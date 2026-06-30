@@ -1,4 +1,5 @@
 import 'package:charity_management/Donor/Support_Area/support_category_screen.dart';
+import 'package:charity_management/Donor/sponsorships_screen.dart';
 import 'package:flutter/material.dart';
 
 class DonorHomeScreen extends StatelessWidget {
@@ -6,42 +7,46 @@ class DonorHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // لون Background المعتمد في التصميم
-      backgroundColor: const Color(0xFFFDFBF7),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 1. شريط الترحيب العلوي (Header)
-                buildHeader(),
-                const SizedBox(height: 20),
+    // تغليف الواجهة بـ Directionality لجعل الاتجاه من اليمين إلى اليسار (RTL)
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        // لون Background المعتمد في التصميم
+        backgroundColor: const Color(0xFFFDFBF7),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // ستبدأ تلقائياً من اليمين
+                children: [
+                  // 1. شريط الترحيب العلوي (Header)
+                  buildHeader(),
+                  const SizedBox(height: 20),
 
-                // 2. كرت الإعلان الرئيسي (Sponsor an Orphan Today)
-                buildMainCampaignCard(),
-                const SizedBox(height: 28),
+                  // 2. كرت الإعلان الرئيسي (Sponsor an Orphan Today)
+                  buildMainCampaignCard(),
+                  const SizedBox(height: 28),
 
-                // 3. قسم مجالات الدعم (Support Areas)
-                buildSupportAreasSection(context),
-                const SizedBox(height: 28),
+                  // 3. قسم مجالات الدعم (Support Areas)
+                  buildSupportAreasSection(context),
+                  const SizedBox(height: 28),
 
-                // 4. كرت المبادرات المجتمعية (Community Initiatives)
-                buildCommunityCard(),
-                const SizedBox(height: 24),
+                  // 4. كرت المبادرات المجتمعية (Community Initiatives)
+                  buildCommunityCard(),
+                  const SizedBox(height: 24),
 
-                // 5. إحصائيات التأثير السفلي (Impact Stats)
-                buildImpactStatsRow(),
-                const SizedBox(height: 32),
-              ],
+                  // 5. إحصائيات التأثير السفلي (Impact Stats)
+                  buildImpactStatsRow(),
+                  const SizedBox(height: 32),
+                ],
+              ),
             ),
           ),
         ),
+        // 6. شريط التنقل السفلي المخصص (Bottom Navigation Bar)
+        bottomNavigationBar: buildBottomNavigationBar(context),
       ),
-      // 6. شريط التنقل السفلي المخصص (Bottom Navigation Bar)
-      bottomNavigationBar: buildBottomNavigationBar(),
     );
   }
 
@@ -67,7 +72,7 @@ class DonorHomeScreen extends StatelessWidget {
             const Row(
               children: [
                 Text(
-                  'Welcome Back, Sarah',
+                  'مرحباً بعودتك، سارة',
                   style: TextStyle(
                     color: Color(0xFF765A00),
                     fontSize: 18,
@@ -96,8 +101,8 @@ class DonorHomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [Color(0xFFE2F0B9), Color(0xFFD2E794)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.topRight, // تم التعديل ليناسب الـ RTL
+          end: Alignment.bottomLeft,
         ),
         borderRadius: BorderRadius.circular(24),
       ),
@@ -117,24 +122,25 @@ class DonorHomeScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Text(
-                      'Special Appeal',
-                      style: TextStyle(color: Color(0xFF4A6438), fontSize: 11, fontWeight: FontWeight.w600),
+                      'نداء خاص',
+                      style: TextStyle(color: Color(0xFF4A6438), fontSize: 11, fontWeight: FontWeight.w600, fontFamily: 'IBM Plex Sans Arabic'),
                     ),
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Sponsor an\nOrphan Today',
+                    'اكفل يتيماً\nاليوم',
                     style: TextStyle(
                       color: Color(0xFF384D2B),
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       height: 1.2,
+                      fontFamily: 'IBM Plex Sans Arabic',
                     ),
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Transform a life in State A with monthly support, education, and healthcare.',
-                    style: TextStyle(color: Color(0xFF5D754C), fontSize: 12, height: 1.4),
+                    'غيّر حياة طفل في الولاية (أ) بدعم شهري، وتعليم، ورعاية صحية.',
+                    style: TextStyle(color: Color(0xFF5D754C), fontSize: 12, height: 1.4, fontFamily: 'IBM Plex Sans Arabic'),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
@@ -146,8 +152,8 @@ class DonorHomeScreen extends StatelessWidget {
                       elevation: 0,
                     ),
                     child: const Text(
-                      'Learn More',
-                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                      'لمعرفة المزيد',
+                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold, fontFamily: 'IBM Plex Sans Arabic'),
                     ),
                   ),
                 ],
@@ -155,7 +161,7 @@ class DonorHomeScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 16,
+            left: 16, // تم تغييرها من right إلى left لتصبح الصورة في اليسار والنصوص في اليمين
             bottom: 0,
             top: 20,
             child: Image.asset(
@@ -169,7 +175,6 @@ class DonorHomeScreen extends StatelessWidget {
     );
   }
 
-  // دالة مساعدة لتسهيل الانتقال وتمرير البيانات ديناميكياً للـ Category Screen
   void _navigateToCategory(BuildContext context, {required String title, required Color color}) {
     Navigator.push(
       context,
@@ -183,7 +188,7 @@ class DonorHomeScreen extends StatelessWidget {
     );
   }
 
-  // 3. قسم مجالات الدعم (تم تعديل الكروت بالكامل لتصبح قابلة للضغط والتوجيه)
+  // 3. قسم مجالات الدعم
   Widget buildSupportAreasSection(BuildContext context) {
     return Column(
       children: [
@@ -191,66 +196,64 @@ class DonorHomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Support Areas',
-              style: TextStyle(color: Color(0xFF2B2D42), fontSize: 18, fontWeight: FontWeight.bold),
+              'مجالات الدعم',
+              style: TextStyle(color: Color(0xFF2B2D42), fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'IBM Plex Sans Arabic'),
             ),
             TextButton(
               onPressed: () {},
               child: const Text(
-                'View All',
-                style: TextStyle(color: Color(0xFF765A00), fontSize: 14, fontWeight: FontWeight.w600),
+                'عرض الكل',
+                style: TextStyle(color: Color(0xFF765A00), fontSize: 14, fontWeight: FontWeight.w600, fontFamily: 'IBM Plex Sans Arabic'),
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
         
-        // الصف الأول: Small Projects & Education
         Row(
           children: [
             Expanded(
               child: InkWell(
-                onTap: () => _navigateToCategory(context, title: 'Small Projects', color: const Color(0xFFF5EBE6)),
+                onTap: () => _navigateToCategory(context, title: 'المشاريع الصغيرة', color: const Color(0xFFF5EBE6)),
                 borderRadius: BorderRadius.circular(16),
-                child: buildSupportCard('Small Projects', Icons.rocket_launch_outlined, const Color(0xFFF5EBE6)),
+                child: buildSupportCard('المشاريع الصغيرة', Icons.rocket_launch_outlined, const Color(0xFFF5EBE6)),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: InkWell(
-                onTap: () => _navigateToCategory(context, title: 'Education', color: const Color(0xFFFEF3D6)),
+                onTap: () => _navigateToCategory(context, title: 'التعليم', color: const Color(0xFFFEF3D6)),
                 borderRadius: BorderRadius.circular(16),
-                child: buildSupportCard('Education', Icons.school_outlined, const Color(0xFFFEF3D6)),
+                child: buildSupportCard('التعليم', Icons.school_outlined, const Color(0xFFFEF3D6)),
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
         
-        // الصف الثاني: Health, Food & Residential
         Row(
           children: [
             Expanded(
               child: InkWell(
-                onTap: () => _navigateToCategory(context, title: 'Health', color: const Color(0xFFEBF5EE)),
+                onTap: () => _navigateToCategory(context, title: 'الصحة', color: const Color(0xFFEBF5EE)),
                 borderRadius: BorderRadius.circular(16),
-                child: buildSupportCard('Health', Icons.local_hospital_outlined, const Color(0xFFEBF5EE)),
+                child: buildSupportCard('الصحة', Icons.local_hospital_outlined, const Color(0xFFEBF5EE)),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: InkWell(
-                onTap: () => _navigateToCategory(context, title: 'Food', color: const Color(0xFFF7F5DD)),
+                onTap: () => _navigateToCategory(context, title: 'الغذاء', color: const Color(0xFFF7F5DD)),
                 borderRadius: BorderRadius.circular(16),
-                child: buildSupportCard('Food', Icons.restaurant_outlined, const Color(0xFFF7F5DD)),
+                child: buildSupportCard('الغذاء', Icons.restaurant_outlined, const Color(0xFFF7F5DD)),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: InkWell(
-                onTap: () => _navigateToCategory(context, title: 'Residential', color: const Color(0xFFEFEAE4)),
+                onTap: () => _navigateToCategory(context, title: 'السكن', color: const Color(0xFFEFEAE4)),
                 borderRadius: BorderRadius.circular(16),
-                child: buildSupportCard('Residential', Icons.holiday_village_outlined, const Color(0xFFEFEAE4)),
+                child: buildSupportCard('السكن', Icons.holiday_village_outlined, const Color(0xFFEFEAE4)),
               ),
             ),
           ],
@@ -259,7 +262,6 @@ class DonorHomeScreen extends StatelessWidget {
     );
   }
 
-  // ويدجت بناء كرت المجال الفردي
   Widget buildSupportCard(String title, IconData icon, Color bgColor) {
     return Container(
       height: 100,
@@ -279,6 +281,7 @@ class DonorHomeScreen extends StatelessWidget {
               color: Color(0xFF2B2D42),
               fontSize: 12,
               fontWeight: FontWeight.bold,
+              fontFamily: 'IBM Plex Sans Arabic',
             ),
           ),
         ],
@@ -286,28 +289,27 @@ class DonorHomeScreen extends StatelessWidget {
     );
   }
 
-  // دالة توليد الحالات التجريبية لكل قسم يتم الضغط عليه
   List<DonationCase> _getDummyCasesFor(String category) {
     return [
       DonationCase(
-        title: 'Support $category Campaign',
-        description: 'Help us deliver essential support and complete urgent requirements for $category projects.',
+        title: 'حملة دعم قطاع $category',
+        description: 'ساعدنا في تقديم الدعم الأساسي واستكمال المتطلبات العاجلة لمشاريع $category.',
         raised: '\$12,450',
         goal: '\$20,000',
         progress: 0.62,
         percentage: '62%',
-        daysLeft: '12 Days left',
-        imagePath: 'assets/images/sample.png', // غيري المسار حسب الصور المتوفرة لديكِ
+        daysLeft: 'متبقي 12 يوم',
+        imagePath: 'assets/images/sample.png', 
         isUrgent: true,
       ),
       DonationCase(
-        title: 'General Development for $category',
-        description: 'Long-term sustainable funding targeting community needs in the $category sector.',
+        title: 'التطوير العام لـ $category',
+        description: 'تمويل مستدام طويل الأجل يستهدف احتياجات المجتمع في قطاع $category.',
         raised: '\$4,200',
         goal: '\$15,000',
         progress: 0.28,
         percentage: '28%',
-        daysLeft: '30 Days left',
+        daysLeft: 'متبقي 30 يوم',
         imagePath: 'assets/images/sample.png',
         isUrgent: false,
       ),
@@ -337,31 +339,34 @@ class DonorHomeScreen extends StatelessWidget {
         ),
         padding: const EdgeInsets.all(20),
         child: Column(
-          // cross Dynamic: CrossAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             const Text(
-              'Community Initiatives',
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              'المبادرات المجتمعية',
+              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'IBM Plex Sans Arabic'),
             ),
             const SizedBox(height: 4),
             Text(
-              'Join hands with local leaders to build sustainable futures through collaborative giving.',
-              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12, height: 1.4),
+              'تكاتف مع القادة المحليين لبناء مستقبل مستدام من خلال العطاء التعاوني.',
+              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12, height: 1.4, fontFamily: 'IBM Plex Sans Arabic'),
             ),
             const SizedBox(height: 12),
             InkWell(
               onTap: () {},
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Explore Gateway',
-                    style: TextStyle(color: Color(0xFFFFD56B), fontSize: 13, fontWeight: FontWeight.bold),
+                  const Text(
+                    'استكشف البوابة',
+                    style: TextStyle(color: Color(0xFFFFD56B), fontSize: 13, fontWeight: FontWeight.bold, fontFamily: 'IBM Plex Sans Arabic'),
                   ),
-                  SizedBox(width: 6),
-                  Icon(Icons.arrow_forward, color: Color(0xFFFFD56B), size: 16),
+                  const SizedBox(width: 6),
+                  // قلب السهم ليناسب اتجاه الـ RTL العربي
+                  Transform.flip(
+                    flipX: true,
+                    child: const Icon(Icons.arrow_forward, color: Color(0xFFFFD56B), size: 16),
+                  ),
                 ],
               ),
             ),
@@ -375,9 +380,9 @@ class DonorHomeScreen extends StatelessWidget {
   Widget buildImpactStatsRow() {
     return Row(
       children: [
-        Expanded(child: buildStatBox('Total Impact', '\$1,240.00', const Color(0xFF3D523A))),
+        Expanded(child: buildStatBox('إجمالي التأثير', '\$1,240.00', const Color(0xFF3D523A))),
         const SizedBox(width: 16),
-        Expanded(child: buildStatBox('Lives Touched', '12 Children', const Color(0xFF765A00))),
+        Expanded(child: buildStatBox('الأرواح المؤثرة', '12 طفل', const Color(0xFF765A00))),
       ],
     );
   }
@@ -394,20 +399,20 @@ class DonorHomeScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(color: Color(0xFF8A817C), fontSize: 11, fontWeight: FontWeight.w500),
+            style: const TextStyle(color: Color(0xFF8A817C), fontSize: 11, fontWeight: FontWeight.w500, fontFamily: 'IBM Plex Sans Arabic'),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(color: valueColor, fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(color: valueColor, fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'IBM Plex Sans Arabic'),
           ),
         ],
       ),
     );
   }
 
-  // 6. شريط التنقل السفلي
-  Widget buildBottomNavigationBar() {
+  // 6. شريط التنقل السفلي المخصص
+  Widget buildBottomNavigationBar(BuildContext context) { 
     return Container(
       decoration: const BoxDecoration(
         color: Color(0xFFFDFBF7),
@@ -422,6 +427,18 @@ class DonorHomeScreen extends StatelessWidget {
         selectedFontSize: 11,
         unselectedFontSize: 11,
         currentIndex: 0,
+        
+        onTap: (index) {
+          if (index == 2) { 
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SponsorshipsScreen(), 
+              ),
+            );
+          }
+        },
+
         items: [
           BottomNavigationBarItem(
             icon: Container(
@@ -432,23 +449,23 @@ class DonorHomeScreen extends StatelessWidget {
               ),
               child: const Icon(Icons.home, color: Color(0xFF765A00)),
             ),
-            label: 'Home',
+            label: 'الرئيسية',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet_outlined),
-            label: 'Wallet',
+            label: 'المحفظة',
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            label: 'Sponsorship',
+            icon: Icon(Icons.favorite_border), 
+            label: 'الكفالات',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.analytics_outlined),
-            label: 'Impact',
+            label: 'التأثير',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.menu),
-            label: 'Menu',
+            label: 'القائمة',
           ),
         ],
       ),

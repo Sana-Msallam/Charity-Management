@@ -1,3 +1,4 @@
+import 'package:charity_management/Orphan/orphan_profile.dart';
 import 'package:flutter/material.dart';
 
 // هيكل بيانات تجريبي للأطفال المكفولين لسهولة العرض والتحكم
@@ -163,17 +164,14 @@ class SponsorshipsScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final child = children[index];
                   return InkWell(
-                    onTap: () {
-                      // الانتقال إلى صفحة تفاصيل اليتيم عند الضغط على الكرت
-                      /* 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const OrphanDetailsScreen(),
-                        ),
-                      );
-                      */
-                    },
+          onTap: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const OrphanDetailsScreen(),
+    ),
+  );
+},
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
                       padding: const EdgeInsets.all(12),
