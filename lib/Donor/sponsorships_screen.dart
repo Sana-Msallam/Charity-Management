@@ -62,7 +62,7 @@ class SponsorshipsScreen extends StatelessWidget {
             ),
           ),
           title: const Text(
-            'Noor Giving',
+            'كفالاتي الحالية ',
             style: TextStyle(
               color: primaryYellow,
               fontWeight: FontWeight.bold,

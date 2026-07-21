@@ -1,4 +1,5 @@
 import 'package:charity_management/Donor/Support_Area/support_category_screen.dart';
+import 'package:charity_management/Donor/sponsership_main_screen.dart';
 import 'package:charity_management/Donor/sponsorships_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -433,7 +434,7 @@ class DonorHomeScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const SponsorshipsScreen(), 
+                builder: (context) => const SponsorshipMainScreen(), 
               ),
             );
           }
