@@ -1,4 +1,4 @@
-import 'package:charity_management/Orphan/orphan_profile.dart';
+import 'package:charity_management/Orphan/Screen/orphan_profile.dart';
 import 'package:flutter/material.dart';
 
 // هيكل بيانات تجريبي للأطفال المكفولين لسهولة العرض والتحكم

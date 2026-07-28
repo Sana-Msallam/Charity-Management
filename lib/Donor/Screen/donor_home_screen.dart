@@ -1,10 +1,14 @@
-import 'package:charity_management/Donor/Support_Area/support_category_screen.dart';
-import 'package:charity_management/Donor/sponsership_main_screen.dart';
-import 'package:charity_management/Donor/sponsorships_screen.dart';
+import 'package:charity_management/Donor/Drawer/app_drawer.dart';
+import 'package:charity_management/Donor/Screen/Support_Area/support_category_screen.dart';
+import 'package:charity_management/Donor/cubit/aid_request_cubit.dart';
+import 'package:charity_management/Sponsership/Screen/sponsership_main_screen.dart';
+import 'package:charity_management/Sponsership/Screen/sponsorships_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DonorHomeScreen extends StatelessWidget {
-  const DonorHomeScreen({super.key});
+  DonorHomeScreen({super.key});
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +16,10 @@ class DonorHomeScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+         key: scaffoldKey,
         // لون Background المعتمد في التصميم
         backgroundColor: const Color(0xFFFDFBF7),
+        drawer: const AppDrawer(),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -176,19 +182,30 @@ class DonorHomeScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToCategory(BuildContext context, {required String title, required Color color}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SupportCategoryScreen(
-          categoryTitle: title,
-          bannerColor: color,
-          cases: _getDummyCasesFor(title),
-        ),
-      ),
-    );
-  }
+void _navigateToCategory(
+ BuildContext context,
+ {required String title, required Color color}
+) {
 
+final id = _getCategoryId(title);
+
+Navigator.push(
+ context,
+ MaterialPageRoute(
+  builder: (_) => BlocProvider(
+    create: (_) => AidRequestCubit()
+      ..fetchAidRequests(categoryId: id),
+
+    child: SupportCategoryScreen(
+      categoryTitle: title,
+      bannerColor: color,
+      categoryId: id,
+    ),
+  ),
+ ),
+);
+
+}
   // 3. قسم مجالات الدعم
   Widget buildSupportAreasSection(BuildContext context) {
     return Column(
@@ -267,10 +284,17 @@ class DonorHomeScreen extends StatelessWidget {
     return Container(
       height: 100,
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
+   decoration: BoxDecoration(
+  color: bgColor,
+  borderRadius: BorderRadius.circular(16),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.12),
+      blurRadius: 8,
+      offset: const Offset(0, 4),
+    ),
+  ],
+),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -290,32 +314,7 @@ class DonorHomeScreen extends StatelessWidget {
     );
   }
 
-  List<DonationCase> _getDummyCasesFor(String category) {
-    return [
-      DonationCase(
-        title: 'حملة دعم قطاع $category',
-        description: 'ساعدنا في تقديم الدعم الأساسي واستكمال المتطلبات العاجلة لمشاريع $category.',
-        raised: '\$12,450',
-        goal: '\$20,000',
-        progress: 0.62,
-        percentage: '62%',
-        daysLeft: 'متبقي 12 يوم',
-        imagePath: 'assets/images/sample.png', 
-        isUrgent: true,
-      ),
-      DonationCase(
-        title: 'التطوير العام لـ $category',
-        description: 'تمويل مستدام طويل الأجل يستهدف احتياجات المجتمع في قطاع $category.',
-        raised: '\$4,200',
-        goal: '\$15,000',
-        progress: 0.28,
-        percentage: '28%',
-        daysLeft: 'متبقي 30 يوم',
-        imagePath: 'assets/images/sample.png',
-        isUrgent: false,
-      ),
-    ];
-  }
+
 
   // 4. كرت المبادرات المجتمعية
   Widget buildCommunityCard() {
@@ -427,49 +426,78 @@ class DonorHomeScreen extends StatelessWidget {
         unselectedItemColor: const Color(0xFF8A817C),
         selectedFontSize: 11,
         unselectedFontSize: 11,
-        currentIndex: 0,
-        
-        onTap: (index) {
-          if (index == 2) { 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SponsorshipMainScreen(), 
-              ),
-            );
-          }
-        },
+        currentIndex: 2,
+  onTap: (index) {
+  if (index == 0) {
+    scaffoldKey.currentState?.openDrawer();
+  }
 
-        items: [
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5D166),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(Icons.home, color: Color(0xFF765A00)),
-            ),
-            label: 'الرئيسية',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            label: 'المحفظة',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border), 
-            label: 'الكفالات',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.analytics_outlined),
-            label: 'التأثير',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'القائمة',
-          ),
-        ],
+  if (index == 4) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SponsorshipMainScreen(),
       ),
     );
   }
+},
+
+       items: [
+  const BottomNavigationBarItem(
+    icon: Icon(Icons.menu),
+    label: 'القائمة',
+  ),
+  const BottomNavigationBarItem(
+    icon: Icon(Icons.analytics_outlined),
+    label: 'التأثير',
+  ),
+  BottomNavigationBarItem(
+    icon: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5D166),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: const Icon(
+        Icons.home,
+        color: Color(0xFF765A00),
+      ),
+    ),
+    label: 'الرئيسية',
+  ),
+  const BottomNavigationBarItem(
+    icon: Icon(Icons.account_balance_wallet_outlined),
+    label: 'المحفظة',
+  ),
+  const BottomNavigationBarItem(
+    icon: Icon(Icons.favorite_border),
+    label: 'الكفالات',
+  ),
+],
+      ),
+    );
+  }
+}int _getCategoryId(String title){
+
+  switch(title){
+
+    case 'المشاريع الصغيرة':
+      return 1;
+
+    case 'التعليم':
+      return 2;
+
+    case 'الصحة':
+      return 3;
+
+    case 'الغذاء':
+      return 4;
+
+    case 'السكن':
+      return 5;
+
+    default:
+      return 1;
+  }
+
 }

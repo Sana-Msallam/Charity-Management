@@ -1,4 +1,4 @@
-import 'package:charity_management/Donor/sponsership_success_screen.dart';
+import 'package:charity_management/Sponsership/Screen/sponsership_success_screen.dart';
 import 'package:flutter/material.dart';
 
 class SponsorshipRequestScreen extends StatelessWidget {

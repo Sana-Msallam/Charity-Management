@@ -1,4 +1,4 @@
-import 'package:charity_management/Payment/payment_success.dart';
+import 'package:charity_management/Payment/Screen/payment_success.dart';
 import 'package:flutter/material.dart';
 // import 'payment_success_screen.dart'; // تأكدي من تعديل المسار حسب مشروعك
 

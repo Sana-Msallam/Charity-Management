@@ -1,7 +1,7 @@
-import 'package:charity_management/Donor/sponsership_request.dart';
+import 'package:charity_management/Sponsership/Screen/sponsership_request.dart';
 import 'package:flutter/material.dart';
 // تأكدي من تعديل مسارات الاستيراد (imports) أدناه لتتوافق مع أسماء الملفات وبنية المجلدات في مشروعكِ
-import 'package:charity_management/Donor/sponsorships_screen.dart'; 
+import 'package:charity_management/Sponsership/Screen/sponsorships_screen.dart'; 
 // import 'package:charity_management/Donor/sponsorship_request_screen.dart'; 
 
 class SponsorshipMainScreen extends StatelessWidget {
