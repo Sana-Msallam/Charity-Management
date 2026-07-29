@@ -73,11 +73,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
       children: [
         if (widget.labelText != null) ...[
           Align(
-            alignment: Alignment.centerRight,
+            alignment: AlignmentDirectional.centerStart,
             child: Text(
               widget.labelText!,
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.right,
+              textAlign: TextAlign.start,
               style: const TextStyle(
                 fontSize: 11,
                 color: textColor,

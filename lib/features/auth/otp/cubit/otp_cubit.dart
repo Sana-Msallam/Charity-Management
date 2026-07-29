@@ -1,16 +1,16 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 
-
+import '../../../../constants/api_exception.dart';
 import '../../services/auth_service.dart';
 import 'otp_state.dart';
 
 class OtpCubit extends Cubit<OtpState> {
-  OtpCubit({
-    AuthService? authService,
-  })  : _authService = authService ?? AuthService(),
-        super(const OtpInitial());
+  OtpCubit({AuthService? authService})
+    : _authService = authService ?? AuthService(),
+      super(const OtpInitial());
 
   final AuthService _authService;
 
@@ -18,9 +18,10 @@ class OtpCubit extends Cubit<OtpState> {
     required String countryCode,
     required String phoneNumber,
     required String code,
+    required AppLocalizations localizations,
   }) async {
     emit(const OtpLoading());
-      debugPrint('OTP Cubit: request started');
+    debugPrint('OTP Cubit: request started');
     debugPrint('countryCode: $countryCode');
     debugPrint('phoneNumber: $phoneNumber');
     debugPrint('code: $code');
@@ -30,44 +31,15 @@ class OtpCubit extends Cubit<OtpState> {
         countryCode: countryCode,
         phoneNumber: phoneNumber,
         code: code,
+        invalidResponseMessage: localizations.invalidServerResponse,
+        verificationFailedMessage: localizations.verificationFailed,
       );
 
-      emit(
-        OtpSuccess(
-          userId: result.userId,
-          message: result.message,
-        ),
-      );
+      emit(OtpSuccess(userId: result.userId, message: result.message));
     } on DioException catch (error) {
-      emit(
-        OtpFailure(
-          _extractErrorMessage(error),
-        ),
-      );
+      emit(OtpFailure(ApiException.getMessage(error, localizations)));
     } catch (error) {
-      emit(
-        OtpFailure(
-          error.toString().replaceFirst('Exception: ', ''),
-        ),
-      );
+      emit(OtpFailure(localizations.unexpectedError));
     }
-  }
-
-  String _extractErrorMessage(DioException error) {
-    final data = error.response?.data;
-
-    if (data is Map<String, dynamic>) {
-      final message = data['message'];
-
-      if (message is String && message.isNotEmpty) {
-        return message;
-      }
-
-      if (message is List) {
-        return message.join('\n');
-      }
-    }
-
-    return 'حدث خطأ أثناء التحقق من الرمز';
   }
 }

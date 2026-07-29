@@ -11,10 +11,7 @@ class OtpLoading extends OtpState {
 }
 
 class OtpSuccess extends OtpState {
-  const OtpSuccess({
-    required this.userId,
-    required this.message,
-  });
+  const OtpSuccess({required this.userId, required this.message});
 
   final int userId;
   final String message;

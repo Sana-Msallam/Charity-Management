@@ -1,10 +1,16 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import '/widgets/custom_text_fields.dart';
-import 'dart:io';
 import '/theme/app_colors.dart';
-
+import '/widgets/custom_text_fields.dart';
+import '/widgets/language_toggle_button.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
+import '../cubit/register_beneficiary_cubit.dart';
+import '../cubit/register_beneficiary_state.dart';
+import '../../otp/cubit/otp_cubit.dart';
+import '../../otp/screen/otp_screen.dart';
 
 class SignUpBeneficiaryScreen extends StatefulWidget {
   const SignUpBeneficiaryScreen({super.key});
@@ -15,21 +21,34 @@ class SignUpBeneficiaryScreen extends StatefulWidget {
 }
 
 class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
 
   File? personalImage;
   File? familyStatementImage;
-  final fullNameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final emailController = TextEditingController();
-  final monthlyIncomeController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-  final childrenCountController = TextEditingController();
+
+  final TextEditingController firstNameController = TextEditingController();
+
+  final TextEditingController lastNameController = TextEditingController();
+
+  final TextEditingController phoneController = TextEditingController();
+
+  final TextEditingController emailController = TextEditingController();
+
+  final TextEditingController monthlyIncomeController = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
+
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  final TextEditingController childrenCountController = TextEditingController();
 
   String? selectedAddress;
-  String selectedSocialStatus = 'أعزب';
+  String selectedSocialStatus = 'SINGLE';
+  String selectedGender = 'MALE';
+
+  bool isUnemployed = true;
 
   final List<String> addressOptions = [
     'مزة',
@@ -50,110 +69,159 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
     'ريف دمشق',
   ];
 
-  final List<String> socialStatusOptions = ['أعزب', 'متزوج', 'مطلق', 'أرمل'];
+  final List<String> socialStatusOptions = [
+    'SINGLE',
+    'MARRIED',
+    'DIVORCED',
+    'WIDOWED',
+  ];
 
-  String selectedGender = 'ذكر';
-  bool isUnemployed = true;
+  static const Color backgroundColor = Color(0xFFFFFAF0);
+  static const Color cardColor = AppColors.primaryContainer;
+  static const Color primaryColor = AppColors.primary;
 
-  static const backgroundColor = Color(0xFFFFFAF0);
-  static const cardColor = AppColors.primaryContainer;
-  static const primaryColor = AppColors.primary;
+  @override
+  void initState() {
+    super.initState();
+
+    childrenCountController.text = '0';
+    monthlyIncomeController.text = '0';
+  }
 
   @override
   void dispose() {
-    fullNameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     phoneController.dispose();
     emailController.dispose();
     monthlyIncomeController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     childrenCountController.dispose();
+
     super.dispose();
   }
 
   void _createAccount() {
-    if (!_formKey.currentState!.validate()) return;
+    FocusScope.of(context).unfocus();
 
-    final beneficiaryData = {
-      'fullName': fullNameController.text.trim(),
-      'phone': phoneController.text.trim(),
-      'email': emailController.text.trim(),
-      'address': selectedAddress,
-      'gender': selectedGender,
-      'isUnemployed': isUnemployed,
-      'monthlyIncome': monthlyIncomeController.text.trim(),
-      'socialStatus': selectedSocialStatus,
-      'childrenCount': childrenCountController.text.trim(),
-      'password': passwordController.text,
-    };
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
 
-    debugPrint(beneficiaryData.toString());
+    if (personalImage == null) {
+      _showError(AppLocalizations.of(context).personalPhotoRequired);
+      return;
+    }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم التحقق من بيانات المستفيد بنجاح')),
+    if (familyStatementImage == null) {
+      _showError(AppLocalizations.of(context).familyStatementRequired);
+      return;
+    }
+
+    if (selectedAddress == null) {
+      _showError(AppLocalizations.of(context).addressRequired);
+      return;
+    }
+
+    context.read<RegisterBeneficiaryCubit>().register(
+      firstName: firstNameController.text,
+      lastName: lastNameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+      number: phoneController.text,
+      countryName: 'Syria',
+      countryCode: '+963',
+      gender: selectedGender,
+      personalPhoto: personalImage!,
+      familyStatement: familyStatementImage!,
+      address: selectedAddress!,
+      socialStatus: selectedSocialStatus,
+      isUnemployed: isUnemployed,
+      monthlyIncome: monthlyIncomeController.text,
+      numberOfChildren: childrenCountController.text,
+      localizations: AppLocalizations.of(context),
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    childrenCountController.text = '0';
-    monthlyIncomeController.text = '0';
+  void _showError(String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(content: Text(message), backgroundColor: Colors.red),
+      );
+  }
+
+  String _cleanPhoneNumber(String value) {
+    String number = value.trim().replaceAll(' ', '').replaceAll('-', '');
+
+    if (number.startsWith('0')) {
+      number = number.substring(1);
+    }
+
+    return number;
   }
 
   Future<void> _pickImage({
     required bool isPersonalImage,
     required ImageSource source,
   }) async {
-    final XFile? pickedFile = await _picker.pickImage(
-      source: source,
-      imageQuality: 80,
-    );
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        imageQuality: 80,
+      );
 
-    if (pickedFile == null) return;
-
-    setState(() {
-      if (isPersonalImage) {
-        personalImage = File(pickedFile.path);
-      } else {
-        familyStatementImage = File(pickedFile.path);
+      if (pickedFile == null || !mounted) {
+        return;
       }
-    });
+
+      setState(() {
+        if (isPersonalImage) {
+          personalImage = File(pickedFile.path);
+        } else {
+          familyStatementImage = File(pickedFile.path);
+        }
+      });
+    } catch (_) {
+      if (!mounted) return;
+
+      _showError(AppLocalizations.of(context).imageSelectionFailed);
+    }
   }
 
   void _showImageSourceSheet({required bool isPersonalImage}) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
-      builder: (context) {
+      builder: (bottomSheetContext) {
         return SafeArea(
-          child: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Wrap(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.photo_library),
-                  title: const Text('اختيار من الاستديو'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(
-                      isPersonalImage: isPersonalImage,
-                      source: ImageSource.gallery,
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.camera_alt),
-                  title: const Text('التقاط صورة بالكاميرا'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _pickImage(
-                      isPersonalImage: isPersonalImage,
-                      source: ImageSource.camera,
-                    );
-                  },
-                ),
-              ],
-            ),
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: Text(AppLocalizations.of(context).chooseFromGallery),
+                onTap: () {
+                  Navigator.pop(bottomSheetContext);
+
+                  _pickImage(
+                    isPersonalImage: isPersonalImage,
+                    source: ImageSource.gallery,
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: Text(AppLocalizations.of(context).takePhoto),
+                onTap: () {
+                  Navigator.pop(bottomSheetContext);
+
+                  _pickImage(
+                    isPersonalImage: isPersonalImage,
+                    source: ImageSource.camera,
+                  );
+                },
+              ),
+            ],
           ),
         );
       },
@@ -162,362 +230,488 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: SafeArea(
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: IconButton(
-                              onPressed: () => Navigator.pop(context),
-                              icon: const Icon(Icons.arrow_back),
-                              color: primaryColor,
-                            ),
-                          ),
-                          const Text(
-                            'إنشاء حساب',
-                            style: TextStyle(
-                              color: primaryColor,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Text(
-                        'سجل بياناتك للانضمام إلى برنامج رعاية المستفيدين',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                    ],
-                  ),
+    final localizations = AppLocalizations.of(context);
+    return BlocConsumer<RegisterBeneficiaryCubit, RegisterBeneficiaryState>(
+      listener: (context, state) {
+        if (state is RegisterBeneficiarySuccess) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(
+                  state.response.message.isNotEmpty
+                      ? state.response.message
+                      : localizations.otpSent,
                 ),
+                backgroundColor: Colors.green,
+              ),
+            );
 
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 12,
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider(
+                create: (_) => OtpCubit(),
+                child: OtpScreen(
+                  countryCode: '+963',
+                  phoneNumber: _cleanPhoneNumber(phoneController.text),
+                  userType: 'beneficiary',
+                ),
+              ),
+            ),
+          );
+        }
+        if (state is RegisterBeneficiaryFailure) {
+          _showError(state.message);
+        }
+      },
+      builder: (context, state) {
+        final bool isLoading = state is RegisterBeneficiaryLoading;
+
+        return Scaffold(
+          backgroundColor: backgroundColor,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: LanguageToggleButton(),
                   ),
-                  decoration: const BoxDecoration(
-                    color: cardColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(44),
-                      topRight: Radius.circular(44),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
                     ),
-                  ),
-                  child: Form(
-                    key: _formKey,
                     child: Column(
                       children: [
-                        _ProfileImagePicker(
-                          imageFile: personalImage,
-                          onTap: () =>
-                              _showImageSourceSheet(isPersonalImage: true),
-                        ),
-                        const SizedBox(height: 8),
-
-                        CustomTextField(
-                          labelText: 'الاسم الكامل',
-                          hintText: 'مثال: سارة محمد',
-                          controller: fullNameController,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'الرجاء إدخال الاسم الكامل';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        CustomTextField(
-                          labelText: 'رقم الجوال',
-                          hintText: '5xxxxxxxx',
-                          controller: phoneController,
-                          keyboardType: TextInputType.phone,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'الرجاء إدخال رقم الجوال';
-                            }
-                            if (value.trim().length < 8) {
-                              return 'رقم الجوال غير صحيح';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        CustomTextField(
-                          labelText: 'البريد الإلكتروني',
-                          hintText: 'example@domain.com',
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'الرجاء إدخال البريد الإلكتروني';
-                            }
-                            if (!value.contains('@')) {
-                              return 'البريد الإلكتروني غير صحيح';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        _DropdownField(
-                          labelText: 'عنوان السكن',
-                          hintText: 'اختر عنوان السكن',
-                          value: selectedAddress,
-                          items: addressOptions,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedAddress = value;
-                            });
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء اختيار عنوان السكن';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        _TwoOptionSelector(
-                          title: 'الجنس',
-                          firstText: 'أنثى',
-                          secondText: 'ذكر',
-                          selectedText: selectedGender,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedGender = value;
-                            });
-                          },
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        _EmploymentSelector(
-                          isUnemployed: isUnemployed,
-                          onChanged: (value) {
-                            setState(() {
-                              isUnemployed = value;
-
-                              if (isUnemployed) {
-                                monthlyIncomeController.text = '0';
-                              } else {
-                                monthlyIncomeController.clear();
-                              }
-                            });
-                          },
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        _DocumentUploadBox(
-                          title: 'صورة عن البيان العائلي',
-                          imageFile: familyStatementImage,
-                          onTap: () =>
-                              _showImageSourceSheet(isPersonalImage: false),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        Row(
+                        Stack(
+                          alignment: Alignment.center,
                           children: [
-                            Expanded(
-                              child: _DropdownField(
-                                labelText: 'الحالة الاجتماعية',
-                                hintText: 'اختر الحالة',
-                                value: selectedSocialStatus,
-                                items: socialStatusOptions,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedSocialStatus = value!;
-
-                                    if (selectedSocialStatus == 'أعزب') {
-                                      childrenCountController.text = '0';
-                                    } else {
-                                      childrenCountController.clear();
-                                    }
-                                  });
-                                },
+                            Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: IconButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () => Navigator.pop(context),
+                                icon: const Icon(Icons.arrow_back),
+                                color: primaryColor,
                               ),
                             ),
-
-                            const SizedBox(width: 8),
-
-                            Expanded(
-                              child: CustomTextField(
-                                labelText: 'عدد الأولاد',
-                                hintText: '0',
-                                controller: childrenCountController,
-                                enabled: selectedSocialStatus != 'أعزب',
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                validator: (value) {
-                                  if (selectedSocialStatus == 'أعزب')
-                                    return null;
-
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'أدخل عدد الأولاد';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        CustomTextField(
-                          labelText: 'الراتب الشهري',
-                          hintText: '0.00',
-                          controller: monthlyIncomeController,
-                          enabled: !isUnemployed,
-                          suffixText: 'ل.س',
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true,
-                          ),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d*'),
-                            ),
-                          ],
-                          validator: (value) {
-                            if (isUnemployed) return null;
-
-                            if (value == null || value.trim().isEmpty) {
-                              return 'الرجاء إدخال الراتب الشهري';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 8),
-
-                        CustomTextField(
-                          labelText: 'كلمة المرور',
-                          hintText: '********',
-                          controller: passwordController,
-                          isPassword: true,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء إدخال كلمة المرور';
-                            }
-                            if (value.length < 6) {
-                              return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        CustomTextField(
-                          labelText: 'تأكيد كلمة المرور',
-                          hintText: '********',
-                          controller: confirmPasswordController,
-                          isPassword: true,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'الرجاء تأكيد كلمة المرور';
-                            }
-                            if (value != passwordController.text) {
-                              return 'كلمتا المرور غير متطابقتين';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 14),
-
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: _createAccount,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryColor,
-                              foregroundColor: Colors.white,
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(9),
-                              ),
-                            ),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.person_add_alt_1, size: 19),
-                                SizedBox(width: 8),
-                                Text(
-                                  'إنشاء حساب جديد',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              'لديك حساب بالفعل؟',
+                            Text(
+                              localizations.createAccount,
                               style: TextStyle(
-                                color: Color(0xFF8C805F),
-                                fontSize: 12,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text(
-                                'تسجيل الدخول',
-                                style: TextStyle(
-                                  color: primaryColor,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                color: primaryColor,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
+                        ),
+                        Text(
+                          localizations.beneficiaryWelcome,
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: cardColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(44),
+                        topRight: Radius.circular(44),
+                      ),
+                    ),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          _ProfileImagePicker(
+                            imageFile: personalImage,
+                            onTap: isLoading
+                                ? null
+                                : () {
+                                    _showImageSourceSheet(
+                                      isPersonalImage: true,
+                                    );
+                                  },
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: CustomTextField(
+                                  labelText: localizations.firstName,
+                                  hintText: localizations.firstNameHint,
+                                  controller: firstNameController,
+                                  enabled: !isLoading,
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return localizations.firstNameRequired;
+                                    }
+
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: CustomTextField(
+                                  labelText: localizations.lastName,
+                                  hintText: localizations.lastNameHint,
+                                  controller: lastNameController,
+                                  enabled: !isLoading,
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return localizations.lastNameRequired;
+                                    }
+
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            labelText: localizations.phoneNumber,
+                            hintText: '9xxxxxxxx',
+                            controller: phoneController,
+                            enabled: !isLoading,
+                            keyboardType: TextInputType.phone,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            validator: (value) {
+                              final phone = value?.trim() ?? '';
+
+                              if (phone.isEmpty) {
+                                return localizations.phoneRequired;
+                              }
+
+                              if (phone.length < 8) {
+                                return localizations.invalidPhoneNumber;
+                              }
+
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            labelText: localizations.email,
+                            hintText: 'example@domain.com',
+                            controller: emailController,
+                            enabled: !isLoading,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              final email = value?.trim() ?? '';
+
+                              if (email.isEmpty) {
+                                return localizations.emailRequired;
+                              }
+
+                              final emailRegex = RegExp(
+                                r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                              );
+
+                              if (!emailRegex.hasMatch(email)) {
+                                return localizations.invalidEmail;
+                              }
+
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          _DropdownField(
+                            labelText: localizations.residentialAddress,
+                            hintText: localizations.selectResidentialAddress,
+                            value: selectedAddress,
+                            items: addressOptions,
+                            itemLabelBuilder: (value) =>
+                                _addressLabel(localizations, value),
+                            enabled: !isLoading,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedAddress = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return localizations.addressRequired;
+                              }
+
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          _TwoOptionSelector(
+                            title: localizations.gender,
+                            firstText: localizations.female,
+                            firstValue: 'FEMALE',
+                            secondText: localizations.male,
+                            secondValue: 'MALE',
+                            selectedText: selectedGender,
+                            enabled: !isLoading,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedGender = value;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          _EmploymentSelector(
+                            isUnemployed: isUnemployed,
+                            enabled: !isLoading,
+                            onChanged: (value) {
+                              setState(() {
+                                isUnemployed = value;
+
+                                if (isUnemployed) {
+                                  monthlyIncomeController.text = '0';
+                                } else {
+                                  monthlyIncomeController.clear();
+                                }
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          _DocumentUploadBox(
+                            title: localizations.familyStatementPhoto,
+                            imageFile: familyStatementImage,
+                            onTap: isLoading
+                                ? null
+                                : () {
+                                    _showImageSourceSheet(
+                                      isPersonalImage: false,
+                                    );
+                                  },
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: _DropdownField(
+                                  labelText: localizations.socialStatus,
+                                  hintText: localizations.selectStatus,
+                                  value: selectedSocialStatus,
+                                  items: socialStatusOptions,
+                                  itemLabelBuilder: (value) =>
+                                      _socialStatusLabel(localizations, value),
+                                  enabled: !isLoading,
+                                  onChanged: (value) {
+                                    if (value == null) {
+                                      return;
+                                    }
+
+                                    setState(() {
+                                      selectedSocialStatus = value;
+
+                                      if (value == 'SINGLE') {
+                                        childrenCountController.text = '0';
+                                      } else {
+                                        childrenCountController.clear();
+                                      }
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: CustomTextField(
+                                  labelText: localizations.numberOfChildren,
+                                  hintText: '0',
+                                  controller: childrenCountController,
+                                  enabled:
+                                      !isLoading &&
+                                      selectedSocialStatus != 'SINGLE',
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  validator: (value) {
+                                    if (selectedSocialStatus == 'SINGLE') {
+                                      return null;
+                                    }
+
+                                    if (value == null || value.trim().isEmpty) {
+                                      return localizations.childrenRequired;
+                                    }
+
+                                    final childrenCount = int.tryParse(
+                                      value.trim(),
+                                    );
+
+                                    if (childrenCount == null ||
+                                        childrenCount < 0) {
+                                      return localizations.invalidNumber;
+                                    }
+
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            labelText: localizations.monthlyIncome,
+                            hintText: '0.00',
+                            controller: monthlyIncomeController,
+                            enabled: !isLoading && !isUnemployed,
+                            suffixText: localizations.syrianPound,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d*\.?\d*'),
+                              ),
+                            ],
+                            validator: (value) {
+                              if (isUnemployed) {
+                                return null;
+                              }
+
+                              if (value == null || value.trim().isEmpty) {
+                                return localizations.incomeRequired;
+                              }
+
+                              final monthlyIncome = double.tryParse(
+                                value.trim(),
+                              );
+
+                              if (monthlyIncome == null || monthlyIncome < 0) {
+                                return localizations.invalidIncome;
+                              }
+
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            labelText: localizations.password,
+                            hintText: '********',
+                            controller: passwordController,
+                            enabled: !isLoading,
+                            isPassword: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return localizations.passwordRequired;
+                              }
+
+                              if (value.length < 8) {
+                                return localizations.passwordMin8;
+                              }
+
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            labelText: localizations.confirmPassword,
+                            hintText: '********',
+                            controller: confirmPasswordController,
+                            enabled: !isLoading,
+                            isPassword: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return localizations.confirmPasswordRequired;
+                              }
+
+                              if (value != passwordController.text) {
+                                return localizations.passwordsDoNotMatch;
+                              }
+
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 14),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: isLoading ? null : _createAccount,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: primaryColor,
+                                foregroundColor: Colors.white,
+                                disabledBackgroundColor: primaryColor
+                                    .withValues(alpha: 0.6),
+                                disabledForegroundColor: Colors.white,
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
+                              ),
+                              child: isLoading
+                                  ? const SizedBox(
+                                      width: 22,
+                                      height: 22,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.person_add_alt_1, size: 19),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          localizations.createNewAccount,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                localizations.alreadyHaveAccount,
+                                style: TextStyle(
+                                  color: Color(0xFF8C805F),
+                                  fontSize: 12,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () => Navigator.pop(context),
+                                child: Text(
+                                  localizations.login,
+                                  style: TextStyle(
+                                    color: primaryColor,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -526,9 +720,9 @@ class _ProfileImagePicker extends StatelessWidget {
   const _ProfileImagePicker({required this.imageFile, required this.onTap});
 
   final File? imageFile;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  static const primaryColor = Color(0xFF7A6500);
+  static const Color primaryColor = AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
@@ -540,7 +734,7 @@ class _ProfileImagePicker extends StatelessWidget {
           child: CircleAvatar(
             radius: 30,
             backgroundColor: Colors.white,
-            backgroundImage: imageFile != null ? FileImage(imageFile!) : null,
+            backgroundImage: imageFile == null ? null : FileImage(imageFile!),
             child: imageFile == null
                 ? const Icon(
                     Icons.add_a_photo_outlined,
@@ -551,8 +745,8 @@ class _ProfileImagePicker extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        const Text(
-          'صورة شخصية',
+        Text(
+          AppLocalizations.of(context).personalPhoto,
           style: TextStyle(color: primaryColor, fontSize: 10),
         ),
       ],
@@ -569,9 +763,9 @@ class _DocumentUploadBox extends StatelessWidget {
 
   final String title;
   final File? imageFile;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  static const primaryColor = Color(0xFF7A6500);
+  static const Color primaryColor = AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
@@ -589,23 +783,28 @@ class _DocumentUploadBox extends StatelessWidget {
         const SizedBox(height: 6),
         InkWell(
           onTap: onTap,
+          borderRadius: BorderRadius.circular(8),
           child: Container(
             width: double.infinity,
             height: 68,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: primaryColor.withOpacity(0.45)),
+              border: Border.all(color: primaryColor.withValues(alpha: 0.45)),
             ),
             child: imageFile == null
-                ? const Column(
+                ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.upload_file, color: primaryColor, size: 22),
-                      SizedBox(height: 4),
+                      const Icon(
+                        Icons.upload_file,
+                        color: primaryColor,
+                        size: 22,
+                      ),
+                      const SizedBox(height: 4),
                       Text(
-                        'اضغط لاختيار صورة',
-                        style: TextStyle(
+                        AppLocalizations.of(context).tapToSelectPhoto,
+                        style: const TextStyle(
                           color: Color(0xFF8C805F),
                           fontSize: 10,
                         ),
@@ -632,18 +831,24 @@ class _TwoOptionSelector extends StatelessWidget {
   const _TwoOptionSelector({
     required this.title,
     required this.firstText,
+    required this.firstValue,
     required this.secondText,
+    required this.secondValue,
     required this.selectedText,
     required this.onChanged,
+    this.enabled = true,
   });
 
   final String title;
   final String firstText;
+  final String firstValue;
   final String secondText;
+  final String secondValue;
   final String selectedText;
   final ValueChanged<String> onChanged;
+  final bool enabled;
 
-  static const primaryColor = AppColors.primary;
+  static const Color primaryColor = AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
@@ -671,16 +876,18 @@ class _TwoOptionSelector extends StatelessWidget {
               Expanded(
                 child: _SmallSelectButton(
                   text: firstText,
-                  isSelected: selectedText == firstText,
-                  onTap: () => onChanged(firstText),
+                  isSelected: selectedText == firstValue,
+                  enabled: enabled,
+                  onTap: () => onChanged(firstValue),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: _SmallSelectButton(
                   text: secondText,
-                  isSelected: selectedText == secondText,
-                  onTap: () => onChanged(secondText),
+                  isSelected: selectedText == secondValue,
+                  enabled: enabled,
+                  onTap: () => onChanged(secondValue),
                 ),
               ),
             ],
@@ -695,20 +902,22 @@ class _EmploymentSelector extends StatelessWidget {
   const _EmploymentSelector({
     required this.isUnemployed,
     required this.onChanged,
+    this.enabled = true,
   });
 
   final bool isUnemployed;
   final ValueChanged<bool> onChanged;
+  final bool enabled;
 
-  static const primaryColor = Color(0xFF7A6500);
+  static const Color primaryColor = AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'الحالة المهنية',
+        Text(
+          AppLocalizations.of(context).employmentStatus,
           style: TextStyle(
             color: primaryColor,
             fontSize: 11,
@@ -727,16 +936,18 @@ class _EmploymentSelector extends StatelessWidget {
             children: [
               Expanded(
                 child: _SmallSelectButton(
-                  text: 'لا أعمل',
+                  text: AppLocalizations.of(context).unemployed,
                   isSelected: isUnemployed,
+                  enabled: enabled,
                   onTap: () => onChanged(true),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: _SmallSelectButton(
-                  text: 'أعمل',
+                  text: AppLocalizations.of(context).employed,
                   isSelected: !isUnemployed,
+                  enabled: enabled,
                   onTap: () => onChanged(false),
                 ),
               ),
@@ -753,18 +964,18 @@ class _SmallSelectButton extends StatelessWidget {
     required this.text,
     required this.isSelected,
     required this.onTap,
+    this.enabled = true,
   });
 
   final String text;
   final bool isSelected;
   final VoidCallback onTap;
-
-  static const selectedColor = Color(0xFFAEEBCB);
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: enabled ? onTap : null,
       borderRadius: BorderRadius.circular(7),
       child: Container(
         alignment: Alignment.center,
@@ -775,7 +986,11 @@ class _SmallSelectButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            color: isSelected ? AppColors.primary : Colors.grey,
+            color: enabled
+                ? isSelected
+                      ? AppColors.primary
+                      : Colors.grey
+                : Colors.grey.shade400,
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
           ),
@@ -793,6 +1008,8 @@ class _DropdownField extends StatelessWidget {
     required this.items,
     required this.onChanged,
     this.validator,
+    this.enabled = true,
+    this.itemLabelBuilder,
   });
 
   final String labelText;
@@ -801,6 +1018,8 @@ class _DropdownField extends StatelessWidget {
   final List<String> items;
   final ValueChanged<String?> onChanged;
   final String? Function(String?)? validator;
+  final bool enabled;
+  final String Function(String)? itemLabelBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -817,7 +1036,7 @@ class _DropdownField extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           isExpanded: true,
           hint: Text(
             hintText,
@@ -825,7 +1044,7 @@ class _DropdownField extends StatelessWidget {
           ),
           decoration: InputDecoration(
             filled: true,
-            fillColor: Colors.white,
+            fillColor: enabled ? Colors.white : Colors.grey.shade100,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 8,
@@ -833,6 +1052,14 @@ class _DropdownField extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide.none,
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.red),
             ),
           ),
           icon: const Icon(
@@ -843,13 +1070,47 @@ class _DropdownField extends StatelessWidget {
           items: items.map((item) {
             return DropdownMenuItem<String>(
               value: item,
-              child: Text(item, style: const TextStyle(fontSize: 12)),
+              child: Text(
+                itemLabelBuilder?.call(item) ?? item,
+                style: const TextStyle(fontSize: 12),
+              ),
             );
           }).toList(),
-          onChanged: onChanged,
+          onChanged: enabled ? onChanged : null,
           validator: validator,
         ),
       ],
     );
   }
+}
+
+String _socialStatusLabel(AppLocalizations localizations, String value) {
+  return switch (value) {
+    'MARRIED' => localizations.married,
+    'DIVORCED' => localizations.divorced,
+    'WIDOWED' => localizations.widowed,
+    _ => localizations.single,
+  };
+}
+
+String _addressLabel(AppLocalizations localizations, String value) {
+  return switch (value) {
+    'مزة' => localizations.addressMazzeh,
+    'ميدان' => localizations.addressMidan,
+    'مهاجرين' => localizations.addressMuhajireen,
+    'عفيف' => localizations.addressAfif,
+    'ركن الدين' => localizations.addressRuknAlDin,
+    'صحنايا' => localizations.addressSahnaya,
+    'المالكي' => localizations.addressMalki,
+    'شارع بغداد' => localizations.addressBaghdadStreet,
+    'كفرسوسة' => localizations.addressKafrSousa,
+    'برزة' => localizations.addressBarzeh,
+    'شعلان' => localizations.addressShaalan,
+    'شارع الحمرا' => localizations.addressHamraStreet,
+    'ميسات' => localizations.addressMaysat,
+    'الصالحية' => localizations.addressSalihiyah,
+    'المزرعة' => localizations.addressMazraa,
+    'ريف دمشق' => localizations.addressRuralDamascus,
+    _ => value,
+  };
 }

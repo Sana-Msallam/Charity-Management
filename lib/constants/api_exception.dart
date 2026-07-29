@@ -1,15 +1,16 @@
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:dio/dio.dart';
 
 class ApiException {
-  static String getMessage(DioException error) {
+  static String getMessage(DioException error, AppLocalizations localizations) {
     if (error.type == DioExceptionType.connectionTimeout ||
         error.type == DioExceptionType.sendTimeout ||
         error.type == DioExceptionType.receiveTimeout) {
-      return 'انتهت مهلة الاتصال بالخادم';
+      return localizations.connectionTimeout;
     }
 
     if (error.type == DioExceptionType.connectionError) {
-      return 'تعذر الاتصال بالخادم، تأكد من الإنترنت وعنوان الخادم';
+      return localizations.connectionError;
     }
 
     final responseData = error.response?.data;
@@ -28,22 +29,17 @@ class ApiException {
 
     switch (error.response?.statusCode) {
       case 400:
-        return 'البيانات المدخلة غير صحيحة';
-
+        return localizations.badRequest;
       case 401:
-        return 'رقم الهاتف أو كلمة المرور غير صحيحة';
-
+        return localizations.unauthorized;
       case 403:
-        return 'لا تملك صلاحية لتنفيذ هذه العملية';
-
+        return localizations.forbidden;
       case 404:
-        return 'المستخدم غير موجود';
-
+        return localizations.notFound;
       case 500:
-        return 'حدث خطأ في الخادم';
-
+        return localizations.serverError;
       default:
-        return 'حدث خطأ غير متوقع';
+        return localizations.unexpectedError;
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 
 import '../../../../constants/api_exception.dart';
 import '../../services/auth_service.dart';
@@ -8,14 +9,13 @@ import 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   final AuthService authService;
 
-  LoginCubit({
-    required this.authService,
-  }) : super(const LoginInitial());
+  LoginCubit({required this.authService}) : super(const LoginInitial());
 
   Future<void> login({
     required String countryCode,
     required String phoneNumber,
     required String password,
+    required AppLocalizations localizations,
   }) async {
     if (state is LoginLoading) return;
 
@@ -30,25 +30,17 @@ class LoginCubit extends Cubit<LoginState> {
       final response = await authService.login(
         phoneNumber: fullPhoneNumber,
         password: password,
+        invalidResponseMessage: localizations.invalidServerResponse,
+        missingTokenMessage: localizations.missingLoginToken,
       );
 
       emit(LoginSuccess(response));
     } on DioException catch (error) {
-      emit(
-        LoginFailure(
-          ApiException.getMessage(error),
-        ),
-      );
-    } on FormatException catch (error) {
-      emit(
-        LoginFailure(error.message),
-      );
+      emit(LoginFailure(ApiException.getMessage(error, localizations)));
+    } on FormatException {
+      emit(LoginFailure(localizations.unexpectedError));
     } catch (error) {
-      emit(
-        const LoginFailure(
-          'حدث خطأ غير متوقع أثناء تسجيل الدخول',
-        ),
-      );
+      emit(LoginFailure(localizations.unexpectedError));
     }
   }
 

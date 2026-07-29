@@ -9,9 +9,7 @@ class VerifyOtpResponseModel {
   final String message;
   final int userId;
 
-  factory VerifyOtpResponseModel.fromJson(
-    Map<String, dynamic> json,
-  ) {
+  factory VerifyOtpResponseModel.fromJson(Map<String, dynamic> json) {
     return VerifyOtpResponseModel(
       success: json['success'] == true,
       message: json['message']?.toString() ?? '',

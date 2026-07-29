@@ -5,16 +5,17 @@ import 'api_constants.dart';
 class DioClient {
   DioClient._();
 
+  static const String _defaultLanguageCode = 'en';
+
   static final Dio dio = Dio(
     BaseOptions(
       baseUrl: ApiConstants.baseUrl,
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
-      sendTimeout: const Duration(seconds: 15),
+      sendTimeout: const Duration(seconds: 30),
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'accept-language': 'ar',
+        'accept-language': _defaultLanguageCode,
       },
     ),
   )..interceptors.add(
@@ -27,4 +28,9 @@ class DioClient {
         error: true,
       ),
     );
+
+  static void setLanguage(String languageCode) {
+    final normalizedLanguageCode = languageCode == 'ar' ? 'ar' : 'en';
+    dio.options.headers['accept-language'] = normalizedLanguageCode;
+  }
 }
