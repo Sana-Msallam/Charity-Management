@@ -1,7 +1,7 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'http://192.168.1.13:3000';
+  static const String baseUrl = 'http://192.168.1.14:3000';
 
   static const String login = '/auth/login/client';
 
@@ -13,4 +13,6 @@ class ApiConstants {
 
 static const String resetPassword =
     '/auth/forgot-password/reset';
+
+  static const String healthRequest = '/requests/health';
 }
