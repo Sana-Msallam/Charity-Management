@@ -1,3 +1,4 @@
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class OrphanDetailsScreen extends StatelessWidget {
@@ -11,37 +12,39 @@ class OrphanDetailsScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600), // للحفاظ على مظهر متناسق
+              constraints: const BoxConstraints(
+                maxWidth: 600,
+              ), // للحفاظ على مظهر متناسق
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 16),
-                    
+
                     // 1. كرت البيانات الشخصية العلوي
-                    buildUpperProfileCard(),
-                    
+                    buildUpperProfileCard(context),
+
                     const SizedBox(height: 20),
-                    
+
                     // 2. كرت البيانات العائلية والشخصية
-                    buildFamilyDataCard(),
-                    
+                    buildFamilyDataCard(context),
+
                     const SizedBox(height: 20),
-                    
+
                     // 3. كرت الوضع التعليمي والصحي
-                    buildEducationalAndHealthCard(),
-                    
+                    buildEducationalAndHealthCard(context),
+
                     const SizedBox(height: 20),
-                    
+
                     // 4. كرت بيانات ولي الأمر والمسؤولين
-                    buildGuardianDataCard(),
-                    
+                    buildGuardianDataCard(context),
+
                     const SizedBox(height: 24),
-                    
+
                     // 5. زر تجديد الكفالة
-                    buildActionButton(),
-                    
+                    buildActionButton(context),
+
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -54,7 +57,9 @@ class OrphanDetailsScreen extends StatelessWidget {
   }
 
   // الكرت العلوي المحسن بالكامل بدون تداخل نصوص
-  Widget buildUpperProfileCard() {
+  Widget buildUpperProfileCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       clipBehavior: Clip.antiAlias,
@@ -69,7 +74,7 @@ class OrphanDetailsScreen extends StatelessWidget {
             color: Color(0x0C0B1C30),
             blurRadius: 12,
             offset: Offset(0, 4),
-          )
+          ),
         ],
       ),
       child: Stack(
@@ -79,15 +84,17 @@ class OrphanDetailsScreen extends StatelessWidget {
             left: 0,
             right: 0,
             top: 0,
-            child: Container(
-              height: 4,
-              color: const Color(0xFF765A00),
-            ),
+            child: Container(height: 4, color: const Color(0xFF765A00)),
           ),
-          
+
           // محتوى الكرت مرتب عمودياً بشكل سليم
           Padding(
-            padding: const EdgeInsets.only(top: 32, bottom: 24, left: 16, right: 16),
+            padding: const EdgeInsets.only(
+              top: 32,
+              bottom: 24,
+              left: 16,
+              right: 16,
+            ),
             child: Column(
               children: [
                 // مجمع الصورة مع الرمز الصغير
@@ -122,11 +129,12 @@ class OrphanDetailsScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: const Color(0xFF765A00),
                             shape: BoxShape.circle,
-border: Border.all(color: Colors.white, width: 2),                          ),
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
                           child: const Icon(
-                            Icons.check, 
-                            size: 12, 
-                            color: Colors.white
+                            Icons.check,
+                            size: 12,
+                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -134,7 +142,7 @@ border: Border.all(color: Colors.white, width: 2),                          ),
                   ),
                 ),
                 const SizedBox(height: 12),
-                
+
                 // الاسم
                 const Text(
                   'أحمد محمد',
@@ -147,12 +155,12 @@ border: Border.all(color: Colors.white, width: 2),                          ),
                   ),
                 ),
                 const SizedBox(height: 4),
-                
+
                 // الرقم الرقمي
-                const Text(
-                  'الرقم الرقمي: 1045',
+                Text(
+                  l10n.digitalNumber('1045'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color(0xFF4D4636),
                     fontSize: 14,
                     fontFamily: 'IBM Plex Sans Arabic',
@@ -160,19 +168,25 @@ border: Border.all(color: Colors.white, width: 2),                          ),
                   ),
                 ),
                 const SizedBox(height: 12),
-                
+
                 // شارة حالة الرعاية
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFD5E0F8),
                     borderRadius: BorderRadius.circular(9999),
-                    border: Border.all(color: const Color(0x33545F73), width: 1),
+                    border: Border.all(
+                      color: const Color(0x33545F73),
+                      width: 1,
+                    ),
                   ),
-                  child: const Text(
-                    'تحت الرعاية والدعم حالياً',
+                  child: Text(
+                    l10n.underCareNow,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF586377),
                       fontSize: 12,
                       fontFamily: 'IBM Plex Sans Arabic',
@@ -189,7 +203,9 @@ border: Border.all(color: Colors.white, width: 2),                          ),
   }
 
   // كرت البيانات العائلية والشخصية
-  Widget buildFamilyDataCard() {
+  Widget buildFamilyDataCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -200,27 +216,27 @@ border: Border.all(color: Colors.white, width: 2),                          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'البيانات العائلية والشخصية',
-                style: TextStyle(
+                l10n.familyAndPersonalData,
+                style: const TextStyle(
                   color: Color(0xFF765A00),
                   fontSize: 18,
                   fontFamily: 'IBM Plex Sans Arabic',
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(width: 8),
-              Icon(Icons.people_outline, color: Color(0xFF765A00)),
+              const SizedBox(width: 8),
+              const Icon(Icons.people_outline, color: Color(0xFF765A00)),
             ],
           ),
           const SizedBox(height: 16),
-          buildDataRow('اسم الأب', 'محمد علي'),
-          buildDataRow('اسم الأم', 'سارة حسن'),
-          buildDataRow('الجنس', 'ذكر'),
-          buildDataRow('تاريخ الميلاد', '2014-05-12'),
+          buildDataRow(l10n.fatherName, 'محمد علي'),
+          buildDataRow(l10n.motherName, 'سارة حسن'),
+          buildDataRow(l10n.gender, l10n.male),
+          buildDataRow(l10n.dateOfBirth, '2014-05-12'),
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
@@ -230,29 +246,37 @@ border: Border.all(color: Colors.white, width: 2),                          ),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: const Color(0x1F0B1C30)),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'الحالة العائلية',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF586377), fontSize: 13),
+                  l10n.familyStatus,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF586377),
+                    fontSize: 13,
+                  ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  'يتيم الأب، يعيش مع الأم في بيت مستأجر.',
-                  textDirection: TextDirection.rtl,
-                  style: TextStyle(color: Color(0xFF0B1C30), fontSize: 14),
+                  l10n.sampleFamilyStatusDescription,
+                  style: const TextStyle(
+                    color: Color(0xFF0B1C30),
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   // كرت الوضع التعليمي والصحي الجديد
-  Widget buildEducationalAndHealthCard() {
+  Widget buildEducationalAndHealthCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -263,31 +287,39 @@ border: Border.all(color: Colors.white, width: 2),                          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'الوضع التعليمي والصحي',
-                style: TextStyle(
+                l10n.educationAndHealthStatus,
+                style: const TextStyle(
                   color: Color(0xFF765A00),
                   fontSize: 18,
                   fontFamily: 'IBM Plex Sans Arabic',
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(width: 8),
-              Icon(Icons.school_outlined, color: Color(0xFF765A00)),
+              const SizedBox(width: 8),
+              const Icon(Icons.school_outlined, color: Color(0xFF765A00)),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: buildStatusBox('الحالة الصحية', 'سليم', Icons.local_hospital_outlined),
+                child: buildStatusBox(
+                  l10n.healthStatus,
+                  l10n.healthy,
+                  Icons.local_hospital_outlined,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: buildStatusBox('المرحلة الدراسية', 'الصف الرابع', Icons.menu_book_outlined),
+                child: buildStatusBox(
+                  l10n.schoolGrade,
+                  l10n.fourthGrade,
+                  Icons.menu_book_outlined,
+                ),
               ),
             ],
           ),
@@ -299,33 +331,48 @@ border: Border.all(color: Colors.white, width: 2),                          ),
               color: const Color(0xFFEFF4FF),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('التفاصيل الصحية', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF586377), fontSize: 13)),
-                    SizedBox(width: 6),
-                    Icon(Icons.medical_services_outlined, size: 16, color: Color(0xFF586377)),
+                    Text(
+                      l10n.healthDetails,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF586377),
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(
+                      Icons.medical_services_outlined,
+                      size: 16,
+                      color: Color(0xFF586377),
+                    ),
                   ],
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  'سليم، لا يعاني من أمراض مزمنة ولله الحمد.',
-                  textDirection: TextDirection.rtl,
-                  style: TextStyle(color: Color(0xFF0B1C30), fontSize: 14),
+                  l10n.sampleHealthDetails,
+                  style: const TextStyle(
+                    color: Color(0xFF0B1C30),
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   // كرت بيانات ولي الأمر والمسؤولين الجديد
-  Widget buildGuardianDataCard() {
+  Widget buildGuardianDataCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -336,26 +383,29 @@ border: Border.all(color: Colors.white, width: 2),                          ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'بيانات ولي الأمر والمسؤولين',
-                style: TextStyle(
+                l10n.guardianAndOfficialsData,
+                style: const TextStyle(
                   color: Color(0xFF765A00),
                   fontSize: 18,
                   fontFamily: 'IBM Plex Sans Arabic',
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(width: 8),
-              Icon(Icons.assignment_ind_outlined, color: Color(0xFF765A00)),
+              const SizedBox(width: 8),
+              const Icon(
+                Icons.assignment_ind_outlined,
+                color: Color(0xFF765A00),
+              ),
             ],
           ),
           const SizedBox(height: 16),
-          buildDataRow('ولي الأمر', 'سارة حسن'),
-          buildDataRow('رقم التواصل', '0599123456'),
-          buildDataRow('عدد الإخوة', '3 إخوة وأخوات'),
+          buildDataRow(l10n.guardian, 'سارة حسن'),
+          buildDataRow(l10n.contactNumber, '0599123456'),
+          buildDataRow(l10n.siblingsCount, l10n.sampleSiblingsCount),
         ],
       ),
     );
@@ -373,9 +423,19 @@ border: Border.all(color: Colors.white, width: 2),                          ),
         children: [
           Icon(icon, color: const Color(0xFF586377), size: 20),
           const SizedBox(height: 4),
-          Text(title, style: const TextStyle(color: Color(0xFF586377), fontSize: 12)),
+          Text(
+            title,
+            style: const TextStyle(color: Color(0xFF586377), fontSize: 12),
+          ),
           const SizedBox(height: 2),
-          Text(value, style: const TextStyle(color: Color(0xFF0B1C30), fontWeight: FontWeight.bold, fontSize: 14)),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Color(0xFF0B1C30),
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+          ),
         ],
       ),
     );
@@ -391,19 +451,25 @@ border: Border.all(color: Colors.white, width: 2),                          ),
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            value, 
-            style: const TextStyle(color: Color(0xFF0B1C30), fontSize: 15, fontWeight: FontWeight.w500)
+            value,
+            style: const TextStyle(
+              color: Color(0xFF0B1C30),
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           Text(
-            title, 
-            style: const TextStyle(color: Color(0xFF4D4636), fontSize: 15)
+            title,
+            style: const TextStyle(color: Color(0xFF4D4636), fontSize: 15),
           ),
         ],
       ),
     );
   }
 
-  Widget buildActionButton() {
+  Widget buildActionButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       height: 54,
@@ -411,16 +477,20 @@ border: Border.all(color: Colors.white, width: 2),                          ),
         color: const Color(0xFF765A00),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Center(
+      child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'تجديد الكفالة أو التبرع',
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              l10n.renewSponsorshipOrDonate,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(width: 8),
-            Icon(Icons.card_giftcard, color: Colors.white, size: 20),
+            const SizedBox(width: 8),
+            const Icon(Icons.card_giftcard, color: Colors.white, size: 20),
           ],
         ),
       ),

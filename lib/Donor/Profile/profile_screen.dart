@@ -1,16 +1,18 @@
 import 'package:charity_management/Donor/Profile/Cubit/profile_cubit.dart';
 import 'package:charity_management/Donor/Profile/Cubit/profile_state.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
       child: Scaffold(
         backgroundColor: const Color(0xFFFDFBF7),
 
@@ -18,32 +20,26 @@ class ProfileScreen extends StatelessWidget {
           backgroundColor: const Color(0xFFFDFBF7),
           elevation: 0,
           centerTitle: true,
-          title: const Text(
-            'الحساب',
-            style: TextStyle(
+          title: Text(
+            l10n.profileTitle,
+            style: const TextStyle(
               color: Color(0xFF765A00),
               fontSize: 20,
               fontWeight: FontWeight.bold,
               fontFamily: 'IBM Plex Sans Arabic',
             ),
           ),
-          iconTheme: const IconThemeData(
-            color: Color(0xFF765A00),
-          ),
+          iconTheme: const IconThemeData(color: Color(0xFF765A00)),
         ),
 
         body: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (state is ProfileErrorState) {
-              return Center(
-                child: Text(state.errorMessage),
-              );
+              return Center(child: Text(state.errorMessage));
             }
 
             if (state is ProfileSuccessState) {
@@ -64,7 +60,8 @@ class ProfileScreen extends StatelessWidget {
                           width: 3,
                         ),
                       ),
-                      child: profile.personalPhoto != null &&
+                      child:
+                          profile.personalPhoto != null &&
                               profile.personalPhoto!.isNotEmpty
                           ? ClipOval(
                               child: Image.network(
@@ -101,7 +98,7 @@ class ProfileScreen extends StatelessWidget {
                     const SizedBox(height: 6),
 
                     Text(
-                      profile.gender == 'MALE' ? 'ذكر' : 'أنثى',
+                      profile.gender == 'MALE' ? l10n.male : l10n.female,
                       style: const TextStyle(
                         color: Color(0xFF3D523A),
                         fontSize: 14,
@@ -113,27 +110,28 @@ class ProfileScreen extends StatelessWidget {
 
                     buildInfoCard(
                       icon: Icons.phone,
-                      title: 'رقم الهاتف',
+                      title: l10n.phoneNumber,
                       value: profile.number,
                     ),
 
                     buildInfoCard(
                       icon: Icons.cake_outlined,
-                      title: 'العمر',
-                      value: '${profile.age} سنة',
+                      title: l10n.age,
+                      value: l10n.ageWithYears(profile.age),
                     ),
 
                     buildInfoCard(
                       icon: Icons.location_on_outlined,
-                      title: 'العنوان',
+                      title: l10n.address,
                       value: profile.address.toString(),
                     ),
 
                     buildInfoCard(
                       icon: Icons.work_outline,
-                      title: 'حالة العمل',
-                      value:
-                          profile.isUnemployed ? 'غير موظف' : 'موظف',
+                      title: l10n.workStatus,
+                      value: profile.isUnemployed
+                          ? l10n.unemployedStatus
+                          : l10n.employedStatus,
                     ),
                   ],
                 ),
@@ -158,9 +156,7 @@ class ProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: const Color(0xFFEFEAE4),
-        ),
+        border: Border.all(color: const Color(0xFFEFEAE4)),
       ),
       child: Row(
         children: [
@@ -170,10 +166,7 @@ class ProfileScreen extends StatelessWidget {
               color: const Color(0xFFF7F2EA),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(
-              icon,
-              color: const Color(0xFF765A00),
-            ),
+            child: Icon(icon, color: const Color(0xFF765A00)),
           ),
           const SizedBox(width: 15),
           Column(

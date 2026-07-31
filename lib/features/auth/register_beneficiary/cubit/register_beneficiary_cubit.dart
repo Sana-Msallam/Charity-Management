@@ -24,6 +24,7 @@ class RegisterBeneficiaryCubit extends Cubit<RegisterBeneficiaryState> {
     required String countryName,
     required String countryCode,
     required String gender,
+    required String dateOfBirth,
     required File personalPhoto,
     required File familyStatement,
     required String address,
@@ -48,6 +49,7 @@ class RegisterBeneficiaryCubit extends Cubit<RegisterBeneficiaryState> {
         countryCode: countryCode.trim(),
 
         gender: gender,
+        dateOfBirth: dateOfBirth.trim(),
 
         personalPhoto: personalPhoto,
         familyStatement: familyStatement,

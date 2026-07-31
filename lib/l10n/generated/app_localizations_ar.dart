@@ -124,6 +124,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get female => 'أنثى';
 
   @override
+  String get dateOfBirth => 'تاريخ الميلاد';
+
+  @override
+  String get selectDateOfBirth => 'اختر تاريخ الميلاد';
+
+  @override
+  String get dateOfBirthHint => 'YYYY-MM-DD';
+
+  @override
+  String get dateOfBirthRequired => 'الرجاء اختيار تاريخ الميلاد';
+
+  @override
+  String get invalidDateOfBirth => 'تاريخ الميلاد غير صحيح';
+
+  @override
+  String get dateOfBirthFutureInvalid =>
+      'لا يمكن أن يكون تاريخ الميلاد في المستقبل';
+
+  @override
   String get otpSent => 'تم إرسال رمز التحقق بنجاح';
 
   @override
@@ -383,6 +402,672 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addressRuralDamascus => 'ريف دمشق';
+
+  @override
+  String get welcomeBackName => 'مرحباً بعودتك، سارة';
+
+  @override
+  String get welcomeComma => 'أهلاً بك،';
+
+  @override
+  String get sampleUserSarah => 'سارة';
+
+  @override
+  String get specialAppeal => 'نداء خاص';
+
+  @override
+  String get sponsorAnOrphanToday => 'اكفل يتيماً\nاليوم';
+
+  @override
+  String get sponsorAnOrphanDescription =>
+      'غيّر حياة طفل بدعم شهري وتعليم ورعاية صحية.';
+
+  @override
+  String get learnMore => 'لمعرفة المزيد';
+
+  @override
+  String get supportAreas => 'مجالات الدعم';
+
+  @override
+  String get viewAll => 'عرض الكل';
+
+  @override
+  String get smallProjects => 'المشاريع الصغيرة';
+
+  @override
+  String get education => 'التعليم';
+
+  @override
+  String get health => 'الصحة';
+
+  @override
+  String get food => 'الغذاء';
+
+  @override
+  String get housing => 'السكن';
+
+  @override
+  String get communityInitiatives => 'المبادرات المجتمعية';
+
+  @override
+  String get communityInitiativesDescription =>
+      'تكاتف مع القادة المحليين لبناء مستقبل مستدام من خلال العطاء التعاوني.';
+
+  @override
+  String get explorePortal => 'استكشف البوابة';
+
+  @override
+  String get totalImpact => 'إجمالي التأثير';
+
+  @override
+  String get livesImpacted => 'الأرواح المؤثرة';
+
+  @override
+  String get sampleChildrenCount => '12 طفل';
+
+  @override
+  String get menu => 'القائمة';
+
+  @override
+  String get impact => 'التأثير';
+
+  @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get wallet => 'المحفظة';
+
+  @override
+  String get sponsorships => 'الكفالات';
+
+  @override
+  String get trackRequest => 'تتبع الطلب';
+
+  @override
+  String get account => 'الحساب';
+
+  @override
+  String get settings => 'الإعدادات';
+
+  @override
+  String get newAidRequest => 'تقديم طلب مساعدة جديد';
+
+  @override
+  String get healthRequest => 'طلب صحي';
+
+  @override
+  String get healthRequestSubtitle => 'علاج وأدوية';
+
+  @override
+  String get foodRequest => 'طلب غذائي';
+
+  @override
+  String get foodRequestSubtitle => 'سلال غذائية';
+
+  @override
+  String get housingRequest => 'طلب سكني';
+
+  @override
+  String get housingRequestSubtitle => 'تحسين المسكن أو إيجار';
+
+  @override
+  String get educationRequest => 'طلب تعليمي';
+
+  @override
+  String get educationRequestSubtitle => 'رسوم وكتب';
+
+  @override
+  String get projectSupport => 'دعم المشاريع';
+
+  @override
+  String get projectSupportSubtitle => 'تمويل وتطوير';
+
+  @override
+  String get completedProjectsTitle => 'المشاريع المنجزة من قبل الجمعية';
+
+  @override
+  String get waterWellProject => 'حفر بئر مياه';
+
+  @override
+  String get schoolBuildingProject => 'بناء مدرسة';
+
+  @override
+  String get medicalComplexProject => 'مجمع طبي';
+
+  @override
+  String get aboutAssociationTitle => 'نبذة عن الجمعية';
+
+  @override
+  String get aboutAssociationDescription =>
+      'نحن في جمعيتنا نسعى لتوفير الدعم الشامل للمحتاجين، ونهدف إلى بناء مستقبل يسوده التكافل الاجتماعي والرحمة من خلال برامجنا التنموية والإغاثية المبتكرة.';
+
+  @override
+  String get ourVision => 'رؤيتنا';
+
+  @override
+  String get ourVisionDescription =>
+      'نسعى إلى أن نكون جمعية رائدة في العمل الإنساني، وأن نساهم في بناء مجتمع متكافل يحصل فيه كل فرد على الدعم والرعاية التي يحتاجها.';
+
+  @override
+  String get ourMission => 'رسالتنا';
+
+  @override
+  String get ourMissionDescription =>
+      'تقديم المساعدات والخدمات الإنسانية بكفاءة وشفافية، والوصول إلى الفئات الأكثر احتياجًا من خلال مبادرات تنموية تصنع أثرًا إيجابيًا ومستدامًا.';
+
+  @override
+  String get beneficiariesNeedSupport => 'عدد الأفراد المحتاجين للدعم';
+
+  @override
+  String get individual => 'فرد';
+
+  @override
+  String get individuals => 'أفراد';
+
+  @override
+  String get currencyRiyal => 'ريال';
+
+  @override
+  String get currentStep => 'الخطوة الحالية';
+
+  @override
+  String get lastStep => 'الخطوة الأخيرة';
+
+  @override
+  String stepOfTotal(int currentStep, int totalSteps) {
+    return '$currentStep من $totalSteps';
+  }
+
+  @override
+  String get dataPrivacy => 'خصوصية البيانات';
+
+  @override
+  String get dataPrivacyDescription =>
+      'يتم التعامل مع كافة البيانات المرفوعة بمنتهى السرية والخصوصية التامة وفقاً للمعايير الأمنية.';
+
+  @override
+  String get whyWeAskData => 'لماذا نطلب هذه البيانات؟';
+
+  @override
+  String get whyWeAskDataDescription =>
+      'نحرص على دقة البيانات لضمان وصول المساعدات لمستحقيها بأسرع وقت ممكن وبكل كرامة.';
+
+  @override
+  String get applicantInfoTitle => 'معلومات مقدم الطلب';
+
+  @override
+  String get fatherName => 'اسم الأب';
+
+  @override
+  String get fatherNameHint => 'مثال: أحمد';
+
+  @override
+  String get familyName => 'الكنية';
+
+  @override
+  String get familyNameHint => 'مثال: الدرويش';
+
+  @override
+  String get age => 'العمر';
+
+  @override
+  String get ageHint => 'مثال: 35';
+
+  @override
+  String get address => 'العنوان';
+
+  @override
+  String get addressHint => 'مثال: دمشق - المزة';
+
+  @override
+  String get jobStatus => 'الحالة الوظيفية';
+
+  @override
+  String get working => 'يعمل';
+
+  @override
+  String get notWorking => 'عاطل عن العمل';
+
+  @override
+  String get continueButton => 'متابعة';
+
+  @override
+  String get fillAllDataCorrectly =>
+      'يرجى التأكد من تعبئة جميع البيانات بشكل صحيح';
+
+  @override
+  String get selectGender => 'يرجى اختيار الجنس';
+
+  @override
+  String get selectSocialStatus => 'يرجى اختيار الحالة الاجتماعية';
+
+  @override
+  String get selectJobStatus => 'يرجى اختيار الحالة الوظيفية';
+
+  @override
+  String get invalidAge => 'يرجى إدخال عمر صحيح';
+
+  @override
+  String get unsupportedRequestType => 'نوع الطلب غير مدعوم حالياً';
+
+  @override
+  String requiredField(String fieldName) {
+    return 'يرجى إدخال $fieldName';
+  }
+
+  @override
+  String fieldTooShort(String fieldName) {
+    return '$fieldName قصير جداً';
+  }
+
+  @override
+  String get ageRequired => 'يرجى إدخال العمر';
+
+  @override
+  String get ageNumbersOnly => 'يرجى إدخال العمر بالأرقام';
+
+  @override
+  String get phoneValidRequired => 'يرجى إدخال رقم هاتف صحيح';
+
+  @override
+  String get housingRequestDetails => 'تفاصيل الطلب السكني';
+
+  @override
+  String get currentHousingStatus => 'الوضع الحالي للسكن';
+
+  @override
+  String get ownedHousing => 'ملك';
+
+  @override
+  String get rentedHousing => 'إيجار';
+
+  @override
+  String get noHousing => 'لا يوجد سكن';
+
+  @override
+  String get currentRentValue => 'قيمة الإيجار الحالي (إن وجد)';
+
+  @override
+  String get currentResidenceDetails => 'مكان الإقامة الحالي بالتفصيل';
+
+  @override
+  String get currentResidenceHint => 'المدينة، الحي، اسم الشارع';
+
+  @override
+  String get housingSupportReason => 'سبب عدم وجود مأوى أو سبب طلب الدعم';
+
+  @override
+  String get housingSupportReasonHint => 'يرجى كتابة شرح مفصل للحالة...';
+
+  @override
+  String get requestedHousingSpecs => 'مواصفات السكن المطلوب أو الحالي';
+
+  @override
+  String get requestedHousingSpecsHint => 'عدد الغرف، الدور، الخدمات القريبة';
+
+  @override
+  String get attachProofDocuments => 'إرفاق وثائق ثبوتية';
+
+  @override
+  String get housingDocumentsDescription =>
+      'عقد إيجار، صور السكن الحالي، أو أي وثائق تدعم الطلب (JPG, PDF)';
+
+  @override
+  String get housingQuote => '\"نسعى لتوفير بيئة آمنة وكريمة لكل أسرة\"';
+
+  @override
+  String get submitRequestForReview => 'إرسال الطلب للمراجعة';
+
+  @override
+  String get healthRequestDetails => 'تفاصيل الطلب الصحي';
+
+  @override
+  String get medicalAidTypeRequired => 'يرجى اختيار نوع المساعدة الطبية';
+
+  @override
+  String get healthDescriptionRequired => 'يرجى إدخال وصف الحالة الصحية';
+
+  @override
+  String get validCostRequired => 'يرجى إدخال تكلفة صحيحة';
+
+  @override
+  String get medicalAttachmentRequired =>
+      'يرجى إرفاق تقرير أو وصفة طبية واحدة على الأقل';
+
+  @override
+  String get duplicateFiles => 'الملفات المحددة مضافة مسبقاً';
+
+  @override
+  String get filesAccessFailed => 'تعذر الوصول إلى الملفات المحددة';
+
+  @override
+  String get fileSelectionFailed => 'تعذر اختيار الملفات، يرجى المحاولة مجدداً';
+
+  @override
+  String get medicalAidType => 'نوع المساعدة الطبية المطلوبة';
+
+  @override
+  String get medicineInsurance => 'تأمين أدوية';
+
+  @override
+  String get surgery => 'عمل جراحي';
+
+  @override
+  String get medicalDevices => 'أجهزة طبية';
+
+  @override
+  String get healthDescription => 'وصف الحالة الصحية بالتفصيل';
+
+  @override
+  String get healthDescriptionHint => 'يرجى ذكر التشخيص والأعراض بوضوح...';
+
+  @override
+  String get treatmentExpectedCost => 'التكلفة المالية المتوقعة للعلاج';
+
+  @override
+  String get medicalReportsUpload => 'إرفاق التقارير الطبية والوصفات الرسمية';
+
+  @override
+  String get uploadFilesOrCapture => 'رفع الملفات أو التقاط صور';
+
+  @override
+  String get medicalReportsUploadDescription =>
+      'يرجى إرفاق صور واضحة للتقارير والوصفات الطبية';
+
+  @override
+  String get deleteAttachment => 'حذف المرفق';
+
+  @override
+  String get fileReadyForUpload => 'ملف جاهز للرفع';
+
+  @override
+  String get educationRequestDetails => 'تفاصيل الطلب التعليمي';
+
+  @override
+  String get educationLevel => 'التحصيل الدراسي';
+
+  @override
+  String get schoolLevel => 'مدرسي';
+
+  @override
+  String get universityLevel => 'جامعي';
+
+  @override
+  String get institutionName => 'اسم المدرسة / الجامعة';
+
+  @override
+  String get institutionNameHint => 'أدخل الاسم هنا...';
+
+  @override
+  String get gradeOrYear => 'الصف / السنة الدراسية';
+
+  @override
+  String get selectGradeHint => 'اختر المرحلة...';
+
+  @override
+  String get requestedAssistanceType => 'نوع المساعدة المطلوبة';
+
+  @override
+  String get schoolClothes => 'ثياب مدرسية';
+
+  @override
+  String get studySupplies => 'مستلزمات دراسية';
+
+  @override
+  String get universityFees => 'أقساط جامعة';
+
+  @override
+  String get other => 'أخرى';
+
+  @override
+  String get primaryStage => 'المرحلة الابتدائية';
+
+  @override
+  String get middleStage => 'المرحلة المتوسطة';
+
+  @override
+  String get secondaryStage => 'المرحلة الثانوية';
+
+  @override
+  String get firstUniversityYear => 'سنة أولى جامعي';
+
+  @override
+  String get secondUniversityYear => 'سنة ثانية جامعي';
+
+  @override
+  String get caseDescription => 'وصف الحالة بالتفصيل';
+
+  @override
+  String get educationDescriptionHint =>
+      'اشرح لنا حاجتك التعليمية لتقديم أفضل دعم ممكن...';
+
+  @override
+  String get expectedTotalCost => 'التكلفة الإجمالية المتوقعة';
+
+  @override
+  String get profileTitle => 'الحساب';
+
+  @override
+  String ageWithYears(int years) {
+    return '$years سنة';
+  }
+
+  @override
+  String get workStatus => 'حالة العمل';
+
+  @override
+  String get employedStatus => 'موظف';
+
+  @override
+  String get unemployedStatus => 'غير موظف';
+
+  @override
+  String get caseDetails => 'تفاصيل الحالة';
+
+  @override
+  String get activeCases => 'الحالات النشطة';
+
+  @override
+  String availableCases(int count) {
+    return '$count متاحة';
+  }
+
+  @override
+  String get urgent => 'عاجل';
+
+  @override
+  String supportCategoryDescription(String category) {
+    return 'دعم المتطلبات العاجلة والحملات التنموية لـ $category.';
+  }
+
+  @override
+  String remainingAmount(String amount) {
+    return 'المبلغ المتبقي: $amount';
+  }
+
+  @override
+  String get collected => 'المجمّع';
+
+  @override
+  String get target => 'الهدف';
+
+  @override
+  String get requiredAmount => 'المبلغ المطلوب';
+
+  @override
+  String get amountCollected => 'تم جمعه';
+
+  @override
+  String get amountRemaining => 'المتبقي';
+
+  @override
+  String completionPercentage(num percentage) {
+    return 'نسبة الإنجاز $percentage%';
+  }
+
+  @override
+  String get donateNow => 'تبرع الآن';
+
+  @override
+  String get currentWalletBalance => 'رصيد المحفظة الحالي';
+
+  @override
+  String get topUpWallet => 'شحن المحفظة';
+
+  @override
+  String get mySponsorships => 'كفالاتي';
+
+  @override
+  String get manageCurrentSponsoredOrphans => 'إدارة الأيتام المكفولين حالياً';
+
+  @override
+  String get addNewSponsorship => 'إضافة كفالة جديدة';
+
+  @override
+  String get currentSponsorships => 'كفالاتي الحالية';
+
+  @override
+  String get overview => 'نظرة عامة';
+
+  @override
+  String get sponsoredChildrenCount => 'عدد الأطفال المكفولين حالياً';
+
+  @override
+  String sponsoredChildrenTotal(int count) {
+    return '$count';
+  }
+
+  @override
+  String get sponsoredList => 'قائمة المكفولين';
+
+  @override
+  String get activeStatus => 'نشط';
+
+  @override
+  String get yourGivingImpact => 'أثر عطاؤك';
+
+  @override
+  String get givingImpactDescription =>
+      'تم توفير وجبات تعليمية هذا الشهر بفضل عطائك';
+
+  @override
+  String get newSponsorshipRequest => 'طلب كفالة جديدة';
+
+  @override
+  String get changeChildLife => 'ساهم في تغيير حياة طفل';
+
+  @override
+  String get completeTrust => 'موثوقية تامة';
+
+  @override
+  String get completeTrustDescription =>
+      'جميع البيانات والمعلومات يتم التعامل معها بأعلى معايير الخصوصية والأمان وفق الضوابط الشرعية.';
+
+  @override
+  String get sponsorshipTermsTitle => 'شروط وأحكام الكفالة';
+
+  @override
+  String get sponsorshipTermWalletBalance =>
+      'يجب أن يتوفر في المحفظة رصيد يغطي 4 أشهر من الكفالة مسبقاً، على أن يتم استقطاع رصيد الكفالة شهرياً بشكل تلقائي.';
+
+  @override
+  String get sponsorshipTermReservedBalance =>
+      'بمجرد تخصيص رصيد الكفالة سلفاً لمصاريف كفالة اليتيم المحددة، لا يجوز استخدامه في أغراض أخرى.';
+
+  @override
+  String get sponsorshipTermLowBalance =>
+      'تلغى الكفالة تلقائياً في حال انخفاض الرصيد عن قيمة شهرين دون تعويض المبلّغ المعني.';
+
+  @override
+  String get sponsorshipTermOrphanSelection =>
+      'تتم عملية اختيار اليتيم من قبل الإدارة بناءً على قوائم الاحتياج والأولوية لضمان العدالة وتغطية الحالات الأكثر تضرراً.';
+
+  @override
+  String get sponsorshipTermFilesAccess =>
+      'تتاح ملفات اليتيم والتقارير الدورية بالكامل فقط عبر لوحة التحكم الخاصة بالحساب بعد اعتماد الطلب بنجاح.';
+
+  @override
+  String get acceptSponsorshipTerms => 'تأكيد وقبول الشروط';
+
+  @override
+  String get orphanSponsorshipVirtue => 'فضل كفالة الأيتام';
+
+  @override
+  String get orphanSponsorshipHadith =>
+      'عن سهل بن سعد رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: \"أَنَا وَكَافِلُ الْيَتِيمِ فِي الْجَنَّةِ هَكَذَا\" وَأَشَارَ بِالسَّبَّابَةِ وَالْوُسْطَى، وَفَرَّجَ بَيْنَهُمَا شَيْئًا.';
+
+  @override
+  String get narratedByBukhari => 'رواه البخاري';
+
+  @override
+  String get sponsorshipThankYou => 'جزاك الله خيراً وغفر لك';
+
+  @override
+  String get sponsorshipRequestSuccessMessage =>
+      'تم استلام طلب الكفالة الخاص بك بنجاح، ويتم الآن مراجعته وتدقيقه من قِبل القسم المختص.\n\nسيرسل لك التطبيق إشعاراً فور قبول الطلب واعتماده لتتمكن من متابعة حالة اليتيم.';
+
+  @override
+  String get backToHome => 'العودة للرئيسية';
+
+  @override
+  String digitalNumber(String id) {
+    return 'الرقم الرقمي: $id';
+  }
+
+  @override
+  String get underCareNow => 'تحت الرعاية والدعم حالياً';
+
+  @override
+  String get familyAndPersonalData => 'البيانات العائلية والشخصية';
+
+  @override
+  String get motherName => 'اسم الأم';
+
+  @override
+  String get familyStatus => 'الحالة العائلية';
+
+  @override
+  String get sampleFamilyStatusDescription =>
+      'يتيم الأب، يعيش مع الأم في بيت مستأجر.';
+
+  @override
+  String get educationAndHealthStatus => 'الوضع التعليمي والصحي';
+
+  @override
+  String get healthStatus => 'الحالة الصحية';
+
+  @override
+  String get healthy => 'سليم';
+
+  @override
+  String get schoolGrade => 'المرحلة الدراسية';
+
+  @override
+  String get fourthGrade => 'الصف الرابع';
+
+  @override
+  String get healthDetails => 'التفاصيل الصحية';
+
+  @override
+  String get sampleHealthDetails => 'سليم، لا يعاني من أمراض مزمنة ولله الحمد.';
+
+  @override
+  String get guardianAndOfficialsData => 'بيانات ولي الأمر والمسؤولين';
+
+  @override
+  String get guardian => 'ولي الأمر';
+
+  @override
+  String get contactNumber => 'رقم التواصل';
+
+  @override
+  String get siblingsCount => 'عدد الإخوة';
+
+  @override
+  String get sampleSiblingsCount => '3 إخوة وأخوات';
+
+  @override
+  String get renewSponsorshipOrDonate => 'تجديد الكفالة أو التبرع';
 
   @override
   String loginSuccess(String firstName) {

@@ -2,541 +2,293 @@ import 'package:charity_management/Donor/cubit/aid_request_details_cubit.dart';
 import 'package:charity_management/Donor/cubit/aid_request_details_state.dart';
 import 'package:charity_management/Payment/Screen/checkout.dart';
 import 'package:charity_management/constants/api_constants.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AidRequestDetailsScreen extends StatelessWidget {
-
   final int id;
 
-  const AidRequestDetailsScreen({
-    super.key,
-    required this.id,
-  });
-
+  const AidRequestDetailsScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
 
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
 
       child: Scaffold(
-
         backgroundColor: const Color(0xFFFDFBF7),
 
-
         appBar: AppBar(
-
           backgroundColor: const Color(0xFFFDFBF7),
 
-          elevation:0,
+          elevation: 0,
 
           leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Color(0xFF765A00)),
 
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Color(0xFF765A00),
-            ),
-
-            onPressed: (){
+            onPressed: () {
               Navigator.pop(context);
             },
-
           ),
 
+          title: Text(
+            l10n.caseDetails,
 
-          title: const Text(
+            style: const TextStyle(
+              color: Color(0xFF765A00),
 
-            'تفاصيل الحالة',
+              fontWeight: FontWeight.bold,
 
-            style: TextStyle(
-
-              color:Color(0xFF765A00),
-
-              fontWeight:FontWeight.bold,
-
-              fontFamily:'IBM Plex Sans Arabic',
-
+              fontFamily: 'IBM Plex Sans Arabic',
             ),
-
           ),
-
         ),
 
-
-
-        body: BlocBuilder<
-            AidRequestDetailsCubit,
-            AidRequestDetailsState>(
-
-          builder:(context,state){
-
-
-            if(state is AidRequestDetailsLoadingState){
-
-              return const Center(
-                child:CircularProgressIndicator(),
-              );
-
+        body: BlocBuilder<AidRequestDetailsCubit, AidRequestDetailsState>(
+          builder: (context, state) {
+            if (state is AidRequestDetailsLoadingState) {
+              return const Center(child: CircularProgressIndicator());
             }
 
-
-
-            if(state is AidRequestDetailsErrorState){
-
-              return Center(
-                child:Text(
-                  state.error,
-                ),
-              );
-
+            if (state is AidRequestDetailsErrorState) {
+              return Center(child: Text(state.error));
             }
 
-
-
-            if(state is AidRequestDetailsSuccessState){
-
-
+            if (state is AidRequestDetailsSuccessState) {
               final item = state.request;
 
-
               return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
 
-                padding:
-                const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
-
-                child:Column(
-
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
-
-
-                  children:[
-
-
-
+                  children: [
                     ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
 
-                      borderRadius:
-                      BorderRadius.circular(20),
+                      child: Image.network(
+                        '${ApiConstants.baseUrl}/${item.image}',
 
+                        height: 220,
 
-                      child:Image.network(
+                        width: double.infinity,
 
-  '${ApiConstants.baseUrl}/${item.image}',
+                        fit: BoxFit.cover,
 
-                        height:220,
-
-                        width:double.infinity,
-
-                        fit:BoxFit.cover,
-
-
-                        errorBuilder:
-                        (context,error,stack){
-
+                        errorBuilder: (context, error, stack) {
                           return Container(
+                            height: 220,
 
-                            height:220,
+                            color: Colors.grey.shade200,
 
-                            color:Colors.grey.shade200,
-
-                            child:
-                            const Icon(
-                              Icons.image,
-                              size:50,
-                            ),
-
+                            child: const Icon(Icons.image, size: 50),
                           );
-
                         },
-
                       ),
-
                     ),
 
-
-
-                    const SizedBox(height:20),
-
-
+                    const SizedBox(height: 20),
 
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                      mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
-
-
-                      children:[
-
-
+                      children: [
                         Expanded(
-
-                          child:Text(
-
+                          child: Text(
                             item.title,
 
-                            style:const TextStyle(
+                            style: const TextStyle(
+                              fontSize: 22,
 
-                              fontSize:22,
+                              fontWeight: FontWeight.bold,
 
-                              fontWeight:
-                              FontWeight.bold,
+                              color: Color(0xFF2B2D42),
 
-                              color:
-                              Color(0xFF2B2D42),
-
-                              fontFamily:
-                              'IBM Plex Sans Arabic',
-
+                              fontFamily: 'IBM Plex Sans Arabic',
                             ),
-
                           ),
-
                         ),
 
-
-
-                        if(item.isUrgent)
-
+                        if (item.isUrgent)
                           Container(
-
-                            padding:
-                            const EdgeInsets.symmetric(
-                              horizontal:12,
-                              vertical:6,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
                             ),
 
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFBE8E7),
 
-                            decoration:
-                            BoxDecoration(
-
-                              color:
-                              const Color(0xFFFBE8E7),
-
-                              borderRadius:
-                              BorderRadius.circular(12),
-
+                              borderRadius: BorderRadius.circular(12),
                             ),
 
+                            child: Text(
+                              l10n.urgent,
 
-                            child:
-                            const Text(
+                              style: const TextStyle(
+                                color: Color(0xFFA8201A),
 
-                              'عاجل',
-
-                              style:
-                              TextStyle(
-
-                                color:
-                                Color(0xFFA8201A),
-
-                                fontWeight:
-                                FontWeight.bold,
-
+                                fontWeight: FontWeight.bold,
                               ),
-
                             ),
-
                           ),
-
-
                       ],
-
                     ),
 
-
-
-                    const SizedBox(height:12),
-
-
+                    const SizedBox(height: 12),
 
                     Text(
-
                       item.description,
 
-                      style:const TextStyle(
+                      style: const TextStyle(
+                        fontSize: 15,
 
-                        fontSize:15,
+                        height: 1.6,
 
-                        height:1.6,
+                        color: Color(0xFF7F8C8D),
 
-                        color:
-                        Color(0xFF7F8C8D),
-
-                        fontFamily:
-                        'IBM Plex Sans Arabic',
-
+                        fontFamily: 'IBM Plex Sans Arabic',
                       ),
-
                     ),
 
-
-
-                    const SizedBox(height:24),
-
-
+                    const SizedBox(height: 24),
 
                     Container(
+                      padding: const EdgeInsets.all(16),
 
-                      padding:
-                      const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
 
-
-                      decoration:
-                      BoxDecoration(
-
-                        color:Colors.white,
-
-                        borderRadius:
-                        BorderRadius.circular(16),
-
+                        borderRadius: BorderRadius.circular(16),
                       ),
 
-
-                      child:Column(
-
-                        children:[
-
-
+                      child: Column(
+                        children: [
                           buildMoneyRow(
-                            'المبلغ المطلوب',
+                            l10n.requiredAmount,
                             '${item.totalCost}\$',
                           ),
 
-
                           buildMoneyRow(
-                            'تم جمعه',
+                            l10n.amountCollected,
                             '${item.paidAmount}\$',
                           ),
 
-
                           buildMoneyRow(
-                            'المتبقي',
+                            l10n.amountRemaining,
                             '${item.remainingAmount}\$',
                           ),
-
-
                         ],
-
                       ),
-
                     ),
 
-
-
-                    const SizedBox(height:20),
-
-
+                    const SizedBox(height: 20),
 
                     Text(
+                      l10n.completionPercentage(item.completionPercentage),
 
-                      'نسبة الإنجاز ${item.completionPercentage}%',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
 
-                      style:const TextStyle(
-
-                        fontWeight:
-                        FontWeight.bold,
-
-                        fontSize:14,
-
+                        fontSize: 14,
                       ),
-
                     ),
 
-
-
-                    const SizedBox(height:8),
-
-
+                    const SizedBox(height: 8),
 
                     ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
 
-                      borderRadius:
-                      BorderRadius.circular(8),
+                      child: LinearProgressIndicator(
+                        minHeight: 10,
 
+                        value: item.completionPercentage / 100,
 
-                      child:LinearProgressIndicator(
+                        backgroundColor: const Color(0xFFF2ECE4),
 
-                        minHeight:10,
-
-                        value:
-                        item.completionPercentage /100,
-
-                        backgroundColor:
-                        const Color(0xFFF2ECE4),
-
-                        valueColor:
-                        const AlwaysStoppedAnimation(
+                        valueColor: const AlwaysStoppedAnimation(
                           Color(0xFF3D523A),
                         ),
-
                       ),
-
                     ),
 
-
-
-                    const SizedBox(height:30),
-
-
+                    const SizedBox(height: 30),
 
                     SizedBox(
+                      width: double.infinity,
 
-                      width:double.infinity,
+                      height: 50,
 
-                      height:50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFF5D166),
 
-
-                      child:ElevatedButton(
-
-                        style:
-                        ElevatedButton.styleFrom(
-
-                          backgroundColor:
-                          const Color(0xFFF5D166),
-
-                          shape:
-                          RoundedRectangleBorder(
-
-                            borderRadius:
-                            BorderRadius.circular(12),
-
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
-
                         ),
 
-
-                        onPressed:(){
-
-
+                        onPressed: () {
                           Navigator.push(
-
                             context,
 
                             MaterialPageRoute(
-
-                              builder:(context)=>
-                              CheckoutScreen(
-
-                                currentCaseName:
-                                item.title,
-
-                              ),
-
+                              builder: (context) =>
+                                  CheckoutScreen(currentCaseName: item.title),
                             ),
-
                           );
-
-
                         },
 
+                        child: Text(
+                          l10n.donateNow,
 
-                        child:const Text(
+                          style: const TextStyle(
+                            color: Color(0xFF765A00),
 
-                          'تبرع الآن',
+                            fontWeight: FontWeight.bold,
 
-                          style:TextStyle(
-
-                            color:
-                            Color(0xFF765A00),
-
-                            fontWeight:
-                            FontWeight.bold,
-
-                            fontSize:16,
-
+                            fontSize: 16,
                           ),
-
                         ),
-
-
                       ),
-
                     ),
-
-
-
                   ],
-
                 ),
-
               );
-
-
             }
 
-
             return const SizedBox();
-
           },
-
         ),
-
       ),
-
     );
-
   }
 
-
-
-  Widget buildMoneyRow(
-      String title,
-      String value,
-      ){
-
+  Widget buildMoneyRow(String title, String value) {
     return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
 
-      padding:
-      const EdgeInsets.symmetric(
-        vertical:8,
-      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-
-      child:Row(
-
-        mainAxisAlignment:
-        MainAxisAlignment.spaceBetween,
-
-
-        children:[
+        children: [
+          Text(title, style: const TextStyle(color: Color(0xFF8A817C))),
 
           Text(
-            title,
-            style:
-            const TextStyle(
-              color:Color(0xFF8A817C),
-            ),
-          ),
-
-
-          Text(
-
             value,
 
-            style:
-            const TextStyle(
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
 
-              fontWeight:
-              FontWeight.bold,
-
-              color:
-              Color(0xFF3D523A),
-
+              color: Color(0xFF3D523A),
             ),
-
           ),
-
-
         ],
-
       ),
-
     );
-
   }
-
 }

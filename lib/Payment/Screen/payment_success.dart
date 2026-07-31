@@ -6,7 +6,7 @@ class PaymentSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
       child: Scaffold(
         backgroundColor: const Color(0xFFFDFBF7),
         appBar: AppBar(
@@ -21,7 +21,11 @@ class PaymentSuccessScreen extends StatelessWidget {
           ),
           title: const Text(
             'السلة الخيرية',
-            style: TextStyle(color: Color(0xFF765A00), fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(
+              color: Color(0xFF765A00),
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
           centerTitle: true,
           actions: [
@@ -62,7 +66,11 @@ class PaymentSuccessScreen extends StatelessWidget {
                             color: Color(0xFFEBF5EE),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.check_circle, color: Color(0xFF3D523A), size: 48),
+                          child: const Icon(
+                            Icons.check_circle,
+                            color: Color(0xFF3D523A),
+                            size: 48,
+                          ),
                         ),
                         const SizedBox(height: 24),
 
@@ -80,7 +88,11 @@ class PaymentSuccessScreen extends StatelessWidget {
 
                         const Text(
                           'شكراً لعطائك، يمكنك تتبع أثر تبرعك الآن من خلال سجل التبرعات.',
-                          style: TextStyle(color: Color(0xFF8A817C), fontSize: 13, height: 1.5),
+                          style: TextStyle(
+                            color: Color(0xFF8A817C),
+                            fontSize: 13,
+                            height: 1.5,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 32),
@@ -92,7 +104,10 @@ class PaymentSuccessScreen extends StatelessWidget {
                             color: const Color(0xFFFDFBF7),
                             borderRadius: BorderRadius.circular(16),
                             border: const Border(
-                              right: BorderSide(color: Color(0xFFF5D166), width: 5), // الخط الجانبي الأصفر المتميز
+                              right: BorderSide(
+                                color: Color(0xFFF5D166),
+                                width: 5,
+                              ), // الخط الجانبي الأصفر المتميز
                               left: BorderSide(color: Color(0xFFEFEAE4)),
                               top: BorderSide(color: Color(0xFFEFEAE4)),
                               bottom: BorderSide(color: Color(0xFFEFEAE4)),
@@ -101,16 +116,34 @@ class PaymentSuccessScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               buildReceiptRow('رقم العملية', '#NZ-82749'),
-                              const Divider(height: 20, color: Color(0xFFEFEAE4)),
-                              buildReceiptRow('المبلغ المدفوع', '500 ر.س', isBoldValue: true),
-                              const Divider(height: 20, color: Color(0xFFEFEAE4)),
+                              const Divider(
+                                height: 20,
+                                color: Color(0xFFEFEAE4),
+                              ),
+                              buildReceiptRow(
+                                'المبلغ المدفوع',
+                                '500 ر.س',
+                                isBoldValue: true,
+                              ),
+                              const Divider(
+                                height: 20,
+                                color: Color(0xFFEFEAE4),
+                              ),
                               const Row(
                                 children: [
-                                  Icon(Icons.verified_outlined, color: Color(0xFF3D523A), size: 16),
+                                  Icon(
+                                    Icons.verified_outlined,
+                                    color: Color(0xFF3D523A),
+                                    size: 16,
+                                  ),
                                   SizedBox(width: 6),
                                   Text(
                                     'تأكيد المساهمة في مشاريع الإطعام',
-                                    style: TextStyle(color: Color(0xFF3D523A), fontSize: 12, fontWeight: FontWeight.w600),
+                                    style: TextStyle(
+                                      color: Color(0xFF3D523A),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -129,12 +162,18 @@ class PaymentSuccessScreen extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFF5D166),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                               elevation: 0,
                             ),
                             child: const Text(
                               'الذهاب لتبرعاتي',
-                              style: TextStyle(color: Color(0xFF765A00), fontWeight: FontWeight.bold, fontSize: 14),
+                              style: TextStyle(
+                                color: Color(0xFF765A00),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ),
@@ -149,11 +188,17 @@ class PaymentSuccessScreen extends StatelessWidget {
                             },
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Color(0xFFEFEAE4)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             ),
                             child: const Text(
                               'تحميل الإيصال',
-                              style: TextStyle(color: Color(0xFF765A00), fontWeight: FontWeight.bold, fontSize: 14),
+                              style: TextStyle(
+                                color: Color(0xFF765A00),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ),
@@ -194,11 +239,18 @@ class PaymentSuccessScreen extends StatelessWidget {
     );
   }
 
-  Widget buildReceiptRow(String label, String value, {bool isBoldValue = false}) {
+  Widget buildReceiptRow(
+    String label,
+    String value, {
+    bool isBoldValue = false,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(color: Color(0xFF8A817C), fontSize: 13)),
+        Text(
+          label,
+          style: const TextStyle(color: Color(0xFF8A817C), fontSize: 13),
+        ),
         Text(
           value,
           style: TextStyle(

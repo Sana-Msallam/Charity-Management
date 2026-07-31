@@ -12,6 +12,7 @@ class RegisterBeneficiaryRequestModel {
   final String countryName;
   final String countryCode;
   final String gender;
+  final String dateOfBirth;
 
   final File personalPhoto;
   final File familyStatement;
@@ -31,6 +32,7 @@ class RegisterBeneficiaryRequestModel {
     required this.countryName,
     required this.countryCode,
     required this.gender,
+    required this.dateOfBirth,
     required this.personalPhoto,
     required this.familyStatement,
     required this.address,
@@ -50,6 +52,7 @@ class RegisterBeneficiaryRequestModel {
       'countryName': countryName,
       'countryCode': countryCode,
       'gender': gender,
+      'dateOfBirth': dateOfBirth,
 
       'personalPhoto': await MultipartFile.fromFile(personalPhoto.path),
 

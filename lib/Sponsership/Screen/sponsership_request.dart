@@ -1,4 +1,5 @@
 import 'package:charity_management/Sponsership/Screen/sponsership_success_screen.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class SponsorshipRequestScreen extends StatelessWidget {
@@ -6,8 +7,17 @@ class SponsorshipRequestScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final conditions = [
+      l10n.sponsorshipTermWalletBalance,
+      l10n.sponsorshipTermReservedBalance,
+      l10n.sponsorshipTermLowBalance,
+      l10n.sponsorshipTermOrphanSelection,
+      l10n.sponsorshipTermFilesAccess,
+    ];
+
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
       child: Scaffold(
         backgroundColor: const Color(0xFFFDFBF7),
         appBar: AppBar(
@@ -18,9 +28,9 @@ class SponsorshipRequestScreen extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
           centerTitle: true,
-          title: const Text(
-            'طلب كفالة جديدة',
-            style: TextStyle(
+          title: Text(
+            l10n.newSponsorshipRequest,
+            style: const TextStyle(
               color: Color(0xFF765A00),
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -42,7 +52,7 @@ class SponsorshipRequestScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     image: const DecorationImage(
                       image: AssetImage(
-                        'assets/images/sponsorship_banner.jpg',
+                        'assets/orphan_profile.jpg',
                       ), // مسار تعبيري لخلفية البنر
                       fit: BoxFit.cover,
                     ),
@@ -61,9 +71,9 @@ class SponsorshipRequestScreen extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.all(16),
                     alignment: Alignment.bottomRight,
-                    child: const Text(
-                      'ساهم في تغيير حياة طفل',
-                      style: TextStyle(
+                    child: Text(
+                      l10n.changeChildLife,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -83,28 +93,28 @@ class SponsorshipRequestScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: const Color(0xFFEFEAE4)),
                   ),
-                  child: const Column(
+                  child: Column(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.verified_user_outlined,
                         color: Color(0xFF765A00),
                         size: 28,
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       Text(
-                        'موثوقية تامة',
-                        style: TextStyle(
+                        l10n.completeTrust,
+                        style: const TextStyle(
                           color: Color(0xFF2B2D42),
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'IBM Plex Sans Arabic',
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        'جميع البيانات والمعلومات يتم التعامل معها بأعلى معايير الخصوصية والأمان وفق الضوابط الشرعية.',
+                        l10n.completeTrustDescription,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFF8A817C),
                           fontSize: 12,
                           height: 1.4,
@@ -128,17 +138,17 @@ class SponsorshipRequestScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.gavel_outlined,
                             color: Color(0xFF765A00),
                             size: 20,
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text(
-                            'شروط وأحكام الكفالة',
-                            style: TextStyle(
+                            l10n.sponsorshipTermsTitle,
+                            style: const TextStyle(
                               color: Color(0xFF765A00),
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -148,21 +158,8 @@ class SponsorshipRequestScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      buildConditionRow(
-                        'يجب أن يتوفر في المحفظة رصيد يغطي 4 أشهر من الكفالة مسبقاً، على أن يتم استقطاع رصيد الكفالة شهرياً بشكل تلقائي.',
-                      ),
-                      buildConditionRow(
-                        'بمجرد تخصيص رصيد الكفالة سلفاً لمصاريف كفالة اليتيم المحددة، لا يجوز استخدامه في أغراض أخرى.',
-                      ),
-                      buildConditionRow(
-                        'تلغى الكفالة تلقائياً في حال انخفاض الرصيد عن قيمة شهرين دون تعويض المبلّغ المعني.',
-                      ),
-                      buildConditionRow(
-                        'تتم عملية اختيار اليتيم من قبل الإدارة بناءً على قوائم الاحتياج والأولوية لضمان العدالة وتغطية الحالات الأكثر تضرراً.',
-                      ),
-                      buildConditionRow(
-                        'تتاح ملفات اليتيم والتقارير الدورية بالكامل فقط عبر لوحة التحكم الخاصة بالحساب بعد اعتماد الطلب بنجاح.',
-                      ),
+                      for (final condition in conditions)
+                        buildConditionRow(condition),
                     ],
                   ),
                 ),
@@ -180,29 +177,30 @@ class SponsorshipRequestScreen extends StatelessWidget {
                       ),
                       elevation: 0,
                     ),
-                   onPressed: () {
-  // الانتقال لواجهة تم تقديم الطلب بنجاح
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const SponsorshipSuccessScreen(),
-    ),
-  );
-},
-                    child: const Row(
+                    onPressed: () {
+                      // الانتقال لواجهة تم تقديم الطلب بنجاح
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const SponsorshipSuccessScreen(),
+                        ),
+                      );
+                    },
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'تأكيد وقبول الشروط',
-                          style: TextStyle(
+                          l10n.acceptSponsorshipTerms,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'IBM Plex Sans Arabic',
                           ),
                         ),
-                        SizedBox(width: 8),
-                        Icon(
+                        const SizedBox(width: 8),
+                        const Icon(
                           Icons.assignment_turned_in_outlined,
                           color: Colors.white,
                           size: 18,
@@ -223,9 +221,9 @@ class SponsorshipRequestScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      const Text(
-                        'ـ فضل كفالة الأيتام ـ',
-                        style: TextStyle(
+                      Text(
+                        l10n.orphanSponsorshipVirtue,
+                        style: const TextStyle(
                           color: Color(0xFF765A00),
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -233,10 +231,10 @@ class SponsorshipRequestScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const Text(
-                        'عن سهل بن سعد رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: "أَنَا وَكَافِلُ الْيَتِيمِ فِي الْجَنَّةِ هَكَذَا" وَأَشَارَ بِالسَّبَّابَةِ وَالْوُسْطَى، وَفَرَّجَ بَيْنَهُمَا شَيْئًا.',
+                      Text(
+                        l10n.orphanSponsorshipHadith,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFF3D523A),
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -246,7 +244,7 @@ class SponsorshipRequestScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'ـ رواه البخاري',
+                        l10n.narratedByBukhari,
                         style: TextStyle(
                           color: const Color(0xFF3D523A).withOpacity(0.6),
                           fontSize: 11,

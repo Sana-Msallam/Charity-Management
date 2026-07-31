@@ -1,4 +1,5 @@
 import 'package:charity_management/theme/app_colors.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -35,10 +36,7 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(
-            right: 4.0,
-            bottom: 8.0,
-          ),
+          padding: const EdgeInsets.only(right: 4.0, bottom: 8.0),
           child: Text(
             label,
             style: const TextStyle(
@@ -69,12 +67,10 @@ class CustomTextField extends StatelessWidget {
 
               textDirection: isLtr
                   ? TextDirection.ltr
-                  : TextDirection.rtl,
+                  : Directionality.of(context),
 
               style: TextStyle(
-                fontWeight: isCurrency
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+                fontWeight: isCurrency ? FontWeight.bold : FontWeight.normal,
               ),
 
               decoration: InputDecoration(
@@ -90,14 +86,9 @@ class CustomTextField extends StatelessWidget {
 
                 errorMaxLines: 2,
 
-                suffixIcon:
-                    suffixIcon != null && !isCurrency
-                        ? Icon(
-                            suffixIcon,
-                            color: AppColors.brandGray,
-                            size: 22,
-                          )
-                        : null,
+                suffixIcon: suffixIcon != null && !isCurrency
+                    ? Icon(suffixIcon, color: AppColors.brandGray, size: 22)
+                    : null,
 
                 contentPadding: EdgeInsets.only(
                   right: 16,
@@ -123,17 +114,12 @@ class CustomTextField extends StatelessWidget {
 
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
-                  borderSide: const BorderSide(
-                    color: Colors.red,
-                  ),
+                  borderSide: const BorderSide(color: Colors.red),
                 ),
 
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
-                  borderSide: const BorderSide(
-                    color: Colors.red,
-                    width: 1.5,
-                  ),
+                  borderSide: const BorderSide(color: Colors.red, width: 1.5),
                 ),
 
                 disabledBorder: OutlineInputBorder(
@@ -149,20 +135,17 @@ class CustomTextField extends StatelessWidget {
               Positioned(
                 left: 16,
                 child: Container(
-                  padding: const EdgeInsets.only(
-                    right: 12,
-                  ),
+                  padding: const EdgeInsets.only(right: 12),
                   decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
-                        color:
-                            AppColors.brandGray.withOpacity(0.2),
+                        color: AppColors.brandGray.withOpacity(0.2),
                       ),
                     ),
                   ),
-                  child: const Text(
-                    'ريال',
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context).currencyRiyal,
+                    style: const TextStyle(
                       color: AppColors.brandGray,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

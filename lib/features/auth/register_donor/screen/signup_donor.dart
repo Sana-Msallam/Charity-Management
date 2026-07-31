@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
-import 'package:charity_management/widgets/language_toggle_button.dart';
+import 'package:charity_management/routes/app_routes.dart';
 import '../cubit/register_donor_cubit.dart';
 import '../cubit/register_donor_state.dart';
 
 import '/widgets/custom_text_fields.dart';
 import 'package:country_picker/country_picker.dart';
 import '/theme/app_colors.dart';
-import '../../otp/cubit/otp_cubit.dart';
-import '../../otp/screen/otp_screen.dart';
 
 class SignUpDonorScreen extends StatefulWidget {
   const SignUpDonorScreen({super.key});
@@ -129,17 +127,13 @@ class _SignUpDonorScreenState extends State<SignUpDonorScreen> {
               ),
             );
 
-            Navigator.pushReplacement(
+            Navigator.pushReplacementNamed(
               context,
-              MaterialPageRoute(
-                builder: (_) => BlocProvider(
-                  create: (_) => OtpCubit(),
-                  child: OtpScreen(
-                    countryCode: selectedCountryCode,
-                    phoneNumber: _cleanPhoneNumber(phoneController.text),
-                    userType: 'donor',
-                  ),
-                ),
+              AppRoutes.otp,
+              arguments: OtpRouteArguments(
+                countryCode: selectedCountryCode,
+                phoneNumber: _cleanPhoneNumber(phoneController.text),
+                userType: 'donor',
               ),
             );
           }
@@ -155,10 +149,6 @@ class _SignUpDonorScreenState extends State<SignUpDonorScreen> {
                   ),
                   child: Column(
                     children: [
-                      const Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: LanguageToggleButton(),
-                      ),
                       Stack(
                         alignment: Alignment.center,
                         children: [

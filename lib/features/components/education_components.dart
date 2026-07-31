@@ -1,5 +1,6 @@
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 // 1. أزرار اختيار التحصيل الدراسي (مدرسي / جامعي)
@@ -28,7 +29,9 @@ class EduLevelButton extends StatelessWidget {
             color: isActive ? AppColors.primaryContainer : Colors.white,
             borderRadius: BorderRadius.circular(12.0),
             border: Border.all(
-              color: isActive ? AppColors.primary : AppColors.brandGray.withOpacity(0.1),
+              color: isActive
+                  ? AppColors.primary
+                  : AppColors.brandGray.withOpacity(0.1),
               width: isActive ? 2.0 : 1.0,
             ),
           ),
@@ -36,7 +39,9 @@ class EduLevelButton extends StatelessWidget {
             child: Text(
               level,
               style: TextStyle(
-                color: isActive ? AppColors.primaryContainer : AppColors.brandGray,
+                color: isActive
+                    ? AppColors.primaryContainer
+                    : AppColors.brandGray,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 fontFamily: AppTextStyles.fontFamily,
@@ -71,10 +76,14 @@ class AssistanceToggleChip extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.secondary.withOpacity(0.4) : Colors.white,
+          color: isSelected
+              ? AppColors.secondary.withOpacity(0.4)
+              : Colors.white,
           borderRadius: BorderRadius.circular(20.0),
           border: Border.all(
-            color: isSelected ? AppColors.secondary.withOpacity(0.3) : AppColors.brandGray.withOpacity(0.1),
+            color: isSelected
+                ? AppColors.secondary.withOpacity(0.3)
+                : AppColors.brandGray.withOpacity(0.1),
           ),
         ),
         child: Row(
@@ -106,6 +115,8 @@ class EducationalDecorativeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20.0),
@@ -114,17 +125,25 @@ class EducationalDecorativeCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24.0),
         border: Border.all(color: AppColors.secondary.withOpacity(0.3)),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'لماذا نطلب هذه البيانات؟',
-            style: TextStyle(color: AppColors.secondary, fontSize: 18, fontWeight: FontWeight.bold),
+            l10n.whyWeAskData,
+            style: const TextStyle(
+              color: AppColors.secondary,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Text(
-            'نحرص على دقة البيانات لضمان وصول المساعدات لمستحقيها بأسرع وقت ممكن وبكل كرامة.',
-            style: TextStyle(color: AppColors.onSurface, fontSize: 14, height: 1.5),
+            l10n.whyWeAskDataDescription,
+            style: const TextStyle(
+              color: AppColors.onSurface,
+              fontSize: 14,
+              height: 1.5,
+            ),
           ),
         ],
       ),

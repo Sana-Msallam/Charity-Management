@@ -1,5 +1,6 @@
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class LargeCategoryCard extends StatelessWidget {
@@ -9,8 +10,9 @@ class LargeCategoryCard extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     const cardColor = Color(0xFFD3DC7C); // اللون المعتمد في كودك للطلب السكني
-    
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
@@ -33,10 +35,13 @@ class LargeCategoryCard extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0),
-                border: Border.all(color: cardColor.withOpacity(0.4), width: 1.2),
+                border: Border.all(
+                  color: cardColor.withOpacity(0.4),
+                  width: 1.2,
+                ),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
@@ -51,18 +56,22 @@ class LargeCategoryCard extends StatelessWidget {
                               color: cardColor.withOpacity(0.2),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
-                            )
+                            ),
                           ],
                         ),
-                        child: const Icon(Icons.home_outlined, color: AppColors.tertiary, size: 28),
+                        child: const Icon(
+                          Icons.home_outlined,
+                          color: AppColors.tertiary,
+                          size: 28,
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [ 
-                          const Text(
-                            'طلب سكني',
-                            style: TextStyle(
+                        children: [
+                          Text(
+                            l10n.housingRequest,
+                            style: const TextStyle(
                               color: AppColors.onSurface,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -70,7 +79,7 @@ class LargeCategoryCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'تحسين المسكن أو إيجار',
+                            l10n.housingRequestSubtitle,
                             style: TextStyle(
                               color: AppColors.onSurface.withOpacity(0.7),
                               fontSize: 13,
@@ -81,7 +90,11 @@ class LargeCategoryCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Icon(Icons.chevron_left, color: AppColors.onSurface, size: 24),
+                  const Icon(
+                    Icons.chevron_left,
+                    color: AppColors.onSurface,
+                    size: 24,
+                  ),
                 ],
               ),
             ),

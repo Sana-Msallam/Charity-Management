@@ -2,13 +2,11 @@ import 'package:charity_management/features/auth/forgot_password/cubit/forgot_pa
 import 'package:charity_management/features/auth/forgot_password/cubit/forgot_password_state.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/widgets/custom_text_fields.dart';
-import 'package:charity_management/widgets/language_toggle_button.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
+import 'package:charity_management/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '/features/auth/forgot_password/screen/new_password.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -58,14 +56,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           );
 
-          Navigator.push(
+          Navigator.pushNamed(
             context,
-            MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: context.read<ForgotPasswordCubit>(),
-                child: const NewPasswordScreen(),
-              ),
-            ),
+            AppRoutes.newPassword,
+            arguments: context.read<ForgotPasswordCubit>(),
           );
         }
 
@@ -87,11 +81,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: LanguageToggleButton(enabled: !isLoading),
-                    ),
-                    const SizedBox(height: 14),
+                  const SizedBox(height: 14),
 
                     Stack(
                       alignment: Alignment.center,

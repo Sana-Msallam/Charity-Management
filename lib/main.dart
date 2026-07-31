@@ -1,9 +1,8 @@
-import 'package:charity_management/features/auth/login/cubit/login_cubit.dart';
-import 'package:charity_management/features/auth/login/screen/login.dart';
-import 'package:charity_management/features/auth/services/auth_service.dart';
 import 'package:charity_management/features/language/cubit/language_cubit.dart';
 import 'package:charity_management/features/language/cubit/language_state.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
+import 'package:charity_management/routes/app_router.dart';
+import 'package:charity_management/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,10 +57,8 @@ class MyApp extends StatelessWidget {
             ),
           ),
           themeMode: ThemeMode.light,
-          home: BlocProvider(
-            create: (_) => LoginCubit(authService: AuthService()),
-            child: const LoginScreen(),
-          ),
+          initialRoute: AppRoutes.authGate,
+          onGenerateRoute: AppRouter.onGenerateRoute,
         );
       },
     );

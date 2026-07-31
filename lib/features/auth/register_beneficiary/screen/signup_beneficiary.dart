@@ -5,12 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '/theme/app_colors.dart';
 import '/widgets/custom_text_fields.dart';
-import '/widgets/language_toggle_button.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
+import 'package:charity_management/routes/app_routes.dart';
 import '../cubit/register_beneficiary_cubit.dart';
 import '../cubit/register_beneficiary_state.dart';
-import '../../otp/cubit/otp_cubit.dart';
-import '../../otp/screen/otp_screen.dart';
 
 class SignUpBeneficiaryScreen extends StatefulWidget {
   const SignUpBeneficiaryScreen({super.key});
@@ -35,6 +33,8 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
 
   final TextEditingController emailController = TextEditingController();
 
+  final TextEditingController dateOfBirthController = TextEditingController();
+
   final TextEditingController monthlyIncomeController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
@@ -47,6 +47,7 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
   String? selectedAddress;
   String selectedSocialStatus = 'SINGLE';
   String selectedGender = 'MALE';
+  DateTime? selectedDateOfBirth;
 
   bool isUnemployed = true;
 
@@ -94,6 +95,7 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
     lastNameController.dispose();
     phoneController.dispose();
     emailController.dispose();
+    dateOfBirthController.dispose();
     monthlyIncomeController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
@@ -133,6 +135,7 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
       countryName: 'Syria',
       countryCode: '+963',
       gender: selectedGender,
+      dateOfBirth: dateOfBirthController.text,
       personalPhoto: personalImage!,
       familyStatement: familyStatementImage!,
       address: selectedAddress!,
@@ -160,6 +163,42 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
     }
 
     return number;
+  }
+
+  Future<void> _pickDateOfBirth() async {
+    final today = _dateOnly(DateTime.now());
+    final initialDate =
+        selectedDateOfBirth ??
+        DateTime(today.year - 18, today.month, today.day);
+
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate.isAfter(today) ? today : initialDate,
+      firstDate: DateTime(1900),
+      lastDate: today,
+      helpText: AppLocalizations.of(context).selectDateOfBirth,
+    );
+
+    if (pickedDate == null || !mounted) {
+      return;
+    }
+
+    setState(() {
+      selectedDateOfBirth = _dateOnly(pickedDate);
+      dateOfBirthController.text = _formatDate(pickedDate);
+    });
+  }
+
+  DateTime _dateOnly(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  String _formatDate(DateTime date) {
+    final year = date.year.toString().padLeft(4, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+
+    return '$year-$month-$day';
   }
 
   Future<void> _pickImage({
@@ -247,17 +286,13 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
               ),
             );
 
-          Navigator.pushReplacement(
+          Navigator.pushReplacementNamed(
             context,
-            MaterialPageRoute(
-              builder: (_) => BlocProvider(
-                create: (_) => OtpCubit(),
-                child: OtpScreen(
-                  countryCode: '+963',
-                  phoneNumber: _cleanPhoneNumber(phoneController.text),
-                  userType: 'beneficiary',
-                ),
-              ),
+            AppRoutes.otp,
+            arguments: OtpRouteArguments(
+              countryCode: '+963',
+              phoneNumber: _cleanPhoneNumber(phoneController.text),
+              userType: 'beneficiary',
             ),
           );
         }
@@ -274,10 +309,6 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: LanguageToggleButton(),
-                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -423,6 +454,42 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
 
                               if (!emailRegex.hasMatch(email)) {
                                 return localizations.invalidEmail;
+                              }
+
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            labelText: localizations.dateOfBirth,
+                            hintText: localizations.dateOfBirthHint,
+                            controller: dateOfBirthController,
+                            enabled: !isLoading,
+                            readOnly: true,
+                            keyboardType: TextInputType.datetime,
+                            suffixIcon: const Icon(
+                              Icons.calendar_today_outlined,
+                              color: primaryColor,
+                              size: 18,
+                            ),
+                            onTap: isLoading ? null : _pickDateOfBirth,
+                            validator: (value) {
+                              final dateText = value?.trim() ?? '';
+
+                              if (dateText.isEmpty) {
+                                return localizations.dateOfBirthRequired;
+                              }
+
+                              final date = DateTime.tryParse(dateText);
+
+                              if (date == null) {
+                                return localizations.invalidDateOfBirth;
+                              }
+
+                              if (_dateOnly(
+                                date,
+                              ).isAfter(_dateOnly(DateTime.now()))) {
+                                return localizations.dateOfBirthFutureInvalid;
                               }
 
                               return null;

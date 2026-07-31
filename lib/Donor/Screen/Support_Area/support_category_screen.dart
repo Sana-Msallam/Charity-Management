@@ -5,6 +5,7 @@ import 'package:charity_management/Donor/cubit/aid_request_cubit.dart';
 import 'package:charity_management/Donor/cubit/aid_request_state.dart';
 import 'package:charity_management/Payment/Screen/checkout.dart';
 import 'package:charity_management/constants/api_constants.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,7 +23,7 @@ class SupportCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // تغليف واجهة القسم بـ Directionality لتصبح RTL بالكامل من اليمين
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
       child: Scaffold(
         backgroundColor: const Color(0xFFFDFBF7),
         appBar: AppBar(
@@ -68,7 +69,7 @@ class SupportCategoryScreen extends StatelessWidget {
                       count = state.requests.length;
                     }
 
-                    return buildActiveCasesBanner(count);
+                    return buildActiveCasesBanner(context, count);
                   },
                 ),
                 const SizedBox(height: 20),
@@ -109,7 +110,9 @@ class SupportCategoryScreen extends StatelessWidget {
     );
   }
 
-  Widget buildActiveCasesBanner(int count) {
+  Widget buildActiveCasesBanner(BuildContext context, int count) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -123,9 +126,9 @@ class SupportCategoryScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'الحالات النشطة',
-                style: TextStyle(
+              Text(
+                l10n.activeCases,
+                style: const TextStyle(
                   color: Color(0xFF3D523A),
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -142,7 +145,7 @@ class SupportCategoryScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  '$count متاحة', // عدد الحالات النشطة
+                  l10n.availableCases(count), // عدد الحالات النشطة
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 11,
@@ -155,7 +158,7 @@ class SupportCategoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'دعم المتطلبات العاجلة والحملات التنموية لـ $categoryTitle.',
+            l10n.supportCategoryDescription(categoryTitle),
             style: const TextStyle(
               color: Color(0xFF5D754C),
               fontSize: 12,
@@ -169,6 +172,8 @@ class SupportCategoryScreen extends StatelessWidget {
   }
 
   Widget buildCaseCard(BuildContext context, AidRequestModel item) {
+    final l10n = AppLocalizations.of(context);
+
     return InkWell(
       borderRadius: BorderRadius.circular(20),
 
@@ -233,9 +238,9 @@ class SupportCategoryScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
 
-                child: const Text(
-                  'عاجل',
-                  style: TextStyle(
+                child: Text(
+                  l10n.urgent,
+                  style: const TextStyle(
                     color: Color(0xFFA8201A),
                     fontWeight: FontWeight.bold,
                   ),
@@ -264,9 +269,9 @@ class SupportCategoryScreen extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   Text(
-                    'المبلغ المتبقي: ${item.remainingAmount}\$',
+                    l10n.remainingAmount('${item.remainingAmount}\$'),
 
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFFFFD56B),
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -284,7 +289,7 @@ class SupportCategoryScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
 
                         children: [
-                          const Text('المجمّع'),
+                          Text(l10n.collected),
 
                           Text(
                             '${item.paidAmount}\$',
@@ -300,7 +305,7 @@ class SupportCategoryScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
 
                         children: [
-                          const Text('الهدف'),
+                          Text(l10n.target),
 
                           Text(
                             '${item.totalCost}\$',
@@ -333,27 +338,27 @@ class SupportCategoryScreen extends StatelessWidget {
 
                     height: 46,
 
-               child: ElevatedButton(
-  style: ElevatedButton.styleFrom(
-    backgroundColor:const Color(0xFFF5D166),
-    foregroundColor: const Color(0xFF765A00),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
-  ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFF5D166),
+                        foregroundColor: const Color(0xFF765A00),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
 
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            CheckoutScreen(currentCaseName: item.title),
-      ),
-    );
-  },
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CheckoutScreen(currentCaseName: item.title),
+                          ),
+                        );
+                      },
 
-  child: const Text('تبرع الآن'),
-),
+                      child: Text(l10n.donateNow),
+                    ),
                   ),
                 ],
               ),

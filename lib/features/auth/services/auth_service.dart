@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../constants/api_constants.dart';
 import '../../../../constants/dio_client.dart';
@@ -9,15 +6,18 @@ import '../login/models/login_request_model.dart';
 import '../login/models/login_response_model.dart';
 import '../register_donor/models/register_donor_request_model.dart';
 import '../register_donor/models/register_donor_response_model.dart';
-import 'package:flutter/foundation.dart';
 import '../otp/models/verify_otp_response_model.dart';
 import '../register_beneficiary/models/register_beneficiary_request_model.dart';
 import '../register_beneficiary/models/register_beneficiary_response_model.dart';
+import '../storage/auth_local_storage.dart';
 
 class AuthService {
   final Dio _dio;
+  final AuthLocalStorage _localStorage;
 
-  AuthService({Dio? dio}) : _dio = dio ?? DioClient.dio;
+  AuthService({Dio? dio, AuthLocalStorage? localStorage})
+    : _dio = dio ?? DioClient.dio,
+      _localStorage = localStorage ?? AuthLocalStorage();
 
   Future<LoginResponseModel> login({
     required String phoneNumber,
@@ -47,31 +47,16 @@ class AuthService {
       throw FormatException(missingTokenMessage);
     }
 
-    await _saveLoginData(loginResponse);
+    if (!AuthLocalStorage.isSupportedUserType(loginResponse.user.type)) {
+      throw FormatException(invalidResponseMessage);
+    }
+
+    await _localStorage.saveSession(
+      token: loginResponse.accessToken,
+      userType: loginResponse.user.type,
+    );
 
     return loginResponse;
-  }
-
-  Future<void> _saveLoginData(LoginResponseModel response) async {
-    final preferences = await SharedPreferences.getInstance();
-
-    await preferences.setString('access_token', response.accessToken);
-
-    await preferences.setString('user_type', response.user.type);
-
-    await preferences.setInt('user_id', response.user.id);
-
-    await preferences.setString(
-      'user_data',
-      jsonEncode(response.user.toJson()),
-    );
-    final savedToken = preferences.getString('access_token');
-    final savedUserType = preferences.getString('user_type');
-    final savedUserId = preferences.getInt('user_id');
-
-    debugPrint('Saved token: $savedToken');
-    debugPrint('Saved user type: $savedUserType');
-    debugPrint('Saved user id: $savedUserId');
   }
 
   Future<RegisterDonorResponseModel> registerDonor({

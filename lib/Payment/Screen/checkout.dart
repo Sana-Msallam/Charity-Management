@@ -25,7 +25,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.rtl, // لضبط محاذاة اللغة العربية كالتصميم
+      textDirection: Directionality.of(context), // يتبع لغة التطبيق الحالية
       child: Scaffold(
         backgroundColor: const Color(0xFFFDFBF7),
         appBar: AppBar(
@@ -76,13 +76,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               children: [
                                 const Text(
                                   'نوع التبرع:',
-                                  style: TextStyle(color: Color(0xFF8A817C), fontSize: 14),
+                                  style: TextStyle(
+                                    color: Color(0xFF8A817C),
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 // القائمة المنسدلة المطلوبة
                                 DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: selectedDonationType,
-                                    icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF765A00)),
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Color(0xFF765A00),
+                                    ),
                                     style: const TextStyle(
                                       color: Color(0xFF2B2D42),
                                       fontWeight: FontWeight.bold,
@@ -114,7 +120,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               children: [
                                 Text(
                                   'إجمالي المبلغ:',
-                                  style: TextStyle(color: Color(0xFF8A817C), fontSize: 14),
+                                  style: TextStyle(
+                                    color: Color(0xFF8A817C),
+                                    fontSize: 14,
+                                  ),
                                 ),
                                 Text(
                                   '400 ر.س',
@@ -133,7 +142,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                       const Text(
                         'طريقة الدفع',
-                        style: TextStyle(color: Color(0xFF2B2D42), fontWeight: FontWeight.bold, fontSize: 14),
+                        style: TextStyle(
+                          color: Color(0xFF2B2D42),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                       const SizedBox(height: 12),
 
@@ -159,7 +172,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       if (paymentMethod == 1) ...[
                         const Text(
                           'بيانات البطاقة',
-                          style: TextStyle(color: Color(0xFF2B2D42), fontWeight: FontWeight.bold, fontSize: 14),
+                          style: TextStyle(
+                            color: Color(0xFF2B2D42),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
                         ),
                         const SizedBox(height: 12),
                         Container(
@@ -172,15 +189,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              buildTextField(label: 'اسم حامل البطاقة', hint: 'الاسم كما هو مكتوب على البطاقة'),
+                              buildTextField(
+                                label: 'اسم حامل البطاقة',
+                                hint: 'الاسم كما هو مكتوب على البطاقة',
+                              ),
                               const SizedBox(height: 16),
-                              buildTextField(label: 'رقم البطاقة', hint: '0000 0000 0000 0000', icon: Icons.credit_card),
+                              buildTextField(
+                                label: 'رقم البطاقة',
+                                hint: '0000 0000 0000 0000',
+                                icon: Icons.credit_card,
+                              ),
                               const SizedBox(height: 16),
                               Row(
                                 children: [
-                                  Expanded(child: buildTextField(label: 'تاريخ الانتهاء', hint: 'MM/YY')),
+                                  Expanded(
+                                    child: buildTextField(
+                                      label: 'تاريخ الانتهاء',
+                                      hint: 'MM/YY',
+                                    ),
+                                  ),
                                   const SizedBox(width: 12),
-                                  Expanded(child: buildTextField(label: 'الرمز السري (CVV)', hint: '***', icon: Icons.help_outline)),
+                                  Expanded(
+                                    child: buildTextField(
+                                      label: 'الرمز السري (CVV)',
+                                      hint: '***',
+                                      icon: Icons.help_outline,
+                                    ),
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 16),
@@ -193,12 +228,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 ),
                                 child: const Row(
                                   children: [
-                                    Icon(Icons.lock_outline, color: Color(0xFF765A00), size: 18),
+                                    Icon(
+                                      Icons.lock_outline,
+                                      color: Color(0xFF765A00),
+                                      size: 18,
+                                    ),
                                     SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
                                         'تتم معالجة بياناتك بشكل مشفر وآمن بالكامل (PCI DSS)',
-                                        style: TextStyle(color: Color(0xFF765A00), fontSize: 11, height: 1.4),
+                                        style: TextStyle(
+                                          color: Color(0xFF765A00),
+                                          fontSize: 11,
+                                          height: 1.4,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -214,11 +257,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Image.asset(
-                          'assets/images/olive_trees.jpg', // تأكدي من إضافة الصورة في الـ assets
+                          'assets/orphan_profile.jpg',
                           width: double.infinity,
                           height: 120,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(), // تتفادى الخطأ إذا لم تكن الصورة جاهزة
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(), // تتفادى الخطأ إذا لم تكن الصورة جاهزة
                         ),
                       ),
                     ],
@@ -243,18 +287,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFF5D166), // اللون الأصفر المعتمد للهوية
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      backgroundColor: const Color(
+                        0xFFF5D166,
+                      ), // اللون الأصفر المعتمد للهوية
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       elevation: 0,
                     ),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.verified_user_outlined, color: Color(0xFF765A00)),
+                        Icon(
+                          Icons.verified_user_outlined,
+                          color: Color(0xFF765A00),
+                        ),
                         SizedBox(width: 8),
                         Text(
                           'تأكيد الدفع الآمن بقيمة 400 ر.س',
-                          style: TextStyle(color: Color(0xFF765A00), fontWeight: FontWeight.bold, fontSize: 15),
+                          style: TextStyle(
+                            color: Color(0xFF765A00),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ],
                     ),
@@ -268,7 +323,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget buildPaymentMethodTile({required int value, required String title, required String subtitle, required IconData icon}) {
+  Widget buildPaymentMethodTile({
+    required int value,
+    required String title,
+    required String subtitle,
+    required IconData icon,
+  }) {
     bool isSelected = paymentMethod == value;
     return InkWell(
       onTap: () => setState(() => paymentMethod = value),
@@ -277,7 +337,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isSelected ? const Color(0xFFF5D166) : const Color(0xFFEFEAE4), width: isSelected ? 2 : 1),
+          border: Border.all(
+            color: isSelected
+                ? const Color(0xFFF5D166)
+                : const Color(0xFFEFEAE4),
+            width: isSelected ? 2 : 1,
+          ),
         ),
         child: Row(
           children: [
@@ -287,9 +352,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(color: Color(0xFF2B2D42), fontWeight: FontWeight.bold, fontSize: 14)),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Color(0xFF2B2D42),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: const TextStyle(color: Color(0xFF8A817C), fontSize: 12)),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Color(0xFF8A817C),
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -307,27 +385,46 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget buildTextField({required String label, required String hint, IconData? icon}) {
+  Widget buildTextField({
+    required String label,
+    required String hint,
+    IconData? icon,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Color(0xFF8A817C), fontSize: 13, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Color(0xFF8A817C),
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         const SizedBox(height: 6),
         TextField(
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: const TextStyle(color: Color(0xFFC2B9B0), fontSize: 13),
-            prefixIcon: icon != null ? Icon(icon, color: const Color(0xFFC2B9B0), size: 20) : null,
+            prefixIcon: icon != null
+                ? Icon(icon, color: const Color(0xFFC2B9B0), size: 20)
+                : null,
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: Color(0xFFEFEAE4)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFF5D166), width: 1.5),
+              borderSide: const BorderSide(
+                color: Color(0xFFF5D166),
+                width: 1.5,
+              ),
             ),
           ),
         ),

@@ -2,7 +2,6 @@ import 'package:charity_management/features/auth/forgot_password/cubit/forgot_pa
 import 'package:charity_management/features/auth/forgot_password/cubit/forgot_password_state.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/widgets/custom_text_fields.dart';
-import 'package:charity_management/widgets/language_toggle_button.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -84,11 +83,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: LanguageToggleButton(enabled: !isLoading),
-                    ),
-                    const SizedBox(height: 14),
+                  const SizedBox(height: 14),
 
                     Stack(
                       alignment: Alignment.center,

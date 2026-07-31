@@ -1,5 +1,6 @@
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
@@ -7,6 +8,8 @@ class CustomBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       height: 72, // ارتفاع محكم ومناسب جداً لجميع الشاشات
       decoration: BoxDecoration(
@@ -24,17 +27,21 @@ class CustomBottomNavigation extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(Icons.home, 'الرئيسية', isActive: true),
-            _buildNavItem(Icons.analytics_outlined, 'تتبع الطلب'),
-            _buildNavItem(Icons.person_outline, 'الحساب'),
-            _buildNavItem(Icons.settings_outlined, 'الإعدادات'),
+            _buildNavItem(Icons.home, l10n.home, isActive: true),
+            _buildNavItem(Icons.analytics_outlined, l10n.trackRequest),
+            _buildNavItem(Icons.person_outline, l10n.account),
+            _buildNavItem(Icons.settings_outlined, l10n.settings),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(final IconData icon, final String label, {final bool isActive = false}) {
+  Widget _buildNavItem(
+    final IconData icon,
+    final String label, {
+    final bool isActive = false,
+  }) {
     return InkWell(
       onTap: () {
         // هنا سيتم إضافة التنقل بين الصفحات لاحقاً
@@ -49,11 +56,12 @@ class CustomBottomNavigation extends StatelessWidget {
               )
             : null,
         child: Column(
-          mainAxisSize: MainAxisSize.min, // تجعل الـ Column يأخذ المساحة المطلوبة لأيقونته ونصّه فقط
+          mainAxisSize: MainAxisSize
+              .min, // تجعل الـ Column يأخذ المساحة المطلوبة لأيقونته ونصّه فقط
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              icon, 
+              icon,
               color: isActive ? AppColors.primary : AppColors.brandGray,
               size: 24,
             ),
@@ -63,7 +71,8 @@ class CustomBottomNavigation extends StatelessWidget {
               child: Text(
                 label,
                 maxLines: 1,
-                overflow: TextOverflow.ellipsis, // في حال صغرت الشاشة جداً يضع نقاط بدل الـ Overflow
+                overflow: TextOverflow
+                    .ellipsis, // في حال صغرت الشاشة جداً يضع نقاط بدل الـ Overflow
                 style: TextStyle(
                   color: isActive ? AppColors.primary : AppColors.brandGray,
                   fontSize: 11,

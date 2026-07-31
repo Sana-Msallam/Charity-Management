@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:charity_management/theme/app_colors.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class AboutSectionCard extends StatefulWidget {
@@ -11,37 +12,34 @@ class AboutSectionCard extends StatefulWidget {
 }
 
 class _AboutSectionCardState extends State<AboutSectionCard> {
+  static const int _slidesCount = 3;
+
   final PageController _pageController = PageController();
 
   Timer? _timer;
   int _currentPage = 0;
 
-  final List<AboutSlide> _slides = const [
-    AboutSlide(
-      title: 'نبذة عن الجمعية',
-      description:
-          'نحن في جمعيتنا نسعى لتوفير الدعم الشامل للمحتاجين، '
-          'ونهدف إلى بناء مستقبل يسوده التكافل الاجتماعي والرحمة '
-          'من خلال برامجنا التنموية والإغاثية المبتكرة.',
-      icon: Icons.volunteer_activism_outlined,
-    ),
-    AboutSlide(
-      title: 'رؤيتنا',
-      description:
-          'نسعى إلى أن نكون جمعية رائدة في العمل الإنساني، '
-          'وأن نساهم في بناء مجتمع متكافل يحصل فيه كل فرد '
-          'على الدعم والرعاية التي يحتاجها.',
-      icon: Icons.visibility_outlined,
-    ),
-    AboutSlide(
-      title: 'رسالتنا',
-      description:
-          'تقديم المساعدات والخدمات الإنسانية بكفاءة وشفافية، '
-          'والوصول إلى الفئات الأكثر احتياجًا من خلال مبادرات '
-          'تنموية تصنع أثرًا إيجابيًا ومستدامًا.',
-      icon: Icons.favorite_outline,
-    ),
-  ];
+  List<AboutSlide> _slides(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return [
+      AboutSlide(
+        title: l10n.aboutAssociationTitle,
+        description: l10n.aboutAssociationDescription,
+        icon: Icons.volunteer_activism_outlined,
+      ),
+      AboutSlide(
+        title: l10n.ourVision,
+        description: l10n.ourVisionDescription,
+        icon: Icons.visibility_outlined,
+      ),
+      AboutSlide(
+        title: l10n.ourMission,
+        description: l10n.ourMissionDescription,
+        icon: Icons.favorite_outline,
+      ),
+    ];
+  }
 
   @override
   void initState() {
@@ -53,22 +51,19 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
   void _startAutoSlide() {
     _timer?.cancel();
 
-    _timer = Timer.periodic(
-      const Duration(seconds: 4),
-      (timer) {
-        if (!_pageController.hasClients) {
-          return;
-        }
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (!_pageController.hasClients) {
+        return;
+      }
 
-        final int nextPage = (_currentPage + 1) % _slides.length;
+      final int nextPage = (_currentPage + 1) % _slidesCount;
 
-        _pageController.animateToPage(
-          nextPage,
-          duration: const Duration(milliseconds: 600),
-          curve: Curves.easeInOut,
-        );
-      },
-    );
+      _pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   void _goToPage(int index) {
@@ -92,13 +87,15 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
 
   @override
   Widget build(BuildContext context) {
+    final slides = _slides(context);
+
     return Column(
       children: [
         SizedBox(
           height: 245,
           child: PageView.builder(
             controller: _pageController,
-            itemCount: _slides.length,
+            itemCount: slides.length,
             physics: const BouncingScrollPhysics(),
             onPageChanged: (index) {
               setState(() {
@@ -111,9 +108,7 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
-                child: _AboutSlideCard(
-                  slide: _slides[index],
-                ),
+                child: _AboutSlideCard(slide: slides[index]),
               );
             },
           ),
@@ -124,38 +119,35 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
         // مؤشرات الشرائح.
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            _slides.length,
-            (index) {
-              final bool isActive = index == _currentPage;
+          children: List.generate(slides.length, (index) {
+            final bool isActive = index == _currentPage;
 
-              return GestureDetector(
-                onTap: () => _goToPage(index),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: isActive ? 22 : 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: isActive
-                        ? AppColors.primary
-                        : AppColors.secondary.withOpacity(0.20),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: isActive
-                        ? [
-                            BoxShadow(
-                              color: AppColors.primary.withOpacity(0.20),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]
-                        : null,
-                  ),
+            return GestureDetector(
+              onTap: () => _goToPage(index),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: isActive ? 22 : 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? AppColors.primary
+                      : AppColors.secondary.withOpacity(0.20),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: isActive
+                      ? [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.20),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ]
+                      : null,
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          }),
         ),
       ],
     );
@@ -165,9 +157,7 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
 class _AboutSlideCard extends StatefulWidget {
   final AboutSlide slide;
 
-  const _AboutSlideCard({
-    required this.slide,
-  });
+  const _AboutSlideCard({required this.slide});
 
   @override
   State<_AboutSlideCard> createState() => _AboutSlideCardState();
@@ -201,43 +191,27 @@ class _AboutSlideCardState extends State<_AboutSlideCard> {
           curve: Curves.easeOut,
           width: double.infinity,
           padding: const EdgeInsets.all(24),
-          transform: Matrix4.translationValues(
-            0,
-            _isPressed ? 4 : 0,
-            0,
-          ),
+          transform: Matrix4.translationValues(0, _isPressed ? 4 : 0, 0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: AppColors.primary.withOpacity(
-                _isPressed ? 0.18 : 0.12,
-              ),
+              color: AppColors.primary.withOpacity(_isPressed ? 0.18 : 0.12),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color.fromRGBO(
-                  124,
-                  118,
-                  108,
-                  0.05,
-                ),
+                color: const Color.fromRGBO(124, 118, 108, 0.05),
                 blurRadius: _isPressed ? 7 : 5,
                 offset: const Offset(0, 2),
               ),
 
               // الظل السفلي يجعل البطاقة تبدو مرتفعة مثل الزر.
               BoxShadow(
-                color: AppColors.primary.withOpacity(
-                  _isPressed ? 0.06 : 0.14,
-                ),
+                color: AppColors.primary.withOpacity(_isPressed ? 0.06 : 0.14),
                 blurRadius: _isPressed ? 8 : 18,
                 spreadRadius: _isPressed ? 0 : 1,
-                offset: Offset(
-                  0,
-                  _isPressed ? 3 : 9,
-                ),
+                offset: Offset(0, _isPressed ? 3 : 9),
               ),
             ],
           ),
@@ -245,7 +219,6 @@ class _AboutSlideCardState extends State<_AboutSlideCard> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Row(
-                textDirection: TextDirection.rtl,
                 children: [
                   // صندوق الأيقونة.
                   Container(
@@ -277,8 +250,7 @@ class _AboutSlideCardState extends State<_AboutSlideCard> {
                   Expanded(
                     child: Text(
                       widget.slide.title,
-                      textAlign: TextAlign.right,
-                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.start,
                       style: const TextStyle(
                         color: AppColors.primary,
                         fontSize: 20,
@@ -310,8 +282,7 @@ class _AboutSlideCardState extends State<_AboutSlideCard> {
               Expanded(
                 child: Text(
                   widget.slide.description,
-                  textAlign: TextAlign.right,
-                  textDirection: TextDirection.rtl,
+                  textAlign: TextAlign.start,
                   style: const TextStyle(
                     color: AppColors.brandGray,
                     fontSize: 16,

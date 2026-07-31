@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../theme/app_colors.dart';
-import '../login/cubit/login_cubit.dart';
-import '../login/screen/login.dart';
-import '../services/auth_service.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:charity_management/routes/app_routes.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../../widgets/language_toggle_button.dart';
 
 class PendingApprovalScreen extends StatelessWidget {
   const PendingApprovalScreen({super.key});
@@ -23,10 +19,6 @@ class PendingApprovalScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: LanguageToggleButton(),
-              ),
               Container(
                 width: 105,
                 height: 105,
@@ -66,14 +58,9 @@ class PendingApprovalScreen extends StatelessWidget {
                 height: 48,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.pushNamedAndRemoveUntil(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider(
-                          create: (_) => LoginCubit(authService: AuthService()),
-                          child: const LoginScreen(),
-                        ),
-                      ),
+                      AppRoutes.login,
                       (route) => false,
                     );
                   },

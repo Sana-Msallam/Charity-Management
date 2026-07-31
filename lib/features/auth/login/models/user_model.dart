@@ -25,7 +25,7 @@ class UserModel {
       lastName: json['lastName']?.toString() ?? '',
       countryCode: json['countryCode']?.toString() ?? '',
       number: json['number']?.toString() ?? '',
-      type: json['type']?.toString() ?? '',
+      type: json['type']?.toString().trim().toUpperCase() ?? '',
     );
   }
 

@@ -1,63 +1,28 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../constants/api_constants.dart';
 import '../../../../../constants/dio_client.dart';
 import '../model/health_request_model.dart';
 
 class HealthRequestService {
-  Future<String> submitHealthRequest(
-    HealthRequestModel request,
-  ) async {
+  Future<String> submitHealthRequest(HealthRequestModel request) async {
     debugPrint('======================================');
     debugPrint('START SUBMIT HEALTH REQUEST');
     debugPrint('======================================');
 
-    final SharedPreferences preferences =
-        await SharedPreferences.getInstance();
-
-    final String? accessToken =
-        preferences.getString('access_token');
-
-    debugPrint(
-      'Token exists: '
-      '${accessToken != null && accessToken.trim().isNotEmpty}',
-    );
-
-    if (accessToken == null ||
-        accessToken.trim().isEmpty) {
-      debugPrint(
-        'Health request stopped: Access token not found',
-      );
-
-      throw const FormatException(
-        'يرجى تسجيل الدخول قبل إرسال الطلب',
-      );
-    }
-
-    debugPrint(
-      'Token preview: ${_maskToken(accessToken)}',
-    );
-
     final applicant = request.applicantInfo;
 
-    final String genderApiValue =
-        _mapGender(applicant.gender);
+    final String genderApiValue = _mapGender(applicant.gender);
 
-    final String socialStatusApiValue =
-        _mapSocialStatus(
+    final String socialStatusApiValue = _mapSocialStatus(
       applicant.socialStatus,
     );
 
-    final String addressJson = jsonEncode({
-      'ar': applicant.address,
-      'en': '',
-    });
+    final String addressJson = jsonEncode({'ar': applicant.address, 'en': ''});
 
     final String detailsJson = jsonEncode({
       'ar': request.description,
@@ -67,25 +32,15 @@ class HealthRequestService {
     debugPrint('Health request values:');
     debugPrint('categoryId: 1');
 
-    debugPrint(
-      'firstName: ${applicant.firstName}',
-    );
+    debugPrint('firstName: ${applicant.firstName}');
 
-    debugPrint(
-      'lastName: ${applicant.lastName}',
-    );
+    debugPrint('lastName: ${applicant.lastName}');
 
-    debugPrint(
-      'fatherName: ${applicant.fatherName}',
-    );
+    debugPrint('fatherName: ${applicant.fatherName}');
 
-    debugPrint(
-      'gender original: ${applicant.gender}',
-    );
+    debugPrint('gender original: ${applicant.gender}');
 
-    debugPrint(
-      'gender API value: $genderApiValue',
-    );
+    debugPrint('gender API value: $genderApiValue');
 
     debugPrint(
       'socialStatus original: '
@@ -97,100 +52,42 @@ class HealthRequestService {
       '$socialStatusApiValue',
     );
 
-    debugPrint(
-      'address: $addressJson',
-    );
+    debugPrint('address: $addressJson');
 
-    debugPrint(
-      'age: ${applicant.age}',
-    );
+    debugPrint('age: ${applicant.age}');
 
-    debugPrint(
-      'isUnemployed: ${applicant.isUnemployed}',
-    );
+    debugPrint('isUnemployed: ${applicant.isUnemployed}');
 
-    debugPrint(
-      'number: ${applicant.phoneNumber}',
-    );
+    debugPrint('number: ${applicant.phoneNumber}');
 
-    debugPrint(
-      'details: $detailsJson',
-    );
+    debugPrint('details: $detailsJson');
 
-    debugPrint(
-      'cost: ${request.cost}',
-    );
+    debugPrint('cost: ${request.cost}');
 
-    debugPrint(
-      'typeAid: ${request.typeAid.apiValue}',
-    );
+    debugPrint('typeAid: ${request.typeAid.apiValue}');
 
-    debugPrint(
-      'attachments count: ${request.media.length}',
-    );
+    debugPrint('attachments count: ${request.media.length}');
 
     final FormData formData = FormData();
 
     formData.fields.addAll([
-      const MapEntry(
-        'categoryId',
-        '1',
-      ),
-      MapEntry(
-        'firstName',
-        applicant.firstName,
-      ),
-      MapEntry(
-        'lastName',
-        applicant.lastName,
-      ),
-      MapEntry(
-        'beneficiaryFatherName',
-        applicant.fatherName,
-      ),
-      MapEntry(
-        'socialStatus',
-        socialStatusApiValue,
-      ),
-      MapEntry(
-        'address',
-        addressJson,
-      ),
-      MapEntry(
-        'age',
-        applicant.age.toString(),
-      ),
-      MapEntry(
-        'isUnemployed',
-        applicant.isUnemployed.toString(),
-      ),
-      MapEntry(
-        'gender',
-        genderApiValue,
-      ),
-      MapEntry(
-        'number',
-        applicant.phoneNumber,
-      ),
-      MapEntry(
-        'details',
-        detailsJson,
-      ),
-      MapEntry(
-        'cost',
-        request.cost.toString(),
-      ),
-      MapEntry(
-        'typeAid',
-        request.typeAid.apiValue,
-      ),
+      const MapEntry('categoryId', '1'),
+      MapEntry('firstName', applicant.firstName),
+      MapEntry('lastName', applicant.lastName),
+      MapEntry('beneficiaryFatherName', applicant.fatherName),
+      MapEntry('socialStatus', socialStatusApiValue),
+      MapEntry('address', addressJson),
+      MapEntry('age', applicant.age.toString()),
+      MapEntry('isUnemployed', applicant.isUnemployed.toString()),
+      MapEntry('gender', genderApiValue),
+      MapEntry('number', applicant.phoneNumber),
+      MapEntry('details', detailsJson),
+      MapEntry('cost', request.cost.toString()),
+      MapEntry('typeAid', request.typeAid.apiValue),
     ]);
 
     for (final PlatformFile file in request.media) {
-      await _addFileToFormData(
-        formData: formData,
-        file: file,
-      );
+      await _addFileToFormData(formData: formData, file: file);
     }
 
     _printFormData(formData);
@@ -202,84 +99,47 @@ class HealthRequestService {
         '${ApiConstants.healthRequest}',
       );
 
-      final Response<dynamic> response =
-          await DioClient.dio.post<dynamic>(
+      final Response<dynamic> response = await DioClient.dio.post<dynamic>(
         ApiConstants.healthRequest,
         data: formData,
-        options: Options(
-          contentType:
-              Headers.multipartFormDataContentType,
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-          },
-        ),
+        options: Options(contentType: Headers.multipartFormDataContentType),
       );
 
-      debugPrint(
-        'Health request response received',
-      );
+      debugPrint('Health request response received');
 
-      debugPrint(
-        'Status code: ${response.statusCode}',
-      );
+      debugPrint('Status code: ${response.statusCode}');
 
-      debugPrint(
-        'Response data: ${response.data}',
-      );
+      debugPrint('Response data: ${response.data}');
 
       debugPrint('======================================');
 
-      return _extractSuccessMessage(
-        response.data,
-      );
+      return _extractSuccessMessage(response.data);
     } on DioException catch (error, stackTrace) {
-      debugPrint(
-        'DIO ERROR WHILE SUBMITTING HEALTH REQUEST',
-      );
+      debugPrint('DIO ERROR WHILE SUBMITTING HEALTH REQUEST');
 
-      debugPrint(
-        'Error type: ${error.type}',
-      );
+      debugPrint('Error type: ${error.type}');
 
-      debugPrint(
-        'Error message: ${error.message}',
-      );
+      debugPrint('Error message: ${error.message}');
 
-      debugPrint(
-        'Status code: ${error.response?.statusCode}',
-      );
+      debugPrint('Status code: ${error.response?.statusCode}');
 
-      debugPrint(
-        'Response data: ${error.response?.data}',
-      );
+      debugPrint('Response data: ${error.response?.data}');
 
-      debugPrint(
-        'Request URL: ${error.requestOptions.uri}',
-      );
+      debugPrint('Request URL: ${error.requestOptions.uri}');
 
-      debugPrint(
-        'Request method: ${error.requestOptions.method}',
-      );
+      debugPrint('Request method: ${error.requestOptions.method}');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
       debugPrint('======================================');
 
       rethrow;
     } catch (error, stackTrace) {
-      debugPrint(
-        'UNEXPECTED HEALTH REQUEST ERROR',
-      );
+      debugPrint('UNEXPECTED HEALTH REQUEST ERROR');
 
-      debugPrint(
-        'Error: $error',
-      );
+      debugPrint('Error: $error');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
       debugPrint('======================================');
 
@@ -293,9 +153,7 @@ class HealthRequestService {
   }) async {
     debugPrint('--------------------------------------');
 
-    debugPrint(
-      'Checking attachment: ${file.name}',
-    );
+    debugPrint('Checking attachment: ${file.name}');
 
     debugPrint(
       'Attachment declared size: '
@@ -313,32 +171,21 @@ class HealthRequestService {
           '${file.name}',
         );
 
-        throw const FormatException(
-          'تعذر قراءة أحد الملفات المرفقة',
-        );
+        throw const FormatException('تعذر قراءة أحد الملفات المرفقة');
       }
 
-      debugPrint(
-        'Platform: Web',
-      );
+      debugPrint('Platform: Web');
 
-      debugPrint(
-        'Adding attachment using bytes',
-      );
+      debugPrint('Adding attachment using bytes');
 
-      debugPrint(
-        'Attachment name: ${file.name}',
-      );
+      debugPrint('Attachment name: ${file.name}');
 
       debugPrint(
         'Attachment bytes size: '
         '${bytes.length} bytes',
       );
 
-      multipartFile = MultipartFile.fromBytes(
-        bytes,
-        filename: file.name,
-      );
+      multipartFile = MultipartFile.fromBytes(bytes, filename: file.name);
     } else {
       final String? path = file.path;
 
@@ -348,40 +195,21 @@ class HealthRequestService {
           '${file.name}',
         );
 
-        throw const FormatException(
-          'تعذر الوصول إلى أحد الملفات المرفقة',
-        );
+        throw const FormatException('تعذر الوصول إلى أحد الملفات المرفقة');
       }
 
-      debugPrint(
-        'Platform: Mobile or Desktop',
-      );
+      debugPrint('Platform: Mobile or Desktop');
 
-      debugPrint(
-        'Adding attachment using path',
-      );
+      debugPrint('Adding attachment using path');
 
-      debugPrint(
-        'Attachment name: ${file.name}',
-      );
+      debugPrint('Attachment name: ${file.name}');
 
-      debugPrint(
-        'Attachment path: $path',
-      );
+      debugPrint('Attachment path: $path');
 
-      multipartFile =
-          await MultipartFile.fromFile(
-        path,
-        filename: file.name,
-      );
+      multipartFile = await MultipartFile.fromFile(path, filename: file.name);
     }
 
-    formData.files.add(
-      MapEntry(
-        'media',
-        multipartFile,
-      ),
-    );
+    formData.files.add(MapEntry('media', multipartFile));
 
     debugPrint(
       'Attachment added successfully: '
@@ -395,24 +223,18 @@ class HealthRequestService {
     if (data is Map) {
       final dynamic message = data['message'];
 
-      if (message is String &&
-          message.trim().isNotEmpty) {
+      if (message is String && message.trim().isNotEmpty) {
         return message;
       }
     }
 
-    if (data is String &&
-        data.trim().isNotEmpty) {
+    if (data is String && data.trim().isNotEmpty) {
       return data;
     }
 
-    debugPrint(
-      'Invalid server response format: $data',
-    );
+    debugPrint('Invalid server response format: $data');
 
-    throw const FormatException(
-      'استجابة الخادم غير صالحة',
-    );
+    throw const FormatException('استجابة الخادم غير صالحة');
   }
 
   String _mapGender(String gender) {
@@ -427,19 +249,13 @@ class HealthRequestService {
         return 'FEMALE';
 
       default:
-        debugPrint(
-          'Unsupported gender value: $gender',
-        );
+        debugPrint('Unsupported gender value: $gender');
 
-        throw const FormatException(
-          'قيمة الجنس غير صحيحة',
-        );
+        throw const FormatException('قيمة الجنس غير صحيحة');
     }
   }
 
-  String _mapSocialStatus(
-    String socialStatus,
-  ) {
+  String _mapSocialStatus(String socialStatus) {
     switch (socialStatus.trim()) {
       case 'أعزب':
       case 'عازب':
@@ -467,9 +283,7 @@ class HealthRequestService {
           '$socialStatus',
         );
 
-        throw const FormatException(
-          'قيمة الحالة الاجتماعية غير صحيحة',
-        );
+        throw const FormatException('قيمة الحالة الاجتماعية غير صحيحة');
     }
   }
 
@@ -478,14 +292,10 @@ class HealthRequestService {
       return;
     }
 
-    debugPrint(
-      '------------- FORM DATA -------------',
-    );
+    debugPrint('------------- FORM DATA -------------');
 
     for (final field in formData.fields) {
-      debugPrint(
-        '${field.key}: ${field.value}',
-      );
+      debugPrint('${field.key}: ${field.value}');
     }
 
     for (final file in formData.files) {
@@ -496,18 +306,6 @@ class HealthRequestService {
       );
     }
 
-    debugPrint(
-      '-------------------------------------',
-    );
-  }
-
-  String _maskToken(String token) {
-    if (token.length <= 12) {
-      return '***';
-    }
-
-    return '${token.substring(0, 6)}'
-        '...'
-        '${token.substring(token.length - 6)}';
+    debugPrint('-------------------------------------');
   }
 }

@@ -1,4 +1,5 @@
 import 'package:charity_management/theme/app_colors.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class BeneficiariesCounter extends StatelessWidget {
@@ -15,6 +16,8 @@ class BeneficiariesCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -28,14 +31,22 @@ class BeneficiariesCounter extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'عدد الأفراد المحتاجين للدعم',
-                style: TextStyle(color: AppColors.brandGray, fontSize: 13, fontWeight: FontWeight.w500),
+              Text(
+                l10n.beneficiariesNeedSupport,
+                style: const TextStyle(
+                  color: AppColors.brandGray,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
-                '$count ${count == 1 ? 'فرد' : 'أفراد'}',
-                style: const TextStyle(color: AppColors.tertiary, fontSize: 16, fontWeight: FontWeight.bold),
+                '$count ${count == 1 ? l10n.individual : l10n.individuals}',
+                style: const TextStyle(
+                  color: AppColors.tertiary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -43,14 +54,22 @@ class BeneficiariesCounter extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: onDecrement,
-                icon: const Icon(Icons.remove_circle_outline, color: AppColors.primary, size: 28),
+                icon: const Icon(
+                  Icons.remove_circle_outline,
+                  color: AppColors.primary,
+                  size: 28,
+                ),
               ),
               IconButton(
                 onPressed: onIncrement,
-                icon: const Icon(Icons.add_circle, color: AppColors.primary, size: 28),
+                icon: const Icon(
+                  Icons.add_circle,
+                  color: AppColors.primary,
+                  size: 28,
+                ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

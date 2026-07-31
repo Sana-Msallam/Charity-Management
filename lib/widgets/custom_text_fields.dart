@@ -58,13 +58,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
     final bool isLtrInput =
         widget.keyboardType == TextInputType.phone ||
         widget.keyboardType == TextInputType.emailAddress ||
+        widget.keyboardType == TextInputType.datetime ||
         widget.isPassword;
 
     final TextDirection inputDirection = isLtrInput
         ? TextDirection.ltr
-        : TextDirection.rtl;
+        : Directionality.of(context);
 
-    final TextAlign inputAlign = isLtrInput ? TextAlign.left : TextAlign.right;
+    final TextAlign inputAlign = isLtrInput ? TextAlign.left : TextAlign.start;
     const borderColor = Color(0xFFE7D9A8);
     const textColor = AppColors.primary;
 

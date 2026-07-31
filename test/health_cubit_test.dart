@@ -6,9 +6,12 @@ import 'package:charity_management/features/Beneficiary/Help_request/health_requ
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/health_aid_type.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/health_request_model.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/service/health_request_service.dart';
+import 'package:charity_management/l10n/generated/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  final localizations = AppLocalizationsEn();
+
   group('HealthAidType', () {
     test('provides the backend values for all supported types', () {
       expect(HealthAidType.values.map((type) => type.apiValue), [
@@ -26,7 +29,7 @@ void main() {
       final states = <HealthState>[];
       final subscription = cubit.stream.listen(states.add);
 
-      final submission = cubit.submitHealthRequest(_request);
+      final submission = cubit.submitHealthRequest(_request, localizations);
       service.complete('تم إرسال الطلب');
       await submission;
       await Future<void>.delayed(Duration.zero);
@@ -48,8 +51,11 @@ void main() {
       final service = _FakeHealthRequestService();
       final cubit = HealthCubit(service);
 
-      final firstSubmission = cubit.submitHealthRequest(_request);
-      await cubit.submitHealthRequest(_request);
+      final firstSubmission = cubit.submitHealthRequest(
+        _request,
+        localizations,
+      );
+      await cubit.submitHealthRequest(_request, localizations);
 
       expect(service.callCount, 1);
 
@@ -62,7 +68,7 @@ void main() {
       final service = _FakeHealthRequestService();
       final cubit = HealthCubit(service);
 
-      final submission = cubit.submitHealthRequest(_request);
+      final submission = cubit.submitHealthRequest(_request, localizations);
       service.completeError(const FormatException('استجابة غير صالحة'));
       await submission;
 

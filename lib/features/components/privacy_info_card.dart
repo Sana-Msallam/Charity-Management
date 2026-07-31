@@ -1,4 +1,5 @@
 import 'package:charity_management/theme/app_colors.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class PrivacyInfoCard extends StatelessWidget {
@@ -6,6 +7,8 @@ class PrivacyInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -16,20 +19,32 @@ class PrivacyInfoCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.verified_user_outlined, color: AppColors.secondary, size: 24),
+          const Icon(
+            Icons.verified_user_outlined,
+            color: AppColors.secondary,
+            size: 24,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  'خصوصية البيانات',
-                  style: TextStyle(color: AppColors.secondary, fontSize: 14, fontWeight: FontWeight.bold),
+                  l10n.dataPrivacy,
+                  style: const TextStyle(
+                    color: AppColors.secondary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  'يتم التعامل مع كافة البيانات المرفوعة بمنتهى السرية والخصوصية التامة وفقاً للمعايير الأمنية.',
-                  style: TextStyle(color: AppColors.brandGray, fontSize: 12, height: 1.5),
+                  l10n.dataPrivacyDescription,
+                  style: const TextStyle(
+                    color: AppColors.brandGray,
+                    fontSize: 12,
+                    height: 1.5,
+                  ),
                 ),
               ],
             ),

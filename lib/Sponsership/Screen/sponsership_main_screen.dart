@@ -1,16 +1,18 @@
 import 'package:charity_management/Sponsership/Screen/sponsership_request.dart';
+import 'package:charity_management/Sponsership/Screen/sponsorships_screen.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
-// تأكدي من تعديل مسارات الاستيراد (imports) أدناه لتتوافق مع أسماء الملفات وبنية المجلدات في مشروعكِ
-import 'package:charity_management/Sponsership/Screen/sponsorships_screen.dart'; 
-// import 'package:charity_management/Donor/sponsorship_request_screen.dart'; 
+// import 'package:charity_management/Donor/sponsorship_request_screen.dart';
 
 class SponsorshipMainScreen extends StatelessWidget {
   const SponsorshipMainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
       child: Scaffold(
         backgroundColor: const Color(0xFFFDFBF7),
         appBar: AppBar(
@@ -21,9 +23,9 @@ class SponsorshipMainScreen extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
           ),
           centerTitle: true,
-          title: const Text(
-            'الكفالات',
-            style: TextStyle(
+          title: Text(
+            l10n.sponsorships,
+            style: const TextStyle(
               color: Color(0xFF765A00),
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -32,7 +34,10 @@ class SponsorshipMainScreen extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.notifications_none_outlined, color: Color(0xFF765A00)),
+              icon: const Icon(
+                Icons.notifications_none_outlined,
+                color: Color(0xFF765A00),
+              ),
               onPressed: () {},
             ),
           ],
@@ -54,13 +59,17 @@ class SponsorshipMainScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.account_balance_wallet_outlined, color: Color(0xFFF5D166), size: 20),
-                          SizedBox(width: 8),
+                          const Icon(
+                            Icons.account_balance_wallet_outlined,
+                            color: Color(0xFFF5D166),
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
                           Text(
-                            'رصيد المحفظة الحالي',
-                            style: TextStyle(
+                            l10n.currentWalletBalance,
+                            style: const TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
                               fontFamily: 'IBM Plex Sans Arabic',
@@ -86,15 +95,23 @@ class SponsorshipMainScreen extends StatelessWidget {
                             backgroundColor: const Color(0xFFF5D166),
                             foregroundColor: const Color(0xFF765A00),
                             elevation: 0,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                           onPressed: () {},
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.add_circle_outline, size: 18),
-                              SizedBox(width: 6),
-                              Text('شحن المحفظة', style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'IBM Plex Sans Arabic')),
+                              const Icon(Icons.add_circle_outline, size: 18),
+                              const SizedBox(width: 6),
+                              Text(
+                                l10n.topUpWallet,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'IBM Plex Sans Arabic',
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -122,13 +139,17 @@ class SponsorshipMainScreen extends StatelessWidget {
                       color: const Color(0xFF765A00),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Column(
+                    child: Column(
                       children: [
-                        Icon(Icons.favorite, color: Colors.white, size: 32),
-                        SizedBox(height: 8),
+                        const Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                          size: 32,
+                        ),
+                        const SizedBox(height: 8),
                         Text(
-                          'كفالاتي',
-                          style: TextStyle(
+                          l10n.mySponsorships,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -136,8 +157,12 @@ class SponsorshipMainScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'إدارة الأيتام المكفولين حالياً',
-                          style: TextStyle(color: Colors.white70, fontSize: 12, fontFamily: 'IBM Plex Sans Arabic'),
+                          l10n.manageCurrentSponsoredOrphans,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                            fontFamily: 'IBM Plex Sans Arabic',
+                          ),
                         ),
                       ],
                     ),
@@ -164,14 +189,17 @@ class SponsorshipMainScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: const Color(0xFFEFEAE4)),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.person_add_alt_1_outlined, color: Color(0xFF3D523A)),
-                        SizedBox(width: 8),
+                        const Icon(
+                          Icons.person_add_alt_1_outlined,
+                          color: Color(0xFF3D523A),
+                        ),
+                        const SizedBox(width: 8),
                         Text(
-                          'إضافة كفالة جديدة',
-                          style: TextStyle(
+                          l10n.addNewSponsorship,
+                          style: const TextStyle(
                             color: Color(0xFF3D523A),
                             fontSize: 15,
                             fontWeight: FontWeight.bold,

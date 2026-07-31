@@ -1,23 +1,15 @@
-import '../../forgot_password/cubit/forgot_password_cubit.dart';
-import '../../forgot_password/screen/forgot_password_screen.dart';
-import '../../forgot_password/screen/new_password.dart';
-import 'package:charity_management/features/auth/services/auth_service.dart';
+import 'package:charity_management/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '/widgets/custom_text_fields.dart';
 import '/theme/app_colors.dart';
-import '../../register_donor/screen/signup_donor.dart';
-import '../../register_beneficiary/screen/signup_beneficiary.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
-import '../../register_donor/cubit/register_donor_cubit.dart';
 import 'package:charity_management/features/auth/login/cubit/login_cubit.dart';
 import 'package:charity_management/features/auth/login/cubit/login_state.dart';
-import '../../register_beneficiary/cubit/register_beneficiary_cubit.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
-import 'package:charity_management/widgets/language_toggle_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -63,25 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     if (type == RegisterType.donor) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => RegisterDonorCubit(authService: AuthService()),
-            child: const SignUpDonorScreen(),
-          ),
-        ),
-      );
+      Navigator.pushNamed(context, AppRoutes.registerDonor);
     } else if (type == RegisterType.beneficiary) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => RegisterBeneficiaryCubit(authService: AuthService()),
-            child: const SignUpBeneficiaryScreen(),
-          ),
-        ),
-      );
+      Navigator.pushNamed(context, AppRoutes.registerBeneficiary);
     }
   }
 
@@ -111,39 +87,34 @@ class _LoginScreenState extends State<LoginScreen> {
                 behavior: SnackBarBehavior.floating,
               ),
             );
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const NewPasswordScreen()),
-            );
 
-            // if (user.isDonor) {
-            //   Navigator.pushNamedAndRemoveUntil(
-            //     context,
-            //     '/donor-home',
-            //     (route) => false,
-            //   );
-            // } else if (user.isBeneficiary) {
-            //   Navigator.pushNamedAndRemoveUntil(
-            //     context,
-            //     '/beneficiary-home',
-            //     (route) => false,
-            //   );
-            // }
+            if (user.isDonor) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.donorHome,
+                (route) => false,
+              );
+            } else if (user.isBeneficiary) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.beneficiaryHome,
+                (route) => false,
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(localizations.unexpectedError),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
           }
         },
         child: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: const LanguageToggleButton(),
-                  ),
-                ),
-
-                const SizedBox(height: 8),
+              const SizedBox(height: 34),
 
                 Image.asset(
                   'assets/img/logo_isolated.svg.png',
@@ -268,16 +239,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushNamed(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (_) => BlocProvider(
-                                    create: (_) => ForgotPasswordCubit(
-                                      authService: AuthService(),
-                                    ),
-                                    child: const ForgotPasswordScreen(),
-                                  ),
-                                ),
+                                AppRoutes.forgotPassword,
                               );
                             },
                             child: Text(

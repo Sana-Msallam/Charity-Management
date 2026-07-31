@@ -1,4 +1,5 @@
 import 'package:charity_management/Orphan/Screen/orphan_profile.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 // هيكل بيانات تجريبي للأطفال المكفولين لسهولة العرض والتحكم
@@ -21,49 +22,56 @@ class SponsorshipsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     // قائمة البيانات بناءً على الصورة المرفقة image_626a17.png
     final List<SponsoredChild> children = [
       SponsoredChild(
         name: 'أحمد محمد',
         grade: 'الصف الرابع الابتدائي',
-        status: 'نشط',
-        imagePath: 'assets/images/orphan_profile.jpg', // تأكدي من تطابق مسارات الصور لديكِ
+        status: l10n.activeStatus,
+        imagePath:
+            'assets/orphan_profile.jpg', // تأكدي من تطابق مسارات الصور لديكِ
       ),
       SponsoredChild(
         name: 'سارة علي',
         grade: 'الصف الثاني الابتدائي',
-        status: 'نشط',
-        imagePath: 'assets/images/orphan_profile.jpg', 
+        status: l10n.activeStatus,
+        imagePath: 'assets/orphan_profile.jpg',
       ),
       SponsoredChild(
         name: 'ياسين خالد',
         grade: 'الصف السادس الابتدائي',
-        status: 'نشط',
-        imagePath: 'assets/images/orphan_profile.jpg',
+        status: l10n.activeStatus,
+        imagePath: 'assets/orphan_profile.jpg',
       ),
     ];
 
     // الألوان الرئيسية المعتمدة في التصميم
     const Color primaryYellow = Color(0xFFD4AF37); // اللون الأصفر الثري للهوية
-    const Color lightCardBg = Color(0xFFFDF8EB);   // خلفية كرت النظرة العامة
-    const Color textDark = Color(0xFF1A2E40);      // لون النصوص الداكنة
+    const Color lightCardBg = Color(0xFFFDF8EB); // خلفية كرت النظرة العامة
+    const Color textDark = Color(0xFF1A2E40); // لون النصوص الداكنة
 
     return Directionality(
-      textDirection: TextDirection.rtl, // لضبط الواجهة باللغة العربية بالكامل
+      textDirection: Directionality.of(context), // يتبع لغة التطبيق الحالية
       child: Scaffold(
-        backgroundColor: const Color(0xFFF8FAFC), // خلفية الصفحة المائلة للبياض النقي
+        backgroundColor: const Color(
+          0xFFF8FAFC,
+        ), // خلفية الصفحة المائلة للبياض النقي
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0.5,
           leading: const Padding(
             padding: EdgeInsets.all(8.0),
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/orphan_profile.jpg'), // صورة بروفايل المستخدم
+              backgroundImage: AssetImage(
+                'assets/orphan_profile.jpg',
+              ), // صورة بروفايل المستخدم
             ),
           ),
-          title: const Text(
-            'كفالاتي الحالية ',
-            style: TextStyle(
+          title: Text(
+            l10n.currentSponsorships,
+            style: const TextStyle(
               color: primaryYellow,
               fontWeight: FontWeight.bold,
               fontSize: 20,
@@ -92,14 +100,14 @@ class SponsorshipsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'نظرة عامة',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    Text(
+                      l10n.overview,
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'كفالاتي الحالية',
-                      style: TextStyle(
+                    Text(
+                      l10n.currentSponsorships,
+                      style: const TextStyle(
                         color: textDark,
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -109,18 +117,21 @@ class SponsorshipsScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'عدد الأطفال المكفولين حالياً',
-                          style: TextStyle(color: textDark, fontSize: 16),
+                        Text(
+                          l10n.sponsoredChildrenCount,
+                          style: const TextStyle(color: textDark, fontSize: 16),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
                             color: primaryYellow,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            '${children.length}',
+                            l10n.sponsoredChildrenTotal(children.length),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -139,16 +150,19 @@ class SponsorshipsScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'قائمة المكفولين',
-                    style: TextStyle(
+                  Text(
+                    l10n.sponsoredList,
+                    style: const TextStyle(
                       color: textDark,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.tune, color: Colors.grey), // أيقونة الفلترة والتصفية الجانبية
+                    icon: const Icon(
+                      Icons.tune,
+                      color: Colors.grey,
+                    ), // أيقونة الفلترة والتصفية الجانبية
                     onPressed: () {},
                   ),
                 ],
@@ -160,18 +174,19 @@ class SponsorshipsScreen extends StatelessWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: children.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final child = children[index];
                   return InkWell(
-          onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const OrphanDetailsScreen(),
-    ),
-  );
-},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OrphanDetailsScreen(),
+                        ),
+                      );
+                    },
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
                       padding: const EdgeInsets.all(12),
@@ -189,7 +204,11 @@ class SponsorshipsScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           // أيقونة السهم الأيمن للانتقال للتفاصيل
-                          const Icon(Icons.arrow_back_ios_new, size: 16, color: Colors.grey),
+                          const Icon(
+                            Icons.arrow_back_ios_new,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
                           const Spacer(),
                           // تفاصيل الطفل (الاسم والصف والحالة)
                           Column(
@@ -206,13 +225,21 @@ class SponsorshipsScreen extends StatelessWidget {
                               const SizedBox(height: 4),
                               Text(
                                 child.grade,
-                                style: const TextStyle(color: Colors.grey, fontSize: 14),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
                               ),
                               const SizedBox(height: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 4,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFE0F7FA), // لون خلفية شارة "نشط" الفيروزية
+                                  color: const Color(
+                                    0xFFE0F7FA,
+                                  ), // لون خلفية شارة "نشط" الفيروزية
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
@@ -241,7 +268,10 @@ class SponsorshipsScreen extends StatelessWidget {
                                   width: 64,
                                   height: 64,
                                   color: Colors.grey[300],
-                                  child: const Icon(Icons.person, color: Colors.white),
+                                  child: const Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                  ),
                                 );
                               },
                             ),
@@ -261,7 +291,9 @@ class SponsorshipsScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   image: const DecorationImage(
-                    image: AssetImage('assets/images/orphan_profile.jpg'), // استبدليها بصورة الأيدي الملونة لاحقاً
+                    image: AssetImage(
+                      'assets/orphan_profile.jpg',
+                    ), // استبدليها بصورة الأيدي الملونة لاحقاً
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -278,22 +310,22 @@ class SponsorshipsScreen extends StatelessWidget {
                     ),
                   ),
                   padding: const EdgeInsets.all(16.0),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'أثر عطاؤك',
-                        style: TextStyle(
+                        l10n.yourGivingImpact,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        'تم توفير وجبات تعليمية هذا الشهر بفضل عطائك',
-                        style: TextStyle(
+                        l10n.givingImpactDescription,
+                        style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 13,
                         ),

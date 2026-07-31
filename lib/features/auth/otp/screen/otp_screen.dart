@@ -5,14 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
-import 'package:charity_management/widgets/language_toggle_button.dart';
+import 'package:charity_management/routes/app_routes.dart';
 
-import '../../login/cubit/login_cubit.dart';
-import '../../login/screen/login.dart';
-import '../../services/auth_service.dart';
 import '../cubit/otp_cubit.dart';
 import '../cubit/otp_state.dart';
-import '../../../auth/screens/pending_approval_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({
@@ -144,23 +140,18 @@ class _OtpScreenState extends State<OtpScreen> {
     final normalizedUserType = widget.userType.trim().toLowerCase();
 
     if (normalizedUserType == 'beneficiary') {
-      Navigator.pushAndRemoveUntil(
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const PendingApprovalScreen()),
+        AppRoutes.pendingApproval,
         (route) => false,
       );
 
       return;
     }
 
-    Navigator.pushAndRemoveUntil(
+    Navigator.pushNamedAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (_) => BlocProvider(
-          create: (_) => LoginCubit(authService: AuthService()),
-          child: const LoginScreen(),
-        ),
-      ),
+      AppRoutes.login,
       (route) => false,
     );
   }
@@ -215,11 +206,7 @@ class _OtpScreenState extends State<OtpScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 22),
               child: Column(
                 children: [
-                  Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: LanguageToggleButton(enabled: !isLoading),
-                  ),
-                  const SizedBox(height: 14),
+                const SizedBox(height: 14),
 
                   Stack(
                     alignment: Alignment.center,

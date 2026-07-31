@@ -2,6 +2,7 @@ import 'package:charity_management/features/language/cubit/language_cubit.dart';
 import 'package:charity_management/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +13,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
+    FlutterSecureStorage.setMockInitialValues({});
     final languageCubit = await LanguageCubit.create(
       deviceLocale: const Locale('ar'),
     );
@@ -24,7 +26,7 @@ void main() {
 
     expect(find.text('تسجيل الدخول'), findsWidgets);
 
-    await tester.tap(find.byIcon(Icons.language));
+    await languageCubit.toggleLanguage();
     await tester.pumpAndSettle();
 
     expect(find.text('Login'), findsWidgets);
@@ -38,6 +40,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
+    FlutterSecureStorage.setMockInitialValues({});
     final languageCubit = await LanguageCubit.create(
       deviceLocale: const Locale('fr'),
     );
