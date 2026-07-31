@@ -13,6 +13,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 
 class HealthRequestPage extends StatefulWidget {
   const HealthRequestPage({
@@ -496,10 +497,13 @@ class _HealthRequestPageState
     );
 
     debugPrint('======================================');
+    final localizations = AppLocalizations.of(context)!;
 
     context
         .read<HealthCubit>()
-        .submitHealthRequest(request);
+        .submitHealthRequest(request,
+         localizations,
+         );
   }
 
   void _showMessage(String message) {

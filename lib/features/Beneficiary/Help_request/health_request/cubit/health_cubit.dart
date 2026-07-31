@@ -6,6 +6,7 @@ import '../../../../../constants/api_exception.dart';
 import '../model/health_request_model.dart';
 import '../service/health_request_service.dart';
 import 'health_state.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 
 class HealthCubit extends Cubit<HealthState> {
   HealthCubit(
@@ -22,6 +23,7 @@ class HealthCubit extends Cubit<HealthState> {
 
   Future<void> submitHealthRequest(
     HealthRequestModel request,
+    AppLocalizations localizations,
   ) async {
     debugPrint('======================================');
     debugPrint(
@@ -177,7 +179,7 @@ class HealthCubit extends Cubit<HealthState> {
       );
 
       final message =
-          ApiException.getMessage(error);
+          ApiException.getMessage(error,localizations);
 
       debugPrint(
         'Converted Arabic error message: $message',

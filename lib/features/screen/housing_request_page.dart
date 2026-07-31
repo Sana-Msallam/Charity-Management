@@ -4,7 +4,7 @@ import 'package:charity_management/theme/app_font.dart';
 import 'package:charity_management/widgets/custom_text_field.dart';
 import 'package:charity_management/features/components/selection_chip.dart';
 // استيراد المكونات المشتركة الجديدة والموحدة للتطبيق
-import 'package:charity_management/Beneficiary/components/custom_step_indicator.dart';
+import 'package:charity_management/features/components/custom_step_Indicator.dart';
 import 'package:charity_management/features/components/custom_attachment_uploader.dart';
 
 class HousingRequestPage extends StatefulWidget {

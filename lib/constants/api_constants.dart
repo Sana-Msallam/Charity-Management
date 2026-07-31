@@ -15,4 +15,8 @@ static const String resetPassword =
     '/auth/forgot-password/reset';
 
   static const String healthRequest = '/requests/health';
+
+  static const String profile = '/api/profile';
+
+  static const String aidRequests = '/donor/public/aid-requests';
 }
