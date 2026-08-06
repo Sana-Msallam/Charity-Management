@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:charity_management/constants/debug_token.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -8,34 +9,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../constants/api_constants.dart';
 import '../../../../../constants/dio_client.dart';
-import '../model/health_request_model.dart';
+import '../model/food_request_model.dart';
 
-class HealthRequestService {
-  
-  
-
-  Future<String> submitHealthRequest(
-    HealthRequestModel request,
+class FoodRequestService {
+  Future<String> submitFoodRequest(
+    FoodRequestModel request,
   ) async {
     debugPrint('======================================');
-    debugPrint('START SUBMIT HEALTH REQUEST');
+    debugPrint('START SUBMIT FOOD REQUEST');
     debugPrint('======================================');
 
     final SharedPreferences preferences =
         await SharedPreferences.getInstance();
 
-    final String? accessToken =
+    String? accessToken =
         preferences.getString('access_token');
+        accessToken ??= DebugToken.token;
 
-    debugPrint(
-      'Token exists: '
-      '${accessToken != null && accessToken.trim().isNotEmpty}',
-    );
+    final bool tokenExists =
+        accessToken != null &&
+        accessToken.trim().isNotEmpty;
 
-    if (accessToken == null ||
-        accessToken.trim().isEmpty) {
+    debugPrint('Token exists: $tokenExists');
+
+    if (!tokenExists) {
       debugPrint(
-        'Health request stopped: Access token not found',
+        'Food request stopped: Access token not found',
       );
 
       throw const FormatException(
@@ -66,85 +65,50 @@ final String detailsJson = jsonEncode({
   'en': request.detailsEn.trim(),
 });
 
-    debugPrint('Health request values:');
-    debugPrint('categoryId: 1');
+    
 
+    debugPrint('Food request values:');
+    debugPrint('categoryId: 2');
     debugPrint(
       'firstName: ${applicant.firstName}',
     );
-
     debugPrint(
       'lastName: ${applicant.lastName}',
     );
-
     debugPrint(
-      'fatherName: ${applicant.fatherName}',
+      'beneficiaryFatherName: ${applicant.fatherName}',
     );
-
     debugPrint(
-      'gender original: ${applicant.gender}',
+      'socialStatus: $socialStatusApiValue',
     );
-
     debugPrint(
-      'gender API value: $genderApiValue',
+      'address: $addressJson',
     );
-
-    debugPrint(
-      'socialStatus original: '
-      '${applicant.socialStatus}',
-    );
-
-    debugPrint(
-      'socialStatus API value: '
-      '$socialStatusApiValue',
-    );
-
-   debugPrint(
-  'addressAr: ${applicant.addressAr}',
-);
-
-debugPrint(
-  'addressEn: ${applicant.addressEn}',
-);
-
-debugPrint(
-  'address JSON: $addressJson',
-);
-
-debugPrint(
-  'detailsAr: ${request.detailsAr}',
-);
-
-debugPrint(
-  'detailsEn: ${request.detailsEn}',
-);
-
-debugPrint(
-  'details JSON: $detailsJson',
-);
-
     debugPrint(
       'age: ${applicant.age}',
     );
-
     debugPrint(
       'isUnemployed: ${applicant.isUnemployed}',
     );
-
+    debugPrint(
+      'gender: $genderApiValue',
+    );
     debugPrint(
       'number: ${applicant.phoneNumber}',
     );
-
-  
-
+    debugPrint(
+      'details: $detailsJson',
+    );
     debugPrint(
       'cost: ${request.cost}',
     );
-
     debugPrint(
       'typeAid: ${request.typeAid.apiValue}',
     );
-
+    debugPrint(
+      'numberIndividuals: '
+      '${request.numberIndividuals}',
+    );
     debugPrint(
       'attachments count: ${request.media.length}',
     );
@@ -154,7 +118,7 @@ debugPrint(
     formData.fields.addAll([
       const MapEntry(
         'categoryId',
-        '1',
+        '2',
       ),
       MapEntry(
         'firstName',
@@ -204,9 +168,14 @@ debugPrint(
         'typeAid',
         request.typeAid.apiValue,
       ),
+      MapEntry(
+        'numberIndividuals',
+        request.numberIndividuals.toString(),
+      ),
     ]);
 
-    for (final PlatformFile file in request.media) {
+    for (final PlatformFile file
+        in request.media) {
       await _addFileToFormData(
         formData: formData,
         file: file,
@@ -219,34 +188,32 @@ debugPrint(
       debugPrint(
         'Sending POST request to: '
         '${ApiConstants.baseUrl}'
-        '${ApiConstants.healthRequest}',
+        '${ApiConstants.foodRequest}',
       );
 
       final Response<dynamic> response =
           await DioClient.dio.post<dynamic>(
-        ApiConstants.healthRequest,
+        ApiConstants.foodRequest,
         data: formData,
         options: Options(
           contentType:
               Headers.multipartFormDataContentType,
           headers: {
-            'Authorization': 'Bearer $accessToken',
+            'Authorization':
+                'Bearer $accessToken',
           },
         ),
       );
 
       debugPrint(
-        'Health request response received',
+        'Food request response received',
       );
-
       debugPrint(
         'Status code: ${response.statusCode}',
       );
-
       debugPrint(
         'Response data: ${response.data}',
       );
-
       debugPrint('======================================');
 
       return _extractSuccessMessage(
@@ -254,53 +221,42 @@ debugPrint(
       );
     } on DioException catch (error, stackTrace) {
       debugPrint(
-        'DIO ERROR WHILE SUBMITTING HEALTH REQUEST',
+        'DIO ERROR WHILE SUBMITTING FOOD REQUEST',
       );
-
       debugPrint(
         'Error type: ${error.type}',
       );
-
       debugPrint(
         'Error message: ${error.message}',
       );
-
       debugPrint(
         'Status code: ${error.response?.statusCode}',
       );
-
       debugPrint(
         'Response data: ${error.response?.data}',
       );
-
       debugPrint(
         'Request URL: ${error.requestOptions.uri}',
       );
-
       debugPrint(
         'Request method: ${error.requestOptions.method}',
       );
-
       debugPrint(
         'Stack trace: $stackTrace',
       );
-
       debugPrint('======================================');
 
       rethrow;
     } catch (error, stackTrace) {
       debugPrint(
-        'UNEXPECTED HEALTH REQUEST ERROR',
+        'UNEXPECTED FOOD REQUEST ERROR',
       );
-
       debugPrint(
         'Error: $error',
       );
-
       debugPrint(
         'Stack trace: $stackTrace',
       );
-
       debugPrint('======================================');
 
       rethrow;
@@ -312,14 +268,11 @@ debugPrint(
     required PlatformFile file,
   }) async {
     debugPrint('--------------------------------------');
-
     debugPrint(
-      'Checking attachment: ${file.name}',
+      'Checking food attachment: ${file.name}',
     );
-
     debugPrint(
-      'Attachment declared size: '
-      '${file.size} bytes',
+      'Attachment size: ${file.size} bytes',
     );
 
     MultipartFile multipartFile;
@@ -327,7 +280,8 @@ debugPrint(
     if (kIsWeb) {
       final Uint8List? bytes = file.bytes;
 
-      if (bytes == null || bytes.isEmpty) {
+      if (bytes == null ||
+          bytes.isEmpty) {
         debugPrint(
           'Web attachment bytes are missing: '
           '${file.name}',
@@ -338,31 +292,20 @@ debugPrint(
         );
       }
 
-      debugPrint(
-        'Platform: Web',
-      );
-
-      debugPrint(
-        'Adding attachment using bytes',
-      );
-
-      debugPrint(
-        'Attachment name: ${file.name}',
-      );
-
-      debugPrint(
-        'Attachment bytes size: '
-        '${bytes.length} bytes',
-      );
-
-      multipartFile = MultipartFile.fromBytes(
+      multipartFile =
+          MultipartFile.fromBytes(
         bytes,
         filename: file.name,
+      );
+
+      debugPrint(
+        'Web attachment added using bytes',
       );
     } else {
       final String? path = file.path;
 
-      if (path == null || path.trim().isEmpty) {
+      if (path == null ||
+          path.trim().isEmpty) {
         debugPrint(
           'Mobile attachment path is missing: '
           '${file.name}',
@@ -373,26 +316,14 @@ debugPrint(
         );
       }
 
-      debugPrint(
-        'Platform: Mobile or Desktop',
-      );
-
-      debugPrint(
-        'Adding attachment using path',
-      );
-
-      debugPrint(
-        'Attachment name: ${file.name}',
-      );
-
-      debugPrint(
-        'Attachment path: $path',
-      );
-
       multipartFile =
           await MultipartFile.fromFile(
         path,
         filename: file.name,
+      );
+
+      debugPrint(
+        'Mobile attachment added using path: $path',
       );
     }
 
@@ -404,16 +335,21 @@ debugPrint(
     );
 
     debugPrint(
-      'Attachment added successfully: '
+      'Food attachment added successfully: '
       '${file.name}',
     );
-
     debugPrint('--------------------------------------');
   }
+  
 
-  String _extractSuccessMessage(dynamic data) {
+
+
+  String _extractSuccessMessage(
+    dynamic data,
+  ) {
     if (data is Map) {
-      final dynamic message = data['message'];
+      final dynamic message =
+          data['message'];
 
       if (message is String &&
           message.trim().isNotEmpty) {
@@ -427,7 +363,7 @@ debugPrint(
     }
 
     debugPrint(
-      'Invalid server response format: $data',
+      'Invalid food response format: $data',
     );
 
     throw const FormatException(
@@ -435,7 +371,9 @@ debugPrint(
     );
   }
 
-  String _mapGender(String gender) {
+  String _mapGender(
+    String gender,
+  ) {
     switch (gender.trim()) {
       case 'ذكر':
       case 'MALE':
@@ -493,22 +431,26 @@ debugPrint(
     }
   }
 
-  void _printFormData(FormData formData) {
+  void _printFormData(
+    FormData formData,
+  ) {
     if (!kDebugMode) {
       return;
     }
 
     debugPrint(
-      '------------- FORM DATA -------------',
+      '------------- FOOD FORM DATA -------------',
     );
 
-    for (final field in formData.fields) {
+    for (final field
+        in formData.fields) {
       debugPrint(
         '${field.key}: ${field.value}',
       );
     }
 
-    for (final file in formData.files) {
+    for (final file
+        in formData.files) {
       debugPrint(
         '${file.key}: '
         '${file.value.filename} - '
@@ -517,11 +459,13 @@ debugPrint(
     }
 
     debugPrint(
-      '-------------------------------------',
+      '------------------------------------------',
     );
   }
 
-  String _maskToken(String token) {
+  String _maskToken(
+    String token,
+  ) {
     if (token.length <= 12) {
       return '***';
     }

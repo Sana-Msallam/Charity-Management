@@ -1,22 +1,23 @@
+import 'package:charity_management/features/Beneficiary/Help_request/applicantInfo/model/applicant_info_model.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/food_request/cubit/food_cubit.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/food_request/cubit/food_state.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/food_request/model/food_aid_type.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/food_request/model/food_request_model.dart';
 import 'package:charity_management/features/components/custom_attachment_uploader.dart';
 import 'package:charity_management/features/components/custom_step_Indicator.dart';
 import 'package:charity_management/features/components/request_result_dialog.dart';
 import 'package:charity_management/features/components/selection_chip.dart';
-import 'package:charity_management/features/Beneficiary/Help_request/health_request/cubit/health_cubit.dart';
-import 'package:charity_management/features/Beneficiary/Help_request/health_request/cubit/health_state.dart';
-import 'package:charity_management/features/Beneficiary/Help_request/applicantInfo/model/applicant_info_model.dart';
-import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/health_aid_type.dart';
-import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/health_request_model.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
+import 'package:charity_management/widgets/beneficiaries_counter.dart';
 import 'package:charity_management/widgets/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HealthRequestPage extends StatefulWidget {
-  const HealthRequestPage({
+class FoodRequestPage extends StatefulWidget {
+  const FoodRequestPage({
     super.key,
     required this.applicantInfo,
   });
@@ -24,13 +25,12 @@ class HealthRequestPage extends StatefulWidget {
   final ApplicantInfoModel applicantInfo;
 
   @override
-  State<HealthRequestPage> createState() {
-    return _HealthRequestPageState();
+  State<FoodRequestPage> createState() {
+    return _FoodRequestPageState();
   }
 }
 
-class _HealthRequestPageState
-    extends State<HealthRequestPage> {
+class _FoodRequestPageState extends State<FoodRequestPage> {
   final TextEditingController _detailsArController =
       TextEditingController();
 
@@ -40,101 +40,85 @@ class _HealthRequestPageState
   final TextEditingController _costController =
       TextEditingController();
 
-  // يعمل على Web وAndroid معًا.
-  final List<PlatformFile> _attachments = [];
+  FoodAidType? _selectedFoodAidType;
 
-  HealthAidType? _selectedMedicalType;
+  int _numberIndividuals = 1;
+
+  final List<PlatformFile> _attachments = [];
 
   @override
   void initState() {
     super.initState();
 
     debugPrint('======================================');
-    debugPrint('HealthRequestPage opened');
+    debugPrint('FoodRequestPage opened');
     debugPrint('Applicant data received:');
-
     debugPrint(
       'First name: ${widget.applicantInfo.firstName}',
     );
-
     debugPrint(
       'Father name: ${widget.applicantInfo.fatherName}',
     );
-
     debugPrint(
       'Last name: ${widget.applicantInfo.lastName}',
     );
-
     debugPrint(
       'Age: ${widget.applicantInfo.age}',
     );
-
     debugPrint(
       'Gender: ${widget.applicantInfo.gender}',
     );
-
     debugPrint(
       'Social status: ${widget.applicantInfo.socialStatus}',
     );
-
     debugPrint(
       'Phone number: ${widget.applicantInfo.phoneNumber}',
     );
-
     debugPrint(
       'Address AR: ${widget.applicantInfo.addressAr}',
     );
-
     debugPrint(
       'Address EN: ${widget.applicantInfo.addressEn}',
     );
-
     debugPrint(
       'Is unemployed: ${widget.applicantInfo.isUnemployed}',
     );
-
     debugPrint('======================================');
   }
 
   @override
   void dispose() {
-    debugPrint('HealthRequestPage disposed');
-
     _detailsArController.dispose();
     _detailsEnController.dispose();
     _costController.dispose();
+
+    debugPrint('FoodRequestPage disposed');
 
     super.dispose();
   }
 
   Future<void> _pickAttachments() async {
     debugPrint('======================================');
-    debugPrint('Attachment picker opened');
+    debugPrint('Food attachment picker opened');
 
     try {
       final FilePickerResult? result =
           await FilePicker.platform.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
-        allowedExtensions: [
+        allowedExtensions: const [
           'jpg',
           'jpeg',
           'png',
           'pdf',
         ],
-
-        /*
-         * على Web يجب جلب bytes.
-         * على Android نعتمد على path لتقليل استخدام الذاكرة.
-         */
         withData: kIsWeb,
       );
 
       if (result == null) {
         debugPrint(
-          'Attachment selection cancelled',
+          'Food attachment selection cancelled',
         );
-
         debugPrint('======================================');
         return;
       }
@@ -143,58 +127,32 @@ class _HealthRequestPageState
         debugPrint(
           'Widget is not mounted after file selection',
         );
-
         return;
       }
 
       debugPrint(
-        'Selected platform files count: '
-        '${result.files.length}',
+        'Selected files count: ${result.files.length}',
       );
 
-      for (final PlatformFile platformFile
-          in result.files) {
+      for (final PlatformFile file in result.files) {
+        debugPrint('Selected food attachment:');
+        debugPrint('Name: ${file.name}');
+        debugPrint('Path: ${file.path}');
+        debugPrint('Size: ${file.size} bytes');
+        debugPrint('Extension: ${file.extension}');
         debugPrint(
-          'Selected file information:',
-        );
-
-        debugPrint(
-          'Name: ${platformFile.name}',
-        );
-
-        debugPrint(
-          'Path: ${platformFile.path}',
-        );
-
-        debugPrint(
-          'Bytes available: '
-          '${platformFile.bytes != null}',
-        );
-
-        debugPrint(
-          'Size: ${platformFile.size} bytes',
-        );
-
-        debugPrint(
-          'Extension: ${platformFile.extension}',
+          'Bytes available: ${file.bytes != null}',
         );
       }
 
-      /*
-       * لا نستخدم result.paths لأن paths غير مدعوم
-       * على Flutter Web.
-       *
-       * نستخدم result.files لأنه يعمل على Web
-       * وAndroid.
-       */
       final List<PlatformFile> selectedFiles =
           result.files.where(
         (PlatformFile newFile) {
           final bool alreadyExists =
               _attachments.any(
-            (PlatformFile oldFile) {
-              return oldFile.name == newFile.name &&
-                  oldFile.size == newFile.size;
+            (PlatformFile existingFile) {
+              return existingFile.name == newFile.name &&
+                  existingFile.size == newFile.size;
             },
           );
 
@@ -204,21 +162,16 @@ class _HealthRequestPageState
 
       if (selectedFiles.isEmpty) {
         debugPrint(
-          'No new files were selected',
+          'All selected food files already exist',
         );
 
         _showValidationMessage(
           'الملفات المحددة مضافة مسبقاً',
         );
 
-        debugPrint('======================================');
         return;
       }
 
-      /*
-       * نتأكد أن ملفات Web تحتوي bytes،
-       * وملفات Android تحتوي path.
-       */
       final List<PlatformFile> validFiles = [];
 
       for (final PlatformFile file in selectedFiles) {
@@ -226,20 +179,16 @@ class _HealthRequestPageState
           if (file.bytes == null ||
               file.bytes!.isEmpty) {
             debugPrint(
-              'Web file bytes are missing: '
-              '${file.name}',
+              'Web food file bytes are missing: ${file.name}',
             );
-
             continue;
           }
         } else {
           if (file.path == null ||
               file.path!.trim().isEmpty) {
             debugPrint(
-              'Mobile file path is missing: '
-              '${file.name}',
+              'Mobile food file path is missing: ${file.name}',
             );
-
             continue;
           }
         }
@@ -249,14 +198,13 @@ class _HealthRequestPageState
 
       if (validFiles.isEmpty) {
         debugPrint(
-          'No valid accessible files were found',
+          'No valid food files were found',
         );
 
         _showValidationMessage(
           'تعذر الوصول إلى الملفات المحددة',
         );
 
-        debugPrint('======================================');
         return;
       }
 
@@ -265,27 +213,18 @@ class _HealthRequestPageState
       });
 
       debugPrint(
-        'Files added successfully: '
-        '${validFiles.length}',
+        'Food files added successfully: ${validFiles.length}',
       );
-
       debugPrint(
-        'Total attachments: '
-        '${_attachments.length}',
+        'Total food attachments: ${_attachments.length}',
       );
-
       debugPrint('======================================');
     } catch (error, stackTrace) {
-      debugPrint('Attachment picker error');
-
       debugPrint(
-        'Error: $error',
+        'Food attachment picker error',
       );
-
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
-
+      debugPrint('Error: $error');
+      debugPrint('Stack trace: $stackTrace');
       debugPrint('======================================');
 
       if (mounted) {
@@ -300,9 +239,8 @@ class _HealthRequestPageState
     if (index < 0 ||
         index >= _attachments.length) {
       debugPrint(
-        'Invalid attachment index: $index',
+        'Invalid food attachment index: $index',
       );
-
       return;
     }
 
@@ -314,19 +252,44 @@ class _HealthRequestPageState
     });
 
     debugPrint(
-      'Attachment removed: ${removedFile.name}',
+      'Food attachment removed: ${removedFile.name}',
     );
+    debugPrint(
+      'Remaining food attachments: ${_attachments.length}',
+    );
+  }
+
+  void _incrementIndividuals() {
+    setState(() {
+      _numberIndividuals++;
+    });
 
     debugPrint(
-      'Remaining attachments: '
-      '${_attachments.length}',
+      'Number individuals increased: $_numberIndividuals',
+    );
+  }
+
+  void _decrementIndividuals() {
+    if (_numberIndividuals <= 1) {
+      debugPrint(
+        'Number individuals cannot be less than 1',
+      );
+      return;
+    }
+
+    setState(() {
+      _numberIndividuals--;
+    });
+
+    debugPrint(
+      'Number individuals decreased: $_numberIndividuals',
     );
   }
 
   void _submit() {
     debugPrint('======================================');
     debugPrint(
-      'HealthRequestPage: Submit clicked',
+      'FoodRequestPage: Submit clicked',
     );
 
     FocusScope.of(context).unfocus();
@@ -348,59 +311,61 @@ class _HealthRequestPageState
     );
 
     debugPrint(
-      'Selected medical type label: '
-      '${_selectedMedicalType?.arabicLabel}',
+      'Selected food aid label: '
+      '${_selectedFoodAidType?.arabicLabel}',
     );
-
     debugPrint(
-      'Selected medical type API value: '
-      '${_selectedMedicalType?.apiValue}',
+      'Selected food aid API value: '
+      '${_selectedFoodAidType?.apiValue}',
     );
-
     debugPrint(
-      'Arabic details length: '
-      '${detailsAr.length}',
+      'Number individuals: $_numberIndividuals',
     );
-
     debugPrint(
-      'English details length: '
-      '${detailsEn.length}',
+      'Arabic details length: ${detailsAr.length}',
     );
-
+    debugPrint(
+      'English details length: ${detailsEn.length}',
+    );
     debugPrint(
       'Raw cost: $costText',
     );
-
     debugPrint(
       'Normalized cost: $normalizedCostText',
     );
-
     debugPrint(
       'Parsed cost: $cost',
     );
-
     debugPrint(
-      'Attachments count: '
-      '${_attachments.length}',
+      'Attachments count: ${_attachments.length}',
     );
 
-    if (_selectedMedicalType == null) {
+    if (_selectedFoodAidType == null) {
       debugPrint(
-        'Validation failed: Medical type is missing',
+        'Validation failed: Food aid type is missing',
       );
 
       _showValidationMessage(
-        'يرجى اختيار نوع المساعدة الطبية',
+        'يرجى اختيار نوع المساعدة الغذائية',
       );
 
-      debugPrint('======================================');
+      return;
+    }
+
+    if (_numberIndividuals <= 0) {
+      debugPrint(
+        'Validation failed: Invalid number individuals',
+      );
+
+      _showValidationMessage(
+        'يرجى إدخال عدد أفراد صحيح',
+      );
+
       return;
     }
 
     final String? arabicDetailsError =
-        _validateArabicDetails(
-      detailsAr,
-    );
+        _validateArabicDetails(detailsAr);
 
     if (arabicDetailsError != null) {
       debugPrint(
@@ -411,14 +376,11 @@ class _HealthRequestPageState
         arabicDetailsError,
       );
 
-      debugPrint('======================================');
       return;
     }
 
     final String? englishDetailsError =
-        _validateEnglishDetails(
-      detailsEn,
-    );
+        _validateEnglishDetails(detailsEn);
 
     if (englishDetailsError != null) {
       debugPrint(
@@ -429,7 +391,6 @@ class _HealthRequestPageState
         englishDetailsError,
       );
 
-      debugPrint('======================================');
       return;
     }
 
@@ -442,7 +403,6 @@ class _HealthRequestPageState
         'يرجى إدخال تكلفة صحيحة',
       );
 
-      debugPrint('======================================');
       return;
     }
 
@@ -452,105 +412,78 @@ class _HealthRequestPageState
       );
 
       _showValidationMessage(
-        'يرجى إرفاق تقرير أو وصفة طبية واحدة على الأقل',
+        'يرجى إرفاق وثيقة واحدة على الأقل',
       );
 
-      debugPrint('======================================');
       return;
     }
 
-    final HealthRequestModel request =
-        HealthRequestModel(
+    final FoodRequestModel request =
+        FoodRequestModel(
       applicantInfo: widget.applicantInfo,
-      typeAid: _selectedMedicalType!,
+      typeAid: _selectedFoodAidType!,
+      numberIndividuals: _numberIndividuals,
       detailsAr: detailsAr,
       detailsEn: detailsEn,
       cost: cost,
-
-      // أصبح النوع PlatformFile بدل File.
       media: List<PlatformFile>.unmodifiable(
         _attachments,
       ),
     );
 
     debugPrint(
-      'HealthRequestModel created successfully',
+      'FoodRequestModel created successfully',
     );
-
     debugPrint(
-      'Request applicant firstName: '
-      '${request.applicantInfo.firstName}',
+      'Request first name: ${request.applicantInfo.firstName}',
     );
-
     debugPrint(
-      'Request applicant fatherName: '
-      '${request.applicantInfo.fatherName}',
+      'Request father name: ${request.applicantInfo.fatherName}',
     );
-
     debugPrint(
-      'Request applicant lastName: '
-      '${request.applicantInfo.lastName}',
+      'Request last name: ${request.applicantInfo.lastName}',
     );
-
     debugPrint(
-      'Request applicant gender: '
-      '${request.applicantInfo.gender}',
+      'Request typeAid: ${request.typeAid.apiValue}',
     );
-
     debugPrint(
-      'Request applicant socialStatus: '
-      '${request.applicantInfo.socialStatus}',
+      'Request numberIndividuals: ${request.numberIndividuals}',
     );
-
-    debugPrint(
-      'Request typeAid: '
-      '${request.typeAid.apiValue}',
-    );
-
     debugPrint(
       'Request detailsAr: ${request.detailsAr}',
     );
-
     debugPrint(
       'Request detailsEn: ${request.detailsEn}',
     );
-
     debugPrint(
       'Request cost: ${request.cost}',
     );
-
     debugPrint(
-      'Request media count: '
-      '${request.media.length}',
+      'Request media count: ${request.media.length}',
     );
 
     for (final PlatformFile file
         in request.media) {
       debugPrint(
-        'Request attachment name: '
-        '${file.name}',
+        'Request food attachment name: ${file.name}',
       );
-
       debugPrint(
-        'Request attachment path: '
-        '${file.path}',
+        'Request food attachment path: ${file.path}',
       );
-
       debugPrint(
-        'Request attachment bytes available: '
+        'Request food attachment bytes available: '
         '${file.bytes != null}',
       );
     }
 
     debugPrint(
-      'Calling HealthCubit.submitHealthRequest',
+      'Calling FoodCubit.submitFoodRequest',
     );
-
     debugPrint('======================================');
 
     context
-        .read<HealthCubit>()
-        .submitHealthRequest(request);
+        .read<FoodCubit>()
+        .submitFoodRequest(request);
   }
 
   String? _validateArabicDetails(
@@ -559,7 +492,7 @@ class _HealthRequestPageState
     final String text = value.trim();
 
     if (text.isEmpty) {
-      return 'يرجى إدخال تفاصيل الحالة الصحية باللغة العربية';
+      return 'يرجى إدخال تفاصيل الطلب باللغة العربية';
     }
 
     if (text.length < 5) {
@@ -589,11 +522,11 @@ class _HealthRequestPageState
     final String text = value.trim();
 
     if (text.isEmpty) {
-      return 'Please enter the health details in English';
+      return 'Please enter the request details in English';
     }
 
     if (text.length < 5) {
-      return 'Please provide clearer health details in English';
+      return 'Please provide clearer details in English';
     }
 
     final bool hasEnglish =
@@ -613,17 +546,18 @@ class _HealthRequestPageState
     return null;
   }
 
-  void _showValidationMessage(String message) {
+  void _showValidationMessage(
+    String message,
+  ) {
     if (!mounted) {
       debugPrint(
-        'Cannot show SnackBar because widget is not mounted',
+        'Cannot show SnackBar: widget is not mounted',
       );
-
       return;
     }
 
     debugPrint(
-      'Showing SnackBar: $message',
+      'Showing food validation SnackBar: $message',
     );
 
     ScaffoldMessenger.of(context)
@@ -651,47 +585,190 @@ class _HealthRequestPageState
   Widget _buildSectionLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(
-        right: 4.0,
-        bottom: 8.0,
+        right: 4,
+        bottom: 8,
       ),
       child: Text(
         text,
         style: const TextStyle(
           color: AppColors.brandGray,
           fontSize: 14,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
+          fontFamily: AppTextStyles.fontFamily,
         ),
+      ),
+    );
+  }
+
+  Widget _buildAttachmentsList(
+    bool isLoading,
+  ) {
+    if (_attachments.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      children: [
+        const SizedBox(height: 12),
+
+        ..._attachments
+            .asMap()
+            .entries
+            .map(
+          (
+            MapEntry<int, PlatformFile> entry,
+          ) {
+            final PlatformFile file =
+                entry.value;
+
+            return Card(
+              margin: const EdgeInsets.only(
+                bottom: 10,
+              ),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(14),
+                side: BorderSide(
+                  color: AppColors.brandGray
+                      .withOpacity(
+                    0.16,
+                  ),
+                ),
+              ),
+              child: ListTile(
+                dense: true,
+                leading: Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryContainer
+                        .withOpacity(
+                      0.4,
+                    ),
+                    borderRadius:
+                        BorderRadius.circular(
+                      12,
+                    ),
+                  ),
+                  child: Icon(
+                    _getFileIcon(
+                      file.extension,
+                    ),
+                    color: AppColors.primary,
+                  ),
+                ),
+                title: Text(
+                  file.name,
+                  maxLines: 1,
+                  overflow:
+                      TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight:
+                        FontWeight.w600,
+                    fontFamily:
+                        AppTextStyles.fontFamily,
+                  ),
+                ),
+                subtitle: Text(
+                  _getFileDescription(file),
+                  maxLines: 1,
+                  overflow:
+                      TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontFamily:
+                        AppTextStyles.fontFamily,
+                  ),
+                ),
+                trailing: IconButton(
+                  tooltip: 'حذف المرفق',
+                  icon: const Icon(
+                    Icons.close,
+                    color: AppColors.error,
+                  ),
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          _removeAttachment(
+                            entry.key,
+                          );
+                        },
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDecorativeCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color:
+            AppColors.primaryContainer.withOpacity(
+          0.35,
+        ),
+        borderRadius:
+            BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.primary.withOpacity(
+            0.12,
+          ),
+        ),
+      ),
+      child: const Column(
+        children: [
+          Icon(
+            Icons.volunteer_activism_outlined,
+            size: 52,
+            color: AppColors.primary,
+          ),
+          SizedBox(height: 12),
+          Text(
+            'معاً نساهم في توفير الغذاء لكل أسرة محتاجة',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppColors.primary,
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              fontFamily:
+                  AppTextStyles.fontFamily,
+            ),
+          ),
+        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HealthCubit, HealthState>(
+    return BlocConsumer<
+        FoodCubit,
+        FoodState>(
       listener: (context, state) async {
         debugPrint(
-          'HealthRequestPage listener state: '
+          'FoodRequestPage listener state: '
           '${state.runtimeType}',
         );
 
-        if (state
-            case HealthSuccess(:final message)) {
+        if (state is FoodSuccess) {
           debugPrint(
-            'Health request succeeded',
+            'Food request succeeded',
           );
-
           debugPrint(
-            'Server success message: $message',
+            'Success message: ${state.message}',
           );
 
           await showRequestResultDialog(
             context: context,
             isSuccess: true,
-            message: message,
+            message: state.message,
             onSuccessConfirmed: () {
-              if (!mounted) {
-                return;
-              }
+              if (!mounted) return;
 
               Navigator.of(context).popUntil(
                 (Route<dynamic> route) {
@@ -700,20 +777,18 @@ class _HealthRequestPageState
               );
             },
           );
-        } else if (state
-            case HealthFailure(:final message)) {
+        } else if (state is FoodFailure) {
           debugPrint(
-            'Health request failed',
+            'Food request failed',
           );
-
           debugPrint(
-            'Failure message: $message',
+            'Failure message: ${state.message}',
           );
 
           await showRequestResultDialog(
             context: context,
             isSuccess: false,
-            message: message,
+            message: state.message,
             onRetry: () {
               if (mounted) {
                 _submit();
@@ -724,29 +799,27 @@ class _HealthRequestPageState
       },
       builder: (context, state) {
         final bool isLoading =
-            state is HealthLoading;
+            state is FoodLoading;
 
         debugPrint(
-          'HealthRequestPage builder state: '
+          'FoodRequestPage builder state: '
           '${state.runtimeType}',
         );
-
         debugPrint(
-          'HealthRequestPage isLoading: '
-          '$isLoading',
+          'FoodRequestPage isLoading: $isLoading',
         );
 
         return Directionality(
-          textDirection: TextDirection.rtl,
+          textDirection:
+              TextDirection.rtl,
           child: Scaffold(
             backgroundColor:
                 AppColors.background,
             appBar: AppBar(
               backgroundColor:
-                  AppColors.background.withValues(
-                alpha: 0.9,
-              ),
+                  AppColors.background,
               elevation: 0,
+              scrolledUnderElevation: 0,
               leading: IconButton(
                 icon: const Icon(
                   Icons.arrow_forward,
@@ -756,14 +829,13 @@ class _HealthRequestPageState
                     ? null
                     : () {
                         debugPrint(
-                          'Back button pressed',
+                          'Food page back button pressed',
                         );
-
                         Navigator.pop(context);
                       },
               ),
               title: const Text(
-                'تفاصيل الطلب الصحي',
+                'تفاصيل الطلب الغذائي',
                 style: TextStyle(
                   color: AppColors.primary,
                   fontSize: 20,
@@ -775,12 +847,15 @@ class _HealthRequestPageState
             ),
             body: SafeArea(
               child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior
+                        .onDrag,
                 padding:
                     const EdgeInsets.fromLTRB(
-                  20.0,
-                  12.0,
-                  20.0,
-                  100.0,
+                  20,
+                  12,
+                  20,
+                  120,
                 ),
                 child: Column(
                   crossAxisAlignment:
@@ -791,49 +866,41 @@ class _HealthRequestPageState
                       totalSteps: 2,
                     ),
 
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    const SizedBox(height: 24),
 
                     _buildSectionLabel(
-                      'نوع المساعدة الطبية المطلوبة',
+                      'نوع المساعدة الغذائية المطلوبة',
                     ),
 
                     Wrap(
-                      spacing: 8.0,
-                      runSpacing: 8.0,
+                      spacing: 8,
+                      runSpacing: 8,
                       children:
-                          HealthAidType.values.map(
-                        (HealthAidType type) {
+                          FoodAidType.values.map(
+                        (FoodAidType type) {
                           return SelectionChip(
                             label:
                                 type.arabicLabel,
                             isSelected:
-                                _selectedMedicalType ==
+                                _selectedFoodAidType ==
                                     type,
                             onTap: isLoading
-                                ? () {
-                                    debugPrint(
-                                      'Medical type selection ignored while loading',
-                                    );
-                                  }
+                                ? () {}
                                 : () {
                                     debugPrint(
-                                      'Medical type selected:',
+                                      'Food aid type selected',
                                     );
-
                                     debugPrint(
                                       'Arabic label: '
                                       '${type.arabicLabel}',
                                     );
-
                                     debugPrint(
                                       'API value: '
                                       '${type.apiValue}',
                                     );
 
                                     setState(() {
-                                      _selectedMedicalType =
+                                      _selectedFoodAidType =
                                           type;
                                     });
                                   },
@@ -842,42 +909,49 @@ class _HealthRequestPageState
                       ).toList(),
                     ),
 
-                    const SizedBox(
-                      height: 24,
+                    const SizedBox(height: 24),
+
+                    BeneficiariesCounter(
+                      count:
+                          _numberIndividuals,
+                      onIncrement: isLoading
+                          ? () {}
+                          : _incrementIndividuals,
+                      onDecrement: isLoading
+                          ? () {}
+                          : _decrementIndividuals,
                     ),
+
+                    const SizedBox(height: 24),
 
                     CustomTextField(
                       label:
-                          'تفاصيل الحالة الصحية (عربي)',
+                          'تفاصيل الحالة والاحتياج الغذائي (عربي)',
                       hint:
-                          'يرجى ذكر التشخيص والأعراض باللغة العربية...',
+                          'اشرح نوع الاحتياج والظروف الحالية للأسرة باللغة العربية...',
                       controller:
                           _detailsArController,
                       maxLines: 5,
                     ),
 
-                    const SizedBox(
-                      height: 16,
-                    ),
+                    const SizedBox(height: 16),
 
                     CustomTextField(
                       label:
-                          'Health details (English)',
+                          'Food request details (English)',
                       hint:
-                          'Describe the diagnosis and symptoms in English...',
+                          'Explain the family situation and food needs in English...',
                       controller:
                           _detailsEnController,
                       maxLines: 5,
                       isLtr: true,
                     ),
 
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    const SizedBox(height: 24),
 
                     CustomTextField(
                       label:
-                          'التكلفة المالية المتوقعة للعلاج',
+                          'التكلفة المالية المتوقعة',
                       hint: '0.00',
                       controller:
                           _costController,
@@ -889,146 +963,31 @@ class _HealthRequestPageState
                       isCurrency: true,
                     ),
 
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    const SizedBox(height: 24),
 
                     _buildSectionLabel(
-                      'إرفاق التقارير الطبية والوصفات الرسمية',
+                      'إرفاق الوثائق الثبوتية',
                     ),
 
                     CustomAttachmentUploader(
                       title:
                           'رفع الملفات أو التقاط صور',
                       description:
-                          'يرجى إرفاق صور واضحة للتقارير والوصفات الطبية',
+                          'يرجى إرفاق أي وثائق تدعم الطلب الغذائي',
                       icon:
-                          Icons.camera_alt_rounded,
+                          Icons.upload_file_rounded,
                       onTap: isLoading
-                          ? () {
-                              debugPrint(
-                                'Attachment picker ignored while loading',
-                              );
-                            }
+                          ? () {}
                           : _pickAttachments,
                     ),
 
-                    if (_attachments
-                        .isNotEmpty) ...[
-                      const SizedBox(
-                        height: 12,
-                      ),
+                    _buildAttachmentsList(
+                      isLoading,
+                    ),
 
-                      ..._attachments
-                          .asMap()
-                          .entries
-                          .map(
-                        (
-                          MapEntry<int,
-                                  PlatformFile>
-                              entry,
-                        ) {
-                          final PlatformFile file =
-                              entry.value;
+                    const SizedBox(height: 28),
 
-                          return Card(
-                            margin:
-                                const EdgeInsets.only(
-                              bottom: 10,
-                            ),
-                            elevation: 0,
-                            shape:
-                                RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(
-                                14,
-                              ),
-                              side: BorderSide(
-                                color: AppColors
-                                    .brandGray
-                                    .withOpacity(
-                                  0.16,
-                                ),
-                              ),
-                            ),
-                            child: ListTile(
-                              dense: true,
-                              leading: Container(
-                                width: 42,
-                                height: 42,
-                                decoration:
-                                    BoxDecoration(
-                                  color: AppColors
-                                      .primaryContainer
-                                      .withOpacity(
-                                    0.4,
-                                  ),
-                                  borderRadius:
-                                      BorderRadius
-                                          .circular(
-                                    12,
-                                  ),
-                                ),
-                                child: Icon(
-                                  _getFileIcon(
-                                    file.extension,
-                                  ),
-                                  color:
-                                      AppColors.primary,
-                                ),
-                              ),
-                              title: Text(
-                                file.name,
-                                maxLines: 1,
-                                overflow:
-                                    TextOverflow
-                                        .ellipsis,
-                                style:
-                                    const TextStyle(
-                                  fontWeight:
-                                      FontWeight.w600,
-                                  fontFamily:
-                                      AppTextStyles
-                                          .fontFamily,
-                                ),
-                              ),
-                              subtitle: Text(
-                                _getFileDescription(
-                                  file,
-                                ),
-                                maxLines: 1,
-                                overflow:
-                                    TextOverflow
-                                        .ellipsis,
-                                style:
-                                    const TextStyle(
-                                  fontSize: 12,
-                                  fontFamily:
-                                      AppTextStyles
-                                          .fontFamily,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                tooltip:
-                                    'حذف المرفق',
-                                icon: const Icon(
-                                  Icons.close,
-                                  color:
-                                      AppColors.error,
-                                ),
-                                onPressed: isLoading
-                                    ? null
-                                    : () {
-                                        _removeAttachment(
-                                          entry.key,
-                                        );
-                                      },
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                    _buildDecorativeCard(),
                   ],
                 ),
               ),
@@ -1047,7 +1006,9 @@ class _HealthRequestPageState
     PlatformFile file,
   ) {
     final String formattedSize =
-        _formatFileSize(file.size);
+        _formatFileSize(
+      file.size,
+    );
 
     if (kIsWeb) {
       return '$formattedSize - ملف جاهز للرفع';
@@ -1193,5 +1154,4 @@ class _HealthRequestPageState
       ),
     );
   }
-
 }

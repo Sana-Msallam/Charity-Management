@@ -84,8 +84,13 @@ class HealthCubit extends Cubit<HealthState> {
     );
 
     debugPrint(
-      'Applicant address: '
-      '${request.applicantInfo.address}',
+      'Applicant address AR: '
+      '${request.applicantInfo.addressAr}',
+    );
+
+    debugPrint(
+      'Applicant address EN: '
+      '${request.applicantInfo.addressEn}',
     );
 
     debugPrint(
@@ -94,8 +99,13 @@ class HealthCubit extends Cubit<HealthState> {
     );
 
     debugPrint(
-      'Description length: '
-      '${request.description.length}',
+      'Arabic details length: '
+      '${request.detailsAr.length}',
+    );
+
+    debugPrint(
+      'English details length: '
+      '${request.detailsEn.length}',
     );
 
     debugPrint(
@@ -108,7 +118,20 @@ class HealthCubit extends Cubit<HealthState> {
 
     for (final file in request.media) {
       debugPrint(
+        'Media file name: ${file.name}',
+      );
+
+      debugPrint(
         'Media file path: ${file.path}',
+      );
+
+      debugPrint(
+        'Media file size: ${file.size}',
+      );
+
+      debugPrint(
+        'Media bytes available: '
+        '${file.bytes != null}',
       );
     }
 
@@ -125,8 +148,9 @@ class HealthCubit extends Cubit<HealthState> {
         'HealthCubit: calling HealthRequestService',
       );
 
-      final message =
-          await _healthRequestService.submitHealthRequest(
+      final String message =
+          await _healthRequestService
+              .submitHealthRequest(
         request,
       );
 
@@ -147,7 +171,10 @@ class HealthCubit extends Cubit<HealthState> {
       );
 
       debugPrint('======================================');
-    } on DioException catch (error, stackTrace) {
+    } on DioException catch (
+      error,
+      stackTrace
+    ) {
       debugPrint(
         'HealthCubit caught DioException',
       );
@@ -176,8 +203,10 @@ class HealthCubit extends Cubit<HealthState> {
         'Stack trace: $stackTrace',
       );
 
-      final message =
-          ApiException.getMessage(error);
+      final String message =
+          ApiException.getMessage(
+        error,
+      );
 
       debugPrint(
         'Converted Arabic error message: $message',
@@ -192,7 +221,10 @@ class HealthCubit extends Cubit<HealthState> {
       );
 
       debugPrint('======================================');
-    } on FormatException catch (error, stackTrace) {
+    } on FormatException catch (
+      error,
+      stackTrace
+    ) {
       debugPrint(
         'HealthCubit caught FormatException',
       );
@@ -216,7 +248,10 @@ class HealthCubit extends Cubit<HealthState> {
       );
 
       debugPrint('======================================');
-    } catch (error, stackTrace) {
+    } catch (
+      error,
+      stackTrace
+    ) {
       debugPrint(
         'HealthCubit caught unexpected exception',
       );

@@ -6,7 +6,7 @@ import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/custom_navigation_bar.dart';
-import 'applicant_info_page.dart'; 
+import '../Beneficiary/Help_request/applicantInfo/screen/applicant_info_page.dart'; 
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
