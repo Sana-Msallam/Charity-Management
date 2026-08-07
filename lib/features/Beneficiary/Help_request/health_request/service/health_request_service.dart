@@ -9,7 +9,12 @@ import '../../../../../constants/dio_client.dart';
 import '../model/health_request_model.dart';
 
 class HealthRequestService {
-  Future<String> submitHealthRequest(HealthRequestModel request) async {
+  
+  
+
+  Future<String> submitHealthRequest(
+    HealthRequestModel request,
+  ) async {
     debugPrint('======================================');
     debugPrint('START SUBMIT HEALTH REQUEST');
     debugPrint('======================================');
@@ -21,13 +26,15 @@ class HealthRequestService {
     final String socialStatusApiValue = _mapSocialStatus(
       applicant.socialStatus,
     );
+final String addressJson = jsonEncode({
+  'ar': applicant.addressAr.trim(),
+  'en': applicant.addressEn.trim(),
+});
 
-    final String addressJson = jsonEncode({'ar': applicant.address, 'en': ''});
-
-    final String detailsJson = jsonEncode({
-      'ar': request.description,
-      'en': '',
-    });
+final String detailsJson = jsonEncode({
+  'ar': request.detailsAr.trim(),
+  'en': request.detailsEn.trim(),
+});
 
     debugPrint('Health request values:');
     debugPrint('categoryId: 1');
@@ -52,7 +59,29 @@ class HealthRequestService {
       '$socialStatusApiValue',
     );
 
-    debugPrint('address: $addressJson');
+   debugPrint(
+  'addressAr: ${applicant.addressAr}',
+);
+
+debugPrint(
+  'addressEn: ${applicant.addressEn}',
+);
+
+debugPrint(
+  'address JSON: $addressJson',
+);
+
+debugPrint(
+  'detailsAr: ${request.detailsAr}',
+);
+
+debugPrint(
+  'detailsEn: ${request.detailsEn}',
+);
+
+debugPrint(
+  'details JSON: $detailsJson',
+);
 
     debugPrint('age: ${applicant.age}');
 
@@ -60,7 +89,7 @@ class HealthRequestService {
 
     debugPrint('number: ${applicant.phoneNumber}');
 
-    debugPrint('details: $detailsJson');
+  
 
     debugPrint('cost: ${request.cost}');
 

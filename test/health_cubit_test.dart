@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/cubit/health_cubit.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/cubit/health_state.dart';
-import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/applicant_info_model.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/applicantInfo/model/applicant_info_model.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/health_aid_type.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/health_request_model.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/service/health_request_service.dart';

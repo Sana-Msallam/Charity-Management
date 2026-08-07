@@ -7,7 +7,8 @@ class ApplicantInfoModel {
     required this.gender,
     required this.socialStatus,
     required this.phoneNumber,
-    required this.address,
+    required this.addressAr,
+    required this.addressEn,
     required this.isUnemployed,
   });
 
@@ -18,6 +19,7 @@ class ApplicantInfoModel {
   final String gender;
   final String socialStatus;
   final String phoneNumber;
-  final String address;
+  final String addressAr;
+final String addressEn;
   final bool isUnemployed;
 }

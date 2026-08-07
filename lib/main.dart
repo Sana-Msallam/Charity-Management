@@ -5,10 +5,9 @@ import 'package:charity_management/routes/app_router.dart';
 import 'package:charity_management/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:country_picker/country_picker.dart';
 
-Future<void> main() async {
+/*Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final languageCubit = await LanguageCubit.create();
 
@@ -43,8 +42,7 @@ class MyApp extends StatelessWidget {
               primary: primaryColor,
               brightness: Brightness.light,
             ),
-            textTheme: GoogleFonts.notoKufiArabicTextTheme(),
-          ),
+textTheme: ThemeData.light().textTheme,          ),
           darkTheme: ThemeData(
             useMaterial3: true,
             brightness: Brightness.dark,
@@ -52,12 +50,98 @@ class MyApp extends StatelessWidget {
               primary: Colors.white,
               surface: Color(0xFF1A1C18),
             ),
-            textTheme: GoogleFonts.notoKufiArabicTextTheme(
-              ThemeData.dark().textTheme,
-            ),
+            textTheme: ThemeData.dark().textTheme,
           ),
           themeMode: ThemeMode.light,
           initialRoute: AppRoutes.authGate,
+          onGenerateRoute: AppRouter.onGenerateRoute,
+        );
+      },
+    );
+  }
+}
+*/
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  debugPrint('========== MAIN START ==========');
+
+  final LanguageCubit languageCubit =
+      await LanguageCubit.create();
+
+  debugPrint('LanguageCubit created successfully');
+
+  runApp(
+    BlocProvider.value(
+      value: languageCubit,
+      child: const MyApp(),
+    ),
+  );
+
+  debugPrint('runApp called');
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    debugPrint('MyApp build called');
+
+    const Color primaryColor = Color(0xFF735C00);
+    const Color backgroundColor = Color(0xFFFFF8F1);
+
+    return BlocBuilder<LanguageCubit, LanguageState>(
+      builder: (context, languageState) {
+        debugPrint(
+          'MaterialApp building with locale: '
+          '${languageState.locale}',
+        );
+
+        return MaterialApp(
+          onGenerateTitle: (context) {
+            return AppLocalizations.of(context).appTitle;
+          },
+          debugShowCheckedModeBanner: false,
+
+          locale: languageState.locale,
+
+          supportedLocales:
+              AppLocalizations.supportedLocales,
+
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            CountryLocalizations.delegate,
+          ],
+
+          theme: ThemeData(
+            useMaterial3: true,
+            primaryColor: primaryColor,
+            scaffoldBackgroundColor: backgroundColor,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: primaryColor,
+              primary: primaryColor,
+              brightness: Brightness.light,
+            ),
+            textTheme: ThemeData.light().textTheme,
+          ),
+
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
+            colorScheme: const ColorScheme.dark(
+              primary: Colors.white,
+              surface: Color(0xFF1A1C18),
+            ),
+            textTheme: ThemeData.dark().textTheme,
+          ),
+
+          themeMode: ThemeMode.light,
+
+          // مؤقتاً لنعرف هل المشكلة من AuthGate
+          initialRoute: AppRoutes.login,
+
           onGenerateRoute: AppRouter.onGenerateRoute,
         );
       },
