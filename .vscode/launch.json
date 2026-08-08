@@ -1,0 +1,35 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "charity_management",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "charity_management (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "charity_management (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "Flutter with Stripe",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+               "--dart-define=STRIPE_PUBLISHABLE_KEY=pk_test_51T2DWS4XzwGtrZ2FRu236V6N8e96O8bkdkn1VgmjpjQ9F0IFun5UMUSO6DNr8X8MYTAQd64iGqblatHB10wkuCKZ00BJRwTFoh"
+      ]
+    }
+        
+    ]
+}

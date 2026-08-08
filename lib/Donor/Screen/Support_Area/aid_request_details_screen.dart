@@ -237,10 +237,21 @@ class AidRequestDetailsScreen extends StatelessWidget {
                             context,
 
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  CheckoutScreen(currentCaseName: item.title),
+                              builder: (context) => CheckoutScreen(
+                                requestId: id,
+                                title: item.title,
+                                totalCost: item.totalCost,
+                                paidAmount: item.paidAmount,
+                                remainingAmount: item.remainingAmount,
+                              ),
                             ),
-                          );
+                          ).then((paymentCompleted) {
+                            if (paymentCompleted == true && context.mounted) {
+                              context
+                                  .read<AidRequestDetailsCubit>()
+                                  .fetchDetails(id);
+                            }
+                          });
                         },
 
                         child: Text(

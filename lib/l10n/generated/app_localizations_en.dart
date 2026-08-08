@@ -922,6 +922,56 @@ class AppLocalizationsEn extends AppLocalizations {
   String get donateNow => 'Donate now';
 
   @override
+  String get donationCheckoutTitle => 'Complete donation';
+
+  @override
+  String get aidRequestDonation => 'Aid request donation';
+
+  @override
+  String get donationAmountUsd => 'Donation amount in USD';
+
+  @override
+  String get donationAmountHint => 'Example: 25';
+
+  @override
+  String get invalidDonationAmount =>
+      'Enter a positive amount that does not exceed the remaining amount.';
+
+  @override
+  String get completeDonation => 'Complete secure payment';
+
+  @override
+  String get stripePaymentSheetNotice =>
+      'Card details are entered only in Stripe\'s secure payment sheet.';
+
+  @override
+  String get paymentCompletedRefresh =>
+      'Payment completed. Refreshing request details...';
+
+  @override
+  String get paymentCanceled => 'Payment was canceled.';
+
+  @override
+  String get stripePaymentError =>
+      'Stripe could not complete the payment. Please try again.';
+
+  @override
+  String get stripePublishableKeyMissing =>
+      'Stripe publishable key is missing. Run the Flutter with Stripe launch configuration.';
+
+  @override
+  String get stripePublishableKeyInvalid =>
+      'Stripe publishable key must start with pk_test_.';
+
+  @override
+  String get paymentAmountMustBePositive =>
+      'The donation amount must be greater than zero.';
+
+  @override
+  String get paymentAmountExceedsRemaining =>
+      'The donation amount cannot exceed the remaining amount.';
+
+  @override
   String get currentWalletBalance => 'Current wallet balance';
 
   @override

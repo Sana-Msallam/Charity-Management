@@ -351,10 +351,21 @@ class SupportCategoryScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                CheckoutScreen(currentCaseName: item.title),
+                            builder: (context) => CheckoutScreen(
+                              requestId: item.id,
+                              title: item.title,
+                              totalCost: item.totalCost,
+                              paidAmount: item.paidAmount,
+                              remainingAmount: item.remainingAmount,
+                            ),
                           ),
-                        );
+                        ).then((paymentCompleted) {
+                          if (paymentCompleted == true && context.mounted) {
+                            context.read<AidRequestCubit>().fetchAidRequests(
+                              categoryId: categoryId,
+                            );
+                          }
+                        });
                       },
 
                       child: Text(l10n.donateNow),

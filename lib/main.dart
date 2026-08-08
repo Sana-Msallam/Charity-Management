@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:charity_management/Payment/config/stripe_config.dart';
 import 'package:charity_management/features/language/cubit/language_cubit.dart';
 import 'package:charity_management/features/language/cubit/language_state.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
@@ -13,6 +16,7 @@ Future<void> main() async {
   final languageCubit = await LanguageCubit.create();
 
   runApp(BlocProvider.value(value: languageCubit, child: const MyApp()));
+  unawaited(const StripeConfig().initialize());
 }
 
 class MyApp extends StatelessWidget {
@@ -57,7 +61,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           themeMode: ThemeMode.light,
-          initialRoute: AppRoutes.authGate,
+          initialRoute: AppRoutes.login,
           onGenerateRoute: AppRouter.onGenerateRoute,
         );
       },

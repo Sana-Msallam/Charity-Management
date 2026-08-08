@@ -1826,6 +1826,90 @@ abstract class AppLocalizations {
   /// **'Donate now'**
   String get donateNow;
 
+  /// No description provided for @donationCheckoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete donation'**
+  String get donationCheckoutTitle;
+
+  /// No description provided for @aidRequestDonation.
+  ///
+  /// In en, this message translates to:
+  /// **'Aid request donation'**
+  String get aidRequestDonation;
+
+  /// No description provided for @donationAmountUsd.
+  ///
+  /// In en, this message translates to:
+  /// **'Donation amount in USD'**
+  String get donationAmountUsd;
+
+  /// No description provided for @donationAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: 25'**
+  String get donationAmountHint;
+
+  /// No description provided for @invalidDonationAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a positive amount that does not exceed the remaining amount.'**
+  String get invalidDonationAmount;
+
+  /// No description provided for @completeDonation.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete secure payment'**
+  String get completeDonation;
+
+  /// No description provided for @stripePaymentSheetNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Card details are entered only in Stripe\'s secure payment sheet.'**
+  String get stripePaymentSheetNotice;
+
+  /// No description provided for @paymentCompletedRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment completed. Refreshing request details...'**
+  String get paymentCompletedRefresh;
+
+  /// No description provided for @paymentCanceled.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment was canceled.'**
+  String get paymentCanceled;
+
+  /// No description provided for @stripePaymentError.
+  ///
+  /// In en, this message translates to:
+  /// **'Stripe could not complete the payment. Please try again.'**
+  String get stripePaymentError;
+
+  /// No description provided for @stripePublishableKeyMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Stripe publishable key is missing. Run the Flutter with Stripe launch configuration.'**
+  String get stripePublishableKeyMissing;
+
+  /// No description provided for @stripePublishableKeyInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Stripe publishable key must start with pk_test_.'**
+  String get stripePublishableKeyInvalid;
+
+  /// No description provided for @paymentAmountMustBePositive.
+  ///
+  /// In en, this message translates to:
+  /// **'The donation amount must be greater than zero.'**
+  String get paymentAmountMustBePositive;
+
+  /// No description provided for @paymentAmountExceedsRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'The donation amount cannot exceed the remaining amount.'**
+  String get paymentAmountExceedsRemaining;
+
   /// No description provided for @currentWalletBalance.
   ///
   /// In en, this message translates to:

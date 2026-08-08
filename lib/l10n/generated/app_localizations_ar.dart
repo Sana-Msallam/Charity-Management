@@ -909,6 +909,56 @@ class AppLocalizationsAr extends AppLocalizations {
   String get donateNow => 'تبرع الآن';
 
   @override
+  String get donationCheckoutTitle => 'إتمام التبرع';
+
+  @override
+  String get aidRequestDonation => 'تبرع لطلب إعانة';
+
+  @override
+  String get donationAmountUsd => 'مبلغ التبرع بالدولار';
+
+  @override
+  String get donationAmountHint => 'مثال: 25';
+
+  @override
+  String get invalidDonationAmount =>
+      'أدخل مبلغاً موجباً لا يتجاوز المبلغ المتبقي.';
+
+  @override
+  String get completeDonation => 'إتمام الدفع الآمن';
+
+  @override
+  String get stripePaymentSheetNotice =>
+      'يتم إدخال بيانات البطاقة حصراً داخل واجهة Stripe الآمنة.';
+
+  @override
+  String get paymentCompletedRefresh =>
+      'تم الدفع بنجاح. جارٍ تحديث تفاصيل الطلب...';
+
+  @override
+  String get paymentCanceled => 'تم إلغاء عملية الدفع.';
+
+  @override
+  String get stripePaymentError =>
+      'تعذر إتمام الدفع عبر Stripe، يرجى المحاولة مجدداً.';
+
+  @override
+  String get stripePublishableKeyMissing =>
+      'مفتاح Stripe publishable غير محمّل. شغّل التطبيق من إعداد Flutter with Stripe.';
+
+  @override
+  String get stripePublishableKeyInvalid =>
+      'يجب أن يبدأ مفتاح Stripe publishable بـ pk_test_.';
+
+  @override
+  String get paymentAmountMustBePositive =>
+      'يجب أن يكون مبلغ التبرع أكبر من الصفر.';
+
+  @override
+  String get paymentAmountExceedsRemaining =>
+      'لا يمكن أن يتجاوز مبلغ التبرع المبلغ المتبقي.';
+
+  @override
   String get currentWalletBalance => 'رصيد المحفظة الحالي';
 
   @override

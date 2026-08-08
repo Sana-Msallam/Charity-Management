@@ -25,6 +25,14 @@ void main() {
 
     expect(headers.containsKey('Authorization'), isFalse);
   });
+
+  test('adds Authorization to aid request payment endpoint', () async {
+    final headers = await _captureHeadersFor(
+      ApiConstants.aidRequestPaymentIntent(42),
+    );
+
+    expect(headers['Authorization'], 'Bearer test-token');
+  });
 }
 
 Future<Map<String, dynamic>> _captureHeadersFor(String path) async {
