@@ -9,19 +9,20 @@ class ApiConstants {
   static const String registerBeneficiary = '/auth/register/beneficiary';
   static const String verifyOtp = '/auth/register/verify-otp';
   static const String requestPasswordResetOtp =
-    '/auth/forgot-password/request-otp';
+      '/auth/forgot-password/request-otp';
 
-static const String resetPassword =
-    '/auth/forgot-password/reset';
+  static const String resetPassword = '/auth/forgot-password/reset';
 
   static const String healthRequest = '/requests/health';
-  static const String logout = '/auth/logout';
 
   static const String profile = '/api/profile';
 
   static const String aidRequests = '/donor/public/aid-requests';
   static const String sponsorships = '/sponsorships';
-static const String cancelSponsorship = '/sponsorships';
-static const String completedAidCases =
-    '/public/statistics/completed-aid-cases';
+  static const String cancelSponsorship = '/sponsorships';
+  static const String completedAidCases =
+      '/public/statistics/completed-aid-cases';
+  static const String completedAidRequests =
+      '/donor/public/aid-requests/completed';
+  static const String logout = '/auth/logout';
 }

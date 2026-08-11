@@ -17,8 +17,8 @@ class CompletedAidRequestsCubit
     emit(CompletedAidRequestsLoading());
 
     try {
-      final response = await DioClient.dio.get(
-        '${ApiConstants.baseUrl}/donor/public/aid-requests/completed',
+final response = await DioClient.dio.get(
+  '${ApiConstants.baseUrl}${ApiConstants.completedAidRequests}',
         queryParameters: categoryId != null
             ? {
                 'categoryId': categoryId,
