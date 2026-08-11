@@ -12,7 +12,6 @@ import 'package:charity_management/theme/app_font.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 
 // استيراد المكونات الموحدة والمخصصة
-import 'package:charity_management/widgets/beneficiaries_counter.dart';
 import 'package:charity_management/widgets/custom_text_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -51,19 +50,6 @@ class _EducationRequestPageState extends State<EducationRequestPage> {
 
   AcademicAchievement? _selectedAcademicAchievement;
   String? _selectedYear;
-  int _beneficiariesCount = 1;
-
-  
-
-  final List<String> _assistanceTypes = [
-    'ثياب مدرسية',
-    'مستلزمات دراسية',
-    'أقساط جامعة',
-    'أخرى',
-  ];
-
-
-final List<String> _selectedAssistanceTypes = [];
   final List<String> _yearOptions = [
     'المرحلة الابتدائية',
     'المرحلة المتوسطة',
@@ -300,12 +286,6 @@ final List<String> _selectedAssistanceTypes = [];
       'Institution name EN: $institutionNameEn',
     );
     debugPrint('Selected year: $_selectedYear');
-    debugPrint(
-      'Selected assistance types: $_selectedAssistanceTypes',
-    );
-    debugPrint(
-      'Beneficiaries count: $_beneficiariesCount',
-    );
     debugPrint('Details AR: $detailsAr');
     debugPrint('Details EN: $detailsEn');
     debugPrint('Cost: $cost');
@@ -350,13 +330,6 @@ final List<String> _selectedAssistanceTypes = [];
         _selectedYear!.trim().isEmpty) {
       _showValidationMessage(
         'يرجى اختيار الصف أو السنة الدراسية',
-      );
-      return;
-    }
-
-    if (_selectedAssistanceTypes.isEmpty) {
-      _showValidationMessage(
-        'يرجى اختيار نوع مساعدة واحد على الأقل',
       );
       return;
     }
@@ -414,12 +387,6 @@ final List<String> _selectedAssistanceTypes = [];
       detailsAr: detailsAr,
       detailsEn: detailsEn,
       cost: cost,
-      assistanceTypes:
-          List<String>.unmodifiable(
-        _selectedAssistanceTypes,
-      ),
-      beneficiariesCount:
-          _beneficiariesCount,
       media:
           List<PlatformFile>.unmodifiable(
         _attachments,
@@ -751,71 +718,6 @@ final List<String> _selectedAssistanceTypes = [];
 
                     _buildDropdownField(
                       isLoading,
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    _buildSectionLabel(
-                      'نوع المساعدة المطلوبة',
-                    ),
-
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children:
-                          _assistanceTypes.map(
-                        (String type) {
-                          final bool isSelected =
-                              _selectedAssistanceTypes
-                                  .contains(type);
-
-                          return SelectionChip(
-                            label: type,
-                            isSelected: isSelected,
-                            onTap: isLoading
-                                ? () {}
-                                : () {
-                                    setState(() {
-                                      if (isSelected) {
-                                        _selectedAssistanceTypes
-                                            .remove(
-                                          type,
-                                        );
-                                      } else {
-                                        _selectedAssistanceTypes
-                                            .add(
-                                          type,
-                                        );
-                                      }
-                                    });
-                                  },
-                          );
-                        },
-                      ).toList(),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    BeneficiariesCounter(
-                      count:
-                          _beneficiariesCount,
-                      onIncrement: isLoading
-                          ? () {}
-                          : () {
-                              setState(() {
-                                _beneficiariesCount++;
-                              });
-                            },
-                      onDecrement: isLoading
-                          ? () {}
-                          : () {
-                              if (_beneficiariesCount >
-                                  1) {
-                                setState(() {
-                                  _beneficiariesCount--;
-                                });
-                              }
-                            },
                     ),
 
                     const SizedBox(height: 24),

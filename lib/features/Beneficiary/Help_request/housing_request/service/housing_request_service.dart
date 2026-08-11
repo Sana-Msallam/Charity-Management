@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../constants/api_constants.dart';
 import '../../../../../constants/dio_client.dart';
@@ -18,32 +17,6 @@ class HousingRequestService {
     debugPrint('======================================');
     debugPrint('START SUBMIT HOUSING REQUEST');
     debugPrint('======================================');
-
-    final SharedPreferences preferences =
-        await SharedPreferences.getInstance();
-
-    final String? accessToken =
-        preferences.getString('access_token');
-
-    final bool tokenExists =
-        accessToken != null &&
-        accessToken.trim().isNotEmpty;
-
-    debugPrint('Token exists: $tokenExists');
-
-    if (!tokenExists) {
-      debugPrint(
-        'Housing request stopped: Access token not found',
-      );
-
-      throw const FormatException(
-        'يرجى تسجيل الدخول قبل إرسال الطلب',
-      );
-    }
-
-    debugPrint(
-      'Token preview: ${_maskToken(accessToken)}',
-    );
 
     final applicant = request.applicantInfo;
 
@@ -228,10 +201,6 @@ class HousingRequestService {
         options: Options(
           contentType:
               Headers.multipartFormDataContentType,
-          headers: {
-            'Authorization':
-                'Bearer $accessToken',
-          },
         ),
       );
 
@@ -342,75 +311,63 @@ class HousingRequestService {
     required FormData formData,
     required HousingRequestModel request,
   }) {
-    final String currentPlaceOfResidence =
-        request.currentPlaceOfResidence?.trim() ?? '';
+    final String currentPlaceAr =
+        request.currentPlaceOfResidenceAr?.trim() ?? '';
+    final String currentPlaceEn =
+        request.currentPlaceOfResidenceEn?.trim() ?? '';
 
-    final String reasonForLock =
-        request.reasonForLock?.trim() ?? '';
+    final String reasonAr =
+        request.reasonForLockAr?.trim() ?? '';
+    final String reasonEn =
+        request.reasonForLockEn?.trim() ?? '';
 
-    final String housingSpecifications =
-        request.housingSpecifications?.trim() ?? '';
+    final String specificationsAr =
+        request.housingSpecificationsAr?.trim() ?? '';
+    final String specificationsEn =
+        request.housingSpecificationsEn?.trim() ?? '';
 
-    if (currentPlaceOfResidence.isEmpty) {
-      throw const FormatException(
-        'يرجى إدخال مكان الإقامة الحالي',
-      );
-    }
-
-    if (reasonForLock.isEmpty) {
-      throw const FormatException(
-        'يرجى إدخال سبب طلب تأمين المنزل',
-      );
-    }
-
-    if (housingSpecifications.isEmpty) {
-      throw const FormatException(
-        'يرجى إدخال مواصفات السكن المطلوب',
-      );
-    }
-
-    final String currentPlaceJson =
-        _encodeLocalizedText(
-      currentPlaceOfResidence,
+    _requireLocalizedPair(
+      ar: currentPlaceAr,
+      en: currentPlaceEn,
+      fieldName: 'مكان الإقامة الحالي',
     );
 
-    final String reasonForLockJson =
-        _encodeLocalizedText(
-      reasonForLock,
+    _requireLocalizedPair(
+      ar: reasonAr,
+      en: reasonEn,
+      fieldName: 'سبب طلب تأمين المنزل',
     );
 
-    final String housingSpecificationsJson =
-        _encodeLocalizedText(
-      housingSpecifications,
+    _requireLocalizedPair(
+      ar: specificationsAr,
+      en: specificationsEn,
+      fieldName: 'مواصفات السكن المطلوب',
+    );
+
+    final String currentPlaceJson = _encodeLocalizedText(
+      ar: currentPlaceAr,
+      en: currentPlaceEn,
+    );
+
+    final String reasonJson = _encodeLocalizedText(
+      ar: reasonAr,
+      en: reasonEn,
+    );
+
+    final String specificationsJson = _encodeLocalizedText(
+      ar: specificationsAr,
+      en: specificationsEn,
     );
 
     formData.fields.addAll([
-      MapEntry(
-        'currentPlaceOfResidence',
-        currentPlaceJson,
-      ),
-      MapEntry(
-        'reasonForLock',
-        reasonForLockJson,
-      ),
-      MapEntry(
-        'housingSpecifications',
-        housingSpecificationsJson,
-      ),
+      MapEntry('currentPlaceOfResidence', currentPlaceJson),
+      MapEntry('reasonForLock', reasonJson),
+      MapEntry('housingSpecifications', specificationsJson),
     ]);
 
-    debugPrint(
-      'currentPlaceOfResidence: $currentPlaceJson',
-    );
-
-    debugPrint(
-      'reasonForLock: $reasonForLockJson',
-    );
-
-    debugPrint(
-      'housingSpecifications: '
-      '$housingSpecificationsJson',
-    );
+    debugPrint('currentPlaceOfResidence: $currentPlaceJson');
+    debugPrint('reasonForLock: $reasonJson');
+    debugPrint('housingSpecifications: $specificationsJson');
   }
 
   void _addRentAssistanceFields({
@@ -443,30 +400,31 @@ class HousingRequestService {
     required FormData formData,
     required HousingRequestModel request,
   }) {
-    final String currentHousingSituation =
-        request.currentHousingSituation?.trim() ?? '';
+    final String situationAr =
+        request.currentHousingSituationAr?.trim() ?? '';
+    final String situationEn =
+        request.currentHousingSituationEn?.trim() ?? '';
 
-    if (currentHousingSituation.isEmpty) {
-      throw const FormatException(
-        'يرجى إدخال وصف حالة المنزل والإصلاحات المطلوبة',
-      );
-    }
+    _requireLocalizedPair(
+      ar: situationAr,
+      en: situationEn,
+      fieldName: 'وصف حالة المنزل والإصلاحات المطلوبة',
+    );
 
-    final String currentHousingSituationJson =
-        _encodeLocalizedText(
-      currentHousingSituation,
+    final String situationJson = _encodeLocalizedText(
+      ar: situationAr,
+      en: situationEn,
     );
 
     formData.fields.add(
       MapEntry(
         'currentHousingSituation',
-        currentHousingSituationJson,
+        situationJson,
       ),
     );
 
     debugPrint(
-      'currentHousingSituation: '
-      '$currentHousingSituationJson',
+      'currentHousingSituation: $situationJson',
     );
   }
 
@@ -557,21 +515,25 @@ class HousingRequestService {
     );
   }
 
-  String _encodeLocalizedText(
-    String text,
-  ) {
-    final String normalizedText =
-        text.trim();
-
-    if (normalizedText.isEmpty) {
-      throw const FormatException(
-        'لا يمكن إرسال حقل نصي فارغ',
+  void _requireLocalizedPair({
+    required String ar,
+    required String en,
+    required String fieldName,
+  }) {
+    if (ar.trim().isEmpty || en.trim().isEmpty) {
+      throw FormatException(
+        'يجب إدخال $fieldName باللغتين العربية والإنجليزية',
       );
     }
+  }
 
+  String _encodeLocalizedText({
+    required String ar,
+    required String en,
+  }) {
     return jsonEncode({
-      'ar': normalizedText,
-      'en': normalizedText,
+      'ar': ar.trim(),
+      'en': en.trim(),
     });
   }
 
@@ -692,15 +654,4 @@ class HousingRequestService {
     );
   }
 
-  String _maskToken(
-    String token,
-  ) {
-    if (token.length <= 12) {
-      return '***';
-    }
-
-    return '${token.substring(0, 6)}'
-        '...'
-        '${token.substring(token.length - 6)}';
-  }
 }

@@ -197,12 +197,9 @@ class _ApplicantInfoPageState extends State<ApplicantInfoPage> {
 
       return;
     }
-    if (normalizedRequestType == 'مشروع صغير' ||
-        normalizedRequestType == 'مشاريع صغيرة' ||
-        normalizedRequestType == 'مشروع' ||
-        normalizedRequestType == 'دعم المشاريع') {
+    if (normalizedRequestType.contains('مشروع') ||
+        normalizedRequestType.contains('مشاريع')) {
       _openSmallProjectRequestPage(applicantInfo);
-
       return;
     }
 
@@ -455,6 +452,9 @@ class _ApplicantInfoPageState extends State<ApplicantInfoPage> {
 
   IconData _getRequestIcon() {
     final String type = widget.requestType.trim();
+    debugPrint(
+      'Request type = "${widget.requestType}"',
+    );
 
     if (type == 'صحي') {
       return Icons.health_and_safety_outlined;
@@ -471,10 +471,10 @@ class _ApplicantInfoPageState extends State<ApplicantInfoPage> {
     if (type == 'غذائي' || type == 'غذاء') {
       return Icons.shopping_basket_outlined;
     }
-    if (type == 'مشروع صغير' ||
-        type == 'مشاريع صغيرة' ||
-        type == 'مشروع' ||
-        type == 'دعم المشاريع') {
+    
+
+    if (type.contains('مشروع') ||
+        type.contains('مشاريع')) {
       return Icons.storefront_outlined;
     }
 

@@ -21,21 +21,20 @@ class SmallCategoryCard extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Container(
-      // إضافة الظل السفلي ليعطي إيحاء فوري بأنه زر قابل للضغط
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
             color: color.withOpacity(0.08),
             blurRadius: 12,
-            offset: const Offset(0, 6), // الظل للأسفل يظهر الارتفاع
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
         child: Material(
-          color: color.withOpacity(0.06), // جعل الخلفية ملونة خفيفة لتبدو كزر مخصص
+          color: color.withOpacity(0.06),
           child: InkWell(
             onTap: onTap,
             splashColor: color.withOpacity(0.15),
@@ -44,7 +43,10 @@ class SmallCategoryCard extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0),
-                border: Border.all(color: color.withOpacity(0.15), width: 1.2), // حدود واضحة للزر
+                border: Border.all(
+                  color: color.withOpacity(0.15),
+                  width: 1.2,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,17 +55,21 @@ class SmallCategoryCard extends StatelessWidget {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white, // أيقونة بيضاء تبرز فوق الخلفية الملونة
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(12.0),
                       boxShadow: [
                         BoxShadow(
                           color: color.withOpacity(0.1),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
-                        )
+                        ),
                       ],
                     ),
-                    child: Icon(icon, color: color, size: 24),
+                    child: Icon(
+                      icon,
+                      color: color,
+                      size: 24,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -71,7 +77,7 @@ class SmallCategoryCard extends StatelessWidget {
                     style: const TextStyle(
                       color: AppColors.onSurface,
                       fontSize: 18,
-                      fontWeight: FontWeight.bold, // جعل النص عريض كالأزرار
+                      fontWeight: FontWeight.bold,
                       fontFamily: AppTextStyles.fontFamily,
                     ),
                   ),

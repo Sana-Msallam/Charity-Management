@@ -7,7 +7,6 @@ import 'package:charity_management/features/Beneficiary/Help_request/smaal_proje
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SmallProjectRequestService {
   Future<String> submitSmallProjectRequest(
@@ -16,32 +15,6 @@ class SmallProjectRequestService {
     debugPrint('======================================');
     debugPrint('START SUBMIT SMALL PROJECT REQUEST');
     debugPrint('======================================');
-
-    final SharedPreferences preferences =
-        await SharedPreferences.getInstance();
-
-    final String? accessToken =
-        preferences.getString('access_token');
-
-    final bool tokenExists =
-        accessToken != null &&
-        accessToken.trim().isNotEmpty;
-
-    debugPrint('Token exists: $tokenExists');
-
-    if (!tokenExists) {
-      debugPrint(
-        'Small project request stopped: Access token not found',
-      );
-
-      throw const FormatException(
-        'يرجى تسجيل الدخول قبل إرسال الطلب',
-      );
-    }
-
-    debugPrint(
-      'Token preview: ${_maskToken(accessToken)}',
-    );
 
     final applicant = request.applicantInfo;
 
@@ -235,10 +208,6 @@ class SmallProjectRequestService {
         options: Options(
           contentType:
               Headers.multipartFormDataContentType,
-          headers: {
-            'Authorization':
-                'Bearer $accessToken',
-          },
         ),
       );
 
@@ -498,15 +467,4 @@ class SmallProjectRequestService {
     );
   }
 
-  String _maskToken(
-    String token,
-  ) {
-    if (token.length <= 12) {
-      return '***';
-    }
-
-    return '${token.substring(0, 6)}'
-        '...'
-        '${token.substring(token.length - 6)}';
-  }
 }

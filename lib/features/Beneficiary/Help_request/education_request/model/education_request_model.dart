@@ -13,8 +13,6 @@ class EducationRequestModel {
     required this.detailsAr,
     required this.detailsEn,
     required this.cost,
-    required this.assistanceTypes,
-    required this.beneficiariesCount,
     required this.media,
   });
 
@@ -31,10 +29,6 @@ class EducationRequestModel {
   final String detailsEn;
 
   final double cost;
-
-  final List<String> assistanceTypes;
-
-  final int beneficiariesCount;
 
   final List<PlatformFile> media;
 }

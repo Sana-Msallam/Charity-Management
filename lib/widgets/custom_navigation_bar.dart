@@ -1,84 +1,128 @@
+import 'package:charity_management/features/Beneficiary/profile/cubit/profile_cubit.dart';
+import 'package:charity_management/features/Beneficiary/profile/screen/profile_screen.dart';
+import 'package:charity_management/features/Beneficiary/profile/service/profile_service.dart';
+import 'package:charity_management/features/screen/settings_page.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
-import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
-  const CustomBottomNavigation({Key? key}) : super(key: key);
+  const CustomBottomNavigation({
+    super.key,
+    this.currentIndex = 0,
+  });
+
+  final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
     return Container(
-      height: 72, // ارتفاع محكم ومناسب جداً لجميع الشاشات
+      height: 72,
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24.0),
-          topRight: Radius.circular(24.0),
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
         border: Border(
-          top: BorderSide(color: AppColors.secondary.withOpacity(0.1)),
+          top: BorderSide(
+            color: AppColors.secondary.withOpacity(0.1),
+          ),
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(Icons.home, l10n.home, isActive: true),
-            _buildNavItem(Icons.analytics_outlined, l10n.trackRequest),
-            _buildNavItem(Icons.person_outline, l10n.account),
-            _buildNavItem(Icons.settings_outlined, l10n.settings),
+            _buildNavItem(
+              context: context,
+              index: 0,
+              icon: Icons.home,
+              label: l10n.home,
+            ),
+            _buildNavItem(
+              context: context,
+              index: 1,
+              icon: Icons.analytics_outlined,
+              label: l10n.trackRequest,
+            ),
+            _buildNavItem(
+              context: context,
+              index: 2,
+              icon: Icons.person_outline,
+              label: l10n.account,
+            ),
+            _buildNavItem(
+              context: context,
+              index: 3,
+              icon: Icons.settings_outlined,
+              label: l10n.settings,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(
-    final IconData icon,
-    final String label, {
-    final bool isActive = false,
+  Widget _buildNavItem({
+    required BuildContext context,
+    required int index,
+    required IconData icon,
+    required String label,
   }) {
+    final bool isActive = currentIndex == index;
+
     return InkWell(
       onTap: () {
-        // هنا سيتم إضافة التنقل بين الصفحات لاحقاً
+        _handleNavigation(
+          context,
+          index,
+        );
       },
-      borderRadius: BorderRadius.circular(16.0),
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 6,
+        ),
         decoration: isActive
             ? BoxDecoration(
                 color: AppColors.primaryContainer.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(16),
               )
             : null,
         child: Column(
-          mainAxisSize: MainAxisSize
-              .min, // تجعل الـ Column يأخذ المساحة المطلوبة لأيقونته ونصّه فقط
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               icon,
-              color: isActive ? AppColors.primary : AppColors.brandGray,
+              color: isActive
+                  ? AppColors.primary
+                  : AppColors.brandGray,
               size: 24,
             ),
             const SizedBox(height: 4),
-            // تغليف النص بـ Flexible يحميه تماماً من التمدد خارج حدود الشاشة أو الـ Container الأب
-            Flexible(
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow
-                    .ellipsis, // في حال صغرت الشاشة جداً يضع نقاط بدل الـ Overflow
-                style: TextStyle(
-                  color: isActive ? AppColors.primary : AppColors.brandGray,
-                  fontSize: 11,
-                  fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-                  fontFamily: AppTextStyles.fontFamily,
-                ),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: isActive
+                    ? AppColors.primary
+                    : AppColors.brandGray,
+                fontSize: 11,
+                fontWeight: isActive
+                    ? FontWeight.bold
+                    : FontWeight.normal,
+                fontFamily: AppTextStyles.fontFamily,
               ),
             ),
           ],
@@ -86,4 +130,52 @@ class CustomBottomNavigation extends StatelessWidget {
       ),
     );
   }
+
+void _handleNavigation(
+  BuildContext context,
+  int index,
+) {
+  if (index == currentIndex) {
+    return;
+  }
+
+  switch (index) {
+    case 0:
+      Navigator.of(context).popUntil(
+        (route) => route.isFirst,
+      );
+      break;
+
+    case 1:
+      debugPrint(
+        'Track requests clicked',
+      );
+      break;
+
+    case 2:
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) {
+            return BlocProvider(
+              create: (_) => ProfileCubit(
+                ProfileService(),
+              ),
+              child: const ProfilePage(),
+            );
+          },
+        ),
+      );
+      break;
+
+    case 3:
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) {
+            return const SettingsPage();
+          },
+        ),
+      );
+      break;
+  }
+}
 }

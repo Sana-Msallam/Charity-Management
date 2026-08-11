@@ -4,15 +4,12 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../constants/api_constants.dart';
 import '../../../../../constants/dio_client.dart';
 import '../model/education_request_model.dart';
 
 class EducationRequestService {
-
-
   Future<String> submitEducationRequest(
     EducationRequestModel request,
   ) async {
@@ -20,135 +17,99 @@ class EducationRequestService {
     debugPrint('START SUBMIT EDUCATION REQUEST');
     debugPrint('======================================');
 
-    final SharedPreferences preferences =
-        await SharedPreferences.getInstance();
-
-    final String? accessToken =
-        preferences.getString('access_token');
-
-    final bool tokenExists =
-        accessToken != null &&
-        accessToken.trim().isNotEmpty;
-
-    debugPrint(
-      'Token exists: $tokenExists',
-    );
-
-    if (!tokenExists) {
-      debugPrint(
-        'Education request stopped: '
-        'Access token not found',
-      );
-
-      throw const FormatException(
-        'يرجى تسجيل الدخول قبل إرسال الطلب',
-      );
-    }
-
-    debugPrint(
-      'Token preview: ${_maskToken(accessToken)}',
-    );
-
     final applicant = request.applicantInfo;
 
-    final String genderApiValue =
-        _mapGender(applicant.gender);
+    final String genderApiValue = _mapGender(
+      applicant.gender,
+    );
 
-    final String socialStatusApiValue =
-        _mapSocialStatus(
+    final String socialStatusApiValue = _mapSocialStatus(
       applicant.socialStatus,
     );
 
-  final String addressJson = jsonEncode({
-  'ar': applicant.addressAr.trim(),
-  'en': applicant.addressEn.trim(),
-});
+    final String addressJson = jsonEncode({
+      'ar': applicant.addressAr.trim(),
+      'en': applicant.addressEn.trim(),
+    });
 
-    
-  final String detailsAr = '''
-${request.detailsAr}
+    final String detailsJson = jsonEncode({
+      'ar': request.detailsAr.trim(),
+      'en': request.detailsEn.trim(),
+    });
 
-أنواع المساعدة المطلوبة:
-${request.assistanceTypes.join('، ')}
-
-عدد المستفيدين:
-${request.beneficiariesCount}
-''';
-
-final String detailsEn = '''
-${request.detailsEn}
-
-Requested assistance:
-${request.assistanceTypes.join(', ')}
-
-Beneficiaries count:
-${request.beneficiariesCount}
-''';
-
-final String detailsJson = jsonEncode({
-  'ar': detailsAr.trim(),
-  'en': detailsEn.trim(),
-});
-
-  final String institutionNameJson = jsonEncode({
-  'ar': request.institutionNameAr.trim(),
-  'en': request.institutionNameEn.trim(),
-});
+    final String institutionNameJson = jsonEncode({
+      'ar': request.institutionNameAr.trim(),
+      'en': request.institutionNameEn.trim(),
+    });
 
     debugPrint('Education request values:');
+
     debugPrint('categoryId: 4');
+
     debugPrint(
       'firstName: ${applicant.firstName}',
     );
+
     debugPrint(
       'lastName: ${applicant.lastName}',
     );
+
     debugPrint(
       'fatherName: ${applicant.fatherName}',
     );
+
     debugPrint(
       'socialStatus: $socialStatusApiValue',
     );
+
     debugPrint(
       'address: $addressJson',
     );
+
     debugPrint(
       'age: ${applicant.age}',
     );
+
     debugPrint(
       'isUnemployed: ${applicant.isUnemployed}',
     );
+
     debugPrint(
       'gender: $genderApiValue',
     );
+
     debugPrint(
       'number: ${applicant.phoneNumber}',
     );
+
     debugPrint(
       'details: $detailsJson',
     );
+
     debugPrint(
       'cost: ${request.cost}',
     );
+
     debugPrint(
       'academicAchievement: '
       '${request.academicAchievement.apiValue}',
     );
+
     debugPrint(
       'institutionName: $institutionNameJson',
     );
+
     debugPrint(
       'year: ${request.year}',
     );
+
     debugPrint(
-      'attachments count: '
-      '${request.media.length}',
+      'attachments count: ${request.media.length}',
     );
 
     final FormData formData = FormData();
 
     formData.fields.addAll([
-      // ثابت حصراً للطلب التعليمي.
       const MapEntry(
         'categoryId',
         '4',
@@ -211,8 +172,7 @@ final String detailsJson = jsonEncode({
       ),
     ]);
 
-    for (final PlatformFile file
-        in request.media) {
+    for (final PlatformFile file in request.media) {
       await _addFileToFormData(
         formData: formData,
         file: file,
@@ -233,18 +193,11 @@ final String detailsJson = jsonEncode({
         ApiConstants.educationRequest,
         data: formData,
         options: Options(
-          contentType:
-              Headers.multipartFormDataContentType,
-          headers: {
-            'Authorization':
-                'Bearer $accessToken',
-          },
+          contentType: Headers.multipartFormDataContentType,
         ),
       );
 
-      debugPrint(
-        'Education response received',
-      );
+      debugPrint('Education response received');
 
       debugPrint(
         'Status code: ${response.statusCode}',
@@ -259,13 +212,9 @@ final String detailsJson = jsonEncode({
       return _extractSuccessMessage(
         response.data,
       );
-    } on DioException catch (
-      error,
-      stackTrace
-    ) {
+    } on DioException catch (error, stackTrace) {
       debugPrint(
-        'DIO ERROR WHILE SUBMITTING '
-        'EDUCATION REQUEST',
+        'DIO ERROR WHILE SUBMITTING EDUCATION REQUEST',
       );
 
       debugPrint(
@@ -285,8 +234,11 @@ final String detailsJson = jsonEncode({
       );
 
       debugPrint(
-        'Request URL: '
-        '${error.requestOptions.uri}',
+        'Request URL: ${error.requestOptions.uri}',
+      );
+
+      debugPrint(
+        'Request method: ${error.requestOptions.method}',
       );
 
       debugPrint(
@@ -319,43 +271,59 @@ final String detailsJson = jsonEncode({
     required FormData formData,
     required PlatformFile file,
   }) async {
+    debugPrint('--------------------------------------');
+
     debugPrint(
       'Checking attachment: ${file.name}',
+    );
+
+    debugPrint(
+      'Attachment size: ${file.size} bytes',
     );
 
     MultipartFile multipartFile;
 
     if (kIsWeb) {
-      final Uint8List? bytes =
-          file.bytes;
+      final Uint8List? bytes = file.bytes;
 
-      if (bytes == null ||
-          bytes.isEmpty) {
+      if (bytes == null || bytes.isEmpty) {
+        debugPrint(
+          'Web attachment bytes missing: ${file.name}',
+        );
+
         throw const FormatException(
           'تعذر قراءة أحد الملفات المرفقة',
         );
       }
 
-      multipartFile =
-          MultipartFile.fromBytes(
+      multipartFile = MultipartFile.fromBytes(
         bytes,
         filename: file.name,
       );
-    } else {
-      final String? path =
-          file.path;
 
-      if (path == null ||
-          path.trim().isEmpty) {
+      debugPrint(
+        'Web attachment added using bytes',
+      );
+    } else {
+      final String? path = file.path;
+
+      if (path == null || path.trim().isEmpty) {
+        debugPrint(
+          'Mobile attachment path missing: ${file.name}',
+        );
+
         throw const FormatException(
           'تعذر الوصول إلى أحد الملفات المرفقة',
         );
       }
 
-      multipartFile =
-          await MultipartFile.fromFile(
+      multipartFile = await MultipartFile.fromFile(
         path,
         filename: file.name,
+      );
+
+      debugPrint(
+        'Mobile attachment added using path: $path',
       );
     }
 
@@ -367,16 +335,17 @@ final String detailsJson = jsonEncode({
     );
 
     debugPrint(
-      'Attachment added: ${file.name}',
+      'Attachment added successfully: ${file.name}',
     );
+
+    debugPrint('--------------------------------------');
   }
 
   String _extractSuccessMessage(
     dynamic data,
   ) {
     if (data is Map) {
-      final dynamic message =
-          data['message'];
+      final dynamic message = data['message'];
 
       if (message is String &&
           message.trim().isNotEmpty) {
@@ -389,12 +358,18 @@ final String detailsJson = jsonEncode({
       return data;
     }
 
+    debugPrint(
+      'Invalid education response format: $data',
+    );
+
     throw const FormatException(
       'استجابة الخادم غير صالحة',
     );
   }
 
-  String _mapGender(String gender) {
+  String _mapGender(
+    String gender,
+  ) {
     switch (gender.trim()) {
       case 'ذكر':
       case 'MALE':
@@ -406,6 +381,10 @@ final String detailsJson = jsonEncode({
         return 'FEMALE';
 
       default:
+        debugPrint(
+          'Unsupported gender value: $gender',
+        );
+
         throw const FormatException(
           'قيمة الجنس غير صحيحة',
         );
@@ -437,6 +416,10 @@ final String detailsJson = jsonEncode({
         return 'DIVORCED';
 
       default:
+        debugPrint(
+          'Unsupported social status value: $socialStatus',
+        );
+
         throw const FormatException(
           'قيمة الحالة الاجتماعية غير صحيحة',
         );
@@ -454,15 +437,13 @@ final String detailsJson = jsonEncode({
       '--------- EDUCATION FORM DATA ---------',
     );
 
-    for (final field
-        in formData.fields) {
+    for (final field in formData.fields) {
       debugPrint(
         '${field.key}: ${field.value}',
       );
     }
 
-    for (final file
-        in formData.files) {
+    for (final file in formData.files) {
       debugPrint(
         '${file.key}: '
         '${file.value.filename} - '
@@ -473,15 +454,5 @@ final String detailsJson = jsonEncode({
     debugPrint(
       '---------------------------------------',
     );
-  }
-
-  String _maskToken(String token) {
-    if (token.length <= 12) {
-      return '***';
-    }
-
-    return '${token.substring(0, 6)}'
-        '...'
-        '${token.substring(token.length - 6)}';
   }
 }

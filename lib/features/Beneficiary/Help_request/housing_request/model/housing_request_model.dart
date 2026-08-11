@@ -11,34 +11,40 @@ class HousingRequestModel {
     required this.detailsEn,
     required this.cost,
     required this.media,
-    this.currentHousingSituation,
+    this.currentHousingSituationAr,
+    this.currentHousingSituationEn,
     this.currentRent,
-    this.currentPlaceOfResidence,
-    this.reasonForLock,
-    this.housingSpecifications,
+    this.currentPlaceOfResidenceAr,
+    this.currentPlaceOfResidenceEn,
+    this.reasonForLockAr,
+    this.reasonForLockEn,
+    this.housingSpecificationsAr,
+    this.housingSpecificationsEn,
   });
 
   final ApplicantInfoModel applicantInfo;
-
   final HousingSubCategory subCategory;
 
   // الحقول المشتركة
   final String detailsAr;
-
   final String detailsEn;
-
   final double cost;
-
   final List<PlatformFile> media;
 
-  // الحقول الخاصة حسب نوع الطلب
-  final String? currentHousingSituation;
+  // subCategoryId = 3
+  final String? currentHousingSituationAr;
+  final String? currentHousingSituationEn;
 
+  // subCategoryId = 2
   final double? currentRent;
 
-  final String? currentPlaceOfResidence;
+  // subCategoryId = 1
+  final String? currentPlaceOfResidenceAr;
+  final String? currentPlaceOfResidenceEn;
 
-  final String? reasonForLock;
+  final String? reasonForLockAr;
+  final String? reasonForLockEn;
 
-  final String? housingSpecifications;
+  final String? housingSpecificationsAr;
+  final String? housingSpecificationsEn;
 }

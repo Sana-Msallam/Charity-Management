@@ -76,16 +76,16 @@ class DioClient {
   }
 
   static bool _isPublicEndpoint(String path) {
-    final publicExactPaths = <String>{
-      ApiConstants.login,
-      ApiConstants.registerDonor,
-      ApiConstants.registerBeneficiary,
-      ApiConstants.verifyOtp,
-      ApiConstants.requestPasswordResetOtp,
-      ApiConstants.resetPassword,
-      ApiConstants.aidRequests,
-    };
-
+   final publicExactPaths = <String>{
+  ApiConstants.login,
+  ApiConstants.registerDonor,
+  ApiConstants.registerBeneficiary,
+  ApiConstants.verifyOtp,
+  ApiConstants.requestPasswordResetOtp,
+  ApiConstants.resetPassword,
+  ApiConstants.aidRequests,
+  ApiConstants.completedAidRequests,
+};
     if (publicExactPaths.contains(path)) {
       return true;
     }

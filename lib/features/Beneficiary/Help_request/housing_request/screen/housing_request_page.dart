@@ -57,15 +57,27 @@ class _HousingRequestPageState
    * تأمين منزل
    */
   final TextEditingController
-      _currentPlaceOfResidenceController =
+      _currentPlaceOfResidenceArController =
       TextEditingController();
 
   final TextEditingController
-      _reasonForLockController =
+      _currentPlaceOfResidenceEnController =
       TextEditingController();
 
   final TextEditingController
-      _housingSpecificationsController =
+      _reasonForLockArController =
+      TextEditingController();
+
+  final TextEditingController
+      _reasonForLockEnController =
+      TextEditingController();
+
+  final TextEditingController
+      _housingSpecificationsArController =
+      TextEditingController();
+
+  final TextEditingController
+      _housingSpecificationsEnController =
       TextEditingController();
 
   /*
@@ -80,7 +92,11 @@ class _HousingRequestPageState
    * إصلاحات منزلية
    */
   final TextEditingController
-      _currentHousingSituationController =
+      _currentHousingSituationArController =
+      TextEditingController();
+
+  final TextEditingController
+      _currentHousingSituationEnController =
       TextEditingController();
 
   /*
@@ -149,13 +165,17 @@ class _HousingRequestPageState
     _detailsEnController.dispose();
     _costController.dispose();
 
-    _currentPlaceOfResidenceController.dispose();
-    _reasonForLockController.dispose();
-    _housingSpecificationsController.dispose();
+    _currentPlaceOfResidenceArController.dispose();
+    _currentPlaceOfResidenceEnController.dispose();
+    _reasonForLockArController.dispose();
+    _reasonForLockEnController.dispose();
+    _housingSpecificationsArController.dispose();
+    _housingSpecificationsEnController.dispose();
 
     _currentRentController.dispose();
 
-    _currentHousingSituationController.dispose();
+    _currentHousingSituationArController.dispose();
+    _currentHousingSituationEnController.dispose();
 
     debugPrint('HousingRequestPage disposed');
 
@@ -185,20 +205,28 @@ class _HousingRequestPageState
       switch (subCategory) {
         case HousingSubCategory.homeProvision:
           _currentRentController.clear();
-          _currentHousingSituationController.clear();
+          _currentHousingSituationArController.clear();
+          _currentHousingSituationEnController.clear();
           break;
 
         case HousingSubCategory.rentAssistance:
-          _currentPlaceOfResidenceController.clear();
-          _reasonForLockController.clear();
-          _housingSpecificationsController.clear();
-          _currentHousingSituationController.clear();
+          _currentPlaceOfResidenceArController.clear();
+          _currentPlaceOfResidenceEnController.clear();
+          _reasonForLockArController.clear();
+          _reasonForLockEnController.clear();
+          _housingSpecificationsArController.clear();
+          _housingSpecificationsEnController.clear();
+          _currentHousingSituationArController.clear();
+          _currentHousingSituationEnController.clear();
           break;
 
         case HousingSubCategory.homeRepairs:
-          _currentPlaceOfResidenceController.clear();
-          _reasonForLockController.clear();
-          _housingSpecificationsController.clear();
+          _currentPlaceOfResidenceArController.clear();
+          _currentPlaceOfResidenceEnController.clear();
+          _reasonForLockArController.clear();
+          _reasonForLockEnController.clear();
+          _housingSpecificationsArController.clear();
+          _housingSpecificationsEnController.clear();
           _currentRentController.clear();
           break;
       }
@@ -471,40 +499,78 @@ class _HousingRequestPageState
      */
     switch (_selectedSubCategory!) {
       case HousingSubCategory.homeProvision:
-        final String currentPlace =
-            _currentPlaceOfResidenceController
-                .text
-                .trim();
+        final String currentPlaceAr =
+            _currentPlaceOfResidenceArController.text.trim();
+        final String currentPlaceEn =
+            _currentPlaceOfResidenceEnController.text.trim();
 
-        final String reason =
-            _reasonForLockController.text.trim();
+        final String reasonAr =
+            _reasonForLockArController.text.trim();
+        final String reasonEn =
+            _reasonForLockEnController.text.trim();
 
-        final String specifications =
-            _housingSpecificationsController
-                .text
-                .trim();
+        final String specificationsAr =
+            _housingSpecificationsArController.text.trim();
+        final String specificationsEn =
+            _housingSpecificationsEnController.text.trim();
 
-        if (currentPlace.isEmpty) {
-          _showValidationMessage(
-            'يرجى إدخال مكان الإقامة الحالي',
-          );
-
+        final String? currentPlaceArError =
+            _validateArabicLocalizedField(
+          currentPlaceAr,
+          'يرجى إدخال مكان الإقامة الحالي باللغة العربية',
+        );
+        if (currentPlaceArError != null) {
+          _showValidationMessage(currentPlaceArError);
           return;
         }
 
-        if (reason.isEmpty) {
-          _showValidationMessage(
-            'يرجى إدخال سبب طلب تأمين المنزل',
-          );
-
+        final String? currentPlaceEnError =
+            _validateEnglishLocalizedField(
+          currentPlaceEn,
+          'Please enter the current residence in English',
+        );
+        if (currentPlaceEnError != null) {
+          _showValidationMessage(currentPlaceEnError);
           return;
         }
 
-        if (specifications.isEmpty) {
-          _showValidationMessage(
-            'يرجى إدخال مواصفات المنزل المطلوب',
-          );
+        final String? reasonArError =
+            _validateArabicLocalizedField(
+          reasonAr,
+          'يرجى إدخال سبب طلب تأمين المنزل باللغة العربية',
+        );
+        if (reasonArError != null) {
+          _showValidationMessage(reasonArError);
+          return;
+        }
 
+        final String? reasonEnError =
+            _validateEnglishLocalizedField(
+          reasonEn,
+          'Please enter the reason for requesting a home in English',
+        );
+        if (reasonEnError != null) {
+          _showValidationMessage(reasonEnError);
+          return;
+        }
+
+        final String? specificationsArError =
+            _validateArabicLocalizedField(
+          specificationsAr,
+          'يرجى إدخال مواصفات المنزل المطلوب باللغة العربية',
+        );
+        if (specificationsArError != null) {
+          _showValidationMessage(specificationsArError);
+          return;
+        }
+
+        final String? specificationsEnError =
+            _validateEnglishLocalizedField(
+          specificationsEn,
+          'Please enter the required housing specifications in English',
+        );
+        if (specificationsEnError != null) {
+          _showValidationMessage(specificationsEnError);
           return;
         }
 
@@ -531,16 +597,28 @@ class _HousingRequestPageState
         break;
 
       case HousingSubCategory.homeRepairs:
-        final String housingSituation =
-            _currentHousingSituationController
-                .text
-                .trim();
+        final String housingSituationAr =
+            _currentHousingSituationArController.text.trim();
+        final String housingSituationEn =
+            _currentHousingSituationEnController.text.trim();
 
-        if (housingSituation.isEmpty) {
-          _showValidationMessage(
-            'يرجى وصف حالة المنزل والإصلاحات المطلوبة',
-          );
+        final String? housingSituationArError =
+            _validateArabicLocalizedField(
+          housingSituationAr,
+          'يرجى وصف حالة المنزل والإصلاحات المطلوبة باللغة العربية',
+        );
+        if (housingSituationArError != null) {
+          _showValidationMessage(housingSituationArError);
+          return;
+        }
 
+        final String? housingSituationEnError =
+            _validateEnglishLocalizedField(
+          housingSituationEn,
+          'Please describe the current housing situation and required repairs in English',
+        );
+        if (housingSituationEnError != null) {
+          _showValidationMessage(housingSituationEnError);
           return;
         }
 
@@ -638,26 +716,40 @@ class _HousingRequestPageState
       /*
        * حقول subCategoryId = 1
        */
-      currentPlaceOfResidence:
+      currentPlaceOfResidenceAr:
           _selectedSubCategory ==
                   HousingSubCategory.homeProvision
-              ? _currentPlaceOfResidenceController
-                  .text
-                  .trim()
+              ? _currentPlaceOfResidenceArController.text.trim()
               : null,
 
-      reasonForLock:
+      currentPlaceOfResidenceEn:
           _selectedSubCategory ==
                   HousingSubCategory.homeProvision
-              ? _reasonForLockController.text.trim()
+              ? _currentPlaceOfResidenceEnController.text.trim()
               : null,
 
-      housingSpecifications:
+      reasonForLockAr:
           _selectedSubCategory ==
                   HousingSubCategory.homeProvision
-              ? _housingSpecificationsController
-                  .text
-                  .trim()
+              ? _reasonForLockArController.text.trim()
+              : null,
+
+      reasonForLockEn:
+          _selectedSubCategory ==
+                  HousingSubCategory.homeProvision
+              ? _reasonForLockEnController.text.trim()
+              : null,
+
+      housingSpecificationsAr:
+          _selectedSubCategory ==
+                  HousingSubCategory.homeProvision
+              ? _housingSpecificationsArController.text.trim()
+              : null,
+
+      housingSpecificationsEn:
+          _selectedSubCategory ==
+                  HousingSubCategory.homeProvision
+              ? _housingSpecificationsEnController.text.trim()
               : null,
 
       /*
@@ -672,12 +764,16 @@ class _HousingRequestPageState
       /*
        * حقل subCategoryId = 3
        */
-      currentHousingSituation:
+      currentHousingSituationAr:
           _selectedSubCategory ==
                   HousingSubCategory.homeRepairs
-              ? _currentHousingSituationController
-                  .text
-                  .trim()
+              ? _currentHousingSituationArController.text.trim()
+              : null,
+
+      currentHousingSituationEn:
+          _selectedSubCategory ==
+                  HousingSubCategory.homeRepairs
+              ? _currentHousingSituationEnController.text.trim()
               : null,
     );
 
@@ -704,17 +800,17 @@ class _HousingRequestPageState
 
     debugPrint(
       'Request currentPlaceOfResidence: '
-      '${request.currentPlaceOfResidence}',
+      '${request.currentPlaceOfResidenceAr}',
     );
 
     debugPrint(
       'Request reasonForLock: '
-      '${request.reasonForLock}',
+      '${request.reasonForLockAr}',
     );
 
     debugPrint(
       'Request housingSpecifications: '
-      '${request.housingSpecifications}',
+      '${request.housingSpecificationsAr}',
     );
 
     debugPrint(
@@ -724,7 +820,7 @@ class _HousingRequestPageState
 
     debugPrint(
       'Request currentHousingSituation: '
-      '${request.currentHousingSituation}',
+      '${request.currentHousingSituationAr}',
     );
 
     debugPrint(
@@ -810,6 +906,48 @@ class _HousingRequestPageState
     return null;
   }
 
+  String? _validateArabicLocalizedField(
+    String value,
+    String emptyMessage,
+  ) {
+    final String text = value.trim();
+
+    if (text.isEmpty) {
+      return emptyMessage;
+    }
+
+    if (!RegExp(r'[\u0600-\u06FF]').hasMatch(text)) {
+      return 'يجب أن يحتوي الحقل العربي على أحرف عربية';
+    }
+
+    if (RegExp(r'[A-Za-z]').hasMatch(text)) {
+      return 'يرجى كتابة الحقل العربي دون أحرف إنكليزية';
+    }
+
+    return null;
+  }
+
+  String? _validateEnglishLocalizedField(
+    String value,
+    String emptyMessage,
+  ) {
+    final String text = value.trim();
+
+    if (text.isEmpty) {
+      return emptyMessage;
+    }
+
+    if (!RegExp(r'[A-Za-z]').hasMatch(text)) {
+      return 'The English field must contain English letters';
+    }
+
+    if (RegExp(r'[\u0600-\u06FF]').hasMatch(text)) {
+      return 'Please write the English field without Arabic letters';
+    }
+
+    return null;
+  }
+
   void _showValidationMessage(String message) {
     if (!mounted) {
       debugPrint(
@@ -887,37 +1025,58 @@ class _HousingRequestPageState
             ),*/
 
             CustomTextField(
-              label:
-                  'مكان الإقامة الحالي بالتفصيل',
-              hint:
-                  'مثال: دمشق - المزة - سكن مؤقت',
-              controller:
-                  _currentPlaceOfResidenceController,
+              label: 'مكان الإقامة الحالي (عربي)',
+              hint: 'مثال: دمشق - المزة - سكن مؤقت',
+              controller: _currentPlaceOfResidenceArController,
               maxLines: 2,
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             CustomTextField(
-              label:
-                  'سبب طلب تأمين منزل',
-              hint:
-                  'اشرح سبب الحاجة إلى منزل...',
-              controller:
-                  _reasonForLockController,
-              maxLines: 4,
+              label: 'Current place of residence (English)',
+              hint: 'Example: Damascus - Mezzeh - temporary housing',
+              controller: _currentPlaceOfResidenceEnController,
+              maxLines: 2,
+              isLtr: true,
             ),
 
             const SizedBox(height: 20),
 
             CustomTextField(
-              label:
-                  'مواصفات المنزل المطلوب',
-              hint:
-                  'مثال: غرفتان، قريب من المدرسة...',
-              controller:
-                  _housingSpecificationsController,
+              label: 'سبب طلب تأمين منزل (عربي)',
+              hint: 'اشرح سبب الحاجة إلى منزل...',
+              controller: _reasonForLockArController,
+              maxLines: 4,
+            ),
+
+            const SizedBox(height: 16),
+
+            CustomTextField(
+              label: 'Reason for requesting a home (English)',
+              hint: 'Explain why housing assistance is needed...',
+              controller: _reasonForLockEnController,
+              maxLines: 4,
+              isLtr: true,
+            ),
+
+            const SizedBox(height: 20),
+
+            CustomTextField(
+              label: 'مواصفات المنزل المطلوب (عربي)',
+              hint: 'مثال: غرفتان، قريب من المدرسة...',
+              controller: _housingSpecificationsArController,
               maxLines: 3,
+            ),
+
+            const SizedBox(height: 16),
+
+            CustomTextField(
+              label: 'Required housing specifications (English)',
+              hint: 'Example: two rooms, close to school...',
+              controller: _housingSpecificationsEnController,
+              maxLines: 3,
+              isLtr: true,
             ),
           ],
         );
@@ -957,13 +1116,20 @@ class _HousingRequestPageState
             ),*/
 
             CustomTextField(
-              label:
-                  'وصف حالة المنزل الحالية',
-              hint:
-                  'اشرح الأضرار والإصلاحات المطلوبة...',
-              controller:
-                  _currentHousingSituationController,
+              label: 'وصف حالة المنزل الحالية (عربي)',
+              hint: 'اشرح الأضرار والإصلاحات المطلوبة...',
+              controller: _currentHousingSituationArController,
               maxLines: 5,
+            ),
+
+            const SizedBox(height: 16),
+
+            CustomTextField(
+              label: 'Current housing situation (English)',
+              hint: 'Describe the damage and required repairs...',
+              controller: _currentHousingSituationEnController,
+              maxLines: 5,
+              isLtr: true,
             ),
           ],
         );

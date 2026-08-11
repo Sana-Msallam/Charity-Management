@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:charity_management/constants/debug_token.dart';
+import 'package:charity_management/features/auth/storage/auth_local_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../../../../../constants/api_constants.dart';
 import '../../../../../constants/dio_client.dart';
@@ -19,10 +19,11 @@ class FoodRequestService {
     debugPrint('START SUBMIT FOOD REQUEST');
     debugPrint('======================================');
 
-    final SharedPreferences preferences =
-        await SharedPreferences.getInstance();
-final String? accessToken =
-    preferences.getString('access_token');
+    final AuthLocalStorage authLocalStorage =
+        AuthLocalStorage();
+
+    final String? accessToken =
+        await authLocalStorage.getToken();
     final bool tokenExists =
         accessToken != null &&
         accessToken.trim().isNotEmpty;

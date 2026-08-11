@@ -1,4 +1,0 @@
-class DebugToken {
-  static const String? token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJjb3VudHJ5Q29kZSI6Iis5NjMiLCJudW1iZXIiOiI5OTM2MDIxMDYiLCJ0eXBlIjoiQkVORUZJQ0lBUlkiLCJpYXQiOjE3ODU0OTE4MDAsImV4cCI6MTc4NjA5NjYwMH0.0dvx4dqXWlPMct5oW2Leleea7WRaORzWKYdqAvjmzAM';
-}
