@@ -352,53 +352,46 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
 
                       const SizedBox(height: 24),
 
-                      Container(
-                        width: double.infinity,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          image: const DecorationImage(
-                            image: AssetImage('assets/orphan_profile.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                Colors.black.withOpacity(0.8),
-                                Colors.transparent,
-                              ],
-                            ),
-                          ),
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                l10n.yourGivingImpact,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                l10n.givingImpactDescription,
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   width: double.infinity,
+                      //   height: 140,
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: BorderRadius.circular(16),
+                      //     image: const DecorationImage(
+                      //       image: AssetImage('assets/orphan_profile.jpg'),
+                      //       fit: BoxFit.cover,
+                      //     ),
+                      //   ),
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(16),
+                      //       gradient: LinearGradient(
+                      //         begin: Alignment.bottomCenter,
+                      //         end: Alignment.topCenter,
+                      //         colors: [
+                      //           Colors.black.withOpacity(0.8),
+                      //           Colors.transparent,
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     padding: const EdgeInsets.all(16),
+                      //     child: Column(
+                      //       mainAxisAlignment: MainAxisAlignment.end,
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                          
+                      //         const SizedBox(height: 4),
+                      //         Text(
+                      //           l10n.givingImpactDescription,
+                      //           style: const TextStyle(
+                      //             color: Colors.white70,
+                      //             fontSize: 13,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

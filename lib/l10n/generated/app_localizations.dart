@@ -320,6 +320,30 @@ abstract class AppLocalizations {
   /// **'Male'**
   String get male;
 
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @noCompletedAidCases.
+  ///
+  /// In en, this message translates to:
+  /// **'No completed aid cases'**
+  String get noCompletedAidCases;
+
+  /// No description provided for @aboutAtharAssociation.
+  ///
+  /// In en, this message translates to:
+  /// **'About Athar Association'**
+  String get aboutAtharAssociation;
+
+  /// No description provided for @aboutAtharAssociationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Athar Association supports orphans and families in need through programs and initiatives that aim to improve their lives.'**
+  String get aboutAtharAssociationDescription;
+
   /// No description provided for @female.
   ///
   /// In en, this message translates to:
@@ -337,6 +361,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select date of birth'**
   String get selectDateOfBirth;
+
+  /// No description provided for @completedAidCases.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed Cases'**
+  String get completedAidCases;
 
   /// No description provided for @dateOfBirthHint.
   ///
@@ -955,6 +985,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Housing'**
   String get housing;
+
+  /// No description provided for @loggingOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging out...'**
+  String get loggingOut;
+
+  /// No description provided for @followDonations.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow your requests and donations'**
+  String get followDonations;
+
+  /// No description provided for @changeAppAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Change app appearance'**
+  String get changeAppAppearance;
+
+  /// No description provided for @languageAndAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Language and appearance'**
+  String get languageAndAppearance;
 
   /// No description provided for @communityInitiatives.
   ///
@@ -1892,11 +1946,143 @@ abstract class AppLocalizations {
   /// **'Active'**
   String get activeStatus;
 
-  /// No description provided for @yourGivingImpact.
+  /// No description provided for @sponsorshipsPageDescription.
   ///
   /// In en, this message translates to:
-  /// **'Your giving impact'**
-  String get yourGivingImpact;
+  /// **'Manage your sponsorships and support children'**
+  String get sponsorshipsPageDescription;
+
+  /// No description provided for @active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get active;
+
+  /// No description provided for @personalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Information'**
+  String get personalInformation;
+
+  /// No description provided for @myAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'My Account'**
+  String get myAccount;
+
+  /// No description provided for @donor.
+  ///
+  /// In en, this message translates to:
+  /// **'Donor'**
+  String get donor;
+
+  /// No description provided for @unspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Unspecified'**
+  String get unspecified;
+
+  /// No description provided for @myDonations.
+  ///
+  /// In en, this message translates to:
+  /// **'My Donations'**
+  String get myDonations;
+
+  /// No description provided for @myDonationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your requests and donations'**
+  String get myDonationsSubtitle;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @arabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get arabic;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get darkMode;
+
+  /// No description provided for @appearanceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change app appearance'**
+  String get appearanceSubtitle;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get logout;
+
+  /// No description provided for @logoutLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging out...'**
+  String get logoutLoading;
+
+  /// No description provided for @logoutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get logoutConfirmation;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @logoutError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while logging out'**
+  String get logoutError;
+
+  /// No description provided for @availableForSponsorship.
+  ///
+  /// In en, this message translates to:
+  /// **'Available for sponsorship'**
+  String get availableForSponsorship;
+
+  /// No description provided for @supportAChild.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsor a child'**
+  String get supportAChild;
+
+  /// No description provided for @startNewSponsorshipDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new sponsorship and support a child'**
+  String get startNewSponsorshipDescription;
+
+  /// No description provided for @chooseOrphanAndStartSponsorship.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a child and start a sponsorship request'**
+  String get chooseOrphanAndStartSponsorship;
+
+  /// No description provided for @walletBalanceUsedForSponsorship.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet balance is used when you submit a sponsorship request'**
+  String get walletBalanceUsedForSponsorship;
 
   /// No description provided for @givingImpactDescription.
   ///

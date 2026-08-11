@@ -174,4 +174,13 @@ class AuthService {
 
     return fallbackMessage;
   }
+  Future<void> logout() async {
+  try {
+    await _dio.post(
+      ApiConstants.logout,
+    );
+  } finally {
+    await _localStorage.deleteSession();
+  }
+}
 }

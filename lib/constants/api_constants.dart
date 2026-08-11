@@ -1,7 +1,7 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'http://192.168.68.82:3000';
+  static const String baseUrl = 'http://192.168.68.62:3000';
 
   static const String login = '/auth/login/client';
 
@@ -15,10 +15,13 @@ static const String resetPassword =
     '/auth/forgot-password/reset';
 
   static const String healthRequest = '/requests/health';
+  static const String logout = '/auth/logout';
 
   static const String profile = '/api/profile';
 
   static const String aidRequests = '/donor/public/aid-requests';
   static const String sponsorships = '/sponsorships';
 static const String cancelSponsorship = '/sponsorships';
+static const String completedAidCases =
+    '/public/statistics/completed-aid-cases';
 }
