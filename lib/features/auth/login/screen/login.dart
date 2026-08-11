@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-              const SizedBox(height: 34),
+                const SizedBox(height: 34),
 
                 Image.asset(
                   'assets/img/logo_isolated.svg.png',

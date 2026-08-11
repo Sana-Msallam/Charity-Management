@@ -83,7 +83,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                  const SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
                     Stack(
                       alignment: Alignment.center,

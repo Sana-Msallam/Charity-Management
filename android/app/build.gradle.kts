@@ -8,6 +8,7 @@ plugins {
 android {
     namespace = "com.example.charity_management"
     compileSdk = flutter.compileSdkVersion
+    ndkVersion = "27.0.12077973"
    
 
     compileOptions {

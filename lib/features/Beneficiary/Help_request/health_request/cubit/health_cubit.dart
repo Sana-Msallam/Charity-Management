@@ -9,14 +9,8 @@ import 'health_state.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 
 class HealthCubit extends Cubit<HealthState> {
-  HealthCubit(
-    this._healthRequestService,
-  ) : super(
-          const HealthInitial(),
-        ) {
-    debugPrint(
-      'HealthCubit created with HealthInitial state',
-    );
+  HealthCubit(this._healthRequestService) : super(const HealthInitial()) {
+    debugPrint('HealthCubit created with HealthInitial state');
   }
 
   final HealthRequestService _healthRequestService;
@@ -26,18 +20,12 @@ class HealthCubit extends Cubit<HealthState> {
     AppLocalizations localizations,
   ) async {
     debugPrint('======================================');
-    debugPrint(
-      'HealthCubit.submitHealthRequest called',
-    );
+    debugPrint('HealthCubit.submitHealthRequest called');
 
-    debugPrint(
-      'Current state: ${state.runtimeType}',
-    );
+    debugPrint('Current state: ${state.runtimeType}');
 
     if (state is HealthLoading) {
-      debugPrint(
-        'Duplicate health request submission ignored',
-      );
+      debugPrint('Duplicate health request submission ignored');
 
       debugPrint('======================================');
       return;
@@ -100,170 +88,94 @@ class HealthCubit extends Cubit<HealthState> {
       '${request.description.length}',
     );
 
-    debugPrint(
-      'Cost: ${request.cost}',
-    );
+    debugPrint('Cost: ${request.cost}');
 
-    debugPrint(
-      'Media count: ${request.media.length}',
-    );
+    debugPrint('Media count: ${request.media.length}');
 
     for (final file in request.media) {
-      debugPrint(
-        'Media file path: ${file.path}',
-      );
+      debugPrint('Media file path: ${file.path}');
     }
 
-    debugPrint(
-      'HealthCubit: emitting HealthLoading',
-    );
+    debugPrint('HealthCubit: emitting HealthLoading');
 
-    emit(
-      const HealthLoading(),
-    );
+    emit(const HealthLoading());
 
     try {
-      debugPrint(
-        'HealthCubit: calling HealthRequestService',
-      );
+      debugPrint('HealthCubit: calling HealthRequestService');
 
-      final message =
-          await _healthRequestService.submitHealthRequest(
-        request,
-      );
+      final message = await _healthRequestService.submitHealthRequest(request);
 
-      debugPrint(
-        'HealthCubit: service completed successfully',
-      );
+      debugPrint('HealthCubit: service completed successfully');
 
-      debugPrint(
-        'Success message: $message',
-      );
+      debugPrint('Success message: $message');
 
-      debugPrint(
-        'HealthCubit: emitting HealthSuccess',
-      );
+      debugPrint('HealthCubit: emitting HealthSuccess');
 
-      emit(
-        HealthSuccess(message),
-      );
+      emit(HealthSuccess(message));
 
       debugPrint('======================================');
     } on DioException catch (error, stackTrace) {
-      debugPrint(
-        'HealthCubit caught DioException',
-      );
+      debugPrint('HealthCubit caught DioException');
 
-      debugPrint(
-        'Dio error type: ${error.type}',
-      );
+      debugPrint('Dio error type: ${error.type}');
 
-      debugPrint(
-        'Dio error message: ${error.message}',
-      );
+      debugPrint('Dio error message: ${error.message}');
 
-      debugPrint(
-        'Status code: ${error.response?.statusCode}',
-      );
+      debugPrint('Status code: ${error.response?.statusCode}');
 
-      debugPrint(
-        'Response data: ${error.response?.data}',
-      );
+      debugPrint('Response data: ${error.response?.data}');
 
-      debugPrint(
-        'Request URL: ${error.requestOptions.uri}',
-      );
+      debugPrint('Request URL: ${error.requestOptions.uri}');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
-      final message =
-          ApiException.getMessage(error,localizations);
+      final message = ApiException.getMessage(error, localizations);
 
-      debugPrint(
-        'Converted Arabic error message: $message',
-      );
+      debugPrint('Converted Arabic error message: $message');
 
-      debugPrint(
-        'HealthCubit: emitting HealthFailure',
-      );
+      debugPrint('HealthCubit: emitting HealthFailure');
 
-      emit(
-        HealthFailure(message),
-      );
+      emit(HealthFailure(message));
 
       debugPrint('======================================');
     } on FormatException catch (error, stackTrace) {
-      debugPrint(
-        'HealthCubit caught FormatException',
-      );
+      debugPrint('HealthCubit caught FormatException');
 
-      debugPrint(
-        'FormatException message: ${error.message}',
-      );
+      debugPrint('FormatException message: ${error.message}');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
-      debugPrint(
-        'HealthCubit: emitting HealthFailure',
-      );
+      debugPrint('HealthCubit: emitting HealthFailure');
 
-      emit(
-        HealthFailure(
-          error.message,
-        ),
-      );
+      emit(HealthFailure(error.message));
 
       debugPrint('======================================');
     } catch (error, stackTrace) {
-      debugPrint(
-        'HealthCubit caught unexpected exception',
-      );
+      debugPrint('HealthCubit caught unexpected exception');
 
-      debugPrint(
-        'Runtime type: ${error.runtimeType}',
-      );
+      debugPrint('Runtime type: ${error.runtimeType}');
 
-      debugPrint(
-        'Error: $error',
-      );
+      debugPrint('Error: $error');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
-      debugPrint(
-        'HealthCubit: emitting HealthFailure',
-      );
+      debugPrint('HealthCubit: emitting HealthFailure');
 
-      emit(
-        const HealthFailure(
-          'حدث خطأ غير متوقع، يرجى المحاولة مجدداً',
-        ),
-      );
+      emit(const HealthFailure('حدث خطأ غير متوقع، يرجى المحاولة مجدداً'));
 
       debugPrint('======================================');
     }
   }
 
   void reset() {
-    debugPrint(
-      'HealthCubit reset to HealthInitial',
-    );
+    debugPrint('HealthCubit reset to HealthInitial');
 
-    emit(
-      const HealthInitial(),
-    );
+    emit(const HealthInitial());
   }
 
   @override
   Future<void> close() {
-    debugPrint(
-      'HealthCubit closed',
-    );
+    debugPrint('HealthCubit closed');
 
     return super.close();
   }

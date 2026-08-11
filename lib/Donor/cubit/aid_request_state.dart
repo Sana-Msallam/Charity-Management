@@ -1,4 +1,3 @@
-
 import 'package:charity_management/Donor/model/aid_request_model.dart';
 
 abstract class AidRequestState {}

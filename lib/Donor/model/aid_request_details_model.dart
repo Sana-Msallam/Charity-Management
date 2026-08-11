@@ -1,5 +1,4 @@
 class AidRequestDetailsModel {
-
   final String image;
   final String title;
   final String description;
@@ -8,7 +7,6 @@ class AidRequestDetailsModel {
   final String remainingAmount;
   final double completionPercentage;
   final bool isUrgent;
-
 
   AidRequestDetailsModel({
     required this.image,
@@ -21,30 +19,43 @@ class AidRequestDetailsModel {
     required this.isUrgent,
   });
 
-
-  factory AidRequestDetailsModel.fromJson(Map<String,dynamic> json){
-
+  factory AidRequestDetailsModel.fromJson(Map<String, dynamic> json) {
     return AidRequestDetailsModel(
+      image: _asString(json['image']),
 
-      image: json['image'] ?? '',
+      title: _asString(json['title']),
 
-      title: json['title'] ?? '',
+      description: _asString(json['description']),
 
-      description: json['description'] ?? '',
+      totalCost: _asString(json['totalCost'], fallback: '0'),
 
-      totalCost: json['totalCost'] ?? '0',
+      paidAmount: _asString(json['paidAmount'], fallback: '0'),
 
-      paidAmount: json['paidAmount'] ?? '0',
+      remainingAmount: _asString(json['remainingAmount'], fallback: '0'),
 
-      remainingAmount: json['remainingAmount'] ?? '0',
-
-      completionPercentage:
-          (json['completionPercentage'] ?? 0).toDouble(),
+      completionPercentage: _asDouble(json['completionPercentage']),
 
       isUrgent: json['isUrgent'] ?? false,
-
     );
-
   }
 
+  static String _asString(dynamic value, {String fallback = ''}) {
+    if (value == null) {
+      return fallback;
+    }
+
+    return value.toString();
+  }
+
+  static double _asDouble(dynamic value) {
+    if (value is num) {
+      return value.toDouble();
+    }
+
+    if (value is String) {
+      return double.tryParse(value) ?? 0;
+    }
+
+    return 0;
+  }
 }

@@ -35,7 +35,9 @@ class SmallCategoryCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
         child: Material(
-          color: color.withOpacity(0.06), // جعل الخلفية ملونة خفيفة لتبدو كزر مخصص
+          color: color.withOpacity(
+            0.06,
+          ), // جعل الخلفية ملونة خفيفة لتبدو كزر مخصص
           child: InkWell(
             onTap: onTap,
             splashColor: color.withOpacity(0.15),
@@ -44,7 +46,10 @@ class SmallCategoryCard extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0),
-                border: Border.all(color: color.withOpacity(0.15), width: 1.2), // حدود واضحة للزر
+                border: Border.all(
+                  color: color.withOpacity(0.15),
+                  width: 1.2,
+                ), // حدود واضحة للزر
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,14 +58,15 @@ class SmallCategoryCard extends StatelessWidget {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: Colors.white, // أيقونة بيضاء تبرز فوق الخلفية الملونة
+                      color:
+                          Colors.white, // أيقونة بيضاء تبرز فوق الخلفية الملونة
                       borderRadius: BorderRadius.circular(12.0),
                       boxShadow: [
                         BoxShadow(
                           color: color.withOpacity(0.1),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
-                        )
+                        ),
                       ],
                     ),
                     child: Icon(icon, color: color, size: 24),

@@ -7,6 +7,9 @@ import 'package:charity_management/widgets/language_toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../Orphan/Screen/orphan_support_fund_screen.dart';
+import '../../Payment/Screen/wallet_top_up_screen.dart';
+
 class DonorHomeScreen extends StatelessWidget {
   DonorHomeScreen({super.key});
 
@@ -30,7 +33,7 @@ class DonorHomeScreen extends StatelessWidget {
               const SizedBox(height: 28),
               buildSupportAreasSection(context),
               const SizedBox(height: 28),
-              buildCommunityCard(context),
+              buildOrphanSupportFundCard(context),
               const SizedBox(height: 24),
               buildImpactStatsRow(context),
               const SizedBox(height: 32),
@@ -399,86 +402,160 @@ class DonorHomeScreen extends StatelessWidget {
     );
   }
 
-  Widget buildCommunityCard(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+  Widget buildOrphanSupportFundCard(BuildContext context) {
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final title = isArabic ? 'صندوق سند اليتيم' : 'Orphan Support Fund';
+    final description = isArabic
+        ? 'ساهم في استمرار دعم اليتيم مؤقتًا عند انقطاع كفالته.'
+        : 'Help continue an orphan\'s support when their sponsorship stops.';
+    final actionText = isArabic ? 'ساهم الآن' : 'Donate now';
 
-    return Container(
-      width: double.infinity,
-      height: 180,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          colors: [Color(0xFF37513A), Color(0xFF7A8A43)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-        ),
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(24),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        // TODO: اربطي البطاقة بواجهة صندوق سند اليتيم بعد إنشاء الـroute.
+       onTap: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => OrphanSupportFundScreen(
+        isSponsor: false,
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          gradient: const LinearGradient(
-            colors: [Color(0x99000000), Color(0x00000000)],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
+    ),
+  );
+},
+        child: Ink(
+          width: double.infinity,
+          height: 180,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: const LinearGradient(
+              colors: [Color(0xFF304C39), Color(0xFF78904B)],
+              begin: AlignmentDirectional.topStart,
+              end: AlignmentDirectional.bottomEnd,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              l10n.communityInitiatives,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'IBM Plex Sans Arabic',
+          child: Stack(
+            children: [
+              PositionedDirectional(
+                end: -22,
+                top: -32,
+                child: Container(
+                  width: 145,
+                  height: 145,
+                  decoration: const BoxDecoration(
+                    color: Color(0x1FFFFFFF),
+                    shape: BoxShape.circle,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l10n.communityInitiativesDescription,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 12,
-                height: 1.4,
-                fontFamily: 'IBM Plex Sans Arabic',
+              PositionedDirectional(
+                end: 24,
+                top: 28,
+                child: Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF3C7),
+                    borderRadius: BorderRadius.circular(22),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x33000000),
+                        blurRadius: 12,
+                        offset: Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.volunteer_activism_outlined,
+                    color: Color(0xFF765A00),
+                    size: 38,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            InkWell(
-              onTap: () {},
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      l10n.explorePortal,
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 116, 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0x26FFFFFF),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        isArabic ? 'استمرارية الكفالة' : 'Sponsorship continuity',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Color(0xFFFFE39A),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'IBM Plex Sans Arabic',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Color(0xFFFFD56B),
-                        fontSize: 13,
+                        color: Colors.white,
+                        fontSize: 19,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'IBM Plex Sans Arabic',
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 6),
-                  const Icon(
-                    Icons.arrow_forward,
-                    color: Color(0xFFFFD56B),
-                    size: 16,
-                  ),
-                ],
+                    const SizedBox(height: 5),
+                    Expanded(
+                      child: Text(
+                        description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Color(0xE6FFFFFF),
+                          fontSize: 12,
+                          height: 1.4,
+                          fontFamily: 'IBM Plex Sans Arabic',
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            actionText,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Color(0xFFFFD56B),
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'IBM Plex Sans Arabic',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        const Icon(
+                          Icons.arrow_forward,
+                          color: Color(0xFFFFD56B),
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -566,6 +643,12 @@ class DonorHomeScreen extends StatelessWidget {
         onTap: (index) {
           if (index == 0) {
             scaffoldKey.currentState?.openDrawer();
+          }
+          if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const WalletTopUpScreen()),
+            );
           }
 
           if (index == 4) {

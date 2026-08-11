@@ -206,7 +206,7 @@ class _OtpScreenState extends State<OtpScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 22),
               child: Column(
                 children: [
-                const SizedBox(height: 14),
+                  const SizedBox(height: 14),
 
                   Stack(
                     alignment: Alignment.center,
