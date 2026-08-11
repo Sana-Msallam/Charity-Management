@@ -1,262 +1,947 @@
-import 'package:flutter/material.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/applicantInfo/model/applicant_info_model.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/education_request/cubit/education_cubit.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/education_request/cubit/education_state.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/education_request/model/academic_achievement.dart';
+import 'package:charity_management/features/Beneficiary/Help_request/education_request/model/education_request_model.dart';
+import 'package:charity_management/features/components/custom_attachment_uploader.dart';
+import 'package:charity_management/features/components/education_components.dart';
+import 'package:charity_management/features/components/request_result_dialog.dart';
+import 'package:charity_management/features/components/selection_chip.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 
 // استيراد المكونات الموحدة والمخصصة
-import 'package:charity_management/widgets/beneficiaries_counter.dart';
 import 'package:charity_management/widgets/custom_text_field.dart';
-import 'package:charity_management/features/components/selection_chip.dart'; // 👇 تم استدعاء الـ Chip المخصص هنا
-import '../../../../components/education_components.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EducationRequestPage extends StatefulWidget {
-  const EducationRequestPage({Key? key}) : super(key: key);
+  const EducationRequestPage({
+    super.key,
+    required this.applicantInfo,
+  });
+
+  final ApplicantInfoModel applicantInfo;
 
   @override
-  State<EducationRequestPage> createState() => _EducationRequestPageState();
+  State<EducationRequestPage> createState() {
+    return _EducationRequestPageState();
+  }
 }
 
 class _EducationRequestPageState extends State<EducationRequestPage> {
-  // تعريف الـ Controllers لإدارة نصوص المدخلات
-  final TextEditingController _institutionController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _costController = TextEditingController();
+  final TextEditingController _institutionNameArController =
+      TextEditingController();
 
-  String _selectedEduLevel = 'مدرسي';
-  String? _selectedGrade;
-  int _beneficiariesCount = 1;
+  final TextEditingController _institutionNameEnController =
+      TextEditingController();
 
-  // الاحتفاظ بالأنواع المختارة داخل لستة
-  final List<String> _selectedAssistanceTypes = ['ثياب مدرسية'];
-  final List<String> _assistanceTypes = [
-    'ثياب مدرسية',
-    'مستلزمات دراسية',
-    'أقساط جامعة',
-    'أخرى',
-  ];
+  final TextEditingController _detailsArController =
+      TextEditingController();
 
-  final List<String> _gradeOptions = [
+  final TextEditingController _detailsEnController =
+      TextEditingController();
+
+  final TextEditingController _costController =
+      TextEditingController();
+
+  AcademicAchievement? _selectedAcademicAchievement;
+  String? _selectedYear;
+  final List<String> _yearOptions = [
     'المرحلة الابتدائية',
     'المرحلة المتوسطة',
     'المرحلة الثانوية',
     'سنة أولى جامعي',
     'سنة ثانية جامعي',
+    'سنة ثالثة جامعي',
+    'سنة رابعة جامعي',
+    'سنة خامسة جامعي',
+    'سنة سادسة جامعي',
   ];
+
+  final List<PlatformFile> _attachments = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    debugPrint('======================================');
+    debugPrint('EducationRequestPage opened');
+    debugPrint('Applicant data received:');
+    debugPrint('First name: ${widget.applicantInfo.firstName}');
+    debugPrint('Father name: ${widget.applicantInfo.fatherName}');
+    debugPrint('Last name: ${widget.applicantInfo.lastName}');
+    debugPrint('Age: ${widget.applicantInfo.age}');
+    debugPrint('Gender: ${widget.applicantInfo.gender}');
+    debugPrint(
+      'Social status: ${widget.applicantInfo.socialStatus}',
+    );
+    debugPrint(
+      'Phone number: ${widget.applicantInfo.phoneNumber}',
+    );
+    debugPrint(
+      'Address AR: ${widget.applicantInfo.addressAr}',
+    );
+    debugPrint(
+      'Address EN: ${widget.applicantInfo.addressEn}',
+    );
+    debugPrint(
+      'Is unemployed: ${widget.applicantInfo.isUnemployed}',
+    );
+    debugPrint('======================================');
+  }
 
   @override
   void dispose() {
-    // تنظيف الـ Controllers عند إغلاق الشاشة لمنع تسريب الذاكرة
-    _institutionController.dispose();
-    _descriptionController.dispose();
+    _institutionNameArController.dispose();
+    _institutionNameEnController.dispose();
+    _detailsArController.dispose();
+    _detailsEnController.dispose();
     _costController.dispose();
+
+    debugPrint('EducationRequestPage disposed');
+
     super.dispose();
+  }
+
+  Future<void> _pickAttachments() async {
+    debugPrint('======================================');
+    debugPrint('Education attachment picker opened');
+
+    try {
+      final FilePickerResult? result =
+          await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.custom,
+        allowedExtensions: const [
+          'jpg',
+          'jpeg',
+          'png',
+          'pdf',
+        ],
+        withData: kIsWeb,
+      );
+
+      if (result == null) {
+        debugPrint('Attachment selection cancelled');
+        debugPrint('======================================');
+        return;
+      }
+
+      if (!mounted) {
+        debugPrint(
+          'Widget is not mounted after file selection',
+        );
+        return;
+      }
+
+      final List<PlatformFile> selectedFiles =
+          result.files.where(
+        (PlatformFile newFile) {
+          final bool alreadyExists =
+              _attachments.any(
+            (PlatformFile oldFile) {
+              return oldFile.name == newFile.name &&
+                  oldFile.size == newFile.size;
+            },
+          );
+
+          return !alreadyExists;
+        },
+      ).toList();
+
+      if (selectedFiles.isEmpty) {
+        _showValidationMessage(
+          'الملفات المحددة مضافة مسبقاً',
+        );
+        return;
+      }
+
+      final List<PlatformFile> validFiles = [];
+
+      for (final PlatformFile file in selectedFiles) {
+        debugPrint('Selected file: ${file.name}');
+        debugPrint('Path: ${file.path}');
+        debugPrint('Size: ${file.size}');
+        debugPrint('Extension: ${file.extension}');
+        debugPrint(
+          'Bytes available: ${file.bytes != null}',
+        );
+
+        if (kIsWeb) {
+          if (file.bytes == null ||
+              file.bytes!.isEmpty) {
+            debugPrint(
+              'Web file bytes missing: ${file.name}',
+            );
+            continue;
+          }
+        } else {
+          if (file.path == null ||
+              file.path!.trim().isEmpty) {
+            debugPrint(
+              'Mobile file path missing: ${file.name}',
+            );
+            continue;
+          }
+        }
+
+        validFiles.add(file);
+      }
+
+      if (validFiles.isEmpty) {
+        _showValidationMessage(
+          'تعذر الوصول إلى الملفات المحددة',
+        );
+        return;
+      }
+
+      setState(() {
+        _attachments.addAll(validFiles);
+      });
+
+      debugPrint('Files added: ${validFiles.length}');
+      debugPrint(
+        'Total attachments: ${_attachments.length}',
+      );
+      debugPrint('======================================');
+    } catch (error, stackTrace) {
+      debugPrint(
+        'Education attachment picker error',
+      );
+      debugPrint('Error: $error');
+      debugPrint('Stack trace: $stackTrace');
+      debugPrint('======================================');
+
+      if (mounted) {
+        _showValidationMessage(
+          'تعذر اختيار الملفات، يرجى المحاولة مجدداً',
+        );
+      }
+    }
+  }
+
+  void _removeAttachment(int index) {
+    if (index < 0 ||
+        index >= _attachments.length) {
+      debugPrint(
+        'Invalid attachment index: $index',
+      );
+      return;
+    }
+
+    final PlatformFile removedFile =
+        _attachments[index];
+
+    setState(() {
+      _attachments.removeAt(index);
+    });
+
+    debugPrint(
+      'Attachment removed: ${removedFile.name}',
+    );
+    debugPrint(
+      'Remaining attachments: ${_attachments.length}',
+    );
+  }
+
+  void _submit() {
+    debugPrint('======================================');
+    debugPrint(
+      'EducationRequestPage: Submit clicked',
+    );
+
+    FocusScope.of(context).unfocus();
+
+    final String institutionNameAr =
+        _institutionNameArController.text.trim();
+
+    final String institutionNameEn =
+        _institutionNameEnController.text.trim();
+
+    final String detailsAr =
+        _detailsArController.text.trim();
+
+    final String detailsEn =
+        _detailsEnController.text.trim();
+
+    final String costText =
+        _costController.text.trim();
+
+    final double? cost = double.tryParse(
+      costText.replaceAll(',', '.'),
+    );
+
+    debugPrint(
+      'Academic achievement: '
+      '${_selectedAcademicAchievement?.apiValue}',
+    );
+    debugPrint(
+      'Institution name AR: $institutionNameAr',
+    );
+    debugPrint(
+      'Institution name EN: $institutionNameEn',
+    );
+    debugPrint('Selected year: $_selectedYear');
+    debugPrint('Details AR: $detailsAr');
+    debugPrint('Details EN: $detailsEn');
+    debugPrint('Cost: $cost');
+    debugPrint(
+      'Attachments count: ${_attachments.length}',
+    );
+
+    if (_selectedAcademicAchievement == null) {
+      _showValidationMessage(
+        'يرجى اختيار التحصيل الدراسي',
+      );
+      return;
+    }
+
+    final String? institutionArError =
+        _validateArabicField(
+      institutionNameAr,
+      'اسم المدرسة أو الجامعة',
+    );
+
+    if (institutionArError != null) {
+      _showValidationMessage(
+        institutionArError,
+      );
+      return;
+    }
+
+    final String? institutionEnError =
+        _validateEnglishField(
+      institutionNameEn,
+      'School or university name',
+    );
+
+    if (institutionEnError != null) {
+      _showValidationMessage(
+        institutionEnError,
+      );
+      return;
+    }
+
+    if (_selectedYear == null ||
+        _selectedYear!.trim().isEmpty) {
+      _showValidationMessage(
+        'يرجى اختيار الصف أو السنة الدراسية',
+      );
+      return;
+    }
+
+    final String? detailsArError =
+        _validateArabicField(
+      detailsAr,
+      'تفاصيل الحالة التعليمية',
+      minimumLength: 5,
+    );
+
+    if (detailsArError != null) {
+      _showValidationMessage(
+        detailsArError,
+      );
+      return;
+    }
+
+    final String? detailsEnError =
+        _validateEnglishField(
+      detailsEn,
+      'Education request details',
+      minimumLength: 5,
+    );
+
+    if (detailsEnError != null) {
+      _showValidationMessage(
+        detailsEnError,
+      );
+      return;
+    }
+
+    if (cost == null || cost <= 0) {
+      _showValidationMessage(
+        'يرجى إدخال تكلفة صحيحة',
+      );
+      return;
+    }
+
+    if (_attachments.isEmpty) {
+      _showValidationMessage(
+        'يرجى إرفاق وثيقة واحدة على الأقل',
+      );
+      return;
+    }
+
+    final EducationRequestModel request =
+        EducationRequestModel(
+      applicantInfo: widget.applicantInfo,
+      academicAchievement:
+          _selectedAcademicAchievement!,
+      institutionNameAr: institutionNameAr,
+      institutionNameEn: institutionNameEn,
+      year: _selectedYear!,
+      detailsAr: detailsAr,
+      detailsEn: detailsEn,
+      cost: cost,
+      media:
+          List<PlatformFile>.unmodifiable(
+        _attachments,
+      ),
+    );
+
+    debugPrint(
+      'EducationRequestModel created successfully',
+    );
+    debugPrint(
+      'Request firstName: ${request.applicantInfo.firstName}',
+    );
+    debugPrint(
+      'Request academicAchievement: '
+      '${request.academicAchievement.apiValue}',
+    );
+    debugPrint(
+      'Request institutionNameAr: '
+      '${request.institutionNameAr}',
+    );
+    debugPrint(
+      'Request institutionNameEn: '
+      '${request.institutionNameEn}',
+    );
+    debugPrint(
+      'Request detailsAr: ${request.detailsAr}',
+    );
+    debugPrint(
+      'Request detailsEn: ${request.detailsEn}',
+    );
+    debugPrint('Request year: ${request.year}');
+    debugPrint('Request cost: ${request.cost}');
+    debugPrint(
+      'Request attachments: ${request.media.length}',
+    );
+    debugPrint(
+      'Calling EducationCubit.submitEducationRequest',
+    );
+    debugPrint('======================================');
+
+    context
+        .read<EducationCubit>()
+        .submitEducationRequest(request);
+  }
+
+  String? _validateArabicField(
+    String value,
+    String fieldName, {
+    int minimumLength = 2,
+  }) {
+    final String text = value.trim();
+
+    if (text.isEmpty) {
+      return 'يرجى إدخال $fieldName باللغة العربية';
+    }
+
+    if (text.length < minimumLength) {
+      return '$fieldName قصير جداً';
+    }
+
+    final bool hasArabic =
+        RegExp(r'[\u0600-\u06FF]').hasMatch(text);
+
+    final bool hasEnglish =
+        RegExp(r'[A-Za-z]').hasMatch(text);
+
+    if (!hasArabic || hasEnglish) {
+      return 'يرجى كتابة $fieldName باللغة العربية فقط';
+    }
+
+    return null;
+  }
+
+  String? _validateEnglishField(
+    String value,
+    String fieldName, {
+    int minimumLength = 2,
+  }) {
+    final String text = value.trim();
+
+    if (text.isEmpty) {
+      return 'Please enter $fieldName in English';
+    }
+
+    if (text.length < minimumLength) {
+      return '$fieldName is too short';
+    }
+
+    final bool hasEnglish =
+        RegExp(r'[A-Za-z]').hasMatch(text);
+
+    final bool hasArabic =
+        RegExp(r'[\u0600-\u06FF]').hasMatch(text);
+
+    if (!hasEnglish || hasArabic) {
+      return 'Please write $fieldName in English only';
+    }
+
+    return null;
+  }
+
+  void _showValidationMessage(
+    String message,
+  ) {
+    if (!mounted) {
+      debugPrint(
+        'Cannot show message: widget is not mounted',
+      );
+      return;
+    }
+
+    debugPrint(
+      'Showing validation SnackBar: $message',
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(14),
+          ),
+          content: Text(
+            message,
+            textDirection: TextDirection.rtl,
+            style: const TextStyle(
+              fontFamily:
+                  AppTextStyles.fontFamily,
+            ),
+          ),
+        ),
+      );
+  }
+
+  Widget _buildSectionLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(
+        right: 4,
+        bottom: 8,
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: AppColors.brandGray,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          fontFamily: AppTextStyles.fontFamily,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    return BlocConsumer<
+        EducationCubit,
+        EducationState>(
+      listener: (context, state) async {
+        debugPrint(
+          'EducationRequestPage state: '
+          '${state.runtimeType}',
+        );
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background.withOpacity(0.8),
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_forward, color: AppColors.primary),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          l10n.educationRequestDetails,
-          style: const TextStyle(
-            color: AppColors.primary,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontFamily: AppTextStyles.fontFamily,
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20.0, 24.0, 20.0, 100.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // قسم التحصيل الدراسي (استبدال بالـ SelectionChip المخصص الموحد)
-              Padding(
-                padding: const EdgeInsets.only(right: 4.0, bottom: 8.0),
-                child: Text(
-                  l10n.educationLevel,
-                  style: const TextStyle(
-                    color: AppColors.brandGray,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: SelectionChip(
-                      label: l10n.schoolLevel,
-                      isSelected: _selectedEduLevel == 'مدرسي',
-                      onTap: () => setState(() => _selectedEduLevel = 'مدرسي'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: SelectionChip(
-                      label: l10n.universityLevel,
-                      isSelected: _selectedEduLevel == 'جامعي',
-                      onTap: () => setState(() => _selectedEduLevel = 'جامعي'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
+        if (state is EducationSuccess) {
+          debugPrint(
+            'Education request success: '
+            '${state.message}',
+          );
 
-              // تطبيق الـ CustomTextField لحقل اسم المنشأة التعليمية
-              CustomTextField(
-                label: l10n.institutionName,
-                hint: l10n.institutionNameHint,
-                controller: _institutionController,
-              ),
-              const SizedBox(height: 24),
+          await showRequestResultDialog(
+            context: context,
+            isSuccess: true,
+            message: state.message,
+            onSuccessConfirmed: () {
+              if (!mounted) return;
 
-              // قسم القائمة المنسدلة للمرحلة الدراسية
-              Padding(
-                padding: const EdgeInsets.only(right: 4.0, bottom: 8.0),
-                child: Text(
-                  l10n.gradeOrYear,
-                  style: const TextStyle(
-                    color: AppColors.brandGray,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              _buildDropdownField(context),
-              const SizedBox(height: 24),
-
-              // قسم كبسولات الاختيار لنوع المساعدة (استبدال بالـ SelectionChip المخصص الموحد)
-              Padding(
-                padding: const EdgeInsets.only(right: 4.0, bottom: 8.0),
-                child: Text(
-                  l10n.requestedAssistanceType,
-                  style: const TextStyle(
-                    color: AppColors.brandGray,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: _assistanceTypes.map((type) {
-                  final bool isSelected = _selectedAssistanceTypes.contains(
-                    type,
-                  );
-                  return SelectionChip(
-                    label: _assistanceTypeLabel(context, type),
-                    isSelected: isSelected,
-                    onTap: () {
-                      setState(() {
-                        if (isSelected) {
-                          _selectedAssistanceTypes.remove(type);
-                        } else {
-                          _selectedAssistanceTypes.add(type);
-                        }
-                      });
-                    },
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 24),
-
-              // العداد التفاعلي لعدد الأفراد
-              BeneficiariesCounter(
-                count: _beneficiariesCount,
-                onIncrement: () => setState(() => _beneficiariesCount++),
-                onDecrement: () {
-                  if (_beneficiariesCount > 1) {
-                    setState(() => _beneficiariesCount--);
-                  }
+              Navigator.of(context).popUntil(
+                (Route<dynamic> route) {
+                  return route.isFirst;
                 },
-              ),
-              const SizedBox(height: 24),
+              );
+            },
+          );
+        } else if (state is EducationFailure) {
+          debugPrint(
+            'Education request failure: '
+            '${state.message}',
+          );
 
-              // تطبيق الـ CustomTextField لحقل وصف الحالة (متعدد الأسطر)
-              CustomTextField(
-                label: l10n.caseDescription,
-                hint: l10n.educationDescriptionHint,
-                controller: _descriptionController,
-                maxLines: 4,
-              ),
-              const SizedBox(height: 24),
+          await showRequestResultDialog(
+            context: context,
+            isSuccess: false,
+            message: state.message,
+            onRetry: () {
+              if (mounted) {
+                _submit();
+              }
+            },
+          );
+        }
+      },
+      builder: (context, state) {
+        final bool isLoading =
+            state is EducationLoading;
 
-              // تطبيق الـ CustomTextField كحقل عملة مالي (مع لاصقة ريال التلقائية)
-              CustomTextField(
-                label: l10n.expectedTotalCost,
-                hint: '0.00',
-                controller: _costController,
-                keyboardType: TextInputType.number,
-                isCurrency: true,
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: Scaffold(
+            backgroundColor:
+                AppColors.background,
+            appBar: AppBar(
+              backgroundColor:
+                  AppColors.background,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  color: AppColors.primary,
+                ),
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        Navigator.pop(context);
+                      },
               ),
-              const SizedBox(height: 32),
+              title: const Text(
+                'تفاصيل الطلب التعليمي',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily:
+                      AppTextStyles.fontFamily,
+                ),
+              ),
+            ),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior
+                        .onDrag,
+                padding:
+                    const EdgeInsets.fromLTRB(
+                  20,
+                  24,
+                  20,
+                  110,
+                ),
+                child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionLabel(
+                      'التحصيل الدراسي',
+                    ),
 
-              const EducationalDecorativeCard(),
-            ],
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children:
+                          AcademicAchievement
+                              .values
+                              .map(
+                        (
+                          AcademicAchievement
+                              achievement,
+                        ) {
+                          return SelectionChip(
+                            label:
+                                achievement
+                                    .arabicLabel,
+                            isSelected:
+                                _selectedAcademicAchievement ==
+                                    achievement,
+                            onTap: isLoading
+                                ? () {}
+                                : () {
+                                    setState(() {
+                                      _selectedAcademicAchievement =
+                                          achievement;
+                                    });
+
+                                    debugPrint(
+                                      'Academic achievement selected: '
+                                      '${achievement.apiValue}',
+                                    );
+                                  },
+                          );
+                        },
+                      ).toList(),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    CustomTextField(
+                      label:
+                          'اسم المدرسة / الجامعة (عربي)',
+                      hint:
+                          'مثال: جامعة دمشق',
+                      controller:
+                          _institutionNameArController,
+                      suffixIcon:
+                          Icons.school_outlined,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    CustomTextField(
+                      label:
+                          'School / University Name (English)',
+                      hint:
+                          'Example: Damascus University',
+                      controller:
+                          _institutionNameEnController,
+                      suffixIcon:
+                          Icons.school_outlined,
+                      isLtr: true,
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    _buildSectionLabel(
+                      'الصف / السنة الدراسية',
+                    ),
+
+                    _buildDropdownField(
+                      isLoading,
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    CustomTextField(
+                      label:
+                          'تفاصيل الحالة التعليمية (عربي)',
+                      hint:
+                          'اشرح حاجتك التعليمية باللغة العربية...',
+                      controller:
+                          _detailsArController,
+                      maxLines: 4,
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    CustomTextField(
+                      label:
+                          'Education Request Details (English)',
+                      hint:
+                          'Explain the educational need in English...',
+                      controller:
+                          _detailsEnController,
+                      maxLines: 4,
+                      isLtr: true,
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    CustomTextField(
+                      label:
+                          'التكلفة الإجمالية المتوقعة',
+                      hint: '0.00',
+                      controller:
+                          _costController,
+                      keyboardType:
+                          const TextInputType
+                              .numberWithOptions(
+                        decimal: true,
+                      ),
+                      isCurrency: true,
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    _buildSectionLabel(
+                      'إرفاق الوثائق التعليمية',
+                    ),
+
+                    CustomAttachmentUploader(
+                      title:
+                          'رفع الملفات أو التقاط صور',
+                      description:
+                          'يرجى إرفاق صور واضحة للوثائق أو إثبات التسجيل',
+                      icon:
+                          Icons.upload_file_rounded,
+                      onTap: isLoading
+                          ? () {}
+                          : _pickAttachments,
+                    ),
+
+                    if (_attachments.isNotEmpty) ...[
+                      const SizedBox(height: 12),
+
+                      ..._attachments
+                          .asMap()
+                          .entries
+                          .map(
+                        (
+                          MapEntry<int,
+                                  PlatformFile>
+                              entry,
+                        ) {
+                          final PlatformFile file =
+                              entry.value;
+
+                          return Card(
+                            margin:
+                                const EdgeInsets.only(
+                              bottom: 10,
+                            ),
+                            elevation: 0,
+                            shape:
+                                RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(
+                                14,
+                              ),
+                              side: BorderSide(
+                                color: AppColors
+                                    .brandGray
+                                    .withOpacity(
+                                  0.16,
+                                ),
+                              ),
+                            ),
+                            child: ListTile(
+                              dense: true,
+                              leading: Container(
+                                width: 42,
+                                height: 42,
+                                decoration:
+                                    BoxDecoration(
+                                  color: AppColors
+                                      .primaryContainer
+                                      .withOpacity(
+                                    0.4,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius
+                                          .circular(
+                                    12,
+                                  ),
+                                ),
+                                child: Icon(
+                                  _getFileIcon(
+                                    file.extension,
+                                  ),
+                                  color:
+                                      AppColors.primary,
+                                ),
+                              ),
+                              title: Text(
+                                file.name,
+                                maxLines: 1,
+                                overflow:
+                                    TextOverflow
+                                        .ellipsis,
+                                style:
+                                    const TextStyle(
+                                  fontWeight:
+                                      FontWeight.w600,
+                                  fontFamily:
+                                      AppTextStyles
+                                          .fontFamily,
+                                ),
+                              ),
+                              subtitle: Text(
+                                _getFileDescription(
+                                  file,
+                                ),
+                                maxLines: 1,
+                                overflow:
+                                    TextOverflow
+                                        .ellipsis,
+                                style:
+                                    const TextStyle(
+                                  fontSize: 12,
+                                  fontFamily:
+                                      AppTextStyles
+                                          .fontFamily,
+                                ),
+                              ),
+                              trailing: IconButton(
+                                tooltip:
+                                    'حذف المرفق',
+                                icon: const Icon(
+                                  Icons.close,
+                                  color:
+                                      AppColors.error,
+                                ),
+                                onPressed: isLoading
+                                    ? null
+                                    : () {
+                                        _removeAttachment(
+                                          entry.key,
+                                        );
+                                      },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+
+                    const SizedBox(height: 32),
+
+                    const EducationalDecorativeCard(),
+                  ],
+                ),
+              ),
+            ),
+            bottomNavigationBar:
+                _buildBottomSubmitButton(
+              isLoading,
+            ),
           ),
-        ),
-      ),
-      bottomNavigationBar: _buildBottomSubmitButton(context),
+        );
+      },
     );
   }
 
-  String _assistanceTypeLabel(BuildContext context, String value) {
-    final l10n = AppLocalizations.of(context);
-
-    return switch (value) {
-      'ثياب مدرسية' => l10n.schoolClothes,
-      'مستلزمات دراسية' => l10n.studySupplies,
-      'أقساط جامعة' => l10n.universityFees,
-      'أخرى' => l10n.other,
-      _ => value,
-    };
-  }
-
-  String _gradeLabel(BuildContext context, String value) {
-    final l10n = AppLocalizations.of(context);
-
-    return switch (value) {
-      'المرحلة الابتدائية' => l10n.primaryStage,
-      'المرحلة المتوسطة' => l10n.middleStage,
-      'المرحلة الثانوية' => l10n.secondaryStage,
-      'سنة أولى جامعي' => l10n.firstUniversityYear,
-      'سنة ثانية جامعي' => l10n.secondUniversityYear,
-      _ => value,
-    };
-  }
-
-  Widget _buildDropdownField(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
+  Widget _buildDropdownField(
+    bool isLoading,
+  ) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: AppColors.brandGray.withOpacity(0.1)),
+        borderRadius:
+            BorderRadius.circular(14),
+        border: Border.all(
+          color:
+              AppColors.brandGray.withOpacity(
+            0.3,
+          ),
+          width: 1.2,
+        ),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: _selectedGrade,
+          value: _selectedYear,
           hint: Text(
-            l10n.selectGradeHint,
+            'اختر المرحلة...',
             style: TextStyle(
-              color: AppColors.brandGray.withOpacity(0.5),
+              color:
+                  AppColors.brandGray.withOpacity(
+                0.55,
+              ),
               fontSize: 14,
+              fontFamily:
+                  AppTextStyles.fontFamily,
             ),
           ),
           isExpanded: true,
@@ -264,75 +949,183 @@ class _EducationRequestPageState extends State<EducationRequestPage> {
             Icons.keyboard_arrow_down,
             color: AppColors.brandGray,
           ),
-          items: _gradeOptions.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                _gradeLabel(context, value),
-                style: const TextStyle(
-                  color: AppColors.onSurface,
-                  fontSize: 14,
+          items: _yearOptions.map(
+            (String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  style: const TextStyle(
+                    color: AppColors.onSurface,
+                    fontSize: 14,
+                    fontFamily:
+                        AppTextStyles.fontFamily,
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
-          onChanged: (newValue) => setState(() => _selectedGrade = newValue),
+              );
+            },
+          ).toList(),
+          onChanged: isLoading
+              ? null
+              : (String? newValue) {
+                  setState(() {
+                    _selectedYear = newValue;
+                  });
+                },
         ),
       ),
     );
   }
 
-  Widget _buildBottomSubmitButton(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+  String _getFileDescription(
+    PlatformFile file,
+  ) {
+    final String size =
+        _formatFileSize(file.size);
 
-    return Container(
-      padding: const EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 10,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: ElevatedButton(
-        onPressed: () {
-          // جمع البيانات وطباعتها عند الإرسال
-          print('التحصيل الدراسي: $_selectedEduLevel');
-          print('اسم المنشأة: ${_institutionController.text}');
-          print('المرحلة الدراسية: $_selectedGrade');
-          print('أنواع المساعدة المحددة: $_selectedAssistanceTypes');
-          print('عدد الأفراد: $_beneficiariesCount');
-          print('الوصف: ${_descriptionController.text}');
-          print('التكلفة المتوقعة: ${_costController.text}');
+    if (kIsWeb) {
+      return '$size - ملف جاهز للرفع';
+    }
 
-          // هنا يمكنك إضافة منطق الـ API الخاص بـ إرسال الطلب (POST request)
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryContainer,
-          foregroundColor: Colors.white,
-          minimumSize: const Size(double.infinity, 56),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          elevation: 2,
+    return '$size - ${file.path ?? ''}';
+  }
+
+  String _formatFileSize(int bytes) {
+    if (bytes < 1024) {
+      return '$bytes B';
+    }
+
+    if (bytes < 1024 * 1024) {
+      final double kiloBytes =
+          bytes / 1024;
+
+      return '${kiloBytes.toStringAsFixed(1)} KB';
+    }
+
+    final double megaBytes =
+        bytes / (1024 * 1024);
+
+    return '${megaBytes.toStringAsFixed(1)} MB';
+  }
+
+  IconData _getFileIcon(
+    String? extension,
+  ) {
+    switch (extension?.toLowerCase()) {
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        return Icons.image_outlined;
+
+      case 'pdf':
+        return Icons.picture_as_pdf_outlined;
+
+      default:
+        return Icons.attach_file;
+    }
+  }
+
+  Widget _buildBottomSubmitButton(
+    bool isLoading,
+  ) {
+    return SafeArea(
+      child: Container(
+        padding:
+            const EdgeInsets.fromLTRB(
+          18,
+          12,
+          18,
+          16,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              l10n.submitRequestForReview,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Color(0xFF2C2A29),
-                fontWeight: FontWeight.bold,
+        decoration: BoxDecoration(
+          color:
+              Colors.white.withOpacity(
+            0.97,
+          ),
+          border: Border(
+            top: BorderSide(
+              color: AppColors.brandGray
+                  .withOpacity(
+                0.12,
               ),
             ),
-            const SizedBox(width: 12),
-            const Icon(Icons.send, size: 18, color: Color(0xFF2C2A29)),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(
+                0.04,
+              ),
+              blurRadius: 14,
+              offset: const Offset(
+                0,
+                -4,
+              ),
+            ),
           ],
+        ),
+        child: ElevatedButton(
+          onPressed:
+              isLoading ? null : _submit,
+          style:
+              ElevatedButton.styleFrom(
+            backgroundColor:
+                AppColors.primary,
+            foregroundColor:
+                Colors.white,
+            disabledBackgroundColor:
+                AppColors.primary.withOpacity(
+              0.55,
+            ),
+            disabledForegroundColor:
+                Colors.white,
+            minimumSize:
+                const Size(
+              double.infinity,
+              58,
+            ),
+            elevation: 0,
+            shape:
+                RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(
+                18,
+              ),
+            ),
+          ),
+          child: isLoading
+              ? const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child:
+                      CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+              : const Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'إرسال الطلب للمراجعة',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight:
+                            FontWeight.bold,
+                        fontFamily:
+                            AppTextStyles
+                                .fontFamily,
+                      ),
+                    ),
+
+                    SizedBox(width: 10),
+
+                    Icon(
+                      Icons.send_rounded,
+                      size: 19,
+                    ),
+                  ],
+                ),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:charity_management/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 import '/widgets/custom_text_fields.dart';
 import '/theme/app_colors.dart';
@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 Text(
                   localizations.associationName,
-                  style: GoogleFonts.notoKufiArabic(
+                  style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Text(
                           localizations.login,
-                          style: GoogleFonts.tajawal(
+                          style: TextStyle(
                             fontSize: 24,
                             color: AppColors.primary,
                             fontWeight: FontWeight.w500,
@@ -246,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Text(
                               localizations.forgotPassword,
-                              style: GoogleFonts.tajawal(
+                              style: TextStyle(
                                 fontSize: 12,
                                 color: AppColors.primary,
                               ),
@@ -286,7 +286,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       )
                                     : Text(
                                         localizations.login,
-                                        style: GoogleFonts.tajawal(
+                                        style: TextStyle
+                                        (
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -324,7 +325,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               child: Text(
                                 localizations.or,
-                                style: GoogleFonts.tajawal(
+                                style: TextStyle(
                                   fontSize: 12,
                                   color: AppColors.primary,
                                 ),
@@ -362,7 +363,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: Text(
                               localizations.continueAsGuest,
-                              style: GoogleFonts.tajawal(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -443,7 +444,7 @@ class _RegisterDropdownButton extends StatelessWidget {
       hint: Center(
         child: Text(
           localizations.createNewAccount,
-          style: GoogleFonts.tajawal(fontSize: 14, color: AppColors.primary),
+          style: TextStyle(fontSize: 14, color: AppColors.primary),
         ),
       ),
       items: [
@@ -451,14 +452,14 @@ class _RegisterDropdownButton extends StatelessWidget {
           value: RegisterType.donor,
           child: Text(
             localizations.createDonorAccount,
-            style: GoogleFonts.tajawal(color: AppColors.primary),
+            style: TextStyle(color: AppColors.primary),
           ),
         ),
         DropdownMenuItem(
           value: RegisterType.beneficiary,
           child: Text(
             localizations.createBeneficiaryAccount,
-            style: GoogleFonts.tajawal(color: AppColors.primary),
+            style: TextStyle(color: AppColors.primary),
           ),
         ),
       ],

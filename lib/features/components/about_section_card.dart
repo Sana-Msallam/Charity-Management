@@ -1,14 +1,19 @@
 import 'dart:async';
 
-import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
+import 'package:charity_management/theme/app_colors.dart';
+import 'package:charity_management/theme/app_font.dart';
 import 'package:flutter/material.dart';
 
 class AboutSectionCard extends StatefulWidget {
-  const AboutSectionCard({super.key});
+  const AboutSectionCard({
+    super.key,
+  });
 
   @override
-  State<AboutSectionCard> createState() => _AboutSectionCardState();
+  State<AboutSectionCard> createState() {
+    return _AboutSectionCardState();
+  }
 }
 
 class _AboutSectionCardState extends State<AboutSectionCard> {
@@ -17,26 +22,32 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
   final PageController _pageController = PageController();
 
   Timer? _timer;
+
   int _currentPage = 0;
 
-  List<AboutSlide> _slides(BuildContext context) {
+  List<AboutSlide> _slides(
+    BuildContext context,
+  ) {
     final l10n = AppLocalizations.of(context);
 
     return [
       AboutSlide(
-        title: l10n.aboutAssociationTitle,
+        title: 'جمعية الأثر... لأن لكل عطاء أثراً',
         description: l10n.aboutAssociationDescription,
-        icon: Icons.volunteer_activism_outlined,
+        imagePath: 'assets/img/about_1.jpg',
+        imageBadge: 'معاً نصنع أثراً',
       ),
       AboutSlide(
         title: l10n.ourVision,
         description: l10n.ourVisionDescription,
-        icon: Icons.visibility_outlined,
+        imagePath: 'assets/img/about_2.jpg',
+        imageBadge: 'أمل يتجدد',
       ),
       AboutSlide(
         title: l10n.ourMission,
         description: l10n.ourMissionDescription,
-        icon: Icons.favorite_outline,
+        imagePath: 'assets/img/about_3.jpg',
+        imageBadge: 'العطاء يصنع الفرق',
       ),
     ];
   }
@@ -51,64 +62,87 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
   void _startAutoSlide() {
     _timer?.cancel();
 
-    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (!_pageController.hasClients) {
-        return;
-      }
+    _timer = Timer.periodic(
+      const Duration(seconds: 5),
+      (_) {
+        if (!_pageController.hasClients) {
+          return;
+        }
 
-      final int nextPage = (_currentPage + 1) % _slidesCount;
+        final int nextPage =
+            (_currentPage + 1) % _slidesCount;
 
-      _pageController.animateToPage(
-        nextPage,
-        duration: const Duration(milliseconds: 600),
-        curve: Curves.easeInOut,
-      );
-    });
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(
+            milliseconds: 600,
+          ),
+          curve: Curves.easeInOut,
+        );
+      },
+    );
   }
 
-  void _goToPage(int index) {
+  void _goToPage(
+    int index,
+  ) {
     _pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 450),
+      duration: const Duration(
+        milliseconds: 450,
+      ),
       curve: Curves.easeInOut,
     );
 
-    // إعادة حساب الوقت بعد انتقال المستخدم يدويًا.
     _startAutoSlide();
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+
     _pageController.dispose();
 
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final slides = _slides(context);
+  Widget build(
+    BuildContext context,
+  ) {
+    final List<AboutSlide> slides = _slides(context);
 
     return Column(
       children: [
         SizedBox(
-          height: 245,
+          height: 415,
           child: PageView.builder(
             controller: _pageController,
             itemCount: slides.length,
             physics: const BouncingScrollPhysics(),
-            onPageChanged: (index) {
+            onPageChanged: (
+              int index,
+            ) {
               setState(() {
                 _currentPage = index;
               });
 
-              // إعادة تشغيل المؤقت بعد سحب المستخدم للشريحة.
               _startAutoSlide();
             },
-            itemBuilder: (context, index) {
+            itemBuilder: (
+              context,
+              index,
+            ) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(4, 4, 4, 12),
-                child: _AboutSlideCard(slide: slides[index]),
+                padding: const EdgeInsets.fromLTRB(
+                  4,
+                  4,
+                  4,
+                  12,
+                ),
+                child: _AboutSlideCard(
+                  slide: slides[index],
+                ),
               );
             },
           ),
@@ -116,197 +150,304 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
 
         const SizedBox(height: 4),
 
-        // مؤشرات الشرائح.
+        // مؤشرات السلايدات
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(slides.length, (index) {
-            final bool isActive = index == _currentPage;
+          children: List.generate(
+            slides.length,
+            (
+              int index,
+            ) {
+              final bool isActive =
+                  index == _currentPage;
 
-            return GestureDetector(
-              onTap: () => _goToPage(index),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: isActive ? 22 : 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: isActive
-                      ? AppColors.primary
-                      : AppColors.secondary.withOpacity(0.20),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: isActive
-                      ? [
-                          BoxShadow(
-                            color: AppColors.primary.withOpacity(0.20),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
+              return GestureDetector(
+                onTap: () {
+                  _goToPage(index);
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(
+                    milliseconds: 300,
+                  ),
+                  curve: Curves.easeInOut,
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                  ),
+                  width: isActive ? 26 : 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? AppColors.primary
+                        : AppColors.primary.withOpacity(
+                            0.12,
                           ),
-                        ]
-                      : null,
+                    borderRadius: BorderRadius.circular(
+                      20,
+                    ),
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
       ],
     );
   }
 }
 
-class _AboutSlideCard extends StatefulWidget {
+// =====================================================
+// تصميم كل Slide
+// =====================================================
+
+class _AboutSlideCard extends StatelessWidget {
+  const _AboutSlideCard({
+    required this.slide,
+  });
+
   final AboutSlide slide;
 
-  const _AboutSlideCard({required this.slide});
-
   @override
-  State<_AboutSlideCard> createState() => _AboutSlideCardState();
-}
-
-class _AboutSlideCardState extends State<_AboutSlideCard> {
-  bool _isPressed = false;
-
-  void _changePressedState(bool value) {
-    if (_isPressed == value) {
-      return;
-    }
-
-    setState(() {
-      _isPressed = value;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => _changePressedState(true),
-      onTapUp: (_) => _changePressedState(false),
-      onTapCancel: () => _changePressedState(false),
-      child: AnimatedScale(
-        scale: _isPressed ? 0.985 : 1,
-        duration: const Duration(milliseconds: 140),
-        curve: Curves.easeOut,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 140),
-          curve: Curves.easeOut,
-          width: double.infinity,
-          padding: const EdgeInsets.all(24),
-          transform: Matrix4.translationValues(0, _isPressed ? 4 : 0, 0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.primary.withOpacity(_isPressed ? 0.18 : 0.12),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromRGBO(124, 118, 108, 0.05),
-                blurRadius: _isPressed ? 7 : 5,
-                offset: const Offset(0, 2),
-              ),
-
-              // الظل السفلي يجعل البطاقة تبدو مرتفعة مثل الزر.
-              BoxShadow(
-                color: AppColors.primary.withOpacity(_isPressed ? 0.06 : 0.14),
-                blurRadius: _isPressed ? 8 : 18,
-                spreadRadius: _isPressed ? 0 : 1,
-                offset: Offset(0, _isPressed ? 3 : 9),
-              ),
-            ],
+  Widget build(
+    BuildContext context,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(
+          28,
+        ),
+        border: Border.all(
+          color: AppColors.primary.withOpacity(
+            0.09,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                children: [
-                  // صندوق الأيقونة.
-                  Container(
-                    width: 52,
-                    height: 52,
+          width: 1.1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(
+              0.04,
+            ),
+            blurRadius: 20,
+            offset: const Offset(
+              0,
+              8,
+            ),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ============================================
+          // العنوان
+          // ============================================
+
+          Text(
+            slide.title,
+            textAlign: TextAlign.start,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: AppColors.onSurface,
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+              height: 1.35,
+              letterSpacing: -0.25,
+              fontFamily: AppTextStyles.fontFamily,
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
+          // ============================================
+          // الخط الصغير تحت العنوان
+          // ============================================
+
+          Container(
+            width: 44,
+            height: 3,
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(
+                20,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          // ============================================
+          // الوصف
+          // ============================================
+
+          Text(
+            slide.description,
+            textAlign: TextAlign.start,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: AppColors.onSurface.withOpacity(
+                0.66,
+              ),
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              height: 1.8,
+              fontFamily: AppTextStyles.fontFamily,
+            ),
+          ),
+
+          const SizedBox(height: 18),
+
+          // ============================================
+          // الصورة
+          // ============================================
+
+          Expanded(
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    22,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Image.asset(
+                      slide.imagePath,
+                      fit: BoxFit.cover,
+                      errorBuilder: (
+                        context,
+                        error,
+                        stackTrace,
+                      ) {
+                        return Container(
+                          color: AppColors.primary.withOpacity(
+                            0.06,
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.volunteer_activism_outlined,
+                              color: AppColors.primary.withOpacity(
+                                0.45,
+                              ),
+                              size: 54,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+
+                // ========================================
+                // Gradient خفيف أسفل الصورة
+                // ========================================
+
+                Positioned.fill(
+                  child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.09),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: AppColors.primary.withOpacity(0.10),
+                      borderRadius: BorderRadius.circular(
+                        22,
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(
+                            0.10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // ========================================
+                // العبارة الصغيرة فوق الصورة
+                // ========================================
+
+                PositionedDirectional(
+                  start: 12,
+                  bottom: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(
+                        0.94,
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        14,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.12),
+                          color: Colors.black.withOpacity(
+                            0.08,
+                          ),
                           blurRadius: 10,
-                          offset: const Offset(0, 4),
+                          offset: const Offset(
+                            0,
+                            3,
+                          ),
                         ),
                       ],
                     ),
-                    child: Icon(
-                      widget.slide.icon,
-                      color: AppColors.primary,
-                      size: 27,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.favorite_border_rounded,
+                          color: AppColors.primary,
+                          size: 17,
+                        ),
+
+                        const SizedBox(width: 6),
+
+                        Text(
+                          slide.imageBadge,
+                          style: const TextStyle(
+                            color: AppColors.onSurface,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            fontFamily:
+                                AppTextStyles.fontFamily,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-
-                  const SizedBox(width: 14),
-
-                  Expanded(
-                    child: Text(
-                      widget.slide.title,
-                      textAlign: TextAlign.start,
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              Container(
-                width: double.infinity,
-                height: 1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.secondary.withOpacity(0.02),
-                      AppColors.secondary.withOpacity(0.18),
-                      AppColors.secondary.withOpacity(0.02),
-                    ],
-                  ),
                 ),
-              ),
-
-              const SizedBox(height: 16),
-
-              Expanded(
-                child: Text(
-                  widget.slide.description,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    color: AppColors.brandGray,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    height: 1.7,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
 
-class AboutSlide {
-  final String title;
-  final String description;
-  final IconData icon;
+// =====================================================
+// Model
+// =====================================================
 
+class AboutSlide {
   const AboutSlide({
     required this.title,
     required this.description,
-    required this.icon,
+    required this.imagePath,
+    required this.imageBadge,
   });
+
+  final String title;
+
+  final String description;
+
+  final String imagePath;
+
+  final String imageBadge;
 }

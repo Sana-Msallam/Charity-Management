@@ -6,12 +6,16 @@ import 'package:flutter/material.dart';
 class LargeCategoryCard extends StatelessWidget {
   final VoidCallback onTap;
 
-  const LargeCategoryCard({Key? key, required this.onTap}) : super(key: key);
+  const LargeCategoryCard({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    const cardColor = Color(0xFFD3DC7C); // اللون المعتمد في كودك للطلب السكني
+
+    const cardColor = Color(0xFFD3DC7C);
 
     return Container(
       decoration: BoxDecoration(
@@ -27,7 +31,7 @@ class LargeCategoryCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.0),
         child: Material(
-          color: cardColor.withOpacity(0.15), // خلفية واضحة ومميزة للزر السكني
+          color: cardColor.withOpacity(0.15),
           child: InkWell(
             onTap: onTap,
             splashColor: cardColor.withOpacity(0.25),
@@ -35,8 +39,10 @@ class LargeCategoryCard extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0),
+
+                // تم توحيد قوة الحدود مع باقي الكروت
                 border: Border.all(
-                  color: cardColor.withOpacity(0.4),
+                  color: cardColor.withOpacity(0.15),
                   width: 1.2,
                 ),
               ),

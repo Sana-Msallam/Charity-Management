@@ -1,19 +1,9 @@
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
+import 'package:charity_management/theme/app_font.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String label;
-  final String hint;
-  final TextEditingController controller;
-  final TextInputType keyboardType;
-  final IconData? suffixIcon;
-  final bool isLtr;
-  final int maxLines;
-  final bool isCurrency;
-  final String? Function(String?)? validator;
-  final bool enabled;
-
   const CustomTextField({
     super.key,
     required this.label,
@@ -26,7 +16,20 @@ class CustomTextField extends StatelessWidget {
     this.isCurrency = false,
     this.validator,
     this.enabled = true,
+    this.onChanged,
   });
+
+  final String label;
+  final String hint;
+  final TextEditingController controller;
+  final TextInputType keyboardType;
+  final IconData? suffixIcon;
+  final bool isLtr;
+  final int maxLines;
+  final bool isCurrency;
+  final String? Function(String?)? validator;
+  final bool enabled;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -42,32 +45,39 @@ class CustomTextField extends StatelessWidget {
             style: const TextStyle(
               color: AppColors.brandGray,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
+              fontFamily: AppTextStyles.fontFamily,
             ),
           ),
         ),
+
         Stack(
           alignment: Alignment.centerLeft,
           children: [
             TextFormField(
               controller: controller,
               enabled: enabled,
+              validator: validator,
+              onChanged: onChanged,
 
               keyboardType: isMultiline
                   ? TextInputType.multiline
                   : keyboardType,
 
-              maxLines: maxLines,
-
               textInputAction: isMultiline
                   ? TextInputAction.newline
                   : TextInputAction.next,
 
-              validator: validator,
+              maxLines: maxLines,
+            
 
               textDirection: isLtr
                   ? TextDirection.ltr
                   : Directionality.of(context),
+
+              textAlign: isLtr
+                  ? TextAlign.left
+                  : TextAlign.right,
 
               style: TextStyle(
                 fontWeight: isCurrency ? FontWeight.bold : FontWeight.normal,
@@ -77,14 +87,21 @@ class CustomTextField extends StatelessWidget {
                 hintText: hint,
 
                 hintStyle: TextStyle(
-                  color: AppColors.brandGray.withOpacity(0.5),
-                  fontSize: 14,
+                  color: AppColors.brandGray.withOpacity(
+                    0.55,
+                  ),
+                  fontSize: 13,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: AppTextStyles.fontFamily,
                 ),
 
-                fillColor: Colors.white,
                 filled: true,
 
-                errorMaxLines: 2,
+                fillColor: enabled
+                    ? Colors.white
+                    : AppColors.brandGray.withOpacity(
+                        0.05,
+                      ),
 
                 suffixIcon: suffixIcon != null && !isCurrency
                     ? Icon(suffixIcon, color: AppColors.brandGray, size: 22)
@@ -92,23 +109,49 @@ class CustomTextField extends StatelessWidget {
 
                 contentPadding: EdgeInsets.only(
                   right: 16,
-                  left: isCurrency ? 60 : 16,
-                  top: 14,
-                  bottom: 14,
+                  left: isCurrency ? 72 : 16,
+                  top: isMultiline ? 16 : 15,
+                  bottom: isMultiline ? 16 : 15,
+                ),
+
+                errorMaxLines: 2,
+
+                errorStyle: const TextStyle(
+                  fontSize: 12,
+                  fontFamily: AppTextStyles.fontFamily,
+                ),
+
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(
+                    14,
+                  ),
+                  borderSide: BorderSide(
+                    color: AppColors.brandGray.withOpacity(
+                      0.3,
+                    ),
+                    width: 1.2,
+                  ),
                 ),
 
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(
+                    14,
+                  ),
                   borderSide: BorderSide(
-                    color: AppColors.brandGray.withOpacity(0.1),
+                    color: AppColors.brandGray.withOpacity(
+                      0.32,
+                    ),
+                    width: 1.25,
                   ),
                 ),
 
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(
+                    14,
+                  ),
                   borderSide: const BorderSide(
                     color: AppColors.primary,
-                    width: 1.5,
+                    width: 1.8,
                   ),
                 ),
 
@@ -123,9 +166,14 @@ class CustomTextField extends StatelessWidget {
                 ),
 
                 disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+                  borderRadius: BorderRadius.circular(
+                    14,
+                  ),
                   borderSide: BorderSide(
-                    color: AppColors.brandGray.withOpacity(0.08),
+                    color: AppColors.brandGray.withOpacity(
+                      0.15,
+                    ),
+                    width: 1,
                   ),
                 ),
               ),

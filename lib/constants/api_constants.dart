@@ -14,6 +14,10 @@ class ApiConstants {
   static const String resetPassword = '/auth/forgot-password/reset';
 
   static const String healthRequest = '/requests/health';
+  static const String educationRequest = '/requests/education';
+  static const String housingRequest = '/requests/housing';
+  static const String foodRequest = '/requests/food';
+  static const String smallProjectRequest = '/requests/small-projects';
 
   static const String profile = '/api/profile';
 
@@ -21,4 +25,8 @@ class ApiConstants {
 
   static String aidRequestPaymentIntent(int requestId) =>
       '/payments/aid-requests/$requestId/payment-intent';
+
+  static const String completedAidRequests =
+    '/donor/public/aid-requests/completed';
+
 }
