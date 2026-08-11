@@ -2,10 +2,10 @@ import 'package:charity_management/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomAttachmentUploader extends StatelessWidget {
-  final String title;            // العنوان (مثلاً: إرفاق تقارير طبية أو وثائق ثبوتية)
-  final String description;      // النص التوضيحي المساعد
-  final IconData icon;           // الأيقونة (كاميرا أو ملف)
-  final VoidCallback onTap;      // الحدث عند الضغط
+  final String title; // العنوان (مثلاً: إرفاق تقارير طبية أو وثائق ثبوتية)
+  final String description; // النص التوضيحي المساعد
+  final IconData icon; // الأيقونة (كاميرا أو ملف)
+  final VoidCallback onTap; // الحدث عند الضغط
 
   const CustomAttachmentUploader({
     Key? key,
@@ -59,10 +59,7 @@ class CustomAttachmentUploader extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               description, // الوصف المتغير
-              style: const TextStyle(
-                color: AppColors.brandGray,
-                fontSize: 12,
-              ),
+              style: const TextStyle(color: AppColors.brandGray, fontSize: 12),
               textAlign: TextAlign.center,
             ),
           ],

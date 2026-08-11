@@ -28,8 +28,8 @@ class AidRequestModel {
       totalCost: json['totalCost'] ?? '0',
       paidAmount: json['paidAmount'] ?? '0',
       remainingAmount: json['remainingAmount'] ?? '0',
-completionPercentage:
-    (json['completionPercentage'] ?? 0).toDouble(),      isUrgent: json['isUrgent'] ?? false,
+      completionPercentage: (json['completionPercentage'] ?? 0).toDouble(),
+      isUrgent: json['isUrgent'] ?? false,
     );
   }
 }

@@ -23,6 +23,11 @@ class ApiConstants {
 
   static const String aidRequests = '/donor/public/aid-requests';
 
+  static const String walletTopUpPaymentIntent =
+      '/wallet/top-up/payment-intent';
+
+  static const String walletBalance = '/wallet/balance';
+
   static String aidRequestPaymentIntent(int requestId) =>
       '/payments/aid-requests/$requestId/payment-intent';
 
@@ -34,4 +39,13 @@ class ApiConstants {
   static const String completedAidCases =
       '/public/statistics/completed-aid-cases';
   static const String logout = '/auth/logout';
+
+  static String walletDonateAidRequest(int requestId) =>
+      '/wallet/donate/aid-requests/$requestId';
+
+  static const String orphanSupportFundPaymentIntent =
+      '/api/donor/sponsorship-fund/payment-intent';
+
+  static const String orphanSupportFundWallet =
+      '/api/donor/sponsorship-fund/wallet';
 }

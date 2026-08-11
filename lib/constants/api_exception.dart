@@ -23,7 +23,7 @@ class ApiException {
       }
 
       if (message is List) {
-        return message.join('\n');
+        return _formatMessageList(message);
       }
     }
 
@@ -41,5 +41,45 @@ class ApiException {
       default:
         return localizations.unexpectedError;
     }
+  }
+
+  static String _formatMessageList(List<dynamic> messages) {
+    final formattedMessages = <String>[];
+
+    for (final message in messages) {
+      if (message is String) {
+        formattedMessages.add(message);
+        continue;
+      }
+
+      if (message is Map<String, dynamic>) {
+        final constraints = message['constraints'];
+
+        if (constraints is Map) {
+          formattedMessages.addAll(
+            constraints.values.whereType<String>().where(
+              (value) => value.trim().isNotEmpty,
+            ),
+          );
+          continue;
+        }
+
+        final nestedMessages = message['children'];
+        if (nestedMessages is List && nestedMessages.isNotEmpty) {
+          formattedMessages.add(_formatMessageList(nestedMessages));
+          continue;
+        }
+      }
+
+      formattedMessages.add(message.toString());
+    }
+
+    final uniqueMessages = formattedMessages
+        .map((message) => message.trim())
+        .where((message) => message.isNotEmpty)
+        .toSet()
+        .toList();
+
+    return uniqueMessages.join('\n');
   }
 }

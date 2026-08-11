@@ -4,7 +4,6 @@ import 'package:charity_management/Donor/cubit/aid_request_details_cubit.dart';
 import 'package:charity_management/Donor/model/aid_request_model.dart';
 import 'package:charity_management/Donor/cubit/aid_request_cubit.dart';
 import 'package:charity_management/Donor/cubit/aid_request_state.dart';
-import 'package:charity_management/Payment/Screen/checkout.dart';
 import 'package:charity_management/constants/api_constants.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -345,20 +344,7 @@ class _SupportCategoryScreenState extends State<SupportCategoryScreen> {
       borderRadius: BorderRadius.circular(20),
 
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => BlocProvider(
-              create: (_) =>
-                  AidRequestDetailsCubit()
-                    ..fetchDetails(item.id),
-
-              child: AidRequestDetailsScreen(
-                id: item.id,
-              ),
-            ),
-          ),
-        );
+        _openAidRequestDetails(context, item);
       },
 
       child: Container(
@@ -551,24 +537,7 @@ class _SupportCategoryScreenState extends State<SupportCategoryScreen> {
                       ),
 
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CheckoutScreen(
-                              requestId: item.id,
-                              title: item.title,
-                              totalCost: item.totalCost,
-                              paidAmount: item.paidAmount,
-                              remainingAmount: item.remainingAmount,
-                            ),
-                          ),
-                        ).then((paymentCompleted) {
-                          if (paymentCompleted == true && context.mounted) {
-                            context.read<AidRequestCubit>().fetchAidRequests(
-                              categoryId: categoryId,
-                            );
-                          }
-                        });
+                        _openAidRequestDetails(context, item);
                       },
 
                       child: Text(
@@ -587,6 +556,24 @@ class _SupportCategoryScreenState extends State<SupportCategoryScreen> {
         ),
       ),
     );
+  }
+
+  void _openAidRequestDetails(BuildContext context, AidRequestModel item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => AidRequestDetailsCubit()..fetchDetails(item.id),
+          child: AidRequestDetailsScreen(id: item.id),
+        ),
+      ),
+    ).then((_) {
+      if (context.mounted) {
+        context.read<AidRequestCubit>().fetchAidRequests(
+          categoryId: categoryId,
+        );
+      }
+    });
   }
 }
 

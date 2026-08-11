@@ -9,6 +9,8 @@ import 'package:charity_management/Donor/cubit/aid_request_cubit.dart';
 import 'package:charity_management/Donor/cubit/completed_aid_cases_cubit.dart';
 import 'package:charity_management/Donor/cubit/completed_aid_cases_state.dart';
 import 'package:charity_management/Donor/cubit/completed_aid_requests_cubit.dart';
+import 'package:charity_management/Orphan/Screen/orphan_support_fund_screen.dart';
+import 'package:charity_management/Payment/Screen/wallet_top_up_screen.dart';
 import 'package:charity_management/Sponsership/Screen/sponsership_main_screen.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:charity_management/theme/app_colors.dart';
@@ -96,6 +98,10 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
                 buildSupportAreasSection(
                   context,
                 ),
+
+                const SizedBox(height: 24),
+
+                buildOrphanSupportFundCard(context),
 
                 const SizedBox(height: 24),
 
@@ -1332,6 +1338,133 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
     );
   }
 
+  Widget buildOrphanSupportFundCard(BuildContext context) {
+    final isArabic =
+        Localizations.localeOf(context).languageCode == 'ar';
+    final title = isArabic ? 'صندوق سند اليتيم' : 'Orphan Support Fund';
+    final description = isArabic
+        ? 'ساهم في استمرار دعم اليتيم مؤقتا عند انقطاع كفالته.'
+        : 'Help continue an orphan support when their sponsorship stops.';
+    final actionText = isArabic ? 'ساهم الآن' : 'Donate now';
+
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(24),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const OrphanSupportFundScreen(
+                isSponsor: false,
+              ),
+            ),
+          );
+        },
+        child: Ink(
+          width: double.infinity,
+          height: 180,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF304C39),
+                Color(0xFF78904B),
+              ],
+              begin: AlignmentDirectional.topStart,
+              end: AlignmentDirectional.bottomEnd,
+            ),
+          ),
+          child: Stack(
+            children: [
+              PositionedDirectional(
+                end: -22,
+                top: -32,
+                child: Container(
+                  width: 145,
+                  height: 145,
+                  decoration: const BoxDecoration(
+                    color: Color(0x1FFFFFFF),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.18),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: const Icon(
+                        Icons.volunteer_activism_outlined,
+                        color: Colors.white,
+                        size: 26,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'IBM Plex Sans Arabic',
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Color(0xFFEAF2DF),
+                        fontSize: 13,
+                        height: 1.4,
+                        fontFamily: 'IBM Plex Sans Arabic',
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          actionText,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'IBM Plex Sans Arabic',
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Icon(
+                          isArabic
+                              ? Icons.arrow_back
+                              : Icons.arrow_forward,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildBottomNavigationBar(
     BuildContext context,
   ) {
@@ -1377,6 +1510,15 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
             scaffoldKey
                 .currentState
                 ?.openDrawer();
+          }
+
+          if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const WalletTopUpScreen(),
+              ),
+            );
           }
 
           if (index == 4) {

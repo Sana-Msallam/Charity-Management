@@ -33,6 +33,20 @@ void main() {
 
     expect(headers['Authorization'], 'Bearer test-token');
   });
+
+  test('adds Authorization to wallet top-up payment endpoint', () async {
+    final headers = await _captureHeadersFor(
+      ApiConstants.walletTopUpPaymentIntent,
+    );
+
+    expect(headers['Authorization'], 'Bearer test-token');
+  });
+
+  test('adds Authorization to wallet balance endpoint', () async {
+    final headers = await _captureHeadersFor(ApiConstants.walletBalance);
+
+    expect(headers['Authorization'], 'Bearer test-token');
+  });
 }
 
 Future<Map<String, dynamic>> _captureHeadersFor(String path) async {

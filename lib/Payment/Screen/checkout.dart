@@ -1,9 +1,24 @@
 import 'package:charity_management/Payment/cubit/aid_request_payment_cubit.dart';
 import 'package:charity_management/Payment/cubit/aid_request_payment_state.dart';
+import 'package:charity_management/Payment/cubit/wallet_aid_request_donation_cubit.dart';
+import 'package:charity_management/Payment/cubit/wallet_aid_request_donation_state.dart';
+import 'package:charity_management/Donor/model/aid_request_details_model.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+enum CheckoutPaymentMethod { card, wallet }
+
+class WalletDonationCheckoutResult {
+  const WalletDonationCheckoutResult({
+    required this.balanceAfter,
+    this.request,
+  });
+
+  final String balanceAfter;
+  final AidRequestDetailsModel? request;
+}
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({
@@ -13,6 +28,8 @@ class CheckoutScreen extends StatefulWidget {
     required this.totalCost,
     required this.paidAmount,
     required this.remainingAmount,
+    this.paymentMethod = CheckoutPaymentMethod.card,
+    this.walletBalance = 0,
   });
 
   final int requestId;
@@ -20,6 +37,8 @@ class CheckoutScreen extends StatefulWidget {
   final String totalCost;
   final String paidAmount;
   final String remainingAmount;
+  final CheckoutPaymentMethod paymentMethod;
+  final double walletBalance;
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -60,12 +79,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool get _isAmountValid =>
       _enteredAmount > 0 && _enteredAmount <= _remainingAmount;
 
+  bool get _isWalletPayment =>
+      widget.paymentMethod == CheckoutPaymentMethod.wallet;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return BlocProvider(
-      create: (_) => AidRequestPaymentCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AidRequestPaymentCubit()),
+        BlocProvider(create: (_) => WalletAidRequestDonationCubit()),
+      ],
       child: Directionality(
         textDirection: Directionality.of(context),
         child: Scaffold(
@@ -88,114 +113,154 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             centerTitle: true,
           ),
           body: SafeArea(
-            child: BlocConsumer<AidRequestPaymentCubit, AidRequestPaymentState>(
-              listener: (context, state) {
-                if (state is AidRequestPaymentSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.paymentCompletedRefresh)),
-                  );
-                  Navigator.pop(context, true);
-                }
-
-                if (state is AidRequestPaymentCanceled) {
-                  _showMessage(context, state.message);
-                }
-
-                if (state is AidRequestPaymentFailure) {
-                  _showMessage(context, state.message);
-                }
-              },
-              builder: (context, state) {
-                final isLoading = state is AidRequestPaymentLoading;
-
-                return Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildRequestSummary(l10n),
-                            const SizedBox(height: 24),
-                            _buildAmountField(l10n, isLoading),
-                            const SizedBox(height: 16),
-                            _buildStripeNotice(l10n),
-                            const SizedBox(height: 20),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                'assets/orphan_profile.jpg',
-                                width: double.infinity,
-                                height: 120,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    const SizedBox.shrink(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 54,
-                        child: ElevatedButton(
-                          onPressed: isLoading
-                              ? null
-                              : () => _submitPayment(context, l10n),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _accentColor,
-                            disabledBackgroundColor: _accentColor.withValues(
-                              alpha: 0.55,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            elevation: 0,
+            child: _isWalletPayment
+                ? BlocConsumer<
+                    WalletAidRequestDonationCubit,
+                    WalletAidRequestDonationState
+                  >(
+                    listener: (context, state) {
+                      if (state is WalletAidRequestDonationSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(l10n.paymentCompletedRefresh)),
+                        );
+                        _amountController.clear();
+                        Navigator.pop(
+                          context,
+                          WalletDonationCheckoutResult(
+                            balanceAfter: state.donation.balanceAfter,
+                            request: state.donation.request,
                           ),
-                          child: isLoading
-                              ? const SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.4,
-                                    color: _primaryColor,
-                                  ),
-                                )
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.verified_user_outlined,
-                                      color: _primaryColor,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Flexible(
-                                      child: Text(
-                                        l10n.completeDonation,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          color: _primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                        );
+                      }
+
+                      if (state is WalletAidRequestDonationFailure) {
+                        _showMessage(context, state.message);
+                      }
+                    },
+                    builder: (context, state) {
+                      return _buildCheckoutContent(
+                        context,
+                        l10n,
+                        state is WalletAidRequestDonationLoading,
+                      );
+                    },
+                  )
+                : BlocConsumer<AidRequestPaymentCubit, AidRequestPaymentState>(
+                    listener: (context, state) {
+                      if (state is AidRequestPaymentSuccess) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(l10n.paymentCompletedRefresh)),
+                        );
+                        Navigator.pop(context, true);
+                      }
+
+                      if (state is AidRequestPaymentCanceled) {
+                        _showMessage(context, state.message);
+                      }
+
+                      if (state is AidRequestPaymentFailure) {
+                        _showMessage(context, state.message);
+                      }
+                    },
+                    builder: (context, state) {
+                      return _buildCheckoutContent(
+                        context,
+                        l10n,
+                        state is AidRequestPaymentLoading,
+                      );
+                    },
+                  ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildCheckoutContent(
+    BuildContext context,
+    AppLocalizations l10n,
+    bool isLoading,
+  ) {
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildRequestSummary(l10n),
+                const SizedBox(height: 24),
+                _buildAmountField(l10n, isLoading),
+                const SizedBox(height: 16),
+                _buildPaymentNotice(l10n),
+                const SizedBox(height: 20),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    'assets/orphan_profile.jpg',
+                    width: double.infinity,
+                    height: 120,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const SizedBox.shrink(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: SizedBox(
+            width: double.infinity,
+            height: 54,
+            child: ElevatedButton(
+              onPressed: isLoading ? null : () => _submitPayment(context, l10n),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _accentColor,
+                disabledBackgroundColor: _accentColor.withValues(alpha: 0.55),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 0,
+              ),
+              child: isLoading
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        color: _primaryColor,
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          _isWalletPayment
+                              ? Icons.account_balance_wallet_outlined
+                              : Icons.verified_user_outlined,
+                          color: _primaryColor,
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            l10n.completeDonation,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: _primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -290,7 +355,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget _buildStripeNotice(AppLocalizations l10n) {
+  Widget _buildPaymentNotice(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -303,7 +368,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              l10n.stripePaymentSheetNotice,
+              _isWalletPayment
+                  ? _walletPaymentNotice(l10n)
+                  : l10n.stripePaymentSheetNotice,
               style: const TextStyle(
                 color: _primaryColor,
                 fontSize: 11,
@@ -348,6 +415,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       return;
     }
 
+    if (_isWalletPayment) {
+      context.read<WalletAidRequestDonationCubit>().donate(
+        requestId: widget.requestId,
+        amount: _enteredAmount,
+        remainingAmount: _remainingAmount,
+        walletBalance: widget.walletBalance,
+        localizations: l10n,
+      );
+      return;
+    }
+
     context.read<AidRequestPaymentCubit>().payForAidRequest(
       requestId: widget.requestId,
       amount: _enteredAmount,
@@ -375,5 +453,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     }
 
     return value.toStringAsFixed(2);
+  }
+
+  String _walletPaymentNotice(AppLocalizations l10n) {
+    if (l10n.localeName == 'ar') {
+      return 'سيتم خصم مبلغ التبرع مباشرة من رصيد محفظتك.';
+    }
+
+    return 'The donation amount will be deducted directly from your wallet balance.';
   }
 }
