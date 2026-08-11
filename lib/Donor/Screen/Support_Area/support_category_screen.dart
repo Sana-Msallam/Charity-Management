@@ -570,7 +570,7 @@ class _SupportCategoryScreenState extends State<SupportCategoryScreen> {
     ).then((_) {
       if (context.mounted) {
         context.read<AidRequestCubit>().fetchAidRequests(
-          categoryId: categoryId,
+          categoryId: widget.categoryId,
         );
       }
     });
