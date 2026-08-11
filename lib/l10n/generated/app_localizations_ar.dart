@@ -121,6 +121,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get male => 'ذكر';
 
   @override
+  String get completed => 'مكتمل';
+
+  @override
+  String get noCompletedAidCases => 'لا توجد حالات مساعدة مكتملة';
+
+  @override
+  String get aboutAtharAssociation => 'عن جمعية أثر';
+
+  @override
+  String get aboutAtharAssociationDescription =>
+      'جمعية أثر تسعى إلى دعم الأيتام والأسر المحتاجة من خلال برامج ومبادرات تهدف إلى تحسين حياتهم.';
+
+  @override
   String get female => 'أنثى';
 
   @override
@@ -128,6 +141,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selectDateOfBirth => 'اختر تاريخ الميلاد';
+
+  @override
+  String get completedAidCases => 'الحالات المنجزة';
 
   @override
   String get dateOfBirthHint => 'YYYY-MM-DD';
@@ -404,7 +420,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addressRuralDamascus => 'ريف دمشق';
 
   @override
-  String get welcomeBackName => 'مرحباً بعودتك، سارة';
+  String get welcomeBackName => 'Welcome back, Sarah';
 
   @override
   String get welcomeComma => 'أهلاً بك،';
@@ -445,6 +461,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get housing => 'السكن';
+
+  @override
+  String get loggingOut => 'جارٍ تسجيل الخروج...';
+
+  @override
+  String get followDonations => 'تابع تبرعاتك';
+
+  @override
+  String get changeAppAppearance => 'تغيير مظهر التطبيق';
+
+  @override
+  String get languageAndAppearance => 'اللغة والمظهر';
 
   @override
   String get communityInitiatives => 'المبادرات المجتمعية';
@@ -994,11 +1022,80 @@ class AppLocalizationsAr extends AppLocalizations {
   String get activeStatus => 'نشط';
 
   @override
-  String get yourGivingImpact => 'أثر عطاؤك';
+  String get sponsorshipsPageDescription => 'إدارة كفالاتك ودعم الأطفال';
+
+  @override
+  String get active => 'نشطة';
+
+  @override
+  String get personalInformation => 'المعلومات الشخصية';
+
+  @override
+  String get myAccount => 'حسابي';
+
+  @override
+  String get donor => 'متبرع';
+
+  @override
+  String get unspecified => 'غير محدد';
+
+  @override
+  String get myDonations => 'تبرعاتي';
+
+  @override
+  String get myDonationsSubtitle => 'تابعي طلباتك وتبرعاتك';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get english => 'الإنجليزية';
+
+  @override
+  String get darkMode => 'الوضع الداكن';
+
+  @override
+  String get appearanceSubtitle => 'تغيير مظهر التطبيق';
+
+  @override
+  String get logout => 'تسجيل الخروج';
+
+  @override
+  String get logoutLoading => 'جارٍ تسجيل الخروج...';
+
+  @override
+  String get logoutConfirmation => 'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get logoutError => 'حدث خطأ أثناء تسجيل الخروج';
+
+  @override
+  String get availableForSponsorship => 'Available for sponsorship';
+
+  @override
+  String get supportAChild => 'اكفل طفلًا';
+
+  @override
+  String get startNewSponsorshipDescription =>
+      'ابدئي كفالة جديدة وكوني سببًا في دعم طفل';
+
+  @override
+  String get chooseOrphanAndStartSponsorship =>
+      'اختاري طفلًا وابدئي طلب الكفالة';
+
+  @override
+  String get walletBalanceUsedForSponsorship =>
+      'يُستخدم رصيد محفظتك عند إرسال طلب الكفالة';
 
   @override
   String get givingImpactDescription =>
-      'تم توفير وجبات تعليمية هذا الشهر بفضل عطائك';
+      'Educational meals were provided this month thanks to your giving';
 
   @override
   String get newSponsorshipRequest => 'طلب كفالة جديدة';

@@ -121,6 +121,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get male => 'Male';
 
   @override
+  String get completed => 'Completed';
+
+  @override
+  String get noCompletedAidCases => 'No completed aid cases';
+
+  @override
+  String get aboutAtharAssociation => 'About Athar Association';
+
+  @override
+  String get aboutAtharAssociationDescription =>
+      'Athar Association supports orphans and families in need through programs and initiatives that aim to improve their lives.';
+
+  @override
   String get female => 'Female';
 
   @override
@@ -128,6 +141,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectDateOfBirth => 'Select date of birth';
+
+  @override
+  String get completedAidCases => 'Completed Cases';
 
   @override
   String get dateOfBirthHint => 'YYYY-MM-DD';
@@ -450,6 +466,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get housing => 'Housing';
+
+  @override
+  String get loggingOut => 'Logging out...';
+
+  @override
+  String get followDonations => 'Follow your requests and donations';
+
+  @override
+  String get changeAppAppearance => 'Change app appearance';
+
+  @override
+  String get languageAndAppearance => 'Language and appearance';
 
   @override
   String get communityInitiatives => 'Community initiatives';
@@ -1008,7 +1036,77 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activeStatus => 'Active';
 
   @override
-  String get yourGivingImpact => 'Your giving impact';
+  String get sponsorshipsPageDescription =>
+      'Manage your sponsorships and support children';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get personalInformation => 'Personal Information';
+
+  @override
+  String get myAccount => 'My Account';
+
+  @override
+  String get donor => 'Donor';
+
+  @override
+  String get unspecified => 'Unspecified';
+
+  @override
+  String get myDonations => 'My Donations';
+
+  @override
+  String get myDonationsSubtitle => 'Track your requests and donations';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get arabic => 'Arabic';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get darkMode => 'Dark Mode';
+
+  @override
+  String get appearanceSubtitle => 'Change app appearance';
+
+  @override
+  String get logout => 'Log out';
+
+  @override
+  String get logoutLoading => 'Logging out...';
+
+  @override
+  String get logoutConfirmation => 'Are you sure you want to log out?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get logoutError => 'An error occurred while logging out';
+
+  @override
+  String get availableForSponsorship => 'Available for sponsorship';
+
+  @override
+  String get supportAChild => 'Sponsor a child';
+
+  @override
+  String get startNewSponsorshipDescription =>
+      'Start a new sponsorship and support a child';
+
+  @override
+  String get chooseOrphanAndStartSponsorship =>
+      'Choose a child and start a sponsorship request';
+
+  @override
+  String get walletBalanceUsedForSponsorship =>
+      'Your wallet balance is used when you submit a sponsorship request';
 
   @override
   String get givingImpactDescription =>

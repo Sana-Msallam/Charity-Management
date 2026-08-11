@@ -27,6 +27,11 @@ class ApiConstants {
       '/payments/aid-requests/$requestId/payment-intent';
 
   static const String completedAidRequests =
-    '/donor/public/aid-requests/completed';
+      '/donor/public/aid-requests/completed';
 
+  static const String sponsorships = '/sponsorships';
+  static const String cancelSponsorship = '/sponsorships';
+  static const String completedAidCases =
+      '/public/statistics/completed-aid-cases';
+  static const String logout = '/auth/logout';
 }
