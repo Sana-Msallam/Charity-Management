@@ -161,6 +161,7 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
                       return _buildDonationButtons(
                         context,
                         isArabic: isArabic,
+                        isFullyFunded: item.isFullyFunded,
                         title: item.title,
                         totalCost: item.totalCost,
                         paidAmount: item.paidAmount,
@@ -334,12 +335,17 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
   Widget _buildDonationButtons(
     BuildContext context, {
     required bool isArabic,
+    required bool isFullyFunded,
     required String title,
     required String totalCost,
     required String paidAmount,
     required String remainingAmount,
     required _DonorWalletInfo donorWallet,
   }) {
+    if (isFullyFunded) {
+      return _buildCompletedDonationState(isArabic);
+    }
+
     final walletDisabledMessage = _walletDisabledMessage(isArabic, donorWallet);
 
     return Column(
@@ -433,6 +439,37 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
                 color: _primaryColor,
                 fontSize: 12,
                 height: 1.4,
+                fontFamily: 'IBM Plex Sans Arabic',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompletedDonationState(bool isArabic) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEAF3E6),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFBDD6B4)),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.check_circle_rounded, color: _greenColor, size: 24),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              isArabic
+                  ? 'منجزة'
+                  : 'Completed',
+              style: const TextStyle(
+                color: _greenColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
                 fontFamily: 'IBM Plex Sans Arabic',
               ),
             ),

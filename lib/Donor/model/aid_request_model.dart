@@ -32,4 +32,21 @@ class AidRequestModel {
       isUrgent: json['isUrgent'] ?? false,
     );
   }
+
+  bool get isFullyFunded {
+    final remaining = _parseAmount(remainingAmount);
+    if (remaining <= 0) {
+      return true;
+    }
+
+    final total = _parseAmount(totalCost);
+    final paid = _parseAmount(paidAmount);
+
+    return total > 0 && paid >= total;
+  }
+
+  static double _parseAmount(String value) {
+    final normalized = value.replaceAll(RegExp(r'[^0-9.]'), '');
+    return double.tryParse(normalized) ?? 0;
+  }
 }

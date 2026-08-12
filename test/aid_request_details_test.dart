@@ -1,5 +1,6 @@
 import 'package:charity_management/Donor/cubit/aid_request_details_cubit.dart';
 import 'package:charity_management/Donor/cubit/aid_request_details_state.dart';
+import 'package:charity_management/Donor/model/aid_request_model.dart';
 import 'package:charity_management/Donor/model/aid_request_details_model.dart';
 import 'package:charity_management/constants/api_constants.dart';
 import 'package:dio/dio.dart';
@@ -37,6 +38,36 @@ void main() {
       expect(model.paidAmount, '25.5');
       expect(model.remainingAmount, '74.5');
       expect(model.completionPercentage, 25);
+    });
+
+    test('marks request as fully funded from remaining amount', () {
+      final model = AidRequestDetailsModel.fromJson(
+        _detailsJson(
+          totalCost: '100.00',
+          paidAmount: '100.00',
+          remainingAmount: '0.00',
+          completionPercentage: 100,
+        ),
+      );
+
+      expect(model.isFullyFunded, isTrue);
+    });
+  });
+
+  group('AidRequestModel', () {
+    test('marks list request as fully funded from paid and total amounts', () {
+      final model = AidRequestModel.fromJson(const {
+        'id': 42,
+        'image': 'request.jpg',
+        'title': 'Medical aid',
+        'totalCost': '100.00',
+        'paidAmount': '100.00',
+        'remainingAmount': '0.00',
+        'completionPercentage': 100,
+        'isUrgent': true,
+      });
+
+      expect(model.isFullyFunded, isTrue);
     });
   });
 

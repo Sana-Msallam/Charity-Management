@@ -12,10 +12,13 @@ class AidRequestPaymentIntentModel {
   final String currency;
 
   factory AidRequestPaymentIntentModel.fromJson(Map<String, dynamic> json) {
-    final transactionId = json['transactionId'];
-    final clientSecret = json['clientSecret'];
-    final amount = json['amount'];
-    final currency = json['currency'];
+    final data = json['data'];
+    final source = data is Map<String, dynamic> ? data : json;
+
+    final transactionId = source['transactionId'];
+    final clientSecret = source['clientSecret'];
+    final amount = source['amount'];
+    final currency = source['currency'];
 
     if (transactionId == null ||
         clientSecret == null ||

@@ -339,6 +339,8 @@ class _SupportCategoryScreenState extends State<SupportCategoryScreen> {
     AidRequestModel item,
   ) {
     final l10n = AppLocalizations.of(context);
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final isFullyFunded = item.isFullyFunded;
 
     return InkWell(
       borderRadius: BorderRadius.circular(20),
@@ -537,11 +539,15 @@ class _SupportCategoryScreenState extends State<SupportCategoryScreen> {
                       ),
 
                       onPressed: () {
-                        _openAidRequestDetails(context, item);
+                        if (!isFullyFunded) {
+                          _openAidRequestDetails(context, item);
+                        }
                       },
 
                       child: Text(
-                        l10n.donateNow,
+                        isFullyFunded
+                            ? (isArabic ? 'منجزة' : 'Completed')
+                            : l10n.donateNow,
                         style: const TextStyle(
                           fontFamily:
                               'IBM Plex Sans Arabic',

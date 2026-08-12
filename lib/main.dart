@@ -71,17 +71,13 @@ Future<void> main() async {
 
   debugPrint('========== MAIN START ==========');
 
-  final LanguageCubit languageCubit =
-      await LanguageCubit.create();
+  final LanguageCubit languageCubit = await LanguageCubit.create();
 
   debugPrint('LanguageCubit created successfully');
 
-  runApp(
-    BlocProvider.value(
-      value: languageCubit,
-      child: const MyApp(),
-    ),
-  );
+  await const StripeConfig().initialize();
+
+  runApp(BlocProvider.value(value: languageCubit, child: const MyApp()));
 
   debugPrint('runApp called');
 }
@@ -111,8 +107,7 @@ class MyApp extends StatelessWidget {
 
           locale: languageState.locale,
 
-          supportedLocales:
-              AppLocalizations.supportedLocales,
+          supportedLocales: AppLocalizations.supportedLocales,
 
           localizationsDelegates: const [
             ...AppLocalizations.localizationsDelegates,

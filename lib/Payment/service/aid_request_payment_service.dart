@@ -14,7 +14,7 @@ class AidRequestPaymentService {
   }) async {
     final response = await _dio.post<dynamic>(
       ApiConstants.aidRequestPaymentIntent(requestId),
-      data: {'amount': amount},
+      data: {'amount': amount.toStringAsFixed(2)},
     );
 
     final data = response.data;

@@ -28,6 +28,23 @@ void main() {
       expect(model.amount, '25.00');
       expect(model.currency, 'usd');
     });
+
+    test('parses wrapped backend response', () {
+      final model = AidRequestPaymentIntentModel.fromJson(const {
+        'success': true,
+        'data': {
+          'transactionId': '101',
+          'clientSecret': 'pi_123_secret_abc',
+          'amount': '25.00',
+          'currency': 'usd',
+        },
+      });
+
+      expect(model.transactionId, 101);
+      expect(model.clientSecret, 'pi_123_secret_abc');
+      expect(model.amount, '25.00');
+      expect(model.currency, 'usd');
+    });
   });
 
   group('AidRequestPaymentService', () {
@@ -62,7 +79,7 @@ void main() {
 
       expect(capturedOptions.method, 'POST');
       expect(capturedOptions.path, ApiConstants.aidRequestPaymentIntent(42));
-      expect(capturedOptions.data, {'amount': 25.0});
+      expect(capturedOptions.data, {'amount': '25.00'});
       expect(result.clientSecret, 'pi_123_secret_abc');
     });
   });
