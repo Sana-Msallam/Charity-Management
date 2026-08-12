@@ -34,19 +34,19 @@ class AidRequestModel {
   }
 
   bool get isFullyFunded {
+    final total = _parseAmount(totalCost);
+    final paid = _parseAmount(paidAmount);
     final remaining = _parseAmount(remainingAmount);
-    if (remaining <= 0) {
+
+    if (total > 0 && paid >= total) {
       return true;
     }
 
-    final total = _parseAmount(totalCost);
-    final paid = _parseAmount(paidAmount);
-
-    return total > 0 && paid >= total;
+    return remaining <= 0 && (total > 0 || paid > 0);
   }
 
   static double _parseAmount(String value) {
-    final normalized = value.replaceAll(RegExp(r'[^0-9.]'), '');
+    final normalized = value.replaceAll(RegExp(r'[^0-9.-]'), '');
     return double.tryParse(normalized) ?? 0;
   }
 }
