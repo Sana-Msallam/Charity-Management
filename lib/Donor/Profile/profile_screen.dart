@@ -88,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
                       l10n,
                     ),
 
-                    const SizedBox(height: 26),
+                    const SizedBox(height: 20),
 
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -96,12 +96,12 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          _buildSectionTitle(
-                            l10n.personalInformation,
-                            Icons.person_outline_rounded,
-                          ),
+                          // _buildSectionTitle(
+                          //   l10n.personalInformation,
+                          //   Icons.person_outline_rounded,
+                          // ),
 
-                          const SizedBox(height: 12),
+                          // const SizedBox(height: 12),
 
                           _buildInfoGrid(
                             profile,
@@ -194,20 +194,8 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             child: ClipOval(
-              child: profile.personalPhoto != null &&
-                      profile.personalPhoto!.isNotEmpty
-                  ? Image.network(
-                      'http://192.168.1.14:3000/${profile.personalPhoto}',
-                      fit: BoxFit.cover,
-                      errorBuilder: (
-                        context,
-                        error,
-                        stackTrace,
-                      ) {
-                        return _defaultProfileIcon();
-                      },
-                    )
-                  : _defaultProfileIcon(),
+           
+  child: _defaultProfileIcon(),
             ),
           ),
 
@@ -324,77 +312,77 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(
-              child: _buildSmallInfoCard(
-                icon: Icons.cake_outlined,
-                title: l10n.age,
-                value: l10n.ageWithYears(profile.age),
-                color: const Color(0xFFFFEED1),
-                iconColor: const Color(0xFFB56B00),
-              ),
-            ),
+            // Expanded(
+            //   child: _buildSmallInfoCard(
+            //     icon: Icons.cake_outlined,
+            //     title: l10n.age,
+            //     value: l10n.ageWithYears(profile.age),
+            //     color: const Color(0xFFFFEED1),
+            //     iconColor: const Color(0xFFB56B00),
+            //   ),
+            // ),
 
             const SizedBox(width: 12),
 
-            Expanded(
-              child: _buildSmallInfoCard(
-                icon: Icons.wc_outlined,
-                title: l10n.gender,
-                value: profile.gender == 'MALE'
-                    ? l10n.male
-                    : l10n.female,
-                color: softGreen,
-                iconColor: green,
-              ),
-            ),
+            // Expanded(
+            //   child: _buildSmallInfoCard(
+            //     icon: Icons.wc_outlined,
+            //     title: l10n.gender,
+            //     value: profile.gender == 'MALE'
+            //         ? l10n.male
+            //         : l10n.female,
+            //     color: softGreen,
+            //     iconColor: green,
+            //   ),
+            // ),
           ],
         ),
 
         const SizedBox(height: 12),
 
-        _buildInfoCard(
-          icon: Icons.phone_outlined,
-          title: l10n.phoneNumber,
-          value: profile.number,
-          color: const Color(0xFFEAF1FF),
-          iconColor: const Color(0xFF4567A8),
-          l10n: l10n,
-        ),
+        // _buildInfoCard(
+        //   icon: Icons.phone_outlined,
+        //   title: l10n.phoneNumber,
+        //   value: profile.number,
+        //   color: const Color(0xFFEAF1FF),
+        //   iconColor: const Color(0xFF4567A8),
+        //   l10n: l10n,
+        // ),
 
-        _buildInfoCard(
-          icon: Icons.favorite_border_rounded,
-          title: l10n.socialStatus,
-          value: _getSocialStatus(
-            profile.socialStatus,
-            l10n,
-          ),
-          color: const Color(0xFFFFE9ED),
-          iconColor: const Color(0xFFB84D64),
-          l10n: l10n,
-        ),
+        // _buildInfoCard(
+        //   icon: Icons.favorite_border_rounded,
+        //   title: l10n.socialStatus,
+        //   value: _getSocialStatus(
+        //     profile.socialStatus,
+        //     l10n,
+        //   ),
+        //   color: const Color(0xFFFFE9ED),
+        //   iconColor: const Color(0xFFB84D64),
+        //   l10n: l10n,
+        // ),
 
-        _buildInfoCard(
-          icon: Icons.location_on_outlined,
-          title: l10n.address,
-          value: _formatAddress(
-            profile.address,
-            l10n,
-          ),
-          color: const Color(0xFFE8F4EF),
-          iconColor: const Color(0xFF39785C),
-          l10n: l10n,
-        ),
+        // _buildInfoCard(
+        //   icon: Icons.location_on_outlined,
+        //   title: l10n.address,
+        //   value: _formatAddress(
+        //     profile.address,
+        //     l10n,
+        //   ),
+        //   color: const Color(0xFFE8F4EF),
+        //   iconColor: const Color(0xFF39785C),
+        //   l10n: l10n,
+        // ),
 
-        _buildInfoCard(
-          icon: Icons.work_outline_rounded,
-          title: l10n.workStatus,
-          value: profile.isUnemployed
-              ? l10n.unemployedStatus
-              : l10n.employedStatus,
-          color: const Color(0xFFF0E9FF),
-          iconColor: const Color(0xFF7453A6),
-          l10n: l10n,
-        ),
+        // _buildInfoCard(
+        //   icon: Icons.work_outline_rounded,
+        //   title: l10n.workStatus,
+        //   value: profile.isUnemployed
+        //       ? l10n.unemployedStatus
+        //       : l10n.employedStatus,
+        //   color: const Color(0xFFF0E9FF),
+        //   iconColor: const Color(0xFF7453A6),
+        //   l10n: l10n,
+        // ),
       ],
     );
   }

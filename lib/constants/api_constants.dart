@@ -1,7 +1,7 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'https://paxil-worlds-blvd-population.trycloudflare.com';
+  static const String baseUrl = 'http://192.168.2.129:3000';
 
   static const String login = '/auth/login/client';
 
