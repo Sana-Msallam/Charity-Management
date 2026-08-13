@@ -993,6 +993,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get topUpWallet => 'شحن المحفظة';
 
   @override
+  String get walletBalanceLoading => 'جاري جلب الرصيد...';
+
+  @override
+  String get couldNotLoadWalletBalance => 'تعذر جلب الرصيد';
+
+  @override
+  String get walletBalanceUnavailable => 'الرصيد غير متاح حالياً';
+
+  @override
   String get mySponsorships => 'كفالاتي';
 
   @override
@@ -1017,6 +1026,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sponsoredList => 'قائمة المكفولين';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get noSponsorshipsForStatus => 'لا توجد كفالات بهذه الحالة';
+
+  @override
+  String get sponsorshipUnderReview => 'الكفالة قيد المراجعة';
+
+  @override
+  String get filterSponsorships => 'تصفية الكفالات';
+
+  @override
+  String get allSponsorships => 'جميع الكفالات';
 
   @override
   String get activeStatus => 'نشط';
@@ -1215,6 +1239,87 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get renewSponsorshipOrDonate => 'تجديد الكفالة أو التبرع';
+
+  @override
+  String get orphanSponsorshipDetails => 'تفاصيل الكفالة';
+
+  @override
+  String get orphanPersonalData => 'البيانات الشخصية';
+
+  @override
+  String get sponsorshipData => 'بيانات الكفالة';
+
+  @override
+  String get orphanName => 'الاسم';
+
+  @override
+  String get birthDate => 'تاريخ الميلاد';
+
+  @override
+  String get orphanClass => 'الصف';
+
+  @override
+  String get talent => 'الموهبة';
+
+  @override
+  String get monthlySponsorshipAmount => 'المبلغ الشهري';
+
+  @override
+  String get sponsorshipStatusLabel => 'حالة الكفالة';
+
+  @override
+  String get sponsorshipStartDate => 'تاريخ بدء الكفالة';
+
+  @override
+  String get sponsorshipEndDate => 'تاريخ انتهاء الكفالة';
+
+  @override
+  String get sponsorshipCreatedDate => 'تاريخ إنشاء الكفالة';
+
+  @override
+  String get sponsorshipRejectionReason => 'سبب الرفض';
+
+  @override
+  String get sponsorshipCancellationSource => 'مصدر الإلغاء';
+
+  @override
+  String get sponsorshipStatusPending => 'قيد الانتظار';
+
+  @override
+  String get sponsorshipStatusAccepted => 'مقبولة';
+
+  @override
+  String get sponsorshipStatusRejected => 'مرفوضة';
+
+  @override
+  String get sponsorshipStatusCancelled => 'ملغاة';
+
+  @override
+  String get confirmMonthlySponsorshipPayment => 'تأكيد الدفع الشهري للكفالة';
+
+  @override
+  String get monthlySponsorshipPaymentConfirmation =>
+      'هل تريد دفع مبلغ الكفالة الشهري من رصيد محفظتك؟ سيتم تحديد المبلغ من قبل النظام.';
+
+  @override
+  String get confirmPayment => 'تأكيد الدفع';
+
+  @override
+  String get cancelSponsorship => 'إلغاء الكفالة';
+
+  @override
+  String get cancelSponsorshipConfirmation =>
+      'هل أنت متأكد من رغبتك في إلغاء هذه الكفالة؟';
+
+  @override
+  String get goBack => 'تراجع';
+
+  @override
+  String get noOrphanDataTitle => 'لا توجد معلومات عن اليتيم حالياً';
+
+  @override
+  String get noOrphanDataDescription =>
+      'طلب الكفالة ما زال قيد الانتظار ولم يتم تخصيص يتيم لك حتى الآن.';
 
   @override
   String loginSuccess(String firstName) {

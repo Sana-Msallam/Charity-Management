@@ -1976,6 +1976,24 @@ abstract class AppLocalizations {
   /// **'Top up wallet'**
   String get topUpWallet;
 
+  /// No description provided for @walletBalanceLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading balance...'**
+  String get walletBalanceLoading;
+
+  /// No description provided for @couldNotLoadWalletBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load balance'**
+  String get couldNotLoadWalletBalance;
+
+  /// No description provided for @walletBalanceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance is currently unavailable'**
+  String get walletBalanceUnavailable;
+
   /// No description provided for @mySponsorships.
   ///
   /// In en, this message translates to:
@@ -2023,6 +2041,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sponsored list'**
   String get sponsoredList;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @noSponsorshipsForStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'No sponsorships with this status'**
+  String get noSponsorshipsForStatus;
+
+  /// No description provided for @sponsorshipUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship under review'**
+  String get sponsorshipUnderReview;
+
+  /// No description provided for @filterSponsorships.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter sponsorships'**
+  String get filterSponsorships;
+
+  /// No description provided for @allSponsorships.
+  ///
+  /// In en, this message translates to:
+  /// **'All sponsorships'**
+  String get allSponsorships;
 
   /// No description provided for @activeStatus.
   ///
@@ -2389,6 +2437,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Renew sponsorship or donate'**
   String get renewSponsorshipOrDonate;
+
+  /// No description provided for @orphanSponsorshipDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship Details'**
+  String get orphanSponsorshipDetails;
+
+  /// No description provided for @orphanPersonalData.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Data'**
+  String get orphanPersonalData;
+
+  /// No description provided for @sponsorshipData.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship Data'**
+  String get sponsorshipData;
+
+  /// No description provided for @orphanName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get orphanName;
+
+  /// No description provided for @birthDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get birthDate;
+
+  /// No description provided for @orphanClass.
+  ///
+  /// In en, this message translates to:
+  /// **'Class'**
+  String get orphanClass;
+
+  /// No description provided for @talent.
+  ///
+  /// In en, this message translates to:
+  /// **'Talent'**
+  String get talent;
+
+  /// No description provided for @monthlySponsorshipAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly amount'**
+  String get monthlySponsorshipAmount;
+
+  /// No description provided for @sponsorshipStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship status'**
+  String get sponsorshipStatusLabel;
+
+  /// No description provided for @sponsorshipStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship start date'**
+  String get sponsorshipStartDate;
+
+  /// No description provided for @sponsorshipEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship end date'**
+  String get sponsorshipEndDate;
+
+  /// No description provided for @sponsorshipCreatedDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship creation date'**
+  String get sponsorshipCreatedDate;
+
+  /// No description provided for @sponsorshipRejectionReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejection reason'**
+  String get sponsorshipRejectionReason;
+
+  /// No description provided for @sponsorshipCancellationSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation source'**
+  String get sponsorshipCancellationSource;
+
+  /// No description provided for @sponsorshipStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get sponsorshipStatusPending;
+
+  /// No description provided for @sponsorshipStatusAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get sponsorshipStatusAccepted;
+
+  /// No description provided for @sponsorshipStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get sponsorshipStatusRejected;
+
+  /// No description provided for @sponsorshipStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get sponsorshipStatusCancelled;
+
+  /// No description provided for @confirmMonthlySponsorshipPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm monthly sponsorship payment'**
+  String get confirmMonthlySponsorshipPayment;
+
+  /// No description provided for @monthlySponsorshipPaymentConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to pay the monthly sponsorship from your wallet balance? The system will determine the amount.'**
+  String get monthlySponsorshipPaymentConfirmation;
+
+  /// No description provided for @confirmPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm payment'**
+  String get confirmPayment;
+
+  /// No description provided for @cancelSponsorship.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Sponsorship'**
+  String get cancelSponsorship;
+
+  /// No description provided for @cancelSponsorshipConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel this sponsorship?'**
+  String get cancelSponsorshipConfirmation;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get goBack;
+
+  /// No description provided for @noOrphanDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No orphan information is available now'**
+  String get noOrphanDataTitle;
+
+  /// No description provided for @noOrphanDataDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The sponsorship request is still pending, and no orphan has been assigned to you yet.'**
+  String get noOrphanDataDescription;
 
   /// No description provided for @loginSuccess.
   ///

@@ -1,7 +1,8 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'https://paxil-worlds-blvd-population.trycloudflare.com';
+  static const String baseUrl =
+      'https://bbs-theories-geological-acne.trycloudflare.com';
 
   static const String login = '/auth/login/client';
 
@@ -42,6 +43,9 @@ class ApiConstants {
 
   static String walletDonateAidRequest(int requestId) =>
       '/wallet/donate/aid-requests/$requestId';
+
+  static String walletDonateSponsorship(int sponsorshipId) =>
+      '/wallet/donate/sponsorships/$sponsorshipId';
 
   static const String orphanSupportFundPaymentIntent =
       '/api/donor/sponsorship-fund/payment-intent';

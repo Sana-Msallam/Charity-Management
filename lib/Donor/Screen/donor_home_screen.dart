@@ -1404,7 +1404,7 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
                       ),
                       child: const Icon(
                         Icons.volunteer_activism_outlined,
-                        color: Colors.white,
+                        color: AppColors.primaryContainer,
                         size: 26,
                       ),
                     ),
@@ -1439,7 +1439,7 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
                         Text(
                           actionText,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color:AppColors.primaryContainer,
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'IBM Plex Sans Arabic',
@@ -1450,7 +1450,7 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
                           isArabic
                               ? Icons.arrow_back
                               : Icons.arrow_forward,
-                          color: Colors.white,
+                          color: AppColors.primaryContainer,
                           size: 18,
                         ),
                       ],

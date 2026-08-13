@@ -1006,6 +1006,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topUpWallet => 'Top up wallet';
 
   @override
+  String get walletBalanceLoading => 'Loading balance...';
+
+  @override
+  String get couldNotLoadWalletBalance => 'Could not load balance';
+
+  @override
+  String get walletBalanceUnavailable => 'Balance is currently unavailable';
+
+  @override
   String get mySponsorships => 'My sponsorships';
 
   @override
@@ -1031,6 +1040,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sponsoredList => 'Sponsored list';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get noSponsorshipsForStatus => 'No sponsorships with this status';
+
+  @override
+  String get sponsorshipUnderReview => 'Sponsorship under review';
+
+  @override
+  String get filterSponsorships => 'Filter sponsorships';
+
+  @override
+  String get allSponsorships => 'All sponsorships';
 
   @override
   String get activeStatus => 'Active';
@@ -1231,6 +1255,88 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get renewSponsorshipOrDonate => 'Renew sponsorship or donate';
+
+  @override
+  String get orphanSponsorshipDetails => 'Sponsorship Details';
+
+  @override
+  String get orphanPersonalData => 'Personal Data';
+
+  @override
+  String get sponsorshipData => 'Sponsorship Data';
+
+  @override
+  String get orphanName => 'Name';
+
+  @override
+  String get birthDate => 'Date of birth';
+
+  @override
+  String get orphanClass => 'Class';
+
+  @override
+  String get talent => 'Talent';
+
+  @override
+  String get monthlySponsorshipAmount => 'Monthly amount';
+
+  @override
+  String get sponsorshipStatusLabel => 'Sponsorship status';
+
+  @override
+  String get sponsorshipStartDate => 'Sponsorship start date';
+
+  @override
+  String get sponsorshipEndDate => 'Sponsorship end date';
+
+  @override
+  String get sponsorshipCreatedDate => 'Sponsorship creation date';
+
+  @override
+  String get sponsorshipRejectionReason => 'Rejection reason';
+
+  @override
+  String get sponsorshipCancellationSource => 'Cancellation source';
+
+  @override
+  String get sponsorshipStatusPending => 'Pending';
+
+  @override
+  String get sponsorshipStatusAccepted => 'Accepted';
+
+  @override
+  String get sponsorshipStatusRejected => 'Rejected';
+
+  @override
+  String get sponsorshipStatusCancelled => 'Cancelled';
+
+  @override
+  String get confirmMonthlySponsorshipPayment =>
+      'Confirm monthly sponsorship payment';
+
+  @override
+  String get monthlySponsorshipPaymentConfirmation =>
+      'Do you want to pay the monthly sponsorship from your wallet balance? The system will determine the amount.';
+
+  @override
+  String get confirmPayment => 'Confirm payment';
+
+  @override
+  String get cancelSponsorship => 'Cancel Sponsorship';
+
+  @override
+  String get cancelSponsorshipConfirmation =>
+      'Are you sure you want to cancel this sponsorship?';
+
+  @override
+  String get goBack => 'Back';
+
+  @override
+  String get noOrphanDataTitle => 'No orphan information is available now';
+
+  @override
+  String get noOrphanDataDescription =>
+      'The sponsorship request is still pending, and no orphan has been assigned to you yet.';
 
   @override
   String loginSuccess(String firstName) {

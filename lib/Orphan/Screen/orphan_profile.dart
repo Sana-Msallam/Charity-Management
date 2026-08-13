@@ -1,3 +1,5 @@
+import 'package:charity_management/Payment/cubit/wallet_sponsorship_donation_cubit.dart';
+import 'package:charity_management/Payment/cubit/wallet_sponsorship_donation_state.dart';
 import 'package:charity_management/Sponsership/cubit/cancel_sponsorship_cubit.dart';
 import 'package:charity_management/Sponsership/cubit/cancel_sponsorship_state.dart';
 import 'package:charity_management/Sponsership/model/sponsorship_list_model.dart';
@@ -8,129 +10,173 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class OrphanDetailsScreen extends StatefulWidget {
   final SponsorshipListModel sponsorship;
 
-  const OrphanDetailsScreen({
-    super.key,
-    required this.sponsorship,
-  });
+  const OrphanDetailsScreen({super.key, required this.sponsorship});
 
   @override
-  State<OrphanDetailsScreen> createState() =>
-      _OrphanDetailsScreenState();
+  State<OrphanDetailsScreen> createState() => _OrphanDetailsScreenState();
 }
 
-class _OrphanDetailsScreenState
-    extends State<OrphanDetailsScreen> {
+class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final orphan = widget.sponsorship.orphan;
     final l10n = AppLocalizations.of(context);
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
-    return BlocProvider(
-      create: (_) => CancelSponsorshipCubit(),
-      child: BlocListener<
-          CancelSponsorshipCubit,
-          CancelSponsorshipState>(
-        listener: (context, state) {
-          if (state is CancelSponsorshipSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  state.response.message,
-                ),
-                backgroundColor: Colors.green,
-              ),
-            );
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => CancelSponsorshipCubit()),
+        BlocProvider(create: (_) => WalletSponsorshipDonationCubit()),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<CancelSponsorshipCubit, CancelSponsorshipState>(
+            listener: (context, state) {
+              if (state is CancelSponsorshipSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.response.message),
+                    backgroundColor: Colors.green,
+                  ),
+                );
 
-            Navigator.pop(context, true);
-          }
+                Navigator.pop(context, true);
+              }
 
-          if (state is CancelSponsorshipError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-        },
+              if (state is CancelSponsorshipError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+          BlocListener<
+            WalletSponsorshipDonationCubit,
+            WalletSponsorshipDonationState
+          >(
+            listener: (context, state) {
+              if (state is WalletSponsorshipDonationSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.donation.message),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+
+                Navigator.pop(context, true);
+              }
+
+              if (state is WalletSponsorshipDonationFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
         child: Scaffold(
           backgroundColor: const Color(0xFFF8F9FF),
-
           appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0.5,
             centerTitle: true,
-            title: const Text(
-              'تفاصيل الكفالة',
-              style: TextStyle(
+            title: Text(
+              l10n.orphanSponsorshipDetails,
+              style: const TextStyle(
                 color: Color(0xFF765A00),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            iconTheme: const IconThemeData(
-              color: Color(0xFF765A00),
-            ),
+            iconTheme: const IconThemeData(color: Color(0xFF765A00)),
+            actions: [
+              if (_canCancelSponsorship())
+                PopupMenuButton<_OrphanProfileAction>(
+                  icon: const Icon(Icons.more_vert),
+                  onSelected: (action) {
+                    switch (action) {
+                      case _OrphanProfileAction.cancelSponsorship:
+                        _showCancelConfirmation(context);
+                    }
+                  },
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        value: _OrphanProfileAction.cancelSponsorship,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.cancel_outlined,
+                              color: Color(0xFFC62828),
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              l10n.cancelSponsorship,
+                              style: const TextStyle(
+                                color: Color(0xFFC62828),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ];
+                  },
+                ),
+            ],
           ),
-
           body: SafeArea(
             child: orphan == null
                 ? _buildNoOrphanData(context)
                 : SingleChildScrollView(
                     child: Center(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxWidth: 600,
-                        ),
+                        constraints: const BoxConstraints(maxWidth: 600),
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.stretch,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               _buildProfileCard(orphan),
-
                               const SizedBox(height: 20),
-
-                              _buildPersonalDataCard(
-                                orphan,
-                                l10n,
-                              ),
-
+                              _buildPersonalDataCard(orphan, l10n, isRtl),
                               const SizedBox(height: 20),
-
                               _buildSponsorshipCard(
                                 widget.sponsorship,
+                                l10n,
+                                isRtl,
                               ),
-
-                              if (widget.sponsorship
-                                      .rejectionReason !=
+                              if (widget.sponsorship.rejectionReason !=
                                   null) ...[
                                 const SizedBox(height: 20),
                                 _buildInfoCard(
-                                  title: 'سبب الرفض',
-                                  value: widget.sponsorship
-                                      .rejectionReason!,
+                                  title: l10n.sponsorshipRejectionReason,
+                                  value: widget.sponsorship.rejectionReason!,
                                   icon: Icons.info_outline,
+                                  isRtl: isRtl,
                                 ),
                               ],
-
-                              if (widget.sponsorship
-                                      .cancellationSource !=
+                              if (widget.sponsorship.cancellationSource !=
                                   null) ...[
                                 const SizedBox(height: 20),
                                 _buildInfoCard(
-                                  title: 'مصدر الإلغاء',
-                                  value: widget.sponsorship
-                                      .cancellationSource!,
+                                  title: l10n.sponsorshipCancellationSource,
+                                  value: widget.sponsorship.cancellationSource!,
                                   icon: Icons.cancel_outlined,
+                                  isRtl: isRtl,
                                 ),
                               ],
-
-                              if (_canCancelSponsorship()) ...[
+                              if (_canPayMonthlySponsorship()) ...[
                                 const SizedBox(height: 20),
-                                _buildCancelButton(context),
+                                _buildMonthlyPaymentButton(context, l10n),
                               ],
-
                               const SizedBox(height: 30),
                             ],
                           ),
@@ -145,13 +191,14 @@ class _OrphanDetailsScreenState
   }
 
   Widget _buildNoOrphanData(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
             const SizedBox(height: 90),
-
             Container(
               width: 90,
               height: 90,
@@ -165,36 +212,29 @@ class _OrphanDetailsScreenState
                 color: Color(0xFF765A00),
               ),
             ),
-
             const SizedBox(height: 20),
-
-            const Text(
-              'لا توجد معلومات عن اليتيم حالياً',
+            Text(
+              l10n.noOrphanDataTitle,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF765A00),
               ),
             ),
-
             const SizedBox(height: 10),
-
-            const Text(
-              'طلب الكفالة ما زال قيد الانتظار ولم يتم تخصيص يتيم لك حتى الآن.',
+            Text(
+              l10n.noOrphanDataDescription,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
                 height: 1.6,
               ),
             ),
-
             const SizedBox(height: 30),
-
-            if (widget.sponsorship.status.toUpperCase() ==
-                'PENDING')
-              _buildCancelButton(context),
+            if (_canPayMonthlySponsorship())
+              _buildMonthlyPaymentButton(context, l10n),
           ],
         ),
       ),
@@ -202,31 +242,23 @@ class _OrphanDetailsScreenState
   }
 
   bool _canCancelSponsorship() {
-    final status =
-        widget.sponsorship.status.toUpperCase();
+    final status = widget.sponsorship.status.toUpperCase();
 
-    return status == 'PENDING' ||
-        status == 'ACCEPTED';
+    return status == 'PENDING' || status == 'ACCEPTED';
   }
 
-  Widget _buildProfileCard(
-    SponsoredOrphanModel orphan,
-  ) {
+  bool _canPayMonthlySponsorship() {
+    return widget.sponsorship.status.toUpperCase() == 'ACCEPTED';
+  }
+
+  Widget _buildProfileCard(SponsoredOrphanModel orphan) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(
-        top: 32,
-        bottom: 24,
-        left: 16,
-        right: 16,
-      ),
+      padding: const EdgeInsets.only(top: 32, bottom: 24, left: 16, right: 16),
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            width: 1,
-            color: Color(0xFFD1C5B1),
-          ),
+          side: const BorderSide(width: 1, color: Color(0xFFD1C5B1)),
           borderRadius: BorderRadius.circular(12),
         ),
         shadows: const [
@@ -254,15 +286,12 @@ class _OrphanDetailsScreenState
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                      image: AssetImage(
-                        'assets/orphan_profile.jpg',
-                      ),
+                      image: AssetImage('assets/orphan_profile.jpg'),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
-
               Positioned(
                 right: 2,
                 bottom: 2,
@@ -271,23 +300,14 @@ class _OrphanDetailsScreenState
                   decoration: BoxDecoration(
                     color: const Color(0xFF765A00),
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 2,
-                    ),
+                    border: Border.all(color: Colors.white, width: 2),
                   ),
-                  child: const Icon(
-                    Icons.check,
-                    size: 12,
-                    color: Colors.white,
-                  ),
+                  child: const Icon(Icons.check, size: 12, color: Colors.white),
                 ),
               ),
             ],
           ),
-
           const SizedBox(height: 12),
-
           Text(
             orphan.fullName,
             textAlign: TextAlign.center,
@@ -298,45 +318,7 @@ class _OrphanDetailsScreenState
               fontWeight: FontWeight.w600,
             ),
           ),
-
-          const SizedBox(height: 6),
-
-          Text(
-            'رقم اليتيم: ${orphan.id}',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color(0xFF4D4636),
-              fontSize: 14,
-              fontFamily: 'IBM Plex Sans Arabic',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 6,
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0xFFD5E0F8),
-              borderRadius: BorderRadius.circular(9999),
-              border: Border.all(
-                color: const Color(0x33545F73),
-              ),
-            ),
-            child: Text(
-              widget.sponsorship.status,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color(0xFF586377),
-                fontSize: 12,
-                fontFamily: 'IBM Plex Sans Arabic',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          const SizedBox(height: 4),
         ],
       ),
     );
@@ -345,72 +327,36 @@ class _OrphanDetailsScreenState
   Widget _buildPersonalDataCard(
     SponsoredOrphanModel orphan,
     AppLocalizations l10n,
+    bool isRtl,
   ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFFD1C5B1),
-        ),
+        border: Border.all(color: const Color(0xFFD1C5B1)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: _cardCrossAxisAlignment(isRtl),
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'البيانات الشخصية',
-                style: TextStyle(
-                  color: Color(0xFF765A00),
-                  fontSize: 18,
-                  fontFamily: 'IBM Plex Sans Arabic',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 8),
-              Icon(
-                Icons.person_outline,
-                color: Color(0xFF765A00),
-              ),
-            ],
+          Row(
+            mainAxisAlignment: _cardMainAxisAlignment(isRtl),
+            children: _orderedHeaderChildren(
+              title: l10n.orphanPersonalData,
+              icon: Icons.person_outline,
+            ),
           ),
-
           const SizedBox(height: 16),
-
+          _buildDataRow(l10n.orphanName, orphan.fullName, isRtl),
           _buildDataRow(
-            'الاسم',
-            orphan.fullName,
+            l10n.gender,
+            _translateGender(orphan.gender, l10n),
+            isRtl,
           ),
-
-          _buildDataRow(
-            'الجنس',
-            _translateGender(
-              orphan.gender,
-              l10n,
-            ),
-          ),
-
-          _buildDataRow(
-            'تاريخ الميلاد',
-            _formatDate(
-              orphan.birthOfDate,
-            ),
-          ),
-
-          _buildDataRow(
-            'الصف',
-            orphan.className,
-          ),
-
-          if (orphan.talent != null &&
-              orphan.talent!.trim().isNotEmpty)
-            _buildDataRow(
-              'الموهبة',
-              orphan.talent!,
-            ),
+          _buildDataRow(l10n.birthDate, _formatDate(orphan.birthOfDate), isRtl),
+          _buildDataRow(l10n.orphanClass, orphan.className, isRtl),
+          if (orphan.talent != null && orphan.talent!.trim().isNotEmpty)
+            _buildDataRow(l10n.talent, orphan.talent!, isRtl),
         ],
       ),
     );
@@ -418,92 +364,68 @@ class _OrphanDetailsScreenState
 
   Widget _buildSponsorshipCard(
     SponsorshipListModel sponsorship,
+    AppLocalizations l10n,
+    bool isRtl,
   ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFFD1C5B1),
-        ),
+        border: Border.all(color: const Color(0xFFD1C5B1)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: _cardCrossAxisAlignment(isRtl),
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'بيانات الكفالة',
-                style: TextStyle(
-                  color: Color(0xFF765A00),
-                  fontSize: 18,
-                  fontFamily: 'IBM Plex Sans Arabic',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 8),
-              Icon(
-                Icons.volunteer_activism_outlined,
-                color: Color(0xFF765A00),
-              ),
-            ],
+          Row(
+            mainAxisAlignment: _cardMainAxisAlignment(isRtl),
+            children: _orderedHeaderChildren(
+              title: l10n.sponsorshipData,
+              icon: Icons.volunteer_activism_outlined,
+            ),
           ),
-
           const SizedBox(height: 16),
-
           _buildDataRow(
-            'رقم الكفالة',
-            sponsorship.id.toString(),
-          ),
-
-          _buildDataRow(
-            'المبلغ الشهري',
+            l10n.monthlySponsorshipAmount,
             sponsorship.monthlyAmount,
+            isRtl,
           ),
-
           _buildDataRow(
-            'حالة الكفالة',
-            sponsorship.status,
+            l10n.sponsorshipStatusLabel,
+            _translateSponsorshipStatus(sponsorship.status, l10n),
+            isRtl,
           ),
-
           if (sponsorship.startDate != null)
             _buildDataRow(
-              'تاريخ بدء الكفالة',
-              _formatDate(
-                sponsorship.startDate!,
-              ),
+              l10n.sponsorshipStartDate,
+              _formatDate(sponsorship.startDate!),
+              isRtl,
             ),
-
           if (sponsorship.endDate != null)
             _buildDataRow(
-              'تاريخ انتهاء الكفالة',
-              _formatDate(
-                sponsorship.endDate!,
-              ),
+              l10n.sponsorshipEndDate,
+              _formatDate(sponsorship.endDate!),
+              isRtl,
             ),
-
           _buildDataRow(
-            'تاريخ إنشاء الكفالة',
-            _formatDate(
-              sponsorship.createdAt,
-            ),
+            l10n.sponsorshipCreatedDate,
+            _formatDate(sponsorship.createdAt),
+            isRtl,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCancelButton(
-    BuildContext context,
-  ) {
-    return BlocBuilder<
-        CancelSponsorshipCubit,
-        CancelSponsorshipState>(
+  // Kept for the temporary cancel-button rollback path; cancel is shown
+  // from the AppBar menu for now.
+  // ignore: unused_element
+  Widget _buildCancelButton(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
+    return BlocBuilder<CancelSponsorshipCubit, CancelSponsorshipState>(
       builder: (context, state) {
-        final isLoading =
-            state is CancelSponsorshipLoading;
+        final isLoading = state is CancelSponsorshipLoading;
 
         return SizedBox(
           width: double.infinity,
@@ -511,45 +433,33 @@ class _OrphanDetailsScreenState
           child: OutlinedButton(
             onPressed: isLoading
                 ? null
-                : () => _showCancelConfirmation(
-                      context,
-                    ),
+                : () => _showCancelConfirmation(context),
             style: OutlinedButton.styleFrom(
-              foregroundColor:
-                  const Color(0xFFC62828),
-              side: const BorderSide(
-                color: Color(0xFFC62828),
-              ),
+              foregroundColor: const Color(0xFFC62828),
+              side: const BorderSide(color: Color(0xFFC62828)),
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12),
               ),
             ),
             child: isLoading
                 ? const SizedBox(
                     width: 22,
                     height: 22,
-                    child:
-                        CircularProgressIndicator(
+                    child: CircularProgressIndicator(
                       strokeWidth: 2,
                       color: Color(0xFFC62828),
                     ),
                   )
-                : const Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.center,
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.cancel_outlined,
-                        size: 21,
-                      ),
-                      SizedBox(width: 8),
+                      const Icon(Icons.cancel_outlined, size: 21),
+                      const SizedBox(width: 8),
                       Text(
-                        'إلغاء الكفالة',
-                        style: TextStyle(
+                        l10n.cancelSponsorship,
+                        style: const TextStyle(
                           fontSize: 16,
-                          fontWeight:
-                              FontWeight.bold,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -560,57 +470,157 @@ class _OrphanDetailsScreenState
     );
   }
 
-  void _showCancelConfirmation(
-    BuildContext context,
-  ) {
+  void _showCancelConfirmation(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
     showDialog(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16),
           ),
-          title: const Text(
-            'إلغاء الكفالة',
-            textAlign: TextAlign.right,
-          ),
-          content: const Text(
-            'هل أنت متأكد من رغبتك في إلغاء هذه الكفالة؟',
-            textAlign: TextAlign.right,
+          title: Text(l10n.cancelSponsorship, textAlign: _textAlign(isRtl)),
+          content: Text(
+            l10n.cancelSponsorshipConfirmation,
+            textAlign: _textAlign(isRtl),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
               },
-              child: const Text(
-                'تراجع',
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
+              child: Text(
+                l10n.goBack,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
-
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
 
-                context
-                    .read<
-                        CancelSponsorshipCubit>()
-                    .cancelSponsorship(
-                      widget.sponsorship.id,
-                    );
+                context.read<CancelSponsorshipCubit>().cancelSponsorship(
+                  widget.sponsorship.id,
+                );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    const Color(0xFFC62828),
+                backgroundColor: const Color(0xFFC62828),
                 foregroundColor: Colors.white,
               ),
-              child: const Text(
-                'إلغاء الكفالة',
+              child: Text(l10n.cancelSponsorship),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildMonthlyPaymentButton(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    return BlocBuilder<
+      WalletSponsorshipDonationCubit,
+      WalletSponsorshipDonationState
+    >(
+      builder: (context, state) {
+        final isLoading = state is WalletSponsorshipDonationLoading;
+
+        return SizedBox(
+          width: double.infinity,
+          height: 54,
+          child: ElevatedButton(
+            onPressed: isLoading
+                ? null
+                : () => _showMonthlyPaymentConfirmation(context, l10n),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF765A00),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
+            ),
+            child: isLoading
+                ? const SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.account_balance_wallet_outlined,
+                        size: 21,
+                      ),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          l10n.confirmMonthlySponsorshipPayment,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showMonthlyPaymentConfirmation(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            l10n.confirmMonthlySponsorshipPayment,
+            textAlign: _textAlign(isRtl),
+          ),
+          content: Text(
+            l10n.monthlySponsorshipPaymentConfirmation,
+            textAlign: _textAlign(isRtl),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+              },
+              child: Text(
+                l10n.goBack,
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+
+                context.read<WalletSponsorshipDonationCubit>().donate(
+                  sponsorshipId: widget.sponsorship.id,
+                  localizations: l10n,
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF765A00),
+                foregroundColor: Colors.white,
+              ),
+              child: Text(l10n.confirmPayment),
             ),
           ],
         );
@@ -622,6 +632,7 @@ class _OrphanDetailsScreenState
     required String title,
     required String value,
     required IconData icon,
+    required bool isRtl,
   }) {
     return Container(
       width: double.infinity,
@@ -629,41 +640,29 @@ class _OrphanDetailsScreenState
       decoration: BoxDecoration(
         color: const Color(0xFFEFF4FF),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFFD1C5B1),
-        ),
+        border: Border.all(color: const Color(0xFFD1C5B1)),
       ),
       child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
-        children: [
-          Icon(
-            icon,
-            color: const Color(0xFF765A00),
-          ),
-
-          const SizedBox(width: 12),
-
-          Expanded(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _orderedInfoChildren(
+          icon: icon,
+          child: Expanded(
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.end,
+              crossAxisAlignment: _cardCrossAxisAlignment(isRtl),
               children: [
                 Text(
                   title,
-                  textAlign: TextAlign.right,
+                  textAlign: _textAlign(isRtl),
                   style: const TextStyle(
                     color: Color(0xFF586377),
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 4),
-
                 Text(
                   value,
-                  textAlign: TextAlign.right,
+                  textAlign: _textAlign(isRtl),
                   style: const TextStyle(
                     color: Color(0xFF0B1C30),
                     fontSize: 14,
@@ -672,54 +671,42 @@ class _OrphanDetailsScreenState
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildDataRow(
-    String title,
-    String value,
-  ) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-      ),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Color(0xFFEFF4FF),
-            width: 1,
-          ),
+  Widget _buildDataRow(String title, String value, bool isRtl) {
+    final titleWidget = Text(
+      title,
+      textAlign: _textAlign(isRtl),
+      style: const TextStyle(color: Color(0xFF4D4636), fontSize: 15),
+    );
+    final valueWidget = Expanded(
+      child: Text(
+        value,
+        textAlign: _textAlign(isRtl),
+        style: const TextStyle(
+          color: Color(0xFF0B1C30),
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
         ),
       ),
+    );
+    final children = <Widget>[
+      titleWidget,
+      const SizedBox(width: 16),
+      valueWidget,
+    ];
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFEFF4FF), width: 1)),
+      ),
       child: Row(
-        mainAxisAlignment:
-            MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Text(
-              value,
-              textAlign: TextAlign.left,
-              style: const TextStyle(
-                color: Color(0xFF0B1C30),
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 16),
-
-          Text(
-            title,
-            textAlign: TextAlign.right,
-            style: const TextStyle(
-              color: Color(0xFF4D4636),
-              fontSize: 15,
-            ),
-          ),
-        ],
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: children,
       ),
     );
   }
@@ -730,19 +717,68 @@ class _OrphanDetailsScreenState
         '${date.day.toString().padLeft(2, '0')}';
   }
 
-  String _translateGender(
-    String gender,
-    AppLocalizations l10n,
-  ) {
+  String _translateGender(String gender, AppLocalizations l10n) {
     switch (gender.toUpperCase()) {
       case 'MALE':
         return l10n.male;
-
       case 'FEMALE':
-        return 'أنثى';
-
+        return l10n.female;
       default:
         return gender;
     }
   }
+
+  String _translateSponsorshipStatus(String status, AppLocalizations l10n) {
+    switch (status.toUpperCase()) {
+      case 'PENDING':
+        return l10n.sponsorshipStatusPending;
+      case 'ACCEPTED':
+        return l10n.sponsorshipStatusAccepted;
+      case 'REJECTED':
+        return l10n.sponsorshipStatusRejected;
+      case 'CANCELLED':
+        return l10n.sponsorshipStatusCancelled;
+      default:
+        return status;
+    }
+  }
+
+  CrossAxisAlignment _cardCrossAxisAlignment(bool isRtl) {
+    return CrossAxisAlignment.start;
+  }
+
+  MainAxisAlignment _cardMainAxisAlignment(bool isRtl) {
+    return MainAxisAlignment.start;
+  }
+
+  TextAlign _textAlign(bool isRtl) {
+    return TextAlign.start;
+  }
+
+  List<Widget> _orderedHeaderChildren({
+    required String title,
+    required IconData icon,
+  }) {
+    const style = TextStyle(
+      color: Color(0xFF765A00),
+      fontSize: 18,
+      fontFamily: 'IBM Plex Sans Arabic',
+      fontWeight: FontWeight.bold,
+    );
+    final iconWidget = Icon(icon, color: const Color(0xFF765A00));
+    final titleWidget = Text(title, style: style);
+
+    return [iconWidget, const SizedBox(width: 8), titleWidget];
+  }
+
+  List<Widget> _orderedInfoChildren({
+    required IconData icon,
+    required Widget child,
+  }) {
+    final iconWidget = Icon(icon, color: const Color(0xFF765A00));
+
+    return [iconWidget, const SizedBox(width: 12), child];
+  }
 }
+
+enum _OrphanProfileAction { cancelSponsorship }

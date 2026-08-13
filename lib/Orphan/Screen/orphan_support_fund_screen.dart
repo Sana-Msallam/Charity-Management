@@ -143,7 +143,7 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
           title: Text(
             _isArabic ? 'صندوق سند اليتيم' : 'Orphan Support Fund',
             style: const TextStyle(
-              color: AppColors.onSurface,
+              color: AppColors.primary,
               fontSize: 19,
               fontWeight: FontWeight.bold,
               fontFamily: AppTextStyles.fontFamily,

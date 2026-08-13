@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SponsorshipsScreen extends StatelessWidget {
-  const SponsorshipsScreen({Key? key}) : super(key: key);
+  const SponsorshipsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +31,12 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     const Color primaryYellow = Color(0xFFD4AF37);
     const Color lightCardBg = Color(0xFFFDF8EB);
     const Color textDark = Color(0xFF1A2E40);
+    const Color primaryGold = Color(0xFF765A00);
 
     return Directionality(
       textDirection: Directionality.of(context),
@@ -43,26 +45,16 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0.5,
-          leading: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/orphan_profile.jpg'),
-            ),
-          ),
+          centerTitle: true,
+          leading: BackButton(color: primaryGold),
           title: Text(
             l10n.currentSponsorships,
             style: const TextStyle(
-              color: primaryYellow,
+              color: primaryGold,
               fontWeight: FontWeight.bold,
               fontSize: 20,
             ),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.menu, color: textDark),
-              onPressed: () {},
-            ),
-          ],
         ),
         body: BlocBuilder<SponsorshipListCubit, SponsorshipListState>(
           builder: (context, state) {
@@ -91,7 +83,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                               .read<SponsorshipListCubit>()
                               .getSponsorships();
                         },
-                        child: const Text('إعادة المحاولة'),
+                        child: Text(l10n.retry),
                       ),
                     ],
                   ),
@@ -104,10 +96,9 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
 
               final currentSponsorships = sponsorships
                   .where(
-                    (sponsorship) =>
-                        sponsorship.status == 'ACCEPTED' 
-                        // ||
-                        // sponsorship.status == 'PENDING',
+                    (sponsorship) => sponsorship.status == 'ACCEPTED',
+                    // ||
+                    // sponsorship.status == 'PENDING',
                   )
                   .toList();
 
@@ -137,22 +128,22 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              l10n.overview,
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              l10n.currentSponsorships,
-                              style: const TextStyle(
-                                color: textDark,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            // Text(
+                            //   l10n.overview,
+                            //   style: const TextStyle(
+                            //     color: Colors.grey,
+                            //     fontSize: 14,
+                            //   ),
+                            // ),
+                            // const SizedBox(height: 4),
+                            // Text(
+                            //   l10n.currentSponsorships,
+                            //   style: const TextStyle(
+                            //     color: textDark,
+                            //     fontSize: 22,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
                             const SizedBox(height: 12),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +151,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                                 Text(
                                   l10n.sponsoredChildrenCount,
                                   style: const TextStyle(
-                                    color: textDark,
+                                    color: primaryGold,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -199,7 +190,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                           Text(
                             l10n.sponsoredList,
                             style: const TextStyle(
-                              color: textDark,
+                              color: primaryGold,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -238,7 +229,8 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                'لا توجد كفالات بهذه الحالة',
+                                l10n.noSponsorshipsForStatus,
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 15,
@@ -261,23 +253,30 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
 
                             final name = orphan != null
                                 ? orphan.fullName
-                                : 'الكفالة قيد المراجعة';
-
-                            final grade = orphan?.className ?? '';
+                                : l10n.sponsorshipUnderReview;
 
                             return InkWell(
                               onTap: sponsorship.status == 'CANCELLED'
                                   ? null
-                                  : () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              OrphanDetailsScreen(
-                                                sponsorship: sponsorship,
-                                              ),
-                                        ),
-                                      );
+                                  : () async {
+                                      final shouldRefresh =
+                                          await Navigator.push<bool>(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OrphanDetailsScreen(
+                                                    sponsorship: sponsorship,
+                                                  ),
+                                            ),
+                                          );
+                                      if (!context.mounted) {
+                                        return;
+                                      }
+                                      if (shouldRefresh == true) {
+                                        context
+                                            .read<SponsorshipListCubit>()
+                                            .getSponsorships();
+                                      }
                                     },
                               borderRadius: BorderRadius.circular(16),
                               child: Container(
@@ -287,7 +286,9 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                                   borderRadius: BorderRadius.circular(16),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.02),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.02,
+                                      ),
                                       blurRadius: 8,
                                       offset: const Offset(0, 4),
                                     ),
@@ -295,45 +296,6 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(
-                                      Icons.arrow_back_ios_new,
-                                      size: 16,
-                                      color: Colors.grey,
-                                    ),
-                                    const Spacer(),
-
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          name,
-                                          style: const TextStyle(
-                                            color: textDark,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-
-                                        if (grade.isNotEmpty) ...[
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            grade,
-                                            style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-
-                                        const SizedBox(height: 6),
-
-                                        _buildStatusBadge(sponsorship.status),
-                                      ],
-                                    ),
-
-                                    const SizedBox(width: 16),
-
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(12),
                                       child: Image.asset(
@@ -342,6 +304,35 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                                         height: 64,
                                         fit: BoxFit.cover,
                                       ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            name,
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(
+                                              color: textDark,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 6),
+                                          _buildStatusBadge(
+                                            sponsorship.status,
+                                            l10n,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 16,
+                                      color: Colors.grey,
                                     ),
                                   ],
                                 ),
@@ -379,7 +370,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                       //       mainAxisAlignment: MainAxisAlignment.end,
                       //       crossAxisAlignment: CrossAxisAlignment.start,
                       //       children: [
-                          
+
                       //         const SizedBox(height: 4),
                       //         Text(
                       //           l10n.givingImpactDescription,
@@ -405,7 +396,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
     );
   }
 
-  Widget _buildStatusBadge(String status) {
+  Widget _buildStatusBadge(String status, AppLocalizations l10n) {
     Color backgroundColor;
     Color textColor;
     String text;
@@ -414,25 +405,25 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
       case 'ACCEPTED':
         backgroundColor = const Color(0xFFE8F5E9);
         textColor = const Color(0xFF2E7D32);
-        text = 'مقبولة';
+        text = l10n.sponsorshipStatusAccepted;
         break;
 
       case 'PENDING':
         backgroundColor = const Color(0xFFFFF8E1);
         textColor = const Color(0xFFF57F17);
-        text = 'قيد الانتظار';
+        text = l10n.sponsorshipStatusPending;
         break;
 
       case 'CANCELLED':
         backgroundColor = const Color(0xFFFFEBEE);
         textColor = const Color(0xFFC62828);
-        text = 'ملغاة';
+        text = l10n.sponsorshipStatusCancelled;
         break;
 
       case 'REJECTED':
         backgroundColor = const Color(0xFFFFEBEE);
         textColor = const Color(0xFFC62828);
-        text = 'مرفوضة';
+        text = l10n.sponsorshipStatusRejected;
         break;
 
       default:
@@ -478,7 +469,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: Container(
@@ -493,9 +484,10 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
 
               const SizedBox(height: 20),
 
-              const Text(
-                'تصفية الكفالات',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context).filterSponsorships,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
                   color: Color(0xFF1A2E40),
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -504,7 +496,10 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
 
               const SizedBox(height: 16),
 
-              _buildFilterOption(title: 'جميع الكفالات', value: null),
+              _buildFilterOption(
+                title: AppLocalizations.of(context).allSponsorships,
+                value: null,
+              ),
 
               ...statuses.map((status) {
                 return _buildFilterOption(
@@ -539,22 +534,24 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
         ),
         child: Row(
           children: [
+            Expanded(
+              child: Text(
+                title,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  color: isSelected
+                      ? const Color(0xFF765A00)
+                      : const Color(0xFF1A2E40),
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ),
             Icon(
               isSelected
                   ? Icons.radio_button_checked
                   : Icons.radio_button_unchecked,
               color: isSelected ? const Color(0xFFD4AF37) : Colors.grey,
-            ),
-            const Spacer(),
-            Text(
-              title,
-              style: TextStyle(
-                color: isSelected
-                    ? const Color(0xFF765A00)
-                    : const Color(0xFF1A2E40),
-                fontSize: 16,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
             ),
           ],
         ),
@@ -563,18 +560,20 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
   }
 
   String _statusName(String status) {
+    final l10n = AppLocalizations.of(context);
+
     switch (status) {
       case 'ACCEPTED':
-        return 'مقبولة';
+        return l10n.sponsorshipStatusAccepted;
 
       case 'PENDING':
-        return 'قيد الانتظار';
+        return l10n.sponsorshipStatusPending;
 
       case 'CANCELLED':
-        return 'ملغاة';
+        return l10n.sponsorshipStatusCancelled;
 
       case 'REJECTED':
-        return 'مرفوضة';
+        return l10n.sponsorshipStatusRejected;
 
       default:
         return status;
