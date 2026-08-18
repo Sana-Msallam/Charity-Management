@@ -891,84 +891,97 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
     );
   }
 
-  Widget buildBottomNavigationBar(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+Widget buildBottomNavigationBar(BuildContext context) {
+  final l10n = AppLocalizations.of(context);
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFFFDFBF7),
-        border: Border(top: BorderSide(color: Color(0xFFEFEAE4), width: 1)),
+  return Container(
+    decoration: const BoxDecoration(
+      color: Color(0xFFFDFBF7),
+      border: Border(
+        top: BorderSide(
+          color: Color(0xFFEFEAE4),
+          width: 1,
+        ),
       ),
-      child: BottomNavigationBar(
-        backgroundColor: const Color(0xFFFDFBF7),
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF765A00),
-        unselectedItemColor: const Color(0xFF8A817C),
-        selectedFontSize: 11,
-        unselectedFontSize: 11,
-        currentIndex: 2,
-        onTap: (index) {
-          if (index == 0) {
-            scaffoldKey.currentState?.openDrawer();
-          }
-if (index == 1) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => BlocProvider(
-        create: (_) => DonorHistoryCubit()
-          ..getDonorHistory(),
-        child: const DonationsScreen(),
-      ),
+    ),
+    child: BottomNavigationBar(
+      backgroundColor: const Color(0xFFFDFBF7),
+      elevation: 0,
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: const Color(0xFF765A00),
+      unselectedItemColor: const Color(0xFF8A817C),
+      selectedFontSize: 11,
+      unselectedFontSize: 11,
+      currentIndex: 1,
+
+      onTap: (index) {
+        if (index == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                create: (_) => DonorHistoryCubit()
+                  ..getDonorHistory(),
+                child: const DonationsScreen(),
+              ),
+            ),
+          );
+        }
+
+        if (index == 3) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  const SponsorshipMainScreen(),
+            ),
+          );
+        }
+      },
+
+      items: [
+        BottomNavigationBarItem(
+          icon: const Icon(
+            Icons.volunteer_activism_outlined,
+          ),
+          label:  l10n.myDonations,
+        ),
+
+        BottomNavigationBarItem(
+          icon: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 6,
+            ),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5D166),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Icon(
+              Icons.home,
+              color: Color(0xFF765A00),
+            ),
+          ),
+          label: l10n.home,
+        ),
+
+        BottomNavigationBarItem(
+          icon: const Icon(
+            Icons.account_balance_wallet_outlined,
+          ),
+          label: l10n.wallet,
+        ),
+
+        BottomNavigationBarItem(
+          icon: const Icon(
+            Icons.favorite_border,
+          ),
+          label: l10n.sponsorships,
+        ),
+      ],
     ),
   );
 }
-          if (index == 4) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SponsorshipMainScreen(),
-              ),
-            );
-          }
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.menu),
-            label: l10n.menu,
-          ),
-
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.analytics_outlined),
-            label: l10n.impact,
-          ),
-
-          BottomNavigationBarItem(
-            icon: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5D166),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(Icons.home, color: Color(0xFF765A00)),
-            ),
-            label: l10n.home,
-          ),
-
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.account_balance_wallet_outlined),
-            label: l10n.wallet,
-          ),
-
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.favorite_border),
-            label: l10n.sponsorships,
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _SupportArea {

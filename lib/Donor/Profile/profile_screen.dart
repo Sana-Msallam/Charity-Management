@@ -325,7 +325,7 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 3),
 
                 Text(
-                  '${profile.walletBalance} ${l10n.syrianPound}',
+                  '${profile.walletBalance} \$',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -361,7 +361,7 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 3),
 
                 Text(
-                  '${profile.totalDonated} ${l10n.syrianPound}',
+'${profile.totalDonated} \$',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -420,24 +420,11 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(
-              child: _buildSmallInfoCard(
-                icon: Icons.wc_outlined,
-                title: l10n.gender,
-                value: profile.gender == 'MALE'
-                    ? l10n.male
-                    : profile.gender == 'FEMALE'
-                        ? l10n.female
-                        : l10n.unspecified,
-                color: softGreen,
-                iconColor: green,
-              ),
-            ),
+   
           ],
         ),
 
-        const SizedBox(height: 12),
-
+      
         _buildInfoCard(
           icon: Icons.phone_outlined,
           title: l10n.phoneNumber,
@@ -1089,7 +1076,7 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 8),
 
             Text(
-              l10n.tryAgainLater,
+              "",
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: grayText,

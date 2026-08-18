@@ -316,7 +316,7 @@ class _DonationsScreenState extends State<DonationsScreen> {
                 const SizedBox(height: 4),
 
                 Text(
-                  '${totalDonated.toStringAsFixed(0)} ${l10n.syrianPound}',
+                  '${totalDonated.toStringAsFixed(0)} \$',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 21,
@@ -480,7 +480,7 @@ Widget _buildErrorState(
           const SizedBox(height: 8),
 
           Text(
-            l10n.tryAgainLater,
+          "",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.onSurface.withOpacity(0.65),
@@ -671,7 +671,7 @@ class _DonationCard extends StatelessWidget {
                     CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '${operation.amount.toStringAsFixed(0)} ${AppLocalizations.of(context)!.syrianPound}',
+'${operation.amount.toStringAsFixed(0)} \$',
                     style: TextStyle(
                       color: config.color,
                       fontSize: 14,

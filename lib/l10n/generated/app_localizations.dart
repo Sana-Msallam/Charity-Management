@@ -998,12 +998,6 @@ abstract class AppLocalizations {
   /// **'All'**
   String get all;
 
-  /// No description provided for @tryAgainLater.
-  ///
-  /// In en, this message translates to:
-  /// **'We couldn\'t load your donation history. Please try again.'**
-  String get tryAgainLater;
-
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:

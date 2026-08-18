@@ -469,10 +469,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get all => 'الكل';
 
   @override
-  String get tryAgainLater =>
-      'تعذر تحميل سجل التبرعات حاليًا. يرجى المحاولة مرة أخرى.';
-
-  @override
   String get retry => 'إعادة المحاولة';
 
   @override

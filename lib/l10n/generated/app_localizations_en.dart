@@ -474,10 +474,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get all => 'All';
 
   @override
-  String get tryAgainLater =>
-      'We couldn\'t load your donation history. Please try again.';
-
-  @override
   String get retry => 'Retry';
 
   @override
