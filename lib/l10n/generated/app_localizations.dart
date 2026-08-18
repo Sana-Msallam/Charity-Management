@@ -980,6 +980,90 @@ abstract class AppLocalizations {
   /// **'Food'**
   String get food;
 
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'My Donations'**
+  String get title;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Donations'**
+  String get total;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @tryAgainLater.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t load your donation history. Please try again.'**
+  String get tryAgainLater;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @totalDonaited.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Donations'**
+  String get totalDonaited;
+
+  /// No description provided for @sponsorship.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship'**
+  String get sponsorship;
+
+  /// No description provided for @walletTopUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Top-up'**
+  String get walletTopUp;
+
+  /// No description provided for @caseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Case'**
+  String get caseLabel;
+
+  /// No description provided for @walletBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Balance'**
+  String get walletBalance;
+
+  /// No description provided for @operation.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get operation;
+
+  /// No description provided for @empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions'**
+  String get empty;
+
+  /// No description provided for @sponsor.
+  ///
+  /// In en, this message translates to:
+  /// **'sponsor'**
+  String get sponsor;
+
+  /// No description provided for @loadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load donation history'**
+  String get loadError;
+
   /// No description provided for @housing.
   ///
   /// In en, this message translates to:

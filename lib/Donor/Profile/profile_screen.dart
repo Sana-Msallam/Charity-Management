@@ -1,4 +1,3 @@
-
 import 'package:charity_management/Donor/Profile/Cubit/profile_cubit.dart';
 import 'package:charity_management/Donor/Profile/Cubit/profile_state.dart';
 import 'package:charity_management/features/language/cubit/language_cubit.dart';
@@ -24,13 +23,12 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Directionality(
       textDirection: Directionality.of(context),
       child: Scaffold(
         backgroundColor: background,
-
         appBar: AppBar(
           backgroundColor: background,
           elevation: 0,
@@ -48,7 +46,6 @@ class ProfileScreen extends StatelessWidget {
             color: primary,
           ),
         ),
-
         body: BlocBuilder<ProfileCubit, ProfileState>(
           builder: (context, state) {
             if (state is ProfileLoadingState) {
@@ -60,89 +57,95 @@ class ProfileScreen extends StatelessWidget {
             }
 
             if (state is ProfileErrorState) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    state.errorMessage,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: darkText,
-                      fontFamily: 'IBM Plex Sans Arabic',
-                    ),
-                  ),
-                ),
+              return _buildErrorState(
+                context,
+                l10n,
               );
             }
 
             if (state is ProfileSuccessState) {
-              final profile = state.profile;
-
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.only(bottom: 30),
-                child: Column(
-                  children: [
-                    _buildProfileHeader(
-                      profile,
-                      l10n,
-                    ),
-
-                    const SizedBox(height: 26),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
-                      child: Column(
-                        children: [
-                          _buildSectionTitle(
-                            l10n.personalInformation,
-                            Icons.person_outline_rounded,
-                          ),
-
-                          const SizedBox(height: 12),
-
-                          _buildInfoGrid(
-                            profile,
-                            l10n,
-                          ),
-
-                          const SizedBox(height: 25),
-
-                          _buildSectionTitle(
-                            l10n.myAccount,
-                            Icons.dashboard_outlined,
-                          ),
-
-                          const SizedBox(height: 12),
-
-                          _buildDonationsButton(l10n),
-
-                          const SizedBox(height: 12),
-
-                          _buildSettingsButton(
-                            context,
-                            l10n,
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          _buildLogoutButton(
-                            context,
-                            l10n,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              return _buildContent(
+                context,
+                state.profile,
+                l10n,
               );
             }
 
-            return const SizedBox();
+            return const SizedBox.shrink();
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    ProfileModel profile,
+    AppLocalizations l10n,
+  ) {
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(bottom: 30),
+      child: Column(
+        children: [
+          _buildProfileHeader(
+            profile,
+            l10n,
+          ),
+
+          const SizedBox(height: 22),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                _buildWalletCard(
+                  profile,
+                  l10n,
+                ),
+
+                const SizedBox(height: 25),
+
+                _buildSectionTitle(
+                  l10n.personalInformation,
+                  Icons.person_outline_rounded,
+                ),
+
+                const SizedBox(height: 12),
+
+                _buildInfoGrid(
+                  profile,
+                  l10n,
+                ),
+
+                const SizedBox(height: 25),
+
+                _buildSectionTitle(
+                  l10n.myAccount,
+                  Icons.dashboard_outlined,
+                ),
+
+                const SizedBox(height: 12),
+
+                _buildDonationsButton(l10n),
+
+                const SizedBox(height: 12),
+
+                _buildSettingsButton(
+                  context,
+                  l10n,
+                ),
+
+                const SizedBox(height: 20),
+
+                _buildLogoutButton(
+                  context,
+                  l10n,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -194,20 +197,7 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             child: ClipOval(
-              child: profile.personalPhoto != null &&
-                      profile.personalPhoto!.isNotEmpty
-                  ? Image.network(
-                      'http://192.168.1.14:3000/${profile.personalPhoto}',
-                      fit: BoxFit.cover,
-                      errorBuilder: (
-                        context,
-                        error,
-                        stackTrace,
-                      ) {
-                        return _defaultProfileIcon();
-                      },
-                    )
-                  : _defaultProfileIcon(),
+              child: _defaultProfileIcon(),
             ),
           ),
 
@@ -245,16 +235,18 @@ class ProfileScreen extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.volunteer_activism_rounded,
+                Icon(
+                  profile.isSponsor
+                      ? Icons.child_care_rounded
+                      : Icons.volunteer_activism_rounded,
                   size: 16,
                   color: Colors.white,
                 ),
-
                 const SizedBox(width: 6),
-
                 Text(
-                  l10n.donor,
+                  profile.isSponsor
+                      ? l10n.sponsor
+                      : l10n.donor,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -277,6 +269,110 @@ class ProfileScreen extends StatelessWidget {
         Icons.person_rounded,
         size: 65,
         color: primary,
+      ),
+    );
+  }
+
+  Widget _buildWalletCard(
+    ProfileModel profile,
+    AppLocalizations l10n,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: primary,
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: primary.withOpacity(0.15),
+            blurRadius: 15,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.14),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: const Icon(
+              Icons.account_balance_wallet_rounded,
+              color: Colors.white,
+              size: 23,
+            ),
+          ),
+
+          const SizedBox(width: 13),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.walletBalance,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 11,
+                    fontFamily: 'IBM Plex Sans Arabic',
+                  ),
+                ),
+
+                const SizedBox(height: 3),
+
+                Text(
+                  '${profile.walletBalance} ${l10n.syrianPound}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'IBM Plex Sans Arabic',
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+            width: 1,
+            height: 42,
+            color: Colors.white.withOpacity(0.18),
+          ),
+
+          const SizedBox(width: 16),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.totalDonaited,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 11,
+                    fontFamily: 'IBM Plex Sans Arabic',
+                  ),
+                ),
+
+                const SizedBox(height: 3),
+
+                Text(
+                  '${profile.totalDonated} ${l10n.syrianPound}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'IBM Plex Sans Arabic',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -326,23 +422,13 @@ class ProfileScreen extends StatelessWidget {
           children: [
             Expanded(
               child: _buildSmallInfoCard(
-                icon: Icons.cake_outlined,
-                title: l10n.age,
-                value: l10n.ageWithYears(profile.age),
-                color: const Color(0xFFFFEED1),
-                iconColor: const Color(0xFFB56B00),
-              ),
-            ),
-
-            const SizedBox(width: 12),
-
-            Expanded(
-              child: _buildSmallInfoCard(
                 icon: Icons.wc_outlined,
                 title: l10n.gender,
                 value: profile.gender == 'MALE'
                     ? l10n.male
-                    : l10n.female,
+                    : profile.gender == 'FEMALE'
+                        ? l10n.female
+                        : l10n.unspecified,
                 color: softGreen,
                 iconColor: green,
               ),
@@ -355,45 +441,19 @@ class ProfileScreen extends StatelessWidget {
         _buildInfoCard(
           icon: Icons.phone_outlined,
           title: l10n.phoneNumber,
-          value: profile.number,
+          value: '${profile.countryCode} ${profile.number}',
           color: const Color(0xFFEAF1FF),
           iconColor: const Color(0xFF4567A8),
-          l10n: l10n,
         ),
 
-        _buildInfoCard(
-          icon: Icons.favorite_border_rounded,
-          title: l10n.socialStatus,
-          value: _getSocialStatus(
-            profile.socialStatus,
-            l10n,
-          ),
-          color: const Color(0xFFFFE9ED),
-          iconColor: const Color(0xFFB84D64),
-          l10n: l10n,
-        ),
+        const SizedBox(height: 12),
 
         _buildInfoCard(
-          icon: Icons.location_on_outlined,
-          title: l10n.address,
-          value: _formatAddress(
-            profile.address,
-            l10n,
-          ),
-          color: const Color(0xFFE8F4EF),
-          iconColor: const Color(0xFF39785C),
-          l10n: l10n,
-        ),
-
-        _buildInfoCard(
-          icon: Icons.work_outline_rounded,
-          title: l10n.workStatus,
-          value: profile.isUnemployed
-              ? l10n.unemployedStatus
-              : l10n.employedStatus,
-          color: const Color(0xFFF0E9FF),
-          iconColor: const Color(0xFF7453A6),
-          l10n: l10n,
+          icon: Icons.email_outlined,
+          title: l10n.email,
+          value: profile.email,
+          color: const Color(0xFFF3EAFE),
+          iconColor: const Color(0xFF7950A8),
         ),
       ],
     );
@@ -422,8 +482,7 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
           Container(
             width: 40,
@@ -439,29 +498,32 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(width: 12),
 
-          Text(
-            title,
-            style: const TextStyle(
-              color: grayText,
-              fontSize: 11,
-              fontFamily: 'IBM Plex Sans Arabic',
-            ),
-          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: grayText,
+                  fontSize: 11,
+                  fontFamily: 'IBM Plex Sans Arabic',
+                ),
+              ),
 
-          const SizedBox(height: 3),
+              const SizedBox(height: 3),
 
-          Text(
-            value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: darkText,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'IBM Plex Sans Arabic',
-            ),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: darkText,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'IBM Plex Sans Arabic',
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -474,11 +536,9 @@ class ProfileScreen extends StatelessWidget {
     required String value,
     required Color color,
     required Color iconColor,
-    required AppLocalizations l10n,
   }) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(top: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -528,7 +588,9 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 4),
 
                 Text(
-                  value.isEmpty ? l10n.unspecified : value,
+                  value.isEmpty
+                      ? 'غير محدد'
+                      : value,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -805,8 +867,9 @@ class ProfileScreen extends StatelessWidget {
                   title: l10n.darkMode,
                   subtitle: l10n.changeAppAppearance,
                   trailing: Switch(
-                    value: Theme.of(context).brightness ==
-                        Brightness.dark,
+                    value:
+                        Theme.of(context).brightness ==
+                            Brightness.dark,
                     activeColor: primary,
                     onChanged: (value) {
                       // TODO: Theme
@@ -927,7 +990,6 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                   TextButton(
                     onPressed: isLoading
                         ? null
@@ -987,51 +1049,80 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  String _getSocialStatus(
-    String status,
+  Widget _buildErrorState(
+    BuildContext context,
     AppLocalizations l10n,
   ) {
-    switch (status.toUpperCase()) {
-      case 'SINGLE':
-        return l10n.single;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: softGold,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Icon(
+                Icons.person_off_outlined,
+                color: primary,
+                size: 30,
+              ),
+            ),
 
-      case 'MARRIED':
-        return l10n.married;
+            const SizedBox(height: 16),
 
-      case 'DIVORCED':
-        return l10n.divorced;
+            Text(
+             "حدث خطأ",
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: darkText,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'IBM Plex Sans Arabic',
+              ),
+            ),
 
-      case 'WIDOWED':
-        return l10n.widowed;
+            const SizedBox(height: 8),
 
-      default:
-        return status.isEmpty
-            ? l10n.unspecified
-            : status;
-    }
-  }
+            Text(
+              l10n.tryAgainLater,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: grayText,
+                fontSize: 13,
+                fontFamily: 'IBM Plex Sans Arabic',
+              ),
+            ),
 
-  String _formatAddress(
-    Map<String, dynamic> address,
-    AppLocalizations l10n,
-  ) {
-    if (address.isEmpty) {
-      return l10n.unspecified;
-    }
+            const SizedBox(height: 18),
 
-    final parts = <String>[];
-
-    for (final entry in address.entries) {
-      final value = entry.value;
-
-      if (value != null &&
-          value.toString().trim().isNotEmpty) {
-        parts.add(value.toString());
-      }
-    }
-
-    return parts.isEmpty
-        ? l10n.unspecified
-        : parts.join('، ');
+            OutlinedButton(
+              onPressed: () {
+                context.read<ProfileCubit>().fetchProfile();
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: primary,
+                side: const BorderSide(
+                  color: primary,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+              child: Text(
+                l10n.retry,
+                style: const TextStyle(
+                  fontFamily: 'IBM Plex Sans Arabic',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

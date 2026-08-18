@@ -10,4 +10,6 @@ class AppColors {
   static const Color surface = Color(0xFFFFF8F1);
   static const Color brandGray = Color(0xFF7C766C);
   static const Color onSurface = Color(0xFF1F1B14);
+
+  static const Color border = Color(0xFFE5DED2);
 }

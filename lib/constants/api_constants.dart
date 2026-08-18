@@ -1,7 +1,8 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'http://192.168.68.62:3000';
+  // static const String baseUrl = 'http://192.168.1.100:3000';
+static const String baseUrl = 'http://10.0.2.2:3000';
 
   static const String login = '/auth/login/client';
 
@@ -16,7 +17,7 @@ class ApiConstants {
   static const String healthRequest = '/requests/health';
 
   static const String profile = '/api/profile';
-
+static const String donorHistory = '/api/donors/me/history';
   static const String aidRequests = '/donor/public/aid-requests';
   static const String sponsorships = '/sponsorships';
   static const String cancelSponsorship = '/sponsorships';

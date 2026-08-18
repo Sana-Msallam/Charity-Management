@@ -460,6 +460,49 @@ class AppLocalizationsAr extends AppLocalizations {
   String get food => 'الغذاء';
 
   @override
+  String get title => 'تبرعاتي';
+
+  @override
+  String get total => 'إجمالي التبرعات';
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get tryAgainLater =>
+      'تعذر تحميل سجل التبرعات حاليًا. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
+  String get totalDonaited => 'إجمالي التبرعات';
+
+  @override
+  String get sponsorship => 'كفالة';
+
+  @override
+  String get walletTopUp => 'شحن المحفظة';
+
+  @override
+  String get caseLabel => 'حالة';
+
+  @override
+  String get walletBalance => 'رصيد المحفظة';
+
+  @override
+  String get operation => 'معاملة';
+
+  @override
+  String get empty => 'لا توجد معاملات';
+
+  @override
+  String get sponsor => 'كافل';
+
+  @override
+  String get loadError => 'حدث خطأ أثناء جلب سجل التبرعات';
+
+  @override
   String get housing => 'السكن';
 
   @override

@@ -1,37 +1,34 @@
 class ProfileModel {
   final String fullName;
-  final int age;
-  final String socialStatus;
-  final Map<String, dynamic> address;
+  final String email;
   final String number;
+  final String countryCode;
   final String gender;
-  final bool isUnemployed;
-  final String? personalPhoto;
+  final bool isSponsor;
+  final int totalDonated;
+  final int walletBalance;
 
   ProfileModel({
     required this.fullName,
-    required this.age,
-    required this.socialStatus,
-    required this.address,
+    required this.email,
     required this.number,
+    required this.countryCode,
     required this.gender,
-    required this.isUnemployed,
-    this.personalPhoto,
+    required this.isSponsor,
+    required this.totalDonated,
+    required this.walletBalance,
   });
 
-
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
-
     return ProfileModel(
       fullName: json['fullName'] ?? '',
-      age: json['age'] ?? 0,
-      socialStatus: json['socialStatus'] ?? '',
-      address: json['address'] ?? {},
+      email: json['email'] ?? '',
       number: json['number'] ?? '',
+      countryCode: json['countryCode'] ?? '',
       gender: json['gender'] ?? '',
-      isUnemployed: json['isUnemployed'] ?? false,
-      personalPhoto: json['personalPhoto'],
+      isSponsor: json['isSponsor'] ?? false,
+      totalDonated: json['totalDonated'] ?? 0,
+      walletBalance: json['walletBalance'] ?? 0,
     );
-
   }
 }
