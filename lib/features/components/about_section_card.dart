@@ -25,6 +25,10 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
 
   int _currentPage = 0;
 
+  // =====================================================
+  // SLIDES
+  // =====================================================
+
   List<AboutSlide> _slides(
     BuildContext context,
   ) {
@@ -32,23 +36,23 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
 
     return [
       AboutSlide(
-        title: 'جمعية الأثر... لأن لكل عطاء أثراً',
+        title: l10n.aboutAssociationTitle,
         description: l10n.aboutAssociationDescription,
         imagePath: 'assets/img/about_1.jpg',
-        imageBadge: 'معاً نصنع أثراً',
+        imageBadge: l10n.togetherWeMakeImpact,
       ),
       AboutSlide(
         title: l10n.ourVision,
         description: l10n.ourVisionDescription,
         imagePath: 'assets/img/about_2.jpg',
-        imageBadge: 'أمل يتجدد',
+        imageBadge: l10n.renewedHope,
       ),
       AboutSlide(
-        title: l10n.ourMission,
-        description: l10n.ourMissionDescription,
-        imagePath: 'assets/img/about_3.jpg',
-        imageBadge: 'العطاء يصنع الفرق',
-      ),
+  title: l10n.ourMission,
+  description: l10n.ourMissionDescription,
+  imagePath: 'assets/img/about_3.jpg',
+  imageBadge: l10n.givingMakesDifference,
+),
     ];
   }
 
@@ -58,6 +62,10 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
 
     _startAutoSlide();
   }
+
+  // =====================================================
+  // AUTO SLIDE
+  // =====================================================
 
   void _startAutoSlide() {
     _timer?.cancel();
@@ -83,6 +91,10 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
     );
   }
 
+  // =====================================================
+  // GO TO PAGE
+  // =====================================================
+
   void _goToPage(
     int index,
   ) {
@@ -106,11 +118,16 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
     super.dispose();
   }
 
+  // =====================================================
+  // BUILD
+  // =====================================================
+
   @override
   Widget build(
     BuildContext context,
   ) {
-    final List<AboutSlide> slides = _slides(context);
+    final List<AboutSlide> slides =
+        _slides(context);
 
     return Column(
       children: [
@@ -119,7 +136,8 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
           child: PageView.builder(
             controller: _pageController,
             itemCount: slides.length,
-            physics: const BouncingScrollPhysics(),
+            physics:
+                const BouncingScrollPhysics(),
             onPageChanged: (
               int index,
             ) {
@@ -134,7 +152,8 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
               index,
             ) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(
+                padding:
+                    const EdgeInsets.fromLTRB(
                   4,
                   4,
                   4,
@@ -150,9 +169,13 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
 
         const SizedBox(height: 4),
 
-        // مؤشرات السلايدات
+        // =================================================
+        // SLIDE INDICATORS
+        // =================================================
+
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment:
+              MainAxisAlignment.center,
           children: List.generate(
             slides.length,
             (
@@ -170,7 +193,8 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
                     milliseconds: 300,
                   ),
                   curve: Curves.easeInOut,
-                  margin: const EdgeInsets.symmetric(
+                  margin:
+                      const EdgeInsets.symmetric(
                     horizontal: 4,
                   ),
                   width: isActive ? 26 : 8,
@@ -178,10 +202,12 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
                   decoration: BoxDecoration(
                     color: isActive
                         ? AppColors.primary
-                        : AppColors.primary.withOpacity(
+                        : AppColors.primary
+                            .withOpacity(
                             0.12,
                           ),
-                    borderRadius: BorderRadius.circular(
+                    borderRadius:
+                        BorderRadius.circular(
                       20,
                     ),
                   ),
@@ -238,7 +264,8 @@ class _AboutSlideCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
         children: [
           // ============================================
           // العنوان
@@ -255,7 +282,8 @@ class _AboutSlideCard extends StatelessWidget {
               fontWeight: FontWeight.w800,
               height: 1.35,
               letterSpacing: -0.25,
-              fontFamily: AppTextStyles.fontFamily,
+              fontFamily:
+                  AppTextStyles.fontFamily,
             ),
           ),
 
@@ -270,7 +298,8 @@ class _AboutSlideCard extends StatelessWidget {
             height: 3,
             decoration: BoxDecoration(
               color: AppColors.primary,
-              borderRadius: BorderRadius.circular(
+              borderRadius:
+                  BorderRadius.circular(
                 20,
               ),
             ),
@@ -288,13 +317,15 @@ class _AboutSlideCard extends StatelessWidget {
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: AppColors.onSurface.withOpacity(
+              color: AppColors.onSurface
+                  .withOpacity(
                 0.66,
               ),
               fontSize: 14,
               fontWeight: FontWeight.w400,
               height: 1.8,
-              fontFamily: AppTextStyles.fontFamily,
+              fontFamily:
+                  AppTextStyles.fontFamily,
             ),
           ),
 
@@ -308,7 +339,8 @@ class _AboutSlideCard extends StatelessWidget {
             child: Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(
+                  borderRadius:
+                      BorderRadius.circular(
                     22,
                   ),
                   child: SizedBox(
@@ -323,13 +355,17 @@ class _AboutSlideCard extends StatelessWidget {
                         stackTrace,
                       ) {
                         return Container(
-                          color: AppColors.primary.withOpacity(
+                          color: AppColors.primary
+                              .withOpacity(
                             0.06,
                           ),
                           child: Center(
                             child: Icon(
-                              Icons.volunteer_activism_outlined,
-                              color: AppColors.primary.withOpacity(
+                              Icons
+                                  .volunteer_activism_outlined,
+                              color: AppColors
+                                  .primary
+                                  .withOpacity(
                                 0.45,
                               ),
                               size: 54,
@@ -348,12 +384,15 @@ class _AboutSlideCard extends StatelessWidget {
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
+                      borderRadius:
+                          BorderRadius.circular(
                         22,
                       ),
                       gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        begin:
+                            Alignment.topCenter,
+                        end:
+                            Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
                           Colors.black.withOpacity(
@@ -367,26 +406,32 @@ class _AboutSlideCard extends StatelessWidget {
 
                 // ========================================
                 // العبارة الصغيرة فوق الصورة
+                // PositionedDirectional يتغير تلقائياً
+                // حسب RTL / LTR
                 // ========================================
 
                 PositionedDirectional(
                   start: 12,
                   bottom: 12,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
+                    padding:
+                        const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(
+                      color:
+                          Colors.white.withOpacity(
                         0.94,
                       ),
-                      borderRadius: BorderRadius.circular(
+                      borderRadius:
+                          BorderRadius.circular(
                         14,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(
+                          color: Colors.black
+                              .withOpacity(
                             0.08,
                           ),
                           blurRadius: 10,
@@ -398,11 +443,14 @@ class _AboutSlideCard extends StatelessWidget {
                       ],
                     ),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize:
+                          MainAxisSize.min,
                       children: [
                         const Icon(
-                          Icons.favorite_border_rounded,
-                          color: AppColors.primary,
+                          Icons
+                              .favorite_border_rounded,
+                          color:
+                              AppColors.primary,
                           size: 17,
                         ),
 
@@ -410,12 +458,16 @@ class _AboutSlideCard extends StatelessWidget {
 
                         Text(
                           slide.imageBadge,
-                          style: const TextStyle(
-                            color: AppColors.onSurface,
+                          style:
+                              const TextStyle(
+                            color: AppColors
+                                .onSurface,
                             fontSize: 11,
-                            fontWeight: FontWeight.w600,
+                            fontWeight:
+                                FontWeight.w600,
                             fontFamily:
-                                AppTextStyles.fontFamily,
+                                AppTextStyles
+                                    .fontFamily,
                           ),
                         ),
                       ],
@@ -432,7 +484,7 @@ class _AboutSlideCard extends StatelessWidget {
 }
 
 // =====================================================
-// Model
+// MODEL
 // =====================================================
 
 class AboutSlide {

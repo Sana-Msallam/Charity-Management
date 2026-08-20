@@ -3,6 +3,7 @@ import 'package:charity_management/features/Beneficiary/Help_request/health_requ
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/cubit/health_state.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/health_aid_type.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/health_request/model/health_request_model.dart';
+import 'package:charity_management/features/Beneficiary/request_tracking/model/request_details_model.dart';
 import 'package:charity_management/features/components/custom_attachment_uploader.dart';
 import 'package:charity_management/features/components/custom_step_Indicator.dart';
 import 'package:charity_management/features/components/request_result_dialog.dart';
@@ -20,20 +21,35 @@ class HealthRequestPage extends StatefulWidget {
   const HealthRequestPage({
     super.key,
     required this.applicantInfo,
+    this.requestDetails,
   });
 
   final ApplicantInfoModel applicantInfo;
+  final RequestDetailsModel? requestDetails;
+
+  bool get isEditMode => requestDetails != null;
 
   @override
-  State<HealthRequestPage> createState() => _HealthRequestPageState();
+  State<HealthRequestPage> createState() {
+    return _HealthRequestPageState();
+  }
 }
 
 class _HealthRequestPageState extends State<HealthRequestPage> {
-  final TextEditingController _detailsArController = TextEditingController();
-  final TextEditingController _detailsEnController = TextEditingController();
-  final TextEditingController _costController = TextEditingController();
+  final TextEditingController _detailsArController =
+      TextEditingController();
 
-  final List<PlatformFile> _attachments = [];
+  final TextEditingController _detailsEnController =
+      TextEditingController();
+
+  final TextEditingController _costController =
+      TextEditingController();
+
+  final List<PlatformFile> _attachments =
+      <PlatformFile>[];
+
+  final List<String> _existingMediaUrls =
+      <String>[];
 
   HealthAidType? _selectedMedicalType;
 
@@ -44,17 +60,128 @@ class _HealthRequestPageState extends State<HealthRequestPage> {
     debugPrint('======================================');
     debugPrint('HealthRequestPage opened');
     debugPrint('Applicant data received:');
-    debugPrint('First name: ${widget.applicantInfo.firstName}');
-    debugPrint('Father name: ${widget.applicantInfo.fatherName}');
-    debugPrint('Last name: ${widget.applicantInfo.lastName}');
-    debugPrint('Age: ${widget.applicantInfo.age}');
-    debugPrint('Gender: ${widget.applicantInfo.gender}');
-    debugPrint('Social status: ${widget.applicantInfo.socialStatus}');
-    debugPrint('Phone number: ${widget.applicantInfo.phoneNumber}');
-    debugPrint('Address AR: ${widget.applicantInfo.addressAr}');
-    debugPrint('Address EN: ${widget.applicantInfo.addressEn}');
-    debugPrint('Is unemployed: ${widget.applicantInfo.isUnemployed}');
+    debugPrint(
+      'First name: ${widget.applicantInfo.firstName}',
+    );
+    debugPrint(
+      'Father name: ${widget.applicantInfo.fatherName}',
+    );
+    debugPrint(
+      'Last name: ${widget.applicantInfo.lastName}',
+    );
+    debugPrint(
+      'Age: ${widget.applicantInfo.age}',
+    );
+    debugPrint(
+      'Gender: ${widget.applicantInfo.gender}',
+    );
+    debugPrint(
+      'Social status: ${widget.applicantInfo.socialStatus}',
+    );
+    debugPrint(
+      'Phone number: ${widget.applicantInfo.phoneNumber}',
+    );
+    debugPrint(
+      'Address AR: ${widget.applicantInfo.addressAr}',
+    );
+    debugPrint(
+      'Address EN: ${widget.applicantInfo.addressEn}',
+    );
+    debugPrint(
+      'Is unemployed: ${widget.applicantInfo.isUnemployed}',
+    );
+
+    if (widget.isEditMode) {
+      _fillExistingHealthData();
+    }
+
     debugPrint('======================================');
+  }
+
+  void _fillExistingHealthData() {
+    final RequestDetailsModel? request =
+        widget.requestDetails;
+
+    if (request == null) {
+      return;
+    }
+
+    debugPrint('======================================');
+    debugPrint('FILL EXISTING HEALTH DATA');
+    debugPrint('Request id: ${request.id}');
+    debugPrint('Category id: ${request.categoryId}');
+
+    if (request.categoryId != 1) {
+      debugPrint(
+        'Unexpected category id for health edit: '
+        '${request.categoryId}',
+      );
+    }
+
+    final String? typeAidApiValue =
+        request.getAidDetailStringAr(
+      'typeAid',
+    );
+
+    if (typeAidApiValue != null) {
+      final String normalizedValue =
+          typeAidApiValue
+              .trim()
+              .toUpperCase();
+
+      for (final HealthAidType type
+          in HealthAidType.values) {
+        if (type.apiValue ==
+            normalizedValue) {
+          _selectedMedicalType = type;
+          break;
+        }
+      }
+    }
+
+    _detailsArController.text =
+        request.detailsAr ?? '';
+
+    _detailsEnController.text =
+        request.detailsEn ?? '';
+
+    _costController.text =
+        _formatCost(
+      request.cost,
+    );
+
+    _existingMediaUrls
+      ..clear()
+      ..addAll(
+        request.getAidDetailStringList(
+          'mediaUrls',
+        ),
+      );
+
+    debugPrint(
+      'Health aid type: '
+      '${_selectedMedicalType?.apiValue}',
+    );
+
+    debugPrint(
+      'Existing media: '
+      '$_existingMediaUrls',
+    );
+
+    debugPrint('======================================');
+  }
+
+  String _formatCost(
+    double value,
+  ) {
+    if (value ==
+        value.truncateToDouble()) {
+      return value
+          .toInt()
+          .toString();
+    }
+
+    return value.toString();
   }
 
   @override
@@ -63,20 +190,43 @@ class _HealthRequestPageState extends State<HealthRequestPage> {
     _detailsEnController.dispose();
     _costController.dispose();
 
-    debugPrint('HealthRequestPage disposed');
+    debugPrint(
+      'HealthRequestPage disposed',
+    );
 
     super.dispose();
   }
 
+  String _healthAidTypeLabel(
+    HealthAidType type,
+    AppLocalizations l10n,
+  ) {
+    switch (type) {
+      case HealthAidType.medicineInsurance:
+        return l10n.medicineInsurance;
+
+      case HealthAidType.surgery:
+        return l10n.surgery;
+
+      case HealthAidType.medicalDevices:
+        return l10n.medicalDevices;
+    }
+  }
+
   Future<void> _pickAttachments() async {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
     debugPrint('======================================');
     debugPrint('Attachment picker opened');
 
     try {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final FilePickerResult? result =
+          await FilePicker.platform.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
-        allowedExtensions: const [
+        allowedExtensions:
+            const <String>[
           'jpg',
           'jpeg',
           'png',
@@ -86,249 +236,337 @@ class _HealthRequestPageState extends State<HealthRequestPage> {
       );
 
       if (result == null) {
-        debugPrint('Attachment selection cancelled');
-        debugPrint('======================================');
+        debugPrint(
+          'Attachment selection cancelled',
+        );
         return;
       }
 
       if (!mounted) {
-        debugPrint('Widget is not mounted after file selection');
         return;
       }
 
-      final List<PlatformFile> selectedFiles = result.files.where(
-        (PlatformFile newFile) {
-          final bool alreadyExists = _attachments.any(
-            (PlatformFile oldFile) {
-              return oldFile.name == newFile.name &&
-                  oldFile.size == newFile.size;
+      final List<PlatformFile>
+          selectedFiles =
+          result.files.where(
+        (
+          PlatformFile newFile,
+        ) {
+          return !_attachments.any(
+            (
+              PlatformFile oldFile,
+            ) {
+              return oldFile.name ==
+                      newFile.name &&
+                  oldFile.size ==
+                      newFile.size;
             },
           );
-
-          return !alreadyExists;
         },
       ).toList();
 
       if (selectedFiles.isEmpty) {
-        _showValidationMessage('الملفات المحددة مضافة مسبقاً');
+        _showValidationMessage(
+          l10n.duplicateFiles,
+        );
         return;
       }
 
-      final List<PlatformFile> validFiles = [];
+      final List<PlatformFile> validFiles =
+          <PlatformFile>[];
 
-      for (final PlatformFile file in selectedFiles) {
-        debugPrint('Selected file: ${file.name}');
-        debugPrint('Path: ${file.path}');
-        debugPrint('Size: ${file.size}');
-        debugPrint('Extension: ${file.extension}');
-        debugPrint('Bytes available: ${file.bytes != null}');
-
+      for (final PlatformFile file
+          in selectedFiles) {
         if (kIsWeb) {
-          if (file.bytes == null || file.bytes!.isEmpty) {
-            debugPrint('Web file bytes missing: ${file.name}');
+          if (file.bytes == null ||
+              file.bytes!.isEmpty) {
             continue;
           }
         } else {
-          if (file.path == null || file.path!.trim().isEmpty) {
-            debugPrint('Mobile file path missing: ${file.name}');
+          if (file.path == null ||
+              file.path!
+                  .trim()
+                  .isEmpty) {
             continue;
           }
         }
 
-        validFiles.add(file);
+        validFiles.add(
+          file,
+        );
       }
 
       if (validFiles.isEmpty) {
-        _showValidationMessage('تعذر الوصول إلى الملفات المحددة');
+        _showValidationMessage(
+          l10n.filesAccessFailed,
+        );
         return;
       }
 
       setState(() {
-        _attachments.addAll(validFiles);
+        _attachments.addAll(
+          validFiles,
+        );
       });
-
-      debugPrint('Files added: ${validFiles.length}');
-      debugPrint('Total attachments: ${_attachments.length}');
-      debugPrint('======================================');
     } catch (error, stackTrace) {
-      debugPrint('Attachment picker error');
-      debugPrint('Error: $error');
-      debugPrint('Stack trace: $stackTrace');
-      debugPrint('======================================');
+      debugPrint(
+        'Attachment picker error: $error',
+      );
+
+      debugPrint(
+        'Stack trace: $stackTrace',
+      );
 
       if (mounted) {
         _showValidationMessage(
-          'تعذر اختيار الملفات، يرجى المحاولة مجدداً',
+          l10n.fileSelectionFailed,
         );
       }
     }
   }
 
-  void _removeAttachment(int index) {
-    if (index < 0 || index >= _attachments.length) {
-      debugPrint('Invalid attachment index: $index');
+  void _removeAttachment(
+    int index,
+  ) {
+    if (index < 0 ||
+        index >= _attachments.length) {
       return;
     }
 
-    final PlatformFile removedFile = _attachments[index];
+    _attachments.removeAt(
+      index,
+    );
 
-    setState(() {
-      _attachments.removeAt(index);
-    });
-
-    debugPrint('Attachment removed: ${removedFile.name}');
-    debugPrint('Remaining attachments: ${_attachments.length}');
+    setState(() {});
   }
 
   void _submit() {
-    debugPrint('======================================');
-    debugPrint('HealthRequestPage: Submit clicked');
+    final AppLocalizations localizations =
+        AppLocalizations.of(context);
 
     FocusScope.of(context).unfocus();
 
-    final String detailsAr = _detailsArController.text.trim();
-    final String detailsEn = _detailsEnController.text.trim();
-    final String costText = _costController.text.trim();
+    final String detailsAr =
+        _detailsArController.text.trim();
 
-    final double? cost = double.tryParse(
-      costText.replaceAll(',', '.'),
-    );
+    final String detailsEn =
+        _detailsEnController.text.trim();
 
-    debugPrint(
-      'Selected medical type API value: '
-      '${_selectedMedicalType?.apiValue}',
+    final String costText =
+        _costController.text.trim();
+
+    final double? cost =
+        double.tryParse(
+      costText.replaceAll(
+        ',',
+        '.',
+      ),
     );
-    debugPrint('Arabic details length: ${detailsAr.length}');
-    debugPrint('English details length: ${detailsEn.length}');
-    debugPrint('Cost: $cost');
-    debugPrint('Attachments count: ${_attachments.length}');
 
     if (_selectedMedicalType == null) {
       _showValidationMessage(
-        'يرجى اختيار نوع المساعدة الطبية',
+        localizations.medicalAidTypeRequired,
       );
       return;
     }
 
-    final String? arabicDetailsError = _validateArabicDetails(
+    final String? arabicDetailsError =
+        _validateArabicDetails(
       detailsAr,
     );
 
     if (arabicDetailsError != null) {
-      _showValidationMessage(arabicDetailsError);
+      _showValidationMessage(
+        arabicDetailsError,
+      );
       return;
     }
 
-    final String? englishDetailsError = _validateEnglishDetails(
+    final String? englishDetailsError =
+        _validateEnglishDetails(
       detailsEn,
     );
 
     if (englishDetailsError != null) {
-      _showValidationMessage(englishDetailsError);
-      return;
-    }
-
-    if (cost == null || cost <= 0) {
       _showValidationMessage(
-        'يرجى إدخال تكلفة صحيحة',
+        englishDetailsError,
       );
       return;
     }
 
-    if (_attachments.isEmpty) {
+    if (cost == null ||
+        cost <= 0) {
       _showValidationMessage(
-        'يرجى إرفاق تقرير أو وصفة طبية واحدة على الأقل',
+        localizations.validCostRequired,
       );
       return;
     }
 
-    final HealthRequestModel request = HealthRequestModel(
-      applicantInfo: widget.applicantInfo,
-      typeAid: _selectedMedicalType!,
-      detailsAr: detailsAr,
-      detailsEn: detailsEn,
-      cost: cost,
-      media: List<PlatformFile>.unmodifiable(
+    final bool hasExistingMedia =
+        _existingMediaUrls.isNotEmpty;
+
+    final bool hasNewMedia =
+        _attachments.isNotEmpty;
+
+    if (!hasExistingMedia &&
+        !hasNewMedia) {
+      _showValidationMessage(
+        localizations.medicalAttachmentRequired,
+      );
+      return;
+    }
+
+    final HealthRequestModel request =
+        HealthRequestModel(
+      applicantInfo:
+          widget.applicantInfo,
+      typeAid:
+          _selectedMedicalType!,
+      detailsAr:
+          detailsAr,
+      detailsEn:
+          detailsEn,
+      cost:
+          cost,
+      media:
+          List<PlatformFile>.unmodifiable(
         _attachments,
       ),
     );
 
-    debugPrint('HealthRequestModel created successfully');
-    debugPrint('Request typeAid: ${request.typeAid.apiValue}');
-    debugPrint('Request detailsAr: ${request.detailsAr}');
-    debugPrint('Request detailsEn: ${request.detailsEn}');
-    debugPrint('Request cost: ${request.cost}');
-    debugPrint('Request media count: ${request.media.length}');
-    debugPrint('Calling HealthCubit.submitHealthRequest');
+    debugPrint(
+      'Request typeAid: '
+      '${request.typeAid.apiValue}',
+    );
 
-    final AppLocalizations localizations =
-        AppLocalizations.of(context)!;
+    if (widget.isEditMode) {
+      final int? requestId =
+          widget.requestDetails?.id;
 
-    context.read<HealthCubit>().submitHealthRequest(
+      if (requestId == null) {
+        _showValidationMessage(
+          localizations.requestIdUnavailable,
+        );
+        return;
+      }
+
+      context
+          .read<HealthCubit>()
+          .updateHealthRequest(
+            requestId:
+                requestId,
+            request:
+                request,
+            localizations:
+                localizations,
+          );
+
+      return;
+    }
+
+    context
+        .read<HealthCubit>()
+        .submitHealthRequest(
           request,
           localizations,
         );
-
-    debugPrint('======================================');
   }
 
-  String? _validateArabicDetails(String value) {
-    final String text = value.trim();
+  String? _validateArabicDetails(
+    String value,
+  ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    final String text =
+        value.trim();
 
     if (text.isEmpty) {
-      return 'يرجى إدخال تفاصيل الحالة الصحية باللغة العربية';
+      return l10n
+          .healthArabicDetailsRequired;
     }
 
     if (text.length < 5) {
-      return 'يرجى كتابة تفاصيل أوضح باللغة العربية';
+      return l10n
+          .healthArabicDetailsShort;
     }
 
     final bool hasArabic =
-        RegExp(r'[\u0600-\u06FF]').hasMatch(text);
+        RegExp(
+      r'[\u0600-\u06FF]',
+    ).hasMatch(
+      text,
+    );
 
     final bool hasEnglish =
-        RegExp(r'[A-Za-z]').hasMatch(text);
+        RegExp(
+      r'[A-Za-z]',
+    ).hasMatch(
+      text,
+    );
 
     if (!hasArabic) {
-      return 'يجب أن تحتوي التفاصيل العربية على أحرف عربية';
+      return l10n
+          .healthArabicDetailsMustContainArabic;
     }
 
     if (hasEnglish) {
-      return 'يرجى كتابة التفاصيل العربية دون أحرف إنكليزية';
+      return l10n
+          .healthArabicDetailsNoEnglish;
     }
 
     return null;
   }
 
-  String? _validateEnglishDetails(String value) {
-    final String text = value.trim();
+  String? _validateEnglishDetails(
+    String value,
+  ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    final String text =
+        value.trim();
 
     if (text.isEmpty) {
-      return 'Please enter the health details in English';
+      return l10n
+          .healthEnglishDetailsRequired;
     }
 
     if (text.length < 5) {
-      return 'Please provide clearer health details in English';
+      return l10n
+          .healthEnglishDetailsShort;
     }
 
     final bool hasEnglish =
-        RegExp(r'[A-Za-z]').hasMatch(text);
+        RegExp(
+      r'[A-Za-z]',
+    ).hasMatch(
+      text,
+    );
 
     final bool hasArabic =
-        RegExp(r'[\u0600-\u06FF]').hasMatch(text);
+        RegExp(
+      r'[\u0600-\u06FF]',
+    ).hasMatch(
+      text,
+    );
 
     if (!hasEnglish) {
-      return 'The English details must contain English letters';
+      return l10n
+          .healthEnglishDetailsMustContainEnglish;
     }
 
     if (hasArabic) {
-      return 'Please write the English details without Arabic letters';
+      return l10n
+          .healthEnglishDetailsNoArabic;
     }
 
     return null;
   }
 
-  void _showValidationMessage(String message) {
+  void _showValidationMessage(
+    String message,
+  ) {
     if (!mounted) {
       return;
     }
@@ -337,62 +575,93 @@ class _HealthRequestPageState extends State<HealthRequestPage> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+          behavior:
+              SnackBarBehavior.floating,
+          margin:
+              const EdgeInsets.all(
+            16,
+          ),
+          shape:
+              RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(
+              14,
+            ),
           ),
           content: Text(
             message,
-            textDirection: TextDirection.rtl,
-            style: const TextStyle(
-              fontFamily: AppTextStyles.fontFamily,
+            style:
+                const TextStyle(
+              fontFamily:
+                  AppTextStyles.fontFamily,
             ),
           ),
         ),
       );
   }
 
-  Widget _buildSectionLabel(String text) {
+  Widget _buildSectionLabel(
+    String text,
+  ) {
     return Padding(
-      padding: const EdgeInsets.only(
-        right: 4,
+      padding:
+          const EdgeInsetsDirectional.only(
+        start: 4,
         bottom: 8,
       ),
       child: Text(
         text,
-        style: const TextStyle(
-          color: AppColors.brandGray,
+        style:
+            const TextStyle(
+          color:
+              AppColors.brandGray,
           fontSize: 14,
-          fontWeight: FontWeight.w500,
-          fontFamily: AppTextStyles.fontFamily,
+          fontWeight:
+              FontWeight.w500,
+          fontFamily:
+              AppTextStyles.fontFamily,
         ),
       ),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<HealthCubit, HealthState>(
-      listener: (context, state) async {
-        debugPrint(
-          'HealthRequestPage state: ${state.runtimeType}',
-        );
+  Widget build(
+    BuildContext context,
+  ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
 
-        if (state is HealthSuccess) {
+    return BlocConsumer<
+        HealthCubit,
+        HealthState>(
+      listener: (
+        context,
+        state,
+      ) async {
+        if (state
+            is HealthSuccess) {
           await showRequestResultDialog(
             context: context,
             isSuccess: true,
             message: state.message,
             onSuccessConfirmed: () {
-              if (!mounted) return;
+              if (!mounted) {
+                return;
+              }
 
-              Navigator.of(context).popUntil(
-                (Route<dynamic> route) => route.isFirst,
+              Navigator.of(context)
+                  .popUntil(
+                (
+                  Route<dynamic> route,
+                ) {
+                  return route.isFirst;
+                },
               );
             },
           );
-        } else if (state is HealthFailure) {
+        } else if (state
+            is HealthFailure) {
           await showRequestResultDialog(
             context: context,
             isSuccess: false,
@@ -405,335 +674,754 @@ class _HealthRequestPageState extends State<HealthRequestPage> {
           );
         }
       },
-      builder: (context, state) {
-        final bool isLoading = state is HealthLoading;
+      builder: (
+        context,
+        state,
+      ) {
+        final bool isLoading =
+            state is HealthLoading;
 
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: Scaffold(
-            backgroundColor: AppColors.background,
-            appBar: AppBar(
-              backgroundColor: AppColors.background,
-              elevation: 0,
-              scrolledUnderElevation: 0,
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward,
-                  color: AppColors.primary,
-                ),
-                onPressed: isLoading
-                    ? null
-                    : () {
-                        Navigator.pop(context);
-                      },
+        return Scaffold(
+          backgroundColor:
+              AppColors.background,
+
+          appBar: AppBar(
+            backgroundColor:
+                AppColors.background,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_rounded,
+                color:
+                    AppColors.primary,
               ),
-              title: const Text(
-                'تفاصيل الطلب الصحي',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: AppTextStyles.fontFamily,
-                ),
+              onPressed:
+                  isLoading
+                      ? null
+                      : () {
+                          Navigator.pop(
+                            context,
+                          );
+                        },
+            ),
+            title: Text(
+              widget.isEditMode
+                  ? l10n
+                      .editHealthRequestDetails
+                  : l10n
+                      .healthRequestDetails,
+              style:
+                  const TextStyle(
+                color:
+                    AppColors.primary,
+                fontSize: 20,
+                fontWeight:
+                    FontWeight.bold,
+                fontFamily:
+                    AppTextStyles.fontFamily,
               ),
             ),
-            body: SafeArea(
-              child: SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                padding: const EdgeInsets.fromLTRB(
-                  20,
-                  12,
-                  20,
-                  100,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CustomStepIndicator(
-                      currentStep: 2,
-                      totalSteps: 2,
+            centerTitle: true,
+          ),
+
+          body: SafeArea(
+            child:
+                SingleChildScrollView(
+              keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior
+                      .onDrag,
+              padding:
+                  const EdgeInsets
+                      .fromLTRB(
+                20,
+                12,
+                20,
+                100,
+              ),
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  const CustomStepIndicator(
+                    currentStep: 2,
+                    totalSteps: 2,
+                  ),
+
+                  const SizedBox(
+                    height: 24,
+                  ),
+
+                  if (widget
+                      .isEditMode) ...[
+                    _buildEditInfoCard(),
+
+                    const SizedBox(
+                      height: 20,
                     ),
-                    const SizedBox(height: 24),
-
-                    _buildSectionLabel(
-                      'نوع المساعدة الطبية المطلوبة',
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: HealthAidType.values.map(
-                        (HealthAidType type) {
-                          return SelectionChip(
-                            label: type.arabicLabel,
-                            isSelected:
-                                _selectedMedicalType == type,
-                            onTap: isLoading
-                                ? () {}
-                                : () {
-                                    setState(() {
-                                      _selectedMedicalType = type;
-                                    });
-
-                                    debugPrint(
-                                      'Medical type selected: '
-                                      '${type.apiValue}',
-                                    );
-                                  },
-                          );
-                        },
-                      ).toList(),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    CustomTextField(
-                      label: 'تفاصيل الحالة الصحية (عربي)',
-                      hint:
-                          'يرجى ذكر التشخيص والأعراض باللغة العربية...',
-                      controller: _detailsArController,
-                      maxLines: 5,
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    CustomTextField(
-                      label: 'Health details (English)',
-                      hint:
-                          'Describe the diagnosis and symptoms in English...',
-                      controller: _detailsEnController,
-                      maxLines: 5,
-                      isLtr: true,
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    CustomTextField(
-                      label: 'التكلفة المالية المتوقعة للعلاج',
-                      hint: '0.00',
-                      controller: _costController,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      isCurrency: true,
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    _buildSectionLabel(
-                      'إرفاق التقارير الطبية والوصفات الرسمية',
-                    ),
-
-                    CustomAttachmentUploader(
-                      title: 'رفع الملفات أو التقاط صور',
-                      description:
-                          'يرجى إرفاق صور واضحة للتقارير والوصفات الطبية',
-                      icon: Icons.camera_alt_rounded,
-                      onTap:
-                          isLoading ? () {} : _pickAttachments,
-                    ),
-
-                    if (_attachments.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-
-                      ..._attachments.asMap().entries.map(
-                        (MapEntry<int, PlatformFile> entry) {
-                          final PlatformFile file = entry.value;
-
-                          return Card(
-                            margin: const EdgeInsets.only(
-                              bottom: 10,
-                            ),
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(14),
-                              side: BorderSide(
-                                color: AppColors.brandGray
-                                    .withOpacity(0.16),
-                              ),
-                            ),
-                            child: ListTile(
-                              dense: true,
-                              leading: Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryContainer
-                                      .withOpacity(0.4),
-                                  borderRadius:
-                                      BorderRadius.circular(12),
-                                ),
-                                child: Icon(
-                                  _getFileIcon(file.extension),
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              title: Text(
-                                file.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily:
-                                      AppTextStyles.fontFamily,
-                                ),
-                              ),
-                              subtitle: Text(
-                                _getFileDescription(
-                                  context,
-                                  file,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontFamily:
-                                      AppTextStyles.fontFamily,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                tooltip: 'حذف المرفق',
-                                icon: const Icon(
-                                  Icons.close,
-                                  color: AppColors.error,
-                                ),
-                                onPressed: isLoading
-                                    ? null
-                                    : () {
-                                        _removeAttachment(
-                                          entry.key,
-                                        );
-                                      },
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-
-                    const SizedBox(height: 32),
                   ],
-                ),
+
+                  _buildSectionLabel(
+                    l10n.medicalAidType,
+                  ),
+
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children:
+                        HealthAidType.values.map(
+                      (
+                        HealthAidType type,
+                      ) {
+                        return SelectionChip(
+                          label:
+                              _healthAidTypeLabel(
+                            type,
+                            l10n,
+                          ),
+                          isSelected:
+                              _selectedMedicalType ==
+                                  type,
+                          onTap:
+                              isLoading
+                                  ? () {}
+                                  : () {
+                                      setState(
+                                        () {
+                                          _selectedMedicalType =
+                                              type;
+                                        },
+                                      );
+                                    },
+                        );
+                      },
+                    ).toList(),
+                  ),
+
+                  const SizedBox(
+                    height: 24,
+                  ),
+
+                  CustomTextField(
+                    label:
+                        l10n.healthDetailsArabic,
+                    hint:
+                        l10n.healthDetailsArabicHint,
+                    controller:
+                        _detailsArController,
+                    maxLines: 5,
+                  ),
+
+                  const SizedBox(
+                    height: 16,
+                  ),
+
+                  CustomTextField(
+                    label:
+                        l10n.healthDetailsEnglish,
+                    hint:
+                        l10n.healthDetailsEnglishHint,
+                    controller:
+                        _detailsEnController,
+                    maxLines: 5,
+                    isLtr: true,
+                  ),
+
+                  const SizedBox(
+                    height: 24,
+                  ),
+
+                  CustomTextField(
+                    label:
+                        l10n.treatmentExpectedCost,
+                    hint:
+                        '0.00',
+                    controller:
+                        _costController,
+                    keyboardType:
+                        const TextInputType
+                            .numberWithOptions(
+                      decimal: true,
+                    ),
+                    isCurrency: true,
+                  ),
+
+                  const SizedBox(
+                    height: 24,
+                  ),
+
+                  _buildSectionLabel(
+                    l10n.medicalReportsUpload,
+                  ),
+
+                  if (_existingMediaUrls
+                      .isNotEmpty) ...[
+                    _buildExistingAttachmentsSection(),
+
+                    const SizedBox(
+                      height: 16,
+                    ),
+                  ],
+
+                  CustomAttachmentUploader(
+                    title:
+                        widget.isEditMode
+                            ? l10n
+                                .addNewMedicalDocuments
+                            : l10n
+                                .uploadFilesOrCapture,
+                    description:
+                        widget.isEditMode
+                            ? l10n
+                                .medicalNewDocumentsDescription
+                           : l10n.medicalReportsUploadDescription,
+                    icon:
+                        Icons.camera_alt_rounded,
+                    onTap:
+                        isLoading
+                            ? () {}
+                            : _pickAttachments,
+                  ),
+
+                  if (_attachments
+                      .isNotEmpty) ...[
+                    const SizedBox(
+                      height: 12,
+                    ),
+
+                    ..._attachments
+                        .asMap()
+                        .entries
+                        .map(
+                      (
+                        MapEntry<
+                                int,
+                                PlatformFile>
+                            entry,
+                      ) {
+                        final PlatformFile file =
+                            entry.value;
+
+                        return Card(
+                          margin:
+                              const EdgeInsets
+                                  .only(
+                            bottom: 10,
+                          ),
+                          elevation: 0,
+                          shape:
+                              RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius
+                                    .circular(
+                              14,
+                            ),
+                            side:
+                                BorderSide(
+                              color:
+                                  AppColors.brandGray
+                                      .withOpacity(
+                                0.16,
+                              ),
+                            ),
+                          ),
+                          child:
+                              ListTile(
+                            dense: true,
+                            leading:
+                                Container(
+                              width: 42,
+                              height: 42,
+                              decoration:
+                                  BoxDecoration(
+                                color:
+                                    AppColors.primaryContainer
+                                        .withOpacity(
+                                  0.4,
+                                ),
+                                borderRadius:
+                                    BorderRadius
+                                        .circular(
+                                  12,
+                                ),
+                              ),
+                              child:
+                                  Icon(
+                                _getFileIcon(
+                                  file.extension,
+                                ),
+                                color:
+                                    AppColors.primary,
+                              ),
+                            ),
+                            title:
+                                Text(
+                              file.name,
+                              maxLines: 1,
+                              overflow:
+                                  TextOverflow
+                                      .ellipsis,
+                              style:
+                                  const TextStyle(
+                                fontWeight:
+                                    FontWeight
+                                        .w600,
+                                fontFamily:
+                                    AppTextStyles
+                                        .fontFamily,
+                              ),
+                            ),
+                            subtitle:
+                                Text(
+                              _getFileDescription(
+                                file,
+                              ),
+                              maxLines: 1,
+                              overflow:
+                                  TextOverflow
+                                      .ellipsis,
+                              style:
+                                  const TextStyle(
+                                fontSize: 12,
+                                fontFamily:
+                                    AppTextStyles
+                                        .fontFamily,
+                              ),
+                            ),
+                            trailing:
+                                IconButton(
+                              tooltip:
+                                  l10n.deleteAttachment,
+                              icon:
+                                  const Icon(
+                                Icons.close,
+                                color:
+                                    AppColors.error,
+                              ),
+                              onPressed:
+                                  isLoading
+                                      ? null
+                                      : () {
+                                          _removeAttachment(
+                                            entry.key,
+                                          );
+                                        },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+
+                  const SizedBox(
+                    height: 32,
+                  ),
+                ],
               ),
             ),
-            bottomNavigationBar:
-                _buildBottomSubmitButton(isLoading),
+          ),
+
+          bottomNavigationBar:
+              _buildBottomSubmitButton(
+            isLoading,
           ),
         );
       },
     );
   }
 
-  String _getFileDescription(
-    BuildContext context,
-    PlatformFile file,
-  ) {
-    final String size = _formatFileSize(file.size);
+  Widget _buildEditInfoCard() {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
 
-    if (kIsWeb) {
-      return '$size - ملف جاهز للرفع';
-    }
+    return Container(
+      width: double.infinity,
+      padding:
+          const EdgeInsets.all(
+        14,
+      ),
+      decoration:
+          BoxDecoration(
+        color:
+            AppColors.primaryContainer
+                .withOpacity(
+          0.45,
+        ),
+        borderRadius:
+            BorderRadius.circular(
+          16,
+        ),
+        border: Border.all(
+          color:
+              AppColors.primary
+                  .withOpacity(
+            0.15,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.edit_outlined,
+            color:
+                AppColors.primary,
+          ),
 
-    return '$size - ${file.path ?? ''}';
+          const SizedBox(
+            width: 10,
+          ),
+
+          Expanded(
+            child: Text(
+              l10n.educationEditInfo,
+              style:
+                  const TextStyle(
+                color:
+                    AppColors.brandGray,
+                fontSize: 13,
+                height: 1.5,
+                fontFamily:
+                    AppTextStyles.fontFamily,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  String _formatFileSize(int bytes) {
+  Widget _buildExistingAttachmentsSection() {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    return Column(
+      crossAxisAlignment:
+          CrossAxisAlignment.start,
+      children: [
+        _buildSectionLabel(
+          l10n.existingAttachedFiles,
+        ),
+
+        ..._existingMediaUrls.map(
+          (
+            String path,
+          ) {
+            final String fileName =
+                _getFileNameFromPath(
+              path,
+            );
+
+            return Card(
+              margin:
+                  const EdgeInsets.only(
+                bottom: 10,
+              ),
+              elevation: 0,
+              shape:
+                  RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(
+                  14,
+                ),
+                side: BorderSide(
+                  color:
+                      AppColors.primary
+                          .withOpacity(
+                    0.14,
+                  ),
+                ),
+              ),
+              child: ListTile(
+                dense: true,
+                leading: Container(
+                  width: 42,
+                  height: 42,
+                  decoration:
+                      BoxDecoration(
+                    color:
+                        AppColors.primaryContainer
+                            .withOpacity(
+                      0.4,
+                    ),
+                    borderRadius:
+                        BorderRadius.circular(
+                      12,
+                    ),
+                  ),
+                  child: Icon(
+                    _getFileIcon(
+                      _getExtension(
+                        fileName,
+                      ),
+                    ),
+                    color:
+                        AppColors.primary,
+                  ),
+                ),
+                title: Text(
+                  fileName,
+                  maxLines: 1,
+                  overflow:
+                      TextOverflow.ellipsis,
+                  style:
+                      const TextStyle(
+                    fontWeight:
+                        FontWeight.w600,
+                    fontFamily:
+                        AppTextStyles
+                            .fontFamily,
+                  ),
+                ),
+                subtitle: Text(
+                  l10n.existingAttachment,
+                  style:
+                      const TextStyle(
+                    fontSize: 12,
+                    color:
+                        AppColors.brandGray,
+                    fontFamily:
+                        AppTextStyles
+                            .fontFamily,
+                  ),
+                ),
+                trailing:
+                    const Icon(
+                  Icons
+                      .check_circle_outline,
+                  color:
+                      AppColors.primary,
+                  size: 21,
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  String _getFileNameFromPath(
+    String path,
+  ) {
+    final String normalized =
+        path.replaceAll(
+      '\\',
+      '/',
+    );
+
+    final List<String> parts =
+        normalized.split(
+      '/',
+    );
+
+    if (parts.isEmpty ||
+        parts.last.trim().isEmpty) {
+      return path;
+    }
+
+    return parts.last;
+  }
+
+  String? _getExtension(
+    String fileName,
+  ) {
+    final int index =
+        fileName.lastIndexOf(
+      '.',
+    );
+
+    if (index == -1 ||
+        index ==
+            fileName.length - 1) {
+      return null;
+    }
+
+    return fileName
+        .substring(
+          index + 1,
+        )
+        .toLowerCase();
+  }
+
+  String _getFileDescription(
+    PlatformFile file,
+  ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    final String size =
+        _formatFileSize(
+      file.size,
+    );
+
+    if (kIsWeb) {
+      return '$size - '
+          '${l10n.fileReadyForUpload}';
+    }
+
+    return '$size - '
+        '${file.path ?? ''}';
+  }
+
+  String _formatFileSize(
+    int bytes,
+  ) {
     if (bytes < 1024) {
       return '$bytes B';
     }
 
-    if (bytes < 1024 * 1024) {
-      final double kiloBytes = bytes / 1024;
+    if (bytes <
+        1024 * 1024) {
+      final double kiloBytes =
+          bytes / 1024;
+
       return '${kiloBytes.toStringAsFixed(1)} KB';
     }
 
-    final double megaBytes = bytes / (1024 * 1024);
+    final double megaBytes =
+        bytes /
+            (1024 * 1024);
+
     return '${megaBytes.toStringAsFixed(1)} MB';
   }
 
-  IconData _getFileIcon(String? extension) {
-    switch (extension?.toLowerCase()) {
+  IconData _getFileIcon(
+    String? extension,
+  ) {
+    switch (
+        extension?.toLowerCase()) {
       case 'jpg':
       case 'jpeg':
       case 'png':
         return Icons.image_outlined;
 
       case 'pdf':
-        return Icons.picture_as_pdf_outlined;
+        return Icons
+            .picture_as_pdf_outlined;
 
       default:
         return Icons.attach_file;
     }
   }
 
-  Widget _buildBottomSubmitButton(bool isLoading) {
+  Widget _buildBottomSubmitButton(
+    bool isLoading,
+  ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.fromLTRB(
+        padding:
+            const EdgeInsets.fromLTRB(
           18,
           12,
           18,
           16,
         ),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.97),
+        decoration:
+            BoxDecoration(
+          color:
+              Colors.white.withOpacity(
+            0.97,
+          ),
           border: Border(
             top: BorderSide(
-              color: AppColors.brandGray.withOpacity(0.12),
+              color:
+                  AppColors.brandGray
+                      .withOpacity(
+                0.12,
+              ),
             ),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color:
+                  Colors.black
+                      .withOpacity(
+                0.04,
+              ),
               blurRadius: 14,
-              offset: const Offset(0, -4),
+              offset:
+                  const Offset(
+                0,
+                -4,
+              ),
             ),
           ],
         ),
-        child: ElevatedButton(
-          onPressed: isLoading ? null : _submit,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
+        child:
+            ElevatedButton(
+          onPressed:
+              isLoading
+                  ? null
+                  : _submit,
+          style:
+              ElevatedButton.styleFrom(
+            backgroundColor:
+                AppColors.primary,
+            foregroundColor:
+                Colors.white,
             disabledBackgroundColor:
-                AppColors.primary.withOpacity(0.55),
-            disabledForegroundColor: Colors.white,
-            minimumSize: const Size(
+                AppColors.primary
+                    .withOpacity(
+              0.55,
+            ),
+            disabledForegroundColor:
+                Colors.white,
+            minimumSize:
+                const Size(
               double.infinity,
               58,
             ),
             elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
+            shape:
+                RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(
+                18,
+              ),
             ),
           ),
           child: isLoading
               ? const SizedBox(
                   width: 24,
                   height: 24,
-                  child: CircularProgressIndicator(
+                  child:
+                      CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Colors.white,
+                    color:
+                        Colors.white,
                   ),
                 )
-              : const Row(
+              : Row(
                   mainAxisAlignment:
                       MainAxisAlignment.center,
                   children: [
                     Text(
-                      'إرسال الطلب للمراجعة',
-                      style: TextStyle(
+                      widget.isEditMode
+                          ? l10n.saveChanges
+                          : l10n
+                              .submitRequestForReview,
+                      style:
+                          const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                            FontWeight.bold,
                         fontFamily:
-                            AppTextStyles.fontFamily,
+                            AppTextStyles
+                                .fontFamily,
                       ),
                     ),
-                    SizedBox(width: 10),
+
+                    const SizedBox(
+                      width: 10,
+                    ),
+
                     Icon(
-                      Icons.send_rounded,
+                      widget.isEditMode
+                          ? Icons.save_outlined
+                          : Icons.send_rounded,
                       size: 19,
                     ),
                   ],

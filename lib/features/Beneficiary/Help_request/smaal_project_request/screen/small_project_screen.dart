@@ -2,6 +2,7 @@ import 'package:charity_management/features/Beneficiary/Help_request/applicantIn
 import 'package:charity_management/features/Beneficiary/Help_request/smaal_project_request/cubit/small_project_cubit.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/smaal_project_request/cubit/small_project_state.dart';
 import 'package:charity_management/features/Beneficiary/Help_request/smaal_project_request/model/small_project_request_model.dart';
+import 'package:charity_management/features/Beneficiary/request_tracking/model/request_details_model.dart';
 import 'package:charity_management/features/components/custom_attachment_uploader.dart';
 import 'package:charity_management/features/components/custom_step_Indicator.dart';
 import 'package:charity_management/features/components/request_result_dialog.dart';
@@ -14,14 +15,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SmallProjectRequestPage
-    extends StatefulWidget {
+class SmallProjectRequestPage extends StatefulWidget {
   const SmallProjectRequestPage({
     super.key,
     required this.applicantInfo,
+    this.requestDetails,
   });
 
   final ApplicantInfoModel applicantInfo;
+  final RequestDetailsModel? requestDetails;
+
+  bool get isEditMode => requestDetails != null;
 
   @override
   State<SmallProjectRequestPage> createState() {
@@ -29,41 +33,30 @@ class SmallProjectRequestPage
   }
 }
 
-class _SmallProjectRequestPageState
-    extends State<SmallProjectRequestPage> {
-  final TextEditingController
-      _projectNameArController =
+class _SmallProjectRequestPageState extends State<SmallProjectRequestPage> {
+  final TextEditingController _projectNameArController =
       TextEditingController();
 
-  final TextEditingController
-      _projectNameEnController =
+  final TextEditingController _projectNameEnController =
       TextEditingController();
 
-  final TextEditingController
-      _projectCategoryArController =
+  final TextEditingController _projectCategoryArController =
       TextEditingController();
 
-  final TextEditingController
-      _projectCategoryEnController =
+  final TextEditingController _projectCategoryEnController =
       TextEditingController();
 
-  final TextEditingController
-      _numberOfPeopleController =
+  final TextEditingController _numberOfPeopleController =
       TextEditingController();
 
-  final TextEditingController
-      _detailsArController =
-      TextEditingController();
+  final TextEditingController _detailsArController = TextEditingController();
 
-  final TextEditingController
-      _detailsEnController =
-      TextEditingController();
+  final TextEditingController _detailsEnController = TextEditingController();
 
-  final TextEditingController
-      _costController =
-      TextEditingController();
+  final TextEditingController _costController = TextEditingController();
 
   final List<PlatformFile> _attachments = [];
+  final List<String> _existingMediaUrls = [];
 
   @override
   void initState() {
@@ -71,13 +64,71 @@ class _SmallProjectRequestPageState
 
     debugPrint('======================================');
     debugPrint('SmallProjectRequestPage opened');
-    debugPrint(
-      'Applicant firstName: ${widget.applicantInfo.firstName}',
-    );
-    debugPrint(
-      'Applicant lastName: ${widget.applicantInfo.lastName}',
-    );
+    debugPrint('Applicant firstName: ${widget.applicantInfo.firstName}');
+    debugPrint('Applicant lastName: ${widget.applicantInfo.lastName}');
+
+    if (widget.isEditMode) {
+      _fillExistingSmallProjectData();
+    }
+
     debugPrint('======================================');
+  }
+
+  void _fillExistingSmallProjectData() {
+    final RequestDetailsModel? request = widget.requestDetails;
+
+    if (request == null) {
+      return;
+    }
+
+    debugPrint('======================================');
+    debugPrint('FILL EXISTING SMALL PROJECT DATA');
+    debugPrint('Request id: ${request.id}');
+    debugPrint('Category id: ${request.categoryId}');
+    debugPrint('Subcategory id: ${request.subCategoryId}');
+
+    if (request.categoryId != 5) {
+      debugPrint(
+        'Unexpected category id for Small Project edit: '
+        '${request.categoryId}',
+      );
+    }
+
+    _projectNameArController.text =
+        request.getAidDetailStringAr('projectName') ?? '';
+    _projectNameEnController.text =
+        request.getAidDetailStringEn('projectName') ?? '';
+    _projectCategoryArController.text =
+        request.getAidDetailStringAr('projectCategory') ?? '';
+    _projectCategoryEnController.text =
+        request.getAidDetailStringEn('projectCategory') ?? '';
+
+    final int? numberOfPeopleSupported = request.getAidDetailInt(
+      'numberOfPeopleSupported',
+    );
+
+    _numberOfPeopleController.text = numberOfPeopleSupported?.toString() ?? '';
+    _detailsArController.text = request.detailsAr ?? '';
+    _detailsEnController.text = request.detailsEn ?? '';
+    _costController.text = _formatCost(request.cost);
+
+    _existingMediaUrls
+      ..clear()
+      ..addAll(request.getAidDetailStringList('mediaUrls'));
+
+    debugPrint('Project name AR: ${_projectNameArController.text}');
+    debugPrint('Project name EN: ${_projectNameEnController.text}');
+    debugPrint('Number of people supported: ${_numberOfPeopleController.text}');
+    debugPrint('Existing media: $_existingMediaUrls');
+    debugPrint('======================================');
+  }
+
+  String _formatCost(double value) {
+    if (value == value.truncateToDouble()) {
+      return value.toInt().toString();
+    }
+
+    return value.toString();
   }
 
   @override
@@ -91,37 +142,27 @@ class _SmallProjectRequestPageState
     _detailsEnController.dispose();
     _costController.dispose();
 
-    debugPrint(
-      'SmallProjectRequestPage disposed',
-    );
+    debugPrint('SmallProjectRequestPage disposed');
 
     super.dispose();
   }
 
   Future<void> _pickAttachments() async {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
     debugPrint('======================================');
-    debugPrint(
-      'Small project attachment picker opened',
-    );
+    debugPrint('Small project attachment picker opened');
 
     try {
-      final FilePickerResult? result =
-          await FilePicker.platform.pickFiles(
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
-        allowedExtensions: const [
-          'jpg',
-          'jpeg',
-          'png',
-          'pdf',
-        ],
+        allowedExtensions: const ['jpg', 'jpeg', 'png', 'pdf'],
         withData: kIsWeb,
       );
 
       if (result == null) {
-        debugPrint(
-          'Small project attachment selection cancelled',
-        );
+        debugPrint('Small project attachment selection cancelled');
         return;
       }
 
@@ -131,28 +172,21 @@ class _SmallProjectRequestPageState
 
       final List<PlatformFile> validFiles = [];
 
-      for (final PlatformFile file
-          in result.files) {
-        final bool alreadyExists =
-            _attachments.any(
-          (PlatformFile oldFile) {
-            return oldFile.name == file.name &&
-                oldFile.size == file.size;
-          },
-        );
+      for (final PlatformFile file in result.files) {
+        final bool alreadyExists = _attachments.any((PlatformFile oldFile) {
+          return oldFile.name == file.name && oldFile.size == file.size;
+        });
 
         if (alreadyExists) {
           continue;
         }
 
         if (kIsWeb) {
-          if (file.bytes == null ||
-              file.bytes!.isEmpty) {
+          if (file.bytes == null || file.bytes!.isEmpty) {
             continue;
           }
         } else {
-          if (file.path == null ||
-              file.path!.trim().isEmpty) {
+          if (file.path == null || file.path!.trim().isEmpty) {
             continue;
           }
         }
@@ -162,7 +196,7 @@ class _SmallProjectRequestPageState
 
       if (validFiles.isEmpty) {
         _showValidationMessage(
-          'الملفات المحددة مضافة مسبقاً أو تعذر الوصول إليها',
+          l10n.smallProjectFilesUnavailable,
         );
         return;
       }
@@ -171,270 +205,189 @@ class _SmallProjectRequestPageState
         _attachments.addAll(validFiles);
       });
 
-      debugPrint(
-        'Small project files added: ${validFiles.length}',
-      );
-      debugPrint(
-        'Total attachments: ${_attachments.length}',
-      );
-    } catch (
-      error,
-      stackTrace
-    ) {
-      debugPrint(
-        'Small project attachment error: $error',
-      );
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Small project files added: ${validFiles.length}');
+      debugPrint('Total attachments: ${_attachments.length}');
+    } catch (error, stackTrace) {
+      debugPrint('Small project attachment error: $error');
+      debugPrint('Stack trace: $stackTrace');
 
       if (mounted) {
-        _showValidationMessage(
-          'تعذر اختيار الملفات، يرجى المحاولة مجدداً',
-        );
+        _showValidationMessage(l10n.fileSelectionFailed);
       }
     }
   }
 
-  void _removeAttachment(
-    int index,
-  ) {
-    if (index < 0 ||
-        index >= _attachments.length) {
+  void _removeAttachment(int index) {
+    if (index < 0 || index >= _attachments.length) {
       return;
     }
 
-    final PlatformFile removed =
-        _attachments[index];
+    final PlatformFile removed = _attachments[index];
 
     setState(() {
       _attachments.removeAt(index);
     });
 
-    debugPrint(
-      'Small project attachment removed: ${removed.name}',
-    );
+    debugPrint('Small project attachment removed: ${removed.name}');
   }
 
   void _submit() {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
     debugPrint('======================================');
-    debugPrint(
-      'Small project submit clicked',
-    );
+    debugPrint('Small project submit clicked');
 
     FocusScope.of(context).unfocus();
 
-    final String projectNameAr =
-        _projectNameArController.text.trim();
+    final String projectNameAr = _projectNameArController.text.trim();
 
-    final String projectNameEn =
-        _projectNameEnController.text.trim();
+    final String projectNameEn = _projectNameEnController.text.trim();
 
-    final String projectCategoryAr =
-        _projectCategoryArController.text.trim();
+    final String projectCategoryAr = _projectCategoryArController.text.trim();
 
-    final String projectCategoryEn =
-        _projectCategoryEnController.text.trim();
+    final String projectCategoryEn = _projectCategoryEnController.text.trim();
 
-    final int? numberOfPeople =
-        int.tryParse(
+    final int? numberOfPeople = int.tryParse(
       _numberOfPeopleController.text.trim(),
     );
 
-    final String detailsAr =
-        _detailsArController.text.trim();
+    final String detailsAr = _detailsArController.text.trim();
 
-    final String detailsEn =
-        _detailsEnController.text.trim();
+    final String detailsEn = _detailsEnController.text.trim();
 
-    final double? cost =
-        double.tryParse(
-      _costController.text
-          .trim()
-          .replaceAll(',', '.'),
+    final double? cost = double.tryParse(
+      _costController.text.trim().replaceAll(',', '.'),
     );
 
-    debugPrint(
-      'projectNameAr: $projectNameAr',
-    );
-    debugPrint(
-      'projectNameEn: $projectNameEn',
-    );
-    debugPrint(
-      'projectCategoryAr: $projectCategoryAr',
-    );
-    debugPrint(
-      'projectCategoryEn: $projectCategoryEn',
-    );
-    debugPrint(
-      'numberOfPeopleSupported: $numberOfPeople',
-    );
-    debugPrint(
-      'detailsAr length: ${detailsAr.length}',
-    );
-    debugPrint(
-      'detailsEn length: ${detailsEn.length}',
-    );
-    debugPrint(
-      'cost: $cost',
-    );
-    debugPrint(
-      'attachments count: ${_attachments.length}',
-    );
+    debugPrint('projectNameAr: $projectNameAr');
+    debugPrint('projectNameEn: $projectNameEn');
+    debugPrint('projectCategoryAr: $projectCategoryAr');
+    debugPrint('projectCategoryEn: $projectCategoryEn');
+    debugPrint('numberOfPeopleSupported: $numberOfPeople');
+    debugPrint('detailsAr length: ${detailsAr.length}');
+    debugPrint('detailsEn length: ${detailsEn.length}');
+    debugPrint('cost: $cost');
+    debugPrint('Existing attachments count: ${_existingMediaUrls.length}');
+    debugPrint('New attachments count: ${_attachments.length}');
 
-    final String? projectNameArError =
-        _validateArabicField(
+    final String? projectNameArError = _validateArabicField(
       projectNameAr,
-      emptyMessage:
-          'يرجى إدخال اسم المشروع باللغة العربية',
-      shortMessage:
-          'اسم المشروع باللغة العربية قصير جداً',
+      emptyMessage: l10n.projectNameArabicRequired,
+      shortMessage: l10n.projectNameArabicShort,
     );
 
     if (projectNameArError != null) {
-      _showValidationMessage(
-        projectNameArError,
-      );
+      _showValidationMessage(projectNameArError);
       return;
     }
 
-    final String? projectNameEnError =
-        _validateEnglishField(
+    final String? projectNameEnError = _validateEnglishField(
       projectNameEn,
-      emptyMessage:
-          'Please enter the project name in English',
-      shortMessage:
-          'The English project name is too short',
+      emptyMessage: l10n.projectNameEnglishRequired,
+      shortMessage: l10n.projectNameEnglishShort,
     );
 
     if (projectNameEnError != null) {
-      _showValidationMessage(
-        projectNameEnError,
-      );
+      _showValidationMessage(projectNameEnError);
       return;
     }
 
-    final String? projectCategoryArError =
-        _validateArabicField(
+    final String? projectCategoryArError = _validateArabicField(
       projectCategoryAr,
-      emptyMessage:
-          'يرجى إدخال تصنيف المشروع باللغة العربية',
-      shortMessage:
-          'تصنيف المشروع باللغة العربية قصير جداً',
+      emptyMessage: l10n.projectCategoryArabicRequired,
+      shortMessage: l10n.projectCategoryArabicShort,
     );
 
     if (projectCategoryArError != null) {
-      _showValidationMessage(
-        projectCategoryArError,
-      );
+      _showValidationMessage(projectCategoryArError);
       return;
     }
 
-    final String? projectCategoryEnError =
-        _validateEnglishField(
+    final String? projectCategoryEnError = _validateEnglishField(
       projectCategoryEn,
-      emptyMessage:
-          'Please enter the project category in English',
-      shortMessage:
-          'The English project category is too short',
+      emptyMessage: l10n.projectCategoryEnglishRequired,
+      shortMessage: l10n.projectCategoryEnglishShort,
     );
 
     if (projectCategoryEnError != null) {
-      _showValidationMessage(
-        projectCategoryEnError,
-      );
+      _showValidationMessage(projectCategoryEnError);
       return;
     }
 
-    if (numberOfPeople == null ||
-        numberOfPeople <= 0) {
-      _showValidationMessage(
-        'يرجى إدخال عدد صحيح للأشخاص المستفيدين',
-      );
+    if (numberOfPeople == null || numberOfPeople <= 0) {
+      _showValidationMessage(l10n.validSupportedPeopleCount);
       return;
     }
 
-    final String? detailsArError =
-        _validateArabicField(
+    final String? detailsArError = _validateArabicField(
       detailsAr,
-      emptyMessage:
-          'يرجى إدخال تفاصيل المشروع باللغة العربية',
-      shortMessage:
-          'يرجى كتابة تفاصيل أوضح باللغة العربية',
+      emptyMessage: l10n.projectDetailsArabicRequired,
+      shortMessage: l10n.projectDetailsArabicShort,
       minimumLength: 5,
     );
 
     if (detailsArError != null) {
-      _showValidationMessage(
-        detailsArError,
-      );
+      _showValidationMessage(detailsArError);
       return;
     }
 
-    final String? detailsEnError =
-        _validateEnglishField(
+    final String? detailsEnError = _validateEnglishField(
       detailsEn,
-      emptyMessage:
-          'Please enter the project details in English',
-      shortMessage:
-          'Please provide clearer project details in English',
+      emptyMessage: l10n.projectDetailsEnglishRequired,
+      shortMessage: l10n.projectDetailsEnglishShort,
       minimumLength: 5,
     );
 
     if (detailsEnError != null) {
-      _showValidationMessage(
-        detailsEnError,
-      );
+      _showValidationMessage(detailsEnError);
       return;
     }
 
-    if (cost == null ||
-        cost <= 0) {
-      _showValidationMessage(
-        'يرجى إدخال تكلفة صحيحة',
-      );
+    if (cost == null || cost <= 0) {
+      _showValidationMessage(l10n.validCostRequired);
       return;
     }
 
-    if (_attachments.isEmpty) {
-      _showValidationMessage(
-        'يرجى إرفاق وثيقة واحدة على الأقل',
-      );
+    final bool hasExistingMedia = _existingMediaUrls.isNotEmpty;
+    final bool hasNewMedia = _attachments.isNotEmpty;
+
+    if (!hasExistingMedia && !hasNewMedia) {
+      _showValidationMessage(l10n.smallProjectDocumentRequired);
       return;
     }
 
-    final SmallProjectRequestModel request =
-        SmallProjectRequestModel(
-      applicantInfo:
-          widget.applicantInfo,
-      projectNameAr:
-          projectNameAr,
-      projectNameEn:
-          projectNameEn,
-      projectCategoryAr:
-          projectCategoryAr,
-      projectCategoryEn:
-          projectCategoryEn,
-      numberOfPeopleSupported:
-          numberOfPeople,
-      detailsAr:
-          detailsAr,
-      detailsEn:
-          detailsEn,
-      cost:
-          cost,
-      media:
-          List<PlatformFile>.unmodifiable(
-        _attachments,
-      ),
+    final SmallProjectRequestModel request = SmallProjectRequestModel(
+      applicantInfo: widget.applicantInfo,
+      projectNameAr: projectNameAr,
+      projectNameEn: projectNameEn,
+      projectCategoryAr: projectCategoryAr,
+      projectCategoryEn: projectCategoryEn,
+      numberOfPeopleSupported: numberOfPeople,
+      detailsAr: detailsAr,
+      detailsEn: detailsEn,
+      cost: cost,
+      media: List<PlatformFile>.unmodifiable(_attachments),
     );
 
-    final AppLocalizations localizations =
-        AppLocalizations.of(context);
+    final AppLocalizations localizations = AppLocalizations.of(context);
 
-    context
-        .read<SmallProjectCubit>()
-        .submitSmallProjectRequest(
+    if (widget.isEditMode) {
+      final int? requestId = widget.requestDetails?.id;
+
+      if (requestId == null) {
+        _showValidationMessage(l10n.requestIdUnavailable);
+        return;
+      }
+
+      context.read<SmallProjectCubit>().updateSmallProjectRequest(
+        requestId: requestId,
+        request: request,
+        localizations: localizations,
+      );
+      return;
+    }
+
+    context.read<SmallProjectCubit>().submitSmallProjectRequest(
       request,
       localizations,
     );
@@ -446,6 +399,7 @@ class _SmallProjectRequestPageState
     required String shortMessage,
     int minimumLength = 2,
   }) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
     final String text = value.trim();
 
     if (text.isEmpty) {
@@ -456,18 +410,16 @@ class _SmallProjectRequestPageState
       return shortMessage;
     }
 
-    final bool hasArabic =
-        RegExp(r'[\u0600-\u06FF]').hasMatch(text);
+    final bool hasArabic = RegExp(r'[\u0600-\u06FF]').hasMatch(text);
 
-    final bool hasEnglish =
-        RegExp(r'[A-Za-z]').hasMatch(text);
+    final bool hasEnglish = RegExp(r'[A-Za-z]').hasMatch(text);
 
     if (!hasArabic) {
-      return 'يجب أن يحتوي الحقل العربي على أحرف عربية';
+      return l10n.arabicFieldMustContainArabic;
     }
 
     if (hasEnglish) {
-      return 'يرجى كتابة الحقل العربي دون أحرف إنكليزية';
+      return l10n.arabicFieldNoEnglish;
     }
 
     return null;
@@ -479,6 +431,7 @@ class _SmallProjectRequestPageState
     required String shortMessage,
     int minimumLength = 2,
   }) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
     final String text = value.trim();
 
     if (text.isEmpty) {
@@ -489,26 +442,22 @@ class _SmallProjectRequestPageState
       return shortMessage;
     }
 
-    final bool hasEnglish =
-        RegExp(r'[A-Za-z]').hasMatch(text);
+    final bool hasEnglish = RegExp(r'[A-Za-z]').hasMatch(text);
 
-    final bool hasArabic =
-        RegExp(r'[\u0600-\u06FF]').hasMatch(text);
+    final bool hasArabic = RegExp(r'[\u0600-\u06FF]').hasMatch(text);
 
     if (!hasEnglish) {
-      return 'The English field must contain English letters';
+      return l10n.englishFieldMustContainEnglish;
     }
 
     if (hasArabic) {
-      return 'Please write the English field without Arabic letters';
+      return l10n.englishFieldNoArabic;
     }
 
     return null;
   }
 
-  void _showValidationMessage(
-    String message,
-  ) {
+  void _showValidationMessage(String message) {
     if (!mounted) {
       return;
     }
@@ -517,52 +466,38 @@ class _SmallProjectRequestPageState
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          behavior:
-              SnackBarBehavior.floating,
-          margin:
-              const EdgeInsets.all(16),
-          shape:
-              RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(14),
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
           ),
           content: Text(
             message,
-            textDirection:
-                TextDirection.rtl,
-            style: const TextStyle(
-              fontFamily:
-                  AppTextStyles.fontFamily,
-            ),
+            textDirection: Directionality.of(context),
+            style: const TextStyle(fontFamily: AppTextStyles.fontFamily),
           ),
         ),
       );
   }
 
-  Widget _buildSectionLabel(
-    String text,
-  ) {
+  Widget _buildSectionLabel(String text) {
     return Padding(
-      padding: const EdgeInsets.only(
-        right: 4,
-        bottom: 8,
-      ),
+      padding: const EdgeInsetsDirectional.only(start: 4, bottom: 8),
       child: Text(
         text,
         style: const TextStyle(
           color: AppColors.brandGray,
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          fontFamily:
-              AppTextStyles.fontFamily,
+          fontFamily: AppTextStyles.fontFamily,
         ),
       ),
     );
   }
 
-  Widget _buildAttachmentsList(
-    bool isLoading,
-  ) {
+  Widget _buildAttachmentsList(bool isLoading) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
     if (_attachments.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -571,149 +506,209 @@ class _SmallProjectRequestPageState
       children: [
         const SizedBox(height: 12),
 
-        ..._attachments
-            .asMap()
-            .entries
-            .map(
-          (
-            MapEntry<int, PlatformFile> entry,
-          ) {
-            final PlatformFile file =
-                entry.value;
+        if (widget.isEditMode) _buildSectionLabel(l10n.newFiles),
 
-            return Card(
-              margin:
-                  const EdgeInsets.only(
-                bottom: 10,
-              ),
-              elevation: 0,
-              shape:
-                  RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(
-                  14,
+        ..._attachments.asMap().entries.map((
+          MapEntry<int, PlatformFile> entry,
+        ) {
+          final PlatformFile file = entry.value;
+
+          return Card(
+            margin: const EdgeInsets.only(bottom: 10),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+              side: BorderSide(color: AppColors.brandGray.withOpacity(0.16)),
+            ),
+            child: ListTile(
+              dense: true,
+              leading: Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryContainer.withOpacity(0.4),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                side: BorderSide(
-                  color: AppColors
-                      .brandGray
-                      .withOpacity(
-                    0.16,
-                  ),
-                ),
-              ),
-              child: ListTile(
-                dense: true,
-                leading: Container(
-                  width: 42,
-                  height: 42,
-                  decoration:
-                      BoxDecoration(
-                    color: AppColors
-                        .primaryContainer
-                        .withOpacity(
-                      0.4,
-                    ),
-                    borderRadius:
-                        BorderRadius.circular(
-                      12,
-                    ),
-                  ),
-                  child: Icon(
-                    _getFileIcon(
-                      file.extension,
-                    ),
-                    color:
-                        AppColors.primary,
-                  ),
-                ),
-                title: Text(
-                  file.name,
-                  maxLines: 1,
-                  overflow:
-                      TextOverflow.ellipsis,
-                  style:
-                      const TextStyle(
-                    fontWeight:
-                        FontWeight.w600,
-                    fontFamily:
-                        AppTextStyles
-                            .fontFamily,
-                  ),
-                ),
-                subtitle: Text(
-                  _getFileDescription(file),
-                  maxLines: 1,
-                  overflow:
-                      TextOverflow.ellipsis,
-                  style:
-                      const TextStyle(
-                    fontSize: 12,
-                    fontFamily:
-                        AppTextStyles
-                            .fontFamily,
-                  ),
-                ),
-                trailing: IconButton(
-                  tooltip:
-                      'حذف المرفق',
-                  icon: const Icon(
-                    Icons.close,
-                    color:
-                        AppColors.error,
-                  ),
-                  onPressed: isLoading
-                      ? null
-                      : () {
-                          _removeAttachment(
-                            entry.key,
-                          );
-                        },
+                child: Icon(
+                  _getFileIcon(file.extension),
+                  color: AppColors.primary,
                 ),
               ),
-            );
-          },
-        ),
+              title: Text(
+                file.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: AppTextStyles.fontFamily,
+                ),
+              ),
+              subtitle: Text(
+                _getFileDescription(file),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontFamily: AppTextStyles.fontFamily,
+                ),
+              ),
+              trailing: IconButton(
+                tooltip: l10n.deleteAttachment,
+                icon: const Icon(Icons.close, color: AppColors.error),
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        _removeAttachment(entry.key);
+                      },
+              ),
+            ),
+          );
+        }),
       ],
     );
   }
 
-  Widget _buildDecorativeCard() {
+  Widget _buildEditInfoCard() {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
-      padding:
-          const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.primaryContainer
-            .withOpacity(
-          0.35,
-        ),
-        borderRadius:
-            BorderRadius.circular(24),
-        border: Border.all(
-          color: AppColors.primary
-              .withOpacity(
-            0.12,
-          ),
-        ),
+        color: AppColors.primaryContainer.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
       ),
-      child: const Column(
+      child: Row(
         children: [
-          Icon(
+          const Icon(Icons.edit_outlined, color: AppColors.primary),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              l10n.smallProjectEditInfo,
+              style: const TextStyle(
+                color: AppColors.brandGray,
+                fontSize: 13,
+                height: 1.5,
+                fontFamily: AppTextStyles.fontFamily,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExistingAttachmentsSection() {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionLabel(l10n.existingAttachedFiles),
+        ..._existingMediaUrls.map((String path) {
+          final String fileName = _getFileNameFromPath(path);
+
+          return Card(
+            margin: const EdgeInsets.only(bottom: 10),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+              side: BorderSide(
+                color: AppColors.primary.withValues(alpha: 0.14),
+              ),
+            ),
+            child: ListTile(
+              dense: true,
+              leading: Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryContainer.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  _getFileIcon(_getExtension(fileName)),
+                  color: AppColors.primary,
+                ),
+              ),
+              title: Text(
+                fileName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: AppTextStyles.fontFamily,
+                ),
+              ),
+              subtitle: Text(
+                l10n.existingAttachment,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.brandGray,
+                  fontFamily: AppTextStyles.fontFamily,
+                ),
+              ),
+              trailing: const Icon(
+                Icons.check_circle_outline,
+                color: AppColors.primary,
+                size: 21,
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  String _getFileNameFromPath(String path) {
+    final String normalized = path.replaceAll('\\', '/');
+    final List<String> parts = normalized.split('/');
+
+    if (parts.isEmpty || parts.last.trim().isEmpty) {
+      return path;
+    }
+
+    return parts.last;
+  }
+
+  String? _getExtension(String fileName) {
+    final int index = fileName.lastIndexOf('.');
+
+    if (index == -1 || index == fileName.length - 1) {
+      return null;
+    }
+
+    return fileName.substring(index + 1).toLowerCase();
+  }
+
+  Widget _buildDecorativeCard() {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: AppColors.primaryContainer.withOpacity(0.35),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.primary.withOpacity(0.12)),
+      ),
+      child: Column(
+        children: [
+          const Icon(
             Icons.rocket_launch_outlined,
             size: 52,
             color: AppColors.primary,
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Text(
-            'نسعى لدعم المشاريع الصغيرة لتوفير دخل مستدام للأسر',
+            l10n.smallProjectDecorativeMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.primary,
               fontSize: 15,
-              fontWeight:
-                  FontWeight.w600,
-              fontFamily:
-                  AppTextStyles.fontFamily,
+              fontWeight: FontWeight.w600,
+              fontFamily: AppTextStyles.fontFamily,
             ),
           ),
         ],
@@ -722,23 +717,17 @@ class _SmallProjectRequestPageState
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    return BlocConsumer<
-        SmallProjectCubit,
-        SmallProjectState>(
-      listener: (
-        context,
-        state,
-      ) async {
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
+    return BlocConsumer<SmallProjectCubit, SmallProjectState>(
+      listener: (context, state) async {
         debugPrint(
           'SmallProjectRequestPage listener state: '
           '${state.runtimeType}',
         );
 
-        if (state
-            is SmallProjectSuccess) {
+        if (state is SmallProjectSuccess) {
           await showRequestResultDialog(
             context: context,
             isSuccess: true,
@@ -748,15 +737,12 @@ class _SmallProjectRequestPageState
                 return;
               }
 
-              Navigator.of(context).popUntil(
-                (Route<dynamic> route) {
-                  return route.isFirst;
-                },
-              );
+              Navigator.of(context).popUntil((Route<dynamic> route) {
+                return route.isFirst;
+              });
             },
           );
-        } else if (state
-            is SmallProjectFailure) {
+        } else if (state is SmallProjectFailure) {
           await showRequestResultDialog(
             context: context,
             isSuccess: false,
@@ -769,168 +755,120 @@ class _SmallProjectRequestPageState
           );
         }
       },
-      builder: (
-        context,
-        state,
-      ) {
-        final bool isLoading =
-            state is SmallProjectLoading;
+      builder: (context, state) {
+        final bool isLoading = state is SmallProjectLoading;
 
         return Directionality(
-          textDirection:
-              TextDirection.rtl,
+          textDirection: Directionality.of(context),
           child: Scaffold(
-            backgroundColor:
-                AppColors.background,
+            backgroundColor: AppColors.background,
             appBar: AppBar(
-              backgroundColor:
-                  AppColors.background,
+              backgroundColor: AppColors.background,
               elevation: 0,
               scrolledUnderElevation: 0,
               leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_forward,
-                  color:
-                      AppColors.primary,
-                ),
+                icon: const Icon(Icons.arrow_back_rounded, color: AppColors.primary),
                 onPressed: isLoading
                     ? null
                     : () {
-                        Navigator.pop(
-                          context,
-                        );
+                        Navigator.pop(context);
                       },
               ),
-              title: const Text(
-                'تفاصيل المشروع الصغير',
-                style: TextStyle(
-                  color:
-                      AppColors.primary,
+              title: Text(
+                widget.isEditMode
+                    ? l10n.editSmallProjectRequestDetails
+                    : l10n.smallProjectRequestDetails,
+                style: const TextStyle(
+                  color: AppColors.primary,
                   fontSize: 20,
-                  fontWeight:
-                      FontWeight.bold,
-                  fontFamily:
-                      AppTextStyles
-                          .fontFamily,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: AppTextStyles.fontFamily,
                 ),
               ),
             ),
             body: SafeArea(
-              child:
-                  SingleChildScrollView(
+              child: SingleChildScrollView(
                 keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior
-                        .onDrag,
-                padding:
-                    const EdgeInsets.fromLTRB(
-                  20,
-                  12,
-                  20,
-                  120,
-                ),
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 120),
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomStepIndicator(
-                      currentStep: 2,
-                      totalSteps: 2,
-                    ),
+                    const CustomStepIndicator(currentStep: 2, totalSteps: 2),
 
                     const SizedBox(height: 24),
 
-                    _buildSectionLabel(
-                      'معلومات المشروع',
-                    ),
+                    if (widget.isEditMode) ...[
+                      _buildEditInfoCard(),
+                      const SizedBox(height: 20),
+                    ],
+
+                    _buildSectionLabel(l10n.projectInformation),
 
                     CustomTextField(
-                      label:
-                          'اسم المشروع (عربي)',
-                      hint:
-                          'مثال: مخبز منزلي',
-                      controller:
-                          _projectNameArController,
-                      suffixIcon:
-                          Icons.storefront_outlined,
+                      label: l10n.projectNameArabic,
+                      hint: l10n.projectNameArabicHint,
+                      controller: _projectNameArController,
+                      suffixIcon: Icons.storefront_outlined,
                     ),
 
                     const SizedBox(height: 16),
 
                     CustomTextField(
-                      label:
-                          'Project name (English)',
-                      hint:
-                          'Example: Home bakery',
-                      controller:
-                          _projectNameEnController,
-                      suffixIcon:
-                          Icons.storefront_outlined,
+                      label: l10n.projectNameEnglish,
+                      hint: l10n.projectNameEnglishHint,
+                      controller: _projectNameEnController,
+                      suffixIcon: Icons.storefront_outlined,
                       isLtr: true,
                     ),
 
                     const SizedBox(height: 20),
 
                     CustomTextField(
-                      label:
-                          'تصنيف المشروع (عربي)',
-                      hint:
-                          'مثال: إنتاج غذائي',
-                      controller:
-                          _projectCategoryArController,
-                      suffixIcon:
-                          Icons.category_outlined,
+                      label: l10n.projectCategoryArabic,
+                      hint: l10n.projectCategoryArabicHint,
+                      controller: _projectCategoryArController,
+                      suffixIcon: Icons.category_outlined,
                     ),
 
                     const SizedBox(height: 16),
 
                     CustomTextField(
-                      label:
-                          'Project category (English)',
-                      hint:
-                          'Example: Food production',
-                      controller:
-                          _projectCategoryEnController,
-                      suffixIcon:
-                          Icons.category_outlined,
+                      label: l10n.projectCategoryEnglish,
+                      hint: l10n.projectCategoryEnglishHint,
+                      controller: _projectCategoryEnController,
+                      suffixIcon: Icons.category_outlined,
                       isLtr: true,
                     ),
 
                     const SizedBox(height: 20),
 
                     CustomTextField(
-                      label:
-                          'عدد الأشخاص المتوقع دعمهم',
-                      hint: 'مثال: 3',
-                      controller:
-                          _numberOfPeopleController,
-                      keyboardType:
-                          TextInputType.number,
-                      suffixIcon:
-                          Icons.groups_outlined,
+                      label: l10n.numberOfPeopleSupported,
+                      hint: l10n.numberOfPeopleSupportedHint,
+                      controller: _numberOfPeopleController,
+                      keyboardType: TextInputType.number,
+                      suffixIcon: Icons.groups_outlined,
                       isLtr: true,
                     ),
 
                     const SizedBox(height: 24),
 
                     CustomTextField(
-                      label:
-                          'تفاصيل المشروع (عربي)',
+                      label: l10n.projectDetailsArabic,
                       hint:
-                          'اشرح فكرة المشروع، أهدافه، وخطة الاستفادة منه باللغة العربية...',
-                      controller:
-                          _detailsArController,
+                          l10n.projectDetailsArabicHint,
+                      controller: _detailsArController,
                       maxLines: 5,
                     ),
 
                     const SizedBox(height: 16),
 
                     CustomTextField(
-                      label:
-                          'Project details (English)',
+                      label: l10n.projectDetailsEnglish,
                       hint:
-                          'Explain the project idea, goals, and expected benefit in English...',
-                      controller:
-                          _detailsEnController,
+                          l10n.projectDetailsEnglishHint,
+                      controller: _detailsEnController,
                       maxLines: 5,
                       isLtr: true,
                     ),
@@ -938,14 +876,10 @@ class _SmallProjectRequestPageState
                     const SizedBox(height: 24),
 
                     CustomTextField(
-                      label:
-                          'التكلفة المالية المتوقعة',
+                      label: l10n.expectedProjectCost,
                       hint: '0.00',
-                      controller:
-                          _costController,
-                      keyboardType:
-                          const TextInputType
-                              .numberWithOptions(
+                      controller: _costController,
+                      keyboardType: const TextInputType.numberWithOptions(
                         decimal: true,
                       ),
                       isCurrency: true,
@@ -953,25 +887,25 @@ class _SmallProjectRequestPageState
 
                     const SizedBox(height: 24),
 
-                    _buildSectionLabel(
-                      'إرفاق الوثائق الثبوتية',
-                    ),
+                    _buildSectionLabel(l10n.supportingDocuments),
+
+                    if (_existingMediaUrls.isNotEmpty) ...[
+                      _buildExistingAttachmentsSection(),
+                      const SizedBox(height: 16),
+                    ],
 
                     CustomAttachmentUploader(
-                      title:
-                          'رفع الملفات أو التقاط صور',
-                      description:
-                          'دراسة جدوى، صور، فواتير أو وثائق تدعم المشروع',
-                      icon:
-                          Icons.upload_file_rounded,
-                      onTap: isLoading
-                          ? () {}
-                          : _pickAttachments,
+                      title: widget.isEditMode
+                          ? l10n.addNewDocuments
+                          : l10n.uploadFilesOrCapture,
+                      description: widget.isEditMode
+                          ? l10n.smallProjectNewDocumentsDescription
+                          : l10n.smallProjectDocumentsDescription,
+                      icon: Icons.upload_file_rounded,
+                      onTap: isLoading ? () {} : _pickAttachments,
                     ),
 
-                    _buildAttachmentsList(
-                      isLoading,
-                    ),
+                    _buildAttachmentsList(isLoading),
 
                     const SizedBox(height: 28),
 
@@ -980,34 +914,26 @@ class _SmallProjectRequestPageState
                 ),
               ),
             ),
-            bottomNavigationBar:
-                _buildBottomSubmitButton(
-              isLoading,
-            ),
+            bottomNavigationBar: _buildBottomSubmitButton(isLoading),
           ),
         );
       },
     );
   }
 
-  String _getFileDescription(
-    PlatformFile file,
-  ) {
-    final String size =
-        _formatFileSize(
-      file.size,
-    );
+  String _getFileDescription(PlatformFile file) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
+    final String size = _formatFileSize(file.size);
 
     if (kIsWeb) {
-      return '$size - ملف جاهز للرفع';
+      return '$size - ${l10n.fileReadyForUpload}';
     }
 
     return '$size - ${file.path ?? ''}';
   }
 
-  String _formatFileSize(
-    int bytes,
-  ) {
+  String _formatFileSize(int bytes) {
     if (bytes < 1024) {
       return '$bytes B';
     }
@@ -1019,9 +945,7 @@ class _SmallProjectRequestPageState
     return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
   }
 
-  IconData _getFileIcon(
-    String? extension,
-  ) {
+  IconData _getFileIcon(String? extension) {
     switch (extension?.toLowerCase()) {
       case 'jpg':
       case 'jpeg':
@@ -1036,104 +960,65 @@ class _SmallProjectRequestPageState
     }
   }
 
-  Widget _buildBottomSubmitButton(
-    bool isLoading,
-  ) {
+  Widget _buildBottomSubmitButton(bool isLoading) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+
     return SafeArea(
       child: Container(
-        padding:
-            const EdgeInsets.fromLTRB(
-          18,
-          12,
-          18,
-          16,
-        ),
+        padding: const EdgeInsets.fromLTRB(18, 12, 18, 16),
         decoration: BoxDecoration(
-          color:
-              Colors.white.withOpacity(
-            0.97,
-          ),
+          color: Colors.white.withOpacity(0.97),
           border: Border(
-            top: BorderSide(
-              color: AppColors.brandGray
-                  .withOpacity(
-                0.12,
-              ),
-            ),
+            top: BorderSide(color: AppColors.brandGray.withOpacity(0.12)),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black
-                  .withOpacity(
-                0.04,
-              ),
+              color: Colors.black.withOpacity(0.04),
               blurRadius: 14,
-              offset:
-                  const Offset(
-                0,
-                -4,
-              ),
+              offset: const Offset(0, -4),
             ),
           ],
         ),
         child: ElevatedButton(
-          onPressed:
-              isLoading ? null : _submit,
-          style:
-              ElevatedButton.styleFrom(
-            backgroundColor:
-                AppColors.primary,
-            foregroundColor:
-                Colors.white,
-            disabledBackgroundColor:
-                AppColors.primary
-                    .withOpacity(
-              0.55,
-            ),
-            disabledForegroundColor:
-                Colors.white,
-            minimumSize:
-                const Size(
-              double.infinity,
-              58,
-            ),
+          onPressed: isLoading ? null : _submit,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            disabledBackgroundColor: AppColors.primary.withOpacity(0.55),
+            disabledForegroundColor: Colors.white,
+            minimumSize: const Size(double.infinity, 58),
             elevation: 0,
-            shape:
-                RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(
-                18,
-              ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
             ),
           ),
           child: isLoading
               ? const SizedBox(
                   width: 24,
                   height: 24,
-                  child:
-                      CircularProgressIndicator(
+                  child: CircularProgressIndicator(
                     strokeWidth: 2,
                     color: Colors.white,
                   ),
                 )
-              : const Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center,
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'إرسال الطلب للمراجعة',
-                      style: TextStyle(
+                      widget.isEditMode
+                          ? l10n.saveChanges
+                          : l10n.submitRequestForReview,
+                      style: const TextStyle(
                         fontSize: 16,
-                        fontWeight:
-                            FontWeight.bold,
-                        fontFamily:
-                            AppTextStyles
-                                .fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: AppTextStyles.fontFamily,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Icon(
-                      Icons.send_rounded,
+                      widget.isEditMode
+                          ? Icons.save_outlined
+                          : Icons.send_rounded,
                       size: 19,
                     ),
                   ],

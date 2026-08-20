@@ -257,7 +257,7 @@ abstract class AppLocalizations {
   /// No description provided for @email.
   ///
   /// In en, this message translates to:
-  /// **'Email address'**
+  /// **'Email'**
   String get email;
 
   /// No description provided for @emailRequired.
@@ -353,7 +353,7 @@ abstract class AppLocalizations {
   /// No description provided for @dateOfBirth.
   ///
   /// In en, this message translates to:
-  /// **'Date of birth'**
+  /// **'Date of Birth'**
   String get dateOfBirth;
 
   /// No description provided for @selectDateOfBirth.
@@ -641,7 +641,7 @@ abstract class AppLocalizations {
   /// No description provided for @socialStatus.
   ///
   /// In en, this message translates to:
-  /// **'Marital status'**
+  /// **'Social Status'**
   String get socialStatus;
 
   /// No description provided for @selectStatus.
@@ -719,7 +719,7 @@ abstract class AppLocalizations {
   /// No description provided for @employmentStatus.
   ///
   /// In en, this message translates to:
-  /// **'Employment status'**
+  /// **'Employment Status'**
   String get employmentStatus;
 
   /// No description provided for @employed.
@@ -1187,7 +1187,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutAssociationTitle.
   ///
   /// In en, this message translates to:
-  /// **'About the association'**
+  /// **'Al Athar Association... Every Act of Giving Leaves an Impact'**
   String get aboutAssociationTitle;
 
   /// No description provided for @aboutAssociationDescription.
@@ -1583,7 +1583,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicineInsurance.
   ///
   /// In en, this message translates to:
-  /// **'Medicine insurance'**
+  /// **'Medicine Coverage'**
   String get medicineInsurance;
 
   /// No description provided for @surgery.
@@ -1595,7 +1595,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicalDevices.
   ///
   /// In en, this message translates to:
-  /// **'Medical devices'**
+  /// **'Medical Devices'**
   String get medicalDevices;
 
   /// No description provided for @healthDescription.
@@ -1775,7 +1775,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileTitle.
   ///
   /// In en, this message translates to:
-  /// **'Account'**
+  /// **'My Account'**
   String get profileTitle;
 
   /// No description provided for @ageWithYears.
@@ -1835,7 +1835,7 @@ abstract class AppLocalizations {
   /// No description provided for @remainingAmount.
   ///
   /// In en, this message translates to:
-  /// **'Remaining amount: {amount}'**
+  /// **'Remaining: {amount} SAR'**
   String remainingAmount(String amount);
 
   /// No description provided for @collected.
@@ -2045,7 +2045,7 @@ abstract class AppLocalizations {
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
-  /// **'Retry'**
+  /// **'Try Again'**
   String get retry;
 
   /// No description provided for @noSponsorshipsForStatus.
@@ -2599,6 +2599,1482 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logged in successfully. Welcome, {firstName}'**
   String loginSuccess(String firstName);
+
+  /// No description provided for @appPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'App preferences'**
+  String get appPreferences;
+
+  /// No description provided for @changeAppLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Change app language'**
+  String get changeAppLanguage;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @accountSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get accountSection;
+
+  /// No description provided for @changePasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update account password'**
+  String get changePasswordSubtitle;
+
+  /// No description provided for @logoutSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of the current account'**
+  String get logoutSubtitle;
+
+  /// No description provided for @chooseLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose app language'**
+  String get chooseLanguage;
+
+  /// No description provided for @togetherWeMakeImpact.
+  ///
+  /// In en, this message translates to:
+  /// **'Together, We Make an Impact'**
+  String get togetherWeMakeImpact;
+
+  /// No description provided for @renewedHope.
+  ///
+  /// In en, this message translates to:
+  /// **'Renewed Hope'**
+  String get renewedHope;
+
+  /// No description provided for @givingMakesDifference.
+  ///
+  /// In en, this message translates to:
+  /// **'Giving Makes a Difference'**
+  String get givingMakesDifference;
+
+  /// No description provided for @noCompletedProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no completed projects at the moment'**
+  String get noCompletedProjects;
+
+  /// No description provided for @riyal.
+  ///
+  /// In en, this message translates to:
+  /// **'SAR'**
+  String get riyal;
+
+  /// No description provided for @profileLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load profile'**
+  String get profileLoadError;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @beneficiary.
+  ///
+  /// In en, this message translates to:
+  /// **'Beneficiary'**
+  String get beneficiary;
+
+  /// No description provided for @years.
+  ///
+  /// In en, this message translates to:
+  /// **'years'**
+  String get years;
+
+  /// No description provided for @residence.
+  ///
+  /// In en, this message translates to:
+  /// **'Place of Residence'**
+  String get residence;
+
+  /// No description provided for @notSpecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not specified'**
+  String get notSpecified;
+
+  /// No description provided for @profileAccountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account information registered with the association is displayed here.'**
+  String get profileAccountHint;
+
+  /// No description provided for @alternateAddressLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load the address in the other language'**
+  String get alternateAddressLoadError;
+
+  /// No description provided for @loadBothAddressesBeforeSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Both language addresses must be loaded before saving changes'**
+  String get loadBothAddressesBeforeSave;
+
+  /// No description provided for @unsupportedGenderValue.
+  ///
+  /// In en, this message translates to:
+  /// **'The current gender value is not supported'**
+  String get unsupportedGenderValue;
+
+  /// No description provided for @unsupportedSocialStatusValue.
+  ///
+  /// In en, this message translates to:
+  /// **'The current social status value is not supported'**
+  String get unsupportedSocialStatusValue;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get saveChanges;
+
+  /// No description provided for @savingChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get savingChanges;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get changePhoto;
+
+  /// No description provided for @profilePhotoOptionalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The photo is optional and will only change if you select a new one'**
+  String get profilePhotoOptionalHint;
+
+  /// No description provided for @bilingualAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address in both languages'**
+  String get bilingualAddress;
+
+  /// No description provided for @arabicAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address in Arabic'**
+  String get arabicAddress;
+
+  /// No description provided for @arabicAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the address in Arabic'**
+  String get arabicAddressHint;
+
+  /// No description provided for @englishAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address in English'**
+  String get englishAddress;
+
+  /// No description provided for @englishAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the address in English'**
+  String get englishAddressHint;
+
+  /// No description provided for @loadingAlternateAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading the address in the other language...'**
+  String get loadingAlternateAddress;
+
+  /// No description provided for @readOnlyData.
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only information'**
+  String get readOnlyData;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get fieldRequired;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get currentPassword;
+
+  /// No description provided for @currentPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password is required'**
+  String get currentPasswordRequired;
+
+  /// No description provided for @requestTrackingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track Requests'**
+  String get requestTrackingTitle;
+
+  /// No description provided for @allRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allRequests;
+
+  /// No description provided for @pendingRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Under Review'**
+  String get pendingRequests;
+
+  /// No description provided for @acceptedRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get acceptedRequests;
+
+  /// No description provided for @rejectedRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get rejectedRequests;
+
+  /// No description provided for @cancelledRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelledRequests;
+
+  /// No description provided for @cancelRequestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Request'**
+  String get cancelRequestTitle;
+
+  /// No description provided for @cancelRequestConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel request #{requestId}?\nYou will not be able to undo this action.'**
+  String cancelRequestConfirmation(int requestId);
+
+  /// No description provided for @confirmCancelRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, Cancel Request'**
+  String get confirmCancelRequest;
+
+  /// No description provided for @requestCancelledTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Cancelled'**
+  String get requestCancelledTitle;
+
+  /// No description provided for @requestsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to Load Requests'**
+  String get requestsLoadError;
+
+  /// No description provided for @noRequestsForStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no requests with this status'**
+  String get noRequestsForStatus;
+
+  /// No description provided for @requestNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Request #{requestId}'**
+  String requestNumber(int requestId);
+
+  /// No description provided for @requestType.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Type'**
+  String get requestType;
+
+  /// No description provided for @subCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory'**
+  String get subCategory;
+
+  /// No description provided for @aidType.
+  ///
+  /// In en, this message translates to:
+  /// **'Aid Type'**
+  String get aidType;
+
+  /// No description provided for @cost.
+  ///
+  /// In en, this message translates to:
+  /// **'Cost'**
+  String get cost;
+
+  /// No description provided for @submissionDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Submission Date'**
+  String get submissionDate;
+
+  /// No description provided for @amountRiyal.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} SAR'**
+  String amountRiyal(String amount);
+
+  /// No description provided for @editRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Request'**
+  String get editRequest;
+
+  /// No description provided for @fundingProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Funding Progress'**
+  String get fundingProgress;
+
+  /// No description provided for @fundingAmountOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{current} of {total} SAR'**
+  String fundingAmountOf(String current, String total);
+
+  /// No description provided for @rejectionReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejection Reason'**
+  String get rejectionReason;
+
+  /// No description provided for @noRejectionReason.
+  ///
+  /// In en, this message translates to:
+  /// **'No rejection reason was provided'**
+  String get noRejectionReason;
+
+  /// No description provided for @requestWasCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'This request has been cancelled'**
+  String get requestWasCancelled;
+
+  /// No description provided for @selfApplicant.
+  ///
+  /// In en, this message translates to:
+  /// **'For myself'**
+  String get selfApplicant;
+
+  /// No description provided for @otherApplicant.
+  ///
+  /// In en, this message translates to:
+  /// **'For someone else'**
+  String get otherApplicant;
+
+  /// No description provided for @whoIsRequestFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Who are you submitting this aid request for?'**
+  String get whoIsRequestFor;
+
+  /// No description provided for @chooseApplicantBeforeFilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the applicant before filling in the information'**
+  String get chooseApplicantBeforeFilling;
+
+  /// No description provided for @loadingProfileData.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading profile information...'**
+  String get loadingProfileData;
+
+  /// No description provided for @profileAutoFilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account information was filled in automatically. You can edit any field before continuing.'**
+  String get profileAutoFilled;
+
+  /// No description provided for @profileAutoFillError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load profile information. You can try again or choose another person.'**
+  String get profileAutoFillError;
+
+  /// No description provided for @selectApplicantType.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose who you want to submit the aid request for'**
+  String get selectApplicantType;
+
+  /// No description provided for @waitForProfileLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait until your information is loaded'**
+  String get waitForProfileLoading;
+
+  /// No description provided for @editApplicantInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit applicant information'**
+  String get editApplicantInfo;
+
+  /// No description provided for @personalStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal status'**
+  String get personalStatus;
+
+  /// No description provided for @contactInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact information'**
+  String get contactInformation;
+
+  /// No description provided for @applicantCreateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'First choose who the request is for, then enter the applicant information accurately.'**
+  String get applicantCreateDescription;
+
+  /// No description provided for @applicantEditDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can edit the applicant information, then continue to the aid details to update them.'**
+  String get applicantEditDescription;
+
+  /// No description provided for @arabicAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address (Arabic)'**
+  String get arabicAddressLabel;
+
+  /// No description provided for @arabicAddressExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: Damascus - Mazzeh - Main Street'**
+  String get arabicAddressExample;
+
+  /// No description provided for @englishAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address (English)'**
+  String get englishAddressLabel;
+
+  /// No description provided for @englishAddressExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: Damascus - Al Mazzeh - Main Street'**
+  String get englishAddressExample;
+
+  /// No description provided for @arabicAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the address in Arabic'**
+  String get arabicAddressRequired;
+
+  /// No description provided for @arabicAddressOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the address in Arabic only'**
+  String get arabicAddressOnly;
+
+  /// No description provided for @englishAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the address in English'**
+  String get englishAddressRequired;
+
+  /// No description provided for @englishAddressOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the address in English only'**
+  String get englishAddressOnly;
+
+  /// No description provided for @phoneRequiredApplicant.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the phone number'**
+  String get phoneRequiredApplicant;
+
+  /// No description provided for @aidRequestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Aid request'**
+  String get aidRequestTitle;
+
+  /// No description provided for @editAidRequestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit aid request'**
+  String get editAidRequestTitle;
+
+  /// No description provided for @aidRequestWithType.
+  ///
+  /// In en, this message translates to:
+  /// **'{requestType} request'**
+  String aidRequestWithType(String requestType);
+
+  /// No description provided for @editAidRequestWithType.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {requestType} request'**
+  String editAidRequestWithType(String requestType);
+
+  /// No description provided for @continueToRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to request details'**
+  String get continueToRequestDetails;
+
+  /// No description provided for @continueToEditRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to edit request details'**
+  String get continueToEditRequestDetails;
+
+  /// No description provided for @editEducationRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Education Request Details'**
+  String get editEducationRequestDetails;
+
+  /// No description provided for @academicAchievement.
+  ///
+  /// In en, this message translates to:
+  /// **'Academic Achievement'**
+  String get academicAchievement;
+
+  /// No description provided for @highSchool.
+  ///
+  /// In en, this message translates to:
+  /// **'High School'**
+  String get highSchool;
+
+  /// No description provided for @diploma.
+  ///
+  /// In en, this message translates to:
+  /// **'Diploma'**
+  String get diploma;
+
+  /// No description provided for @bachelor.
+  ///
+  /// In en, this message translates to:
+  /// **'Bachelor\'s Degree'**
+  String get bachelor;
+
+  /// No description provided for @master.
+  ///
+  /// In en, this message translates to:
+  /// **'Master\'s Degree'**
+  String get master;
+
+  /// No description provided for @thirdUniversityYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Third University Year'**
+  String get thirdUniversityYear;
+
+  /// No description provided for @fourthUniversityYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Fourth University Year'**
+  String get fourthUniversityYear;
+
+  /// No description provided for @fifthUniversityYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Fifth University Year'**
+  String get fifthUniversityYear;
+
+  /// No description provided for @sixthUniversityYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Sixth University Year'**
+  String get sixthUniversityYear;
+
+  /// No description provided for @institutionNameArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'School / University Name (Arabic)'**
+  String get institutionNameArabic;
+
+  /// No description provided for @institutionNameArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: Damascus University'**
+  String get institutionNameArabicHint;
+
+  /// No description provided for @institutionNameEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'School / University Name (English)'**
+  String get institutionNameEnglish;
+
+  /// No description provided for @institutionNameEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: Damascus University'**
+  String get institutionNameEnglishHint;
+
+  /// No description provided for @educationDetailsArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Education Request Details (Arabic)'**
+  String get educationDetailsArabic;
+
+  /// No description provided for @educationDetailsArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the educational need in Arabic...'**
+  String get educationDetailsArabicHint;
+
+  /// No description provided for @educationDetailsEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Education Request Details (English)'**
+  String get educationDetailsEnglish;
+
+  /// No description provided for @educationDetailsEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the educational need in English...'**
+  String get educationDetailsEnglishHint;
+
+  /// No description provided for @educationDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach Educational Documents'**
+  String get educationDocuments;
+
+  /// No description provided for @addNewFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Files'**
+  String get addNewFiles;
+
+  /// No description provided for @addNewFilesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add new documents. Existing documents will remain unchanged.'**
+  String get addNewFilesDescription;
+
+  /// No description provided for @educationDocumentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Please attach clear photos of documents or proof of enrollment.'**
+  String get educationDocumentsDescription;
+
+  /// No description provided for @newFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'New Files'**
+  String get newFiles;
+
+  /// No description provided for @attachedFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Attached Files'**
+  String get attachedFiles;
+
+  /// No description provided for @existingAttachedFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently Attached Files'**
+  String get existingAttachedFiles;
+
+  /// No description provided for @existingAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Previously Attached File'**
+  String get existingAttachment;
+
+  /// No description provided for @educationEditInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'The current request data has been loaded. Edit the fields you want to change, then save your changes.'**
+  String get educationEditInfo;
+
+  /// No description provided for @selectAcademicAchievement.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select the academic achievement'**
+  String get selectAcademicAchievement;
+
+  /// No description provided for @selectGradeOrYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select the grade or academic year'**
+  String get selectGradeOrYear;
+
+  /// No description provided for @educationDocumentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please attach at least one document'**
+  String get educationDocumentRequired;
+
+  /// No description provided for @requestIdUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to determine the request ID to update'**
+  String get requestIdUnavailable;
+
+  /// No description provided for @schoolOrUniversityName.
+  ///
+  /// In en, this message translates to:
+  /// **'School or university name'**
+  String get schoolOrUniversityName;
+
+  /// No description provided for @educationCaseDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Education request details'**
+  String get educationCaseDetails;
+
+  /// No description provided for @enterFieldInArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter {fieldName} in Arabic'**
+  String enterFieldInArabic(String fieldName);
+
+  /// No description provided for @fieldArabicOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write {fieldName} in Arabic only'**
+  String fieldArabicOnly(String fieldName);
+
+  /// No description provided for @enterFieldInEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter {fieldName} in English'**
+  String enterFieldInEnglish(String fieldName);
+
+  /// No description provided for @fieldEnglishOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write {fieldName} in English only'**
+  String fieldEnglishOnly(String fieldName);
+
+  /// No description provided for @editFoodRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Food Request Details'**
+  String get editFoodRequestDetails;
+
+  /// No description provided for @foodRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Food Request Details'**
+  String get foodRequestDetails;
+
+  /// No description provided for @foodAidType.
+  ///
+  /// In en, this message translates to:
+  /// **'Required Food Assistance Type'**
+  String get foodAidType;
+
+  /// No description provided for @foodBasket.
+  ///
+  /// In en, this message translates to:
+  /// **'Food Basket'**
+  String get foodBasket;
+
+  /// No description provided for @babyMilk.
+  ///
+  /// In en, this message translates to:
+  /// **'Baby Milk'**
+  String get babyMilk;
+
+  /// No description provided for @foodDetailsArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Food Request Details (Arabic)'**
+  String get foodDetailsArabic;
+
+  /// No description provided for @foodDetailsArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the type of need and the family\'s current situation in Arabic...'**
+  String get foodDetailsArabicHint;
+
+  /// No description provided for @foodDetailsEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Food Request Details (English)'**
+  String get foodDetailsEnglish;
+
+  /// No description provided for @foodDetailsEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the family situation and food needs in English...'**
+  String get foodDetailsEnglishHint;
+
+  /// No description provided for @expectedFoodCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Cost'**
+  String get expectedFoodCost;
+
+  /// No description provided for @supportingDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach Supporting Documents'**
+  String get supportingDocuments;
+
+  /// No description provided for @addNewDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Documents'**
+  String get addNewDocuments;
+
+  /// No description provided for @foodNewDocumentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'New attachments are optional as long as the existing attachments remain available'**
+  String get foodNewDocumentsDescription;
+
+  /// No description provided for @foodDocumentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Please attach any documents that support the food request'**
+  String get foodDocumentsDescription;
+
+  /// No description provided for @foodDecorativeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Together, we help provide food for every family in need'**
+  String get foodDecorativeMessage;
+
+  /// No description provided for @selectFoodAidType.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select the food assistance type'**
+  String get selectFoodAidType;
+
+  /// No description provided for @invalidIndividualsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid number of individuals'**
+  String get invalidIndividualsCount;
+
+  /// No description provided for @foodDocumentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please attach at least one document'**
+  String get foodDocumentRequired;
+
+  /// No description provided for @foodArabicDetailsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the request details in Arabic'**
+  String get foodArabicDetailsRequired;
+
+  /// No description provided for @foodArabicDetailsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide clearer details in Arabic'**
+  String get foodArabicDetailsShort;
+
+  /// No description provided for @foodArabicDetailsMustContainArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arabic details must contain Arabic letters'**
+  String get foodArabicDetailsMustContainArabic;
+
+  /// No description provided for @foodArabicDetailsNoEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the Arabic details without English letters'**
+  String get foodArabicDetailsNoEnglish;
+
+  /// No description provided for @foodEnglishDetailsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the request details in English'**
+  String get foodEnglishDetailsRequired;
+
+  /// No description provided for @foodEnglishDetailsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide clearer details in English'**
+  String get foodEnglishDetailsShort;
+
+  /// No description provided for @foodEnglishDetailsMustContainEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'The English details must contain English letters'**
+  String get foodEnglishDetailsMustContainEnglish;
+
+  /// No description provided for @foodEnglishDetailsNoArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the English details without Arabic letters'**
+  String get foodEnglishDetailsNoArabic;
+
+  /// No description provided for @editHealthRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Health Request Details'**
+  String get editHealthRequestDetails;
+
+  /// No description provided for @healthDetailsArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Details (Arabic)'**
+  String get healthDetailsArabic;
+
+  /// No description provided for @healthDetailsArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the diagnosis and symptoms in Arabic...'**
+  String get healthDetailsArabicHint;
+
+  /// No description provided for @healthDetailsEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Details (English)'**
+  String get healthDetailsEnglish;
+
+  /// No description provided for @healthDetailsEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the diagnosis and symptoms in English...'**
+  String get healthDetailsEnglishHint;
+
+  /// No description provided for @addNewMedicalDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Medical Reports or Prescriptions'**
+  String get addNewMedicalDocuments;
+
+  /// No description provided for @medicalNewDocumentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'New attachments are optional as long as the existing attachments remain available'**
+  String get medicalNewDocumentsDescription;
+
+  /// No description provided for @healthArabicDetailsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the health details in Arabic'**
+  String get healthArabicDetailsRequired;
+
+  /// No description provided for @healthArabicDetailsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide clearer health details in Arabic'**
+  String get healthArabicDetailsShort;
+
+  /// No description provided for @healthArabicDetailsMustContainArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arabic details must contain Arabic letters'**
+  String get healthArabicDetailsMustContainArabic;
+
+  /// No description provided for @healthArabicDetailsNoEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the Arabic details without English letters'**
+  String get healthArabicDetailsNoEnglish;
+
+  /// No description provided for @healthEnglishDetailsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the health details in English'**
+  String get healthEnglishDetailsRequired;
+
+  /// No description provided for @healthEnglishDetailsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide clearer health details in English'**
+  String get healthEnglishDetailsShort;
+
+  /// No description provided for @healthEnglishDetailsMustContainEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'The English details must contain English letters'**
+  String get healthEnglishDetailsMustContainEnglish;
+
+  /// No description provided for @healthEnglishDetailsNoArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the English details without Arabic letters'**
+  String get healthEnglishDetailsNoArabic;
+
+  /// No description provided for @homeProvision.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Provision'**
+  String get homeProvision;
+
+  /// No description provided for @rentAssistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent Assistance'**
+  String get rentAssistance;
+
+  /// No description provided for @homeRepairs.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Repairs'**
+  String get homeRepairs;
+
+  /// No description provided for @editHousingRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Housing Request Details'**
+  String get editHousingRequestDetails;
+
+  /// No description provided for @housingAidType.
+  ///
+  /// In en, this message translates to:
+  /// **'Required Housing Assistance Type'**
+  String get housingAidType;
+
+  /// No description provided for @chooseHousingAidTypeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the housing assistance type to display the required fields'**
+  String get chooseHousingAidTypeHint;
+
+  /// No description provided for @housingEditInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'The current request data has been loaded. The housing assistance type is fixed, and you can edit the remaining fields before saving your changes.'**
+  String get housingEditInfo;
+
+  /// No description provided for @currentResidenceArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Residence (Arabic)'**
+  String get currentResidenceArabic;
+
+  /// No description provided for @currentResidenceArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: Damascus - Mezzeh - temporary housing'**
+  String get currentResidenceArabicHint;
+
+  /// No description provided for @currentResidenceEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Residence (English)'**
+  String get currentResidenceEnglish;
+
+  /// No description provided for @currentResidenceEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: Damascus - Mezzeh - temporary housing'**
+  String get currentResidenceEnglishHint;
+
+  /// No description provided for @housingSupportReasonArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason for Requesting Housing (Arabic)'**
+  String get housingSupportReasonArabic;
+
+  /// No description provided for @housingSupportReasonArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain why housing assistance is needed in Arabic...'**
+  String get housingSupportReasonArabicHint;
+
+  /// No description provided for @housingSupportReasonEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason for Requesting Housing (English)'**
+  String get housingSupportReasonEnglish;
+
+  /// No description provided for @housingSupportReasonEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain why housing assistance is needed in English...'**
+  String get housingSupportReasonEnglishHint;
+
+  /// No description provided for @requestedHousingSpecsArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Required Housing Specifications (Arabic)'**
+  String get requestedHousingSpecsArabic;
+
+  /// No description provided for @requestedHousingSpecsArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: two rooms, close to school...'**
+  String get requestedHousingSpecsArabicHint;
+
+  /// No description provided for @requestedHousingSpecsEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Required Housing Specifications (English)'**
+  String get requestedHousingSpecsEnglish;
+
+  /// No description provided for @requestedHousingSpecsEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: two rooms, close to school...'**
+  String get requestedHousingSpecsEnglishHint;
+
+  /// No description provided for @currentHousingSituation.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Housing Situation'**
+  String get currentHousingSituation;
+
+  /// No description provided for @currentHousingSituationArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Housing Situation (Arabic)'**
+  String get currentHousingSituationArabic;
+
+  /// No description provided for @currentHousingSituationArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the damage and required repairs in Arabic...'**
+  String get currentHousingSituationArabicHint;
+
+  /// No description provided for @currentHousingSituationEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Housing Situation (English)'**
+  String get currentHousingSituationEnglish;
+
+  /// No description provided for @currentHousingSituationEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the damage and required repairs in English...'**
+  String get currentHousingSituationEnglishHint;
+
+  /// No description provided for @housingDetailsArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing Request Details (Arabic)'**
+  String get housingDetailsArabic;
+
+  /// No description provided for @housingDetailsArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the housing situation and need in Arabic...'**
+  String get housingDetailsArabicHint;
+
+  /// No description provided for @housingDetailsEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Housing Request Details (English)'**
+  String get housingDetailsEnglish;
+
+  /// No description provided for @housingDetailsEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the housing situation and need in English...'**
+  String get housingDetailsEnglishHint;
+
+  /// No description provided for @expectedHousingCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Cost'**
+  String get expectedHousingCost;
+
+  /// No description provided for @selectHousingAidType.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select the housing assistance type'**
+  String get selectHousingAidType;
+
+  /// No description provided for @validCurrentRent.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid current rent amount'**
+  String get validCurrentRent;
+
+  /// No description provided for @housingDocumentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please attach at least one document'**
+  String get housingDocumentRequired;
+
+  /// No description provided for @editSmallProjectRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Small Project Details'**
+  String get editSmallProjectRequestDetails;
+
+  /// No description provided for @smallProjectRequestDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Small Project Details'**
+  String get smallProjectRequestDetails;
+
+  /// No description provided for @projectInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Information'**
+  String get projectInformation;
+
+  /// No description provided for @projectNameArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Name (Arabic)'**
+  String get projectNameArabic;
+
+  /// No description provided for @projectNameArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: مخبز منزلي'**
+  String get projectNameArabicHint;
+
+  /// No description provided for @projectNameEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Name (English)'**
+  String get projectNameEnglish;
+
+  /// No description provided for @projectNameEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: Home bakery'**
+  String get projectNameEnglishHint;
+
+  /// No description provided for @projectCategoryArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Category (Arabic)'**
+  String get projectCategoryArabic;
+
+  /// No description provided for @projectCategoryArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: إنتاج غذائي'**
+  String get projectCategoryArabicHint;
+
+  /// No description provided for @projectCategoryEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Category (English)'**
+  String get projectCategoryEnglish;
+
+  /// No description provided for @projectCategoryEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: Food production'**
+  String get projectCategoryEnglishHint;
+
+  /// No description provided for @numberOfPeopleSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Number of People Supported'**
+  String get numberOfPeopleSupported;
+
+  /// No description provided for @numberOfPeopleSupportedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example: 3'**
+  String get numberOfPeopleSupportedHint;
+
+  /// No description provided for @projectDetailsArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Details (Arabic)'**
+  String get projectDetailsArabic;
+
+  /// No description provided for @projectDetailsArabicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the project idea, goals, and expected benefit in Arabic...'**
+  String get projectDetailsArabicHint;
+
+  /// No description provided for @projectDetailsEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Details (English)'**
+  String get projectDetailsEnglish;
+
+  /// No description provided for @projectDetailsEnglishHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain the project idea, goals, and expected benefit in English...'**
+  String get projectDetailsEnglishHint;
+
+  /// No description provided for @expectedProjectCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected Cost'**
+  String get expectedProjectCost;
+
+  /// No description provided for @smallProjectNewDocumentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'New attachments are optional as long as the existing attachments remain available'**
+  String get smallProjectNewDocumentsDescription;
+
+  /// No description provided for @smallProjectDocumentsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Feasibility study, photos, invoices, or any documents supporting the project'**
+  String get smallProjectDocumentsDescription;
+
+  /// No description provided for @smallProjectDecorativeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We support small projects to help families build a sustainable income'**
+  String get smallProjectDecorativeMessage;
+
+  /// No description provided for @smallProjectEditInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'The current request data has been loaded. Edit the fields you want to change, then save your changes.'**
+  String get smallProjectEditInfo;
+
+  /// No description provided for @projectNameArabicRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the project name in Arabic'**
+  String get projectNameArabicRequired;
+
+  /// No description provided for @projectNameArabicShort.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arabic project name is too short'**
+  String get projectNameArabicShort;
+
+  /// No description provided for @projectNameEnglishRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the project name in English'**
+  String get projectNameEnglishRequired;
+
+  /// No description provided for @projectNameEnglishShort.
+  ///
+  /// In en, this message translates to:
+  /// **'The English project name is too short'**
+  String get projectNameEnglishShort;
+
+  /// No description provided for @projectCategoryArabicRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the project category in Arabic'**
+  String get projectCategoryArabicRequired;
+
+  /// No description provided for @projectCategoryArabicShort.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arabic project category is too short'**
+  String get projectCategoryArabicShort;
+
+  /// No description provided for @projectCategoryEnglishRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the project category in English'**
+  String get projectCategoryEnglishRequired;
+
+  /// No description provided for @projectCategoryEnglishShort.
+  ///
+  /// In en, this message translates to:
+  /// **'The English project category is too short'**
+  String get projectCategoryEnglishShort;
+
+  /// No description provided for @validSupportedPeopleCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid number of people to be supported'**
+  String get validSupportedPeopleCount;
+
+  /// No description provided for @projectDetailsArabicRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the project details in Arabic'**
+  String get projectDetailsArabicRequired;
+
+  /// No description provided for @projectDetailsArabicShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide clearer project details in Arabic'**
+  String get projectDetailsArabicShort;
+
+  /// No description provided for @projectDetailsEnglishRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the project details in English'**
+  String get projectDetailsEnglishRequired;
+
+  /// No description provided for @projectDetailsEnglishShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide clearer project details in English'**
+  String get projectDetailsEnglishShort;
+
+  /// No description provided for @smallProjectDocumentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please attach at least one document'**
+  String get smallProjectDocumentRequired;
+
+  /// No description provided for @smallProjectFilesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected files were already added or could not be accessed'**
+  String get smallProjectFilesUnavailable;
+
+  /// No description provided for @arabicFieldMustContainArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'The Arabic field must contain Arabic letters'**
+  String get arabicFieldMustContainArabic;
+
+  /// No description provided for @arabicFieldNoEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the Arabic field without English letters'**
+  String get arabicFieldNoEnglish;
+
+  /// No description provided for @englishFieldMustContainEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'The English field must contain English letters'**
+  String get englishFieldMustContainEnglish;
+
+  /// No description provided for @englishFieldNoArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write the English field without Arabic letters'**
+  String get englishFieldNoArabic;
+
+  /// No description provided for @loadingRequestData.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading request data...'**
+  String get loadingRequestData;
+
+  /// No description provided for @pleaseWaitMoment.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait a moment'**
+  String get pleaseWaitMoment;
+
+  /// No description provided for @requestDetailsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load request details'**
+  String get requestDetailsLoadFailed;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
 }
 
 class _AppLocalizationsDelegate

@@ -327,13 +327,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get syrianPound => 'ل.س';
 
   @override
-  String get employmentStatus => 'الحالة المهنية';
+  String get employmentStatus => 'حالة العمل';
 
   @override
-  String get employed => 'أعمل';
+  String get employed => 'يعمل';
 
   @override
-  String get unemployed => 'لا أعمل';
+  String get unemployed => 'عاطل عن العمل';
 
   @override
   String get unexpectedError => 'حدث خطأ غير متوقع';
@@ -563,7 +563,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get medicalComplexProject => 'مجمع طبي';
 
   @override
-  String get aboutAssociationTitle => 'نبذة عن الجمعية';
+  String get aboutAssociationTitle => 'جمعية الأثر... لأن لكل عطاء أثراً';
 
   @override
   String get aboutAssociationDescription =>
@@ -873,7 +873,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get expectedTotalCost => 'التكلفة الإجمالية المتوقعة';
 
   @override
-  String get profileTitle => 'الحساب';
+  String get profileTitle => 'حسابي';
 
   @override
   String ageWithYears(int years) {
@@ -910,7 +910,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String remainingAmount(String amount) {
-    return 'المبلغ المتبقي: $amount';
+    return 'المتبقي: $amount ريال';
   }
 
   @override
@@ -1325,4 +1325,834 @@ class AppLocalizationsAr extends AppLocalizations {
   String loginSuccess(String firstName) {
     return 'تم تسجيل الدخول بنجاح، أهلاً $firstName';
   }
+
+  @override
+  String get appPreferences => 'تفضيلات التطبيق';
+
+  @override
+  String get changeAppLanguage => 'تغيير لغة التطبيق';
+
+  @override
+  String get appearance => 'المظهر';
+
+  @override
+  String get accountSection => 'الحساب';
+
+  @override
+  String get changePasswordSubtitle => 'تحديث كلمة مرور الحساب';
+
+  @override
+  String get logoutSubtitle => 'الخروج من الحساب الحالي';
+
+  @override
+  String get chooseLanguage => 'اختر لغة التطبيق';
+
+  @override
+  String get togetherWeMakeImpact => 'معاً نصنع أثراً';
+
+  @override
+  String get renewedHope => 'أمل يتجدد';
+
+  @override
+  String get givingMakesDifference => 'العطاء يصنع الفرق';
+
+  @override
+  String get noCompletedProjects => 'لا توجد مشاريع مكتملة حالياً';
+
+  @override
+  String get riyal => 'ريال';
+
+  @override
+  String get profileLoadError => 'تعذر تحميل الملف الشخصي';
+
+  @override
+  String get editProfile => 'تعديل البيانات';
+
+  @override
+  String get beneficiary => 'المستفيد';
+
+  @override
+  String get years => 'سنة';
+
+  @override
+  String get residence => 'مكان الإقامة';
+
+  @override
+  String get notSpecified => 'غير محدد';
+
+  @override
+  String get profileAccountHint => 'يتم عرض بيانات حسابك المسجلة لدى الجمعية.';
+
+  @override
+  String get alternateAddressLoadError => 'تعذر تحميل العنوان باللغة الأخرى';
+
+  @override
+  String get loadBothAddressesBeforeSave =>
+      'يجب تحميل العنوان باللغتين قبل حفظ التعديلات';
+
+  @override
+  String get unsupportedGenderValue => 'قيمة الجنس الحالية غير مدعومة';
+
+  @override
+  String get unsupportedSocialStatusValue =>
+      'قيمة الحالة الاجتماعية الحالية غير مدعومة';
+
+  @override
+  String get saveChanges => 'حفظ التعديلات';
+
+  @override
+  String get savingChanges => 'جارٍ الحفظ...';
+
+  @override
+  String get changePhoto => 'تغيير الصورة';
+
+  @override
+  String get profilePhotoOptionalHint =>
+      'الصورة اختيارية، ولن تتغير إلا عند اختيار صورة جديدة';
+
+  @override
+  String get bilingualAddress => 'العنوان باللغتين';
+
+  @override
+  String get arabicAddress => 'العنوان بالعربية';
+
+  @override
+  String get arabicAddressHint => 'أدخل العنوان بالعربية';
+
+  @override
+  String get englishAddress => 'العنوان بالإنجليزية';
+
+  @override
+  String get englishAddressHint => 'أدخل العنوان بالإنجليزية';
+
+  @override
+  String get loadingAlternateAddress => 'جارٍ تحميل العنوان باللغة الأخرى...';
+
+  @override
+  String get readOnlyData => 'بيانات للعرض فقط';
+
+  @override
+  String get fieldRequired => 'هذا الحقل مطلوب';
+
+  @override
+  String get currentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get currentPasswordRequired => 'كلمة المرور الحالية مطلوبة';
+
+  @override
+  String get requestTrackingTitle => 'تتبع الطلبات';
+
+  @override
+  String get allRequests => 'الكل';
+
+  @override
+  String get pendingRequests => 'قيد المراجعة';
+
+  @override
+  String get acceptedRequests => 'المقبولة';
+
+  @override
+  String get rejectedRequests => 'المرفوضة';
+
+  @override
+  String get cancelledRequests => 'الملغاة';
+
+  @override
+  String get cancelRequestTitle => 'إلغاء الطلب';
+
+  @override
+  String cancelRequestConfirmation(int requestId) {
+    return 'هل أنت متأكد من رغبتك في إلغاء الطلب رقم #$requestId؟\nلن تتمكن من التراجع عن هذه العملية.';
+  }
+
+  @override
+  String get confirmCancelRequest => 'نعم، إلغاء الطلب';
+
+  @override
+  String get requestCancelledTitle => 'تم إلغاء الطلب';
+
+  @override
+  String get requestsLoadError => 'تعذر تحميل الطلبات';
+
+  @override
+  String get noRequestsForStatus => 'لا توجد طلبات في هذه الحالة';
+
+  @override
+  String requestNumber(int requestId) {
+    return 'طلب #$requestId';
+  }
+
+  @override
+  String get requestType => 'نوع الطلب';
+
+  @override
+  String get subCategory => 'النوع الفرعي';
+
+  @override
+  String get aidType => 'نوع المساعدة';
+
+  @override
+  String get cost => 'التكلفة';
+
+  @override
+  String get submissionDate => 'تاريخ التقديم';
+
+  @override
+  String amountRiyal(String amount) {
+    return '$amount ريال';
+  }
+
+  @override
+  String get editRequest => 'تعديل الطلب';
+
+  @override
+  String get fundingProgress => 'متابعة التمويل';
+
+  @override
+  String fundingAmountOf(String current, String total) {
+    return '$current من $total ريال';
+  }
+
+  @override
+  String get rejectionReason => 'سبب الرفض';
+
+  @override
+  String get noRejectionReason => 'لم يتم توضيح سبب الرفض';
+
+  @override
+  String get requestWasCancelled => 'تم إلغاء هذا الطلب';
+
+  @override
+  String get selfApplicant => 'لنفسي';
+
+  @override
+  String get otherApplicant => 'لشخص آخر';
+
+  @override
+  String get whoIsRequestFor => 'لمن تريد تقديم طلب الإعانة؟';
+
+  @override
+  String get chooseApplicantBeforeFilling =>
+      'اختر صاحب الطلب قبل تعبئة المعلومات';
+
+  @override
+  String get loadingProfileData => 'جارٍ تحميل بيانات الملف الشخصي...';
+
+  @override
+  String get profileAutoFilled =>
+      'تم تعبئة بيانات حسابك تلقائياً. يمكنك تعديل أي معلومة قبل متابعة الطلب.';
+
+  @override
+  String get profileAutoFillError =>
+      'تعذر تحميل بيانات الملف الشخصي، يمكنك المحاولة مرة أخرى أو اختيار شخص آخر';
+
+  @override
+  String get selectApplicantType => 'يرجى تحديد لمن تريد تقديم طلب الإعانة';
+
+  @override
+  String get waitForProfileLoading => 'يرجى الانتظار حتى يتم تحميل بياناتك';
+
+  @override
+  String get editApplicantInfo => 'تعديل معلومات مقدم الطلب';
+
+  @override
+  String get personalStatus => 'الحالة الشخصية';
+
+  @override
+  String get contactInformation => 'معلومات التواصل';
+
+  @override
+  String get applicantCreateDescription =>
+      'حدد أولاً لمن تريد تقديم الطلب، ثم أدخل معلومات مقدم الطلب بدقة.';
+
+  @override
+  String get applicantEditDescription =>
+      'يمكنك تعديل معلومات مقدم الطلب، ثم الانتقال إلى تفاصيل المساعدة لتعديلها.';
+
+  @override
+  String get arabicAddressLabel => 'العنوان (عربي)';
+
+  @override
+  String get arabicAddressExample => 'مثال: دمشق - المزة - الشارع الرئيسي';
+
+  @override
+  String get englishAddressLabel => 'العنوان (إنجليزي)';
+
+  @override
+  String get englishAddressExample =>
+      'Example: Damascus - Al Mazzeh - Main Street';
+
+  @override
+  String get arabicAddressRequired => 'يرجى إدخال العنوان باللغة العربية';
+
+  @override
+  String get arabicAddressOnly => 'يرجى كتابة العنوان بالعربية فقط';
+
+  @override
+  String get englishAddressRequired => 'يرجى إدخال العنوان باللغة الإنجليزية';
+
+  @override
+  String get englishAddressOnly => 'يرجى كتابة العنوان باللغة الإنجليزية فقط';
+
+  @override
+  String get phoneRequiredApplicant => 'يرجى إدخال رقم الهاتف';
+
+  @override
+  String get aidRequestTitle => 'طلب مساعدة';
+
+  @override
+  String get editAidRequestTitle => 'تعديل طلب مساعدة';
+
+  @override
+  String aidRequestWithType(String requestType) {
+    return 'طلب $requestType';
+  }
+
+  @override
+  String editAidRequestWithType(String requestType) {
+    return 'تعديل طلب $requestType';
+  }
+
+  @override
+  String get continueToRequestDetails => 'متابعة إلى تفاصيل الطلب';
+
+  @override
+  String get continueToEditRequestDetails => 'متابعة لتعديل تفاصيل الطلب';
+
+  @override
+  String get editEducationRequestDetails => 'تعديل تفاصيل الطلب التعليمي';
+
+  @override
+  String get academicAchievement => 'التحصيل الدراسي';
+
+  @override
+  String get highSchool => 'ثانوي';
+
+  @override
+  String get diploma => 'دبلوم';
+
+  @override
+  String get bachelor => 'بكالوريوس';
+
+  @override
+  String get master => 'ماجستير';
+
+  @override
+  String get thirdUniversityYear => 'سنة ثالثة جامعي';
+
+  @override
+  String get fourthUniversityYear => 'سنة رابعة جامعي';
+
+  @override
+  String get fifthUniversityYear => 'سنة خامسة جامعي';
+
+  @override
+  String get sixthUniversityYear => 'سنة سادسة جامعي';
+
+  @override
+  String get institutionNameArabic => 'اسم المدرسة / الجامعة (عربي)';
+
+  @override
+  String get institutionNameArabicHint => 'مثال: جامعة دمشق';
+
+  @override
+  String get institutionNameEnglish => 'اسم المدرسة / الجامعة (إنجليزي)';
+
+  @override
+  String get institutionNameEnglishHint => 'Example: Damascus University';
+
+  @override
+  String get educationDetailsArabic => 'تفاصيل الحالة التعليمية (عربي)';
+
+  @override
+  String get educationDetailsArabicHint =>
+      'اشرح حاجتك التعليمية باللغة العربية...';
+
+  @override
+  String get educationDetailsEnglish => 'تفاصيل الحالة التعليمية (إنجليزي)';
+
+  @override
+  String get educationDetailsEnglishHint =>
+      'Explain the educational need in English...';
+
+  @override
+  String get educationDocuments => 'إرفاق الوثائق التعليمية';
+
+  @override
+  String get addNewFiles => 'إضافة ملفات جديدة';
+
+  @override
+  String get addNewFilesDescription =>
+      'يمكنك إضافة وثائق جديدة، أما الوثائق الحالية فستبقى كما هي';
+
+  @override
+  String get educationDocumentsDescription =>
+      'يرجى إرفاق صور واضحة للوثائق أو إثبات التسجيل';
+
+  @override
+  String get newFiles => 'الملفات الجديدة';
+
+  @override
+  String get attachedFiles => 'الملفات المرفقة';
+
+  @override
+  String get existingAttachedFiles => 'الملفات المرفقة حالياً';
+
+  @override
+  String get existingAttachment => 'مرفق موجود مسبقاً';
+
+  @override
+  String get educationEditInfo =>
+      'تم تحميل بيانات الطلب الحالية. عدّل الحقول التي تريد تغييرها ثم اضغط حفظ التعديلات.';
+
+  @override
+  String get selectAcademicAchievement => 'يرجى اختيار التحصيل الدراسي';
+
+  @override
+  String get selectGradeOrYear => 'يرجى اختيار الصف أو السنة الدراسية';
+
+  @override
+  String get educationDocumentRequired => 'يرجى إرفاق وثيقة واحدة على الأقل';
+
+  @override
+  String get requestIdUnavailable => 'تعذر تحديد رقم الطلب المراد تعديله';
+
+  @override
+  String get schoolOrUniversityName => 'اسم المدرسة أو الجامعة';
+
+  @override
+  String get educationCaseDetails => 'تفاصيل الحالة التعليمية';
+
+  @override
+  String enterFieldInArabic(String fieldName) {
+    return 'يرجى إدخال $fieldName باللغة العربية';
+  }
+
+  @override
+  String fieldArabicOnly(String fieldName) {
+    return 'يرجى كتابة $fieldName باللغة العربية فقط';
+  }
+
+  @override
+  String enterFieldInEnglish(String fieldName) {
+    return 'يرجى إدخال $fieldName باللغة الإنجليزية';
+  }
+
+  @override
+  String fieldEnglishOnly(String fieldName) {
+    return 'يرجى كتابة $fieldName باللغة الإنجليزية فقط';
+  }
+
+  @override
+  String get editFoodRequestDetails => 'تعديل تفاصيل الطلب الغذائي';
+
+  @override
+  String get foodRequestDetails => 'تفاصيل الطلب الغذائي';
+
+  @override
+  String get foodAidType => 'نوع المساعدة الغذائية المطلوبة';
+
+  @override
+  String get foodBasket => 'سلة غذائية';
+
+  @override
+  String get babyMilk => 'حليب أطفال';
+
+  @override
+  String get foodDetailsArabic => 'تفاصيل الحالة والاحتياج الغذائي (عربي)';
+
+  @override
+  String get foodDetailsArabicHint =>
+      'اشرح نوع الاحتياج والظروف الحالية للأسرة باللغة العربية...';
+
+  @override
+  String get foodDetailsEnglish => 'تفاصيل الطلب الغذائي (إنجليزي)';
+
+  @override
+  String get foodDetailsEnglishHint =>
+      'Explain the family situation and food needs in English...';
+
+  @override
+  String get expectedFoodCost => 'التكلفة المالية المتوقعة';
+
+  @override
+  String get supportingDocuments => 'إرفاق الوثائق الثبوتية';
+
+  @override
+  String get addNewDocuments => 'إضافة وثائق جديدة';
+
+  @override
+  String get foodNewDocumentsDescription =>
+      'المرفقات الجديدة اختيارية ما دامت المرفقات الحالية موجودة';
+
+  @override
+  String get foodDocumentsDescription =>
+      'يرجى إرفاق أي وثائق تدعم الطلب الغذائي';
+
+  @override
+  String get foodDecorativeMessage =>
+      'معاً نساهم في توفير الغذاء لكل أسرة محتاجة';
+
+  @override
+  String get selectFoodAidType => 'يرجى اختيار نوع المساعدة الغذائية';
+
+  @override
+  String get invalidIndividualsCount => 'يرجى إدخال عدد أفراد صحيح';
+
+  @override
+  String get foodDocumentRequired => 'يرجى إرفاق وثيقة واحدة على الأقل';
+
+  @override
+  String get foodArabicDetailsRequired =>
+      'يرجى إدخال تفاصيل الطلب باللغة العربية';
+
+  @override
+  String get foodArabicDetailsShort => 'يرجى كتابة تفاصيل أوضح باللغة العربية';
+
+  @override
+  String get foodArabicDetailsMustContainArabic =>
+      'يجب أن تحتوي التفاصيل العربية على أحرف عربية';
+
+  @override
+  String get foodArabicDetailsNoEnglish =>
+      'يرجى كتابة التفاصيل العربية دون أحرف إنكليزية';
+
+  @override
+  String get foodEnglishDetailsRequired =>
+      'يرجى إدخال تفاصيل الطلب باللغة الإنجليزية';
+
+  @override
+  String get foodEnglishDetailsShort =>
+      'يرجى كتابة تفاصيل أوضح باللغة الإنجليزية';
+
+  @override
+  String get foodEnglishDetailsMustContainEnglish =>
+      'يجب أن تحتوي التفاصيل الإنجليزية على أحرف إنجليزية';
+
+  @override
+  String get foodEnglishDetailsNoArabic =>
+      'يرجى كتابة التفاصيل الإنجليزية دون أحرف عربية';
+
+  @override
+  String get editHealthRequestDetails => 'تعديل تفاصيل الطلب الصحي';
+
+  @override
+  String get healthDetailsArabic => 'تفاصيل الحالة الصحية (عربي)';
+
+  @override
+  String get healthDetailsArabicHint =>
+      'يرجى ذكر التشخيص والأعراض باللغة العربية...';
+
+  @override
+  String get healthDetailsEnglish => 'تفاصيل الحالة الصحية (إنجليزي)';
+
+  @override
+  String get healthDetailsEnglishHint =>
+      'Describe the diagnosis and symptoms in English...';
+
+  @override
+  String get addNewMedicalDocuments => 'إضافة تقارير أو وصفات طبية جديدة';
+
+  @override
+  String get medicalNewDocumentsDescription =>
+      'المرفقات الجديدة اختيارية ما دامت المرفقات الحالية موجودة';
+
+  @override
+  String get healthArabicDetailsRequired =>
+      'يرجى إدخال تفاصيل الحالة الصحية باللغة العربية';
+
+  @override
+  String get healthArabicDetailsShort =>
+      'يرجى كتابة تفاصيل أوضح باللغة العربية';
+
+  @override
+  String get healthArabicDetailsMustContainArabic =>
+      'يجب أن تحتوي التفاصيل العربية على أحرف عربية';
+
+  @override
+  String get healthArabicDetailsNoEnglish =>
+      'يرجى كتابة التفاصيل العربية دون أحرف إنكليزية';
+
+  @override
+  String get healthEnglishDetailsRequired =>
+      'يرجى إدخال تفاصيل الحالة الصحية باللغة الإنجليزية';
+
+  @override
+  String get healthEnglishDetailsShort =>
+      'يرجى كتابة تفاصيل أوضح باللغة الإنجليزية';
+
+  @override
+  String get healthEnglishDetailsMustContainEnglish =>
+      'يجب أن تحتوي التفاصيل الإنجليزية على أحرف إنجليزية';
+
+  @override
+  String get healthEnglishDetailsNoArabic =>
+      'يرجى كتابة التفاصيل الإنجليزية دون أحرف عربية';
+
+  @override
+  String get homeProvision => 'تأمين منزل';
+
+  @override
+  String get rentAssistance => 'مساعدة في إيجار البيت';
+
+  @override
+  String get homeRepairs => 'إصلاحات منزلية';
+
+  @override
+  String get editHousingRequestDetails => 'تعديل تفاصيل الطلب السكني';
+
+  @override
+  String get housingAidType => 'نوع المساعدة السكنية المطلوبة';
+
+  @override
+  String get chooseHousingAidTypeHint =>
+      'اختر نوع المساعدة السكنية لعرض الحقول المطلوبة';
+
+  @override
+  String get housingEditInfo =>
+      'تم تحميل بيانات الطلب الحالية. نوع المساعدة السكنية ثابت، ويمكنك تعديل بقية الحقول ثم حفظ التعديلات.';
+
+  @override
+  String get currentResidenceArabic => 'مكان الإقامة الحالي (عربي)';
+
+  @override
+  String get currentResidenceArabicHint => 'مثال: دمشق - المزة - سكن مؤقت';
+
+  @override
+  String get currentResidenceEnglish => 'مكان الإقامة الحالي (إنجليزي)';
+
+  @override
+  String get currentResidenceEnglishHint =>
+      'Example: Damascus - Mezzeh - temporary housing';
+
+  @override
+  String get housingSupportReasonArabic => 'سبب طلب تأمين منزل (عربي)';
+
+  @override
+  String get housingSupportReasonArabicHint =>
+      'اشرح سبب الحاجة إلى منزل باللغة العربية...';
+
+  @override
+  String get housingSupportReasonEnglish => 'سبب طلب تأمين منزل (إنجليزي)';
+
+  @override
+  String get housingSupportReasonEnglishHint =>
+      'Explain why housing assistance is needed in English...';
+
+  @override
+  String get requestedHousingSpecsArabic => 'مواصفات المنزل المطلوب (عربي)';
+
+  @override
+  String get requestedHousingSpecsArabicHint =>
+      'مثال: غرفتان، قريب من المدرسة...';
+
+  @override
+  String get requestedHousingSpecsEnglish => 'مواصفات المنزل المطلوب (إنجليزي)';
+
+  @override
+  String get requestedHousingSpecsEnglishHint =>
+      'Example: two rooms, close to school...';
+
+  @override
+  String get currentHousingSituation => 'حالة المنزل الحالية';
+
+  @override
+  String get currentHousingSituationArabic => 'وصف حالة المنزل الحالية (عربي)';
+
+  @override
+  String get currentHousingSituationArabicHint =>
+      'اشرح الأضرار والإصلاحات المطلوبة باللغة العربية...';
+
+  @override
+  String get currentHousingSituationEnglish =>
+      'وصف حالة المنزل الحالية (إنجليزي)';
+
+  @override
+  String get currentHousingSituationEnglishHint =>
+      'Describe the damage and required repairs in English...';
+
+  @override
+  String get housingDetailsArabic => 'تفاصيل الطلب السكني (عربي)';
+
+  @override
+  String get housingDetailsArabicHint =>
+      'اشرح الحالة والحاجة إلى المساعدة باللغة العربية...';
+
+  @override
+  String get housingDetailsEnglish => 'تفاصيل الطلب السكني (إنجليزي)';
+
+  @override
+  String get housingDetailsEnglishHint =>
+      'Explain the housing situation and need in English...';
+
+  @override
+  String get expectedHousingCost => 'التكلفة المالية المتوقعة';
+
+  @override
+  String get selectHousingAidType => 'يرجى اختيار نوع المساعدة السكنية';
+
+  @override
+  String get validCurrentRent => 'يرجى إدخال قيمة الإيجار الحالي بشكل صحيح';
+
+  @override
+  String get housingDocumentRequired => 'يرجى إرفاق وثيقة واحدة على الأقل';
+
+  @override
+  String get editSmallProjectRequestDetails => 'تعديل تفاصيل المشروع الصغير';
+
+  @override
+  String get smallProjectRequestDetails => 'تفاصيل المشروع الصغير';
+
+  @override
+  String get projectInformation => 'معلومات المشروع';
+
+  @override
+  String get projectNameArabic => 'اسم المشروع (عربي)';
+
+  @override
+  String get projectNameArabicHint => 'مثال: مخبز منزلي';
+
+  @override
+  String get projectNameEnglish => 'اسم المشروع (إنجليزي)';
+
+  @override
+  String get projectNameEnglishHint => 'Example: Home bakery';
+
+  @override
+  String get projectCategoryArabic => 'تصنيف المشروع (عربي)';
+
+  @override
+  String get projectCategoryArabicHint => 'مثال: إنتاج غذائي';
+
+  @override
+  String get projectCategoryEnglish => 'تصنيف المشروع (إنجليزي)';
+
+  @override
+  String get projectCategoryEnglishHint => 'Example: Food production';
+
+  @override
+  String get numberOfPeopleSupported => 'عدد الأشخاص المتوقع دعمهم';
+
+  @override
+  String get numberOfPeopleSupportedHint => 'مثال: 3';
+
+  @override
+  String get projectDetailsArabic => 'تفاصيل المشروع (عربي)';
+
+  @override
+  String get projectDetailsArabicHint =>
+      'اشرح فكرة المشروع، أهدافه، وخطة الاستفادة منه باللغة العربية...';
+
+  @override
+  String get projectDetailsEnglish => 'تفاصيل المشروع (إنجليزي)';
+
+  @override
+  String get projectDetailsEnglishHint =>
+      'Explain the project idea, goals, and expected benefit in English...';
+
+  @override
+  String get expectedProjectCost => 'التكلفة المالية المتوقعة';
+
+  @override
+  String get smallProjectNewDocumentsDescription =>
+      'المرفقات الجديدة اختيارية ما دامت المرفقات الحالية موجودة';
+
+  @override
+  String get smallProjectDocumentsDescription =>
+      'دراسة جدوى، صور، فواتير أو وثائق تدعم المشروع';
+
+  @override
+  String get smallProjectDecorativeMessage =>
+      'نسعى لدعم المشاريع الصغيرة لتوفير دخل مستدام للأسر';
+
+  @override
+  String get smallProjectEditInfo =>
+      'تم تحميل بيانات الطلب الحالية. عدّل الحقول التي تريد تغييرها ثم اضغط حفظ التعديلات.';
+
+  @override
+  String get projectNameArabicRequired =>
+      'يرجى إدخال اسم المشروع باللغة العربية';
+
+  @override
+  String get projectNameArabicShort => 'اسم المشروع باللغة العربية قصير جداً';
+
+  @override
+  String get projectNameEnglishRequired =>
+      'يرجى إدخال اسم المشروع باللغة الإنجليزية';
+
+  @override
+  String get projectNameEnglishShort =>
+      'اسم المشروع باللغة الإنجليزية قصير جداً';
+
+  @override
+  String get projectCategoryArabicRequired =>
+      'يرجى إدخال تصنيف المشروع باللغة العربية';
+
+  @override
+  String get projectCategoryArabicShort =>
+      'تصنيف المشروع باللغة العربية قصير جداً';
+
+  @override
+  String get projectCategoryEnglishRequired =>
+      'يرجى إدخال تصنيف المشروع باللغة الإنجليزية';
+
+  @override
+  String get projectCategoryEnglishShort =>
+      'تصنيف المشروع باللغة الإنجليزية قصير جداً';
+
+  @override
+  String get validSupportedPeopleCount =>
+      'يرجى إدخال عدد صحيح للأشخاص المستفيدين';
+
+  @override
+  String get projectDetailsArabicRequired =>
+      'يرجى إدخال تفاصيل المشروع باللغة العربية';
+
+  @override
+  String get projectDetailsArabicShort =>
+      'يرجى كتابة تفاصيل أوضح باللغة العربية';
+
+  @override
+  String get projectDetailsEnglishRequired =>
+      'يرجى إدخال تفاصيل المشروع باللغة الإنجليزية';
+
+  @override
+  String get projectDetailsEnglishShort =>
+      'يرجى كتابة تفاصيل أوضح باللغة الإنجليزية';
+
+  @override
+  String get smallProjectDocumentRequired => 'يرجى إرفاق وثيقة واحدة على الأقل';
+
+  @override
+  String get smallProjectFilesUnavailable =>
+      'الملفات المحددة مضافة مسبقاً أو تعذر الوصول إليها';
+
+  @override
+  String get arabicFieldMustContainArabic =>
+      'يجب أن يحتوي الحقل العربي على أحرف عربية';
+
+  @override
+  String get arabicFieldNoEnglish =>
+      'يرجى كتابة الحقل العربي دون أحرف إنكليزية';
+
+  @override
+  String get englishFieldMustContainEnglish =>
+      'يجب أن يحتوي الحقل الإنجليزي على أحرف إنجليزية';
+
+  @override
+  String get englishFieldNoArabic =>
+      'يرجى كتابة الحقل الإنجليزي دون أحرف عربية';
+
+  @override
+  String get loadingRequestData => 'جاري تحميل بيانات الطلب...';
+
+  @override
+  String get pleaseWaitMoment => 'يرجى الانتظار قليلاً';
+
+  @override
+  String get requestDetailsLoadFailed => 'تعذر تحميل تفاصيل الطلب';
+
+  @override
+  String get back => 'رجوع';
 }

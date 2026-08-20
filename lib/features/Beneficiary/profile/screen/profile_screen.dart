@@ -2,6 +2,8 @@ import 'package:charity_management/constants/api_constants.dart';
 import 'package:charity_management/features/Beneficiary/profile/cubit/profile_cubit.dart';
 import 'package:charity_management/features/Beneficiary/profile/cubit/profile_state.dart';
 import 'package:charity_management/features/Beneficiary/profile/model/profile_model.dart';
+import 'package:charity_management/features/Beneficiary/profile/screen/edit_profile_screen.dart';
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
 import 'package:charity_management/widgets/custom_navigation_bar.dart';
@@ -36,76 +38,111 @@ class _ProfilePageState extends State<ProfilePage> {
 
         context
             .read<ProfileCubit>()
-            .loadProfile();
+            .loadProfile(
+              localizations:
+                  AppLocalizations.of(context),
+            );
       },
     );
   }
 
+  // ==================================================
+  // BUILD
+  // ==================================================
+
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor:
-            AppColors.background,
-        appBar: AppBar(
-          backgroundColor:
-              AppColors.background,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          centerTitle: true,
-          title: const Text(
-            'حسابي',
-            style: TextStyle(
-              color: AppColors.primary,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              fontFamily:
-                  AppTextStyles.fontFamily,
-            ),
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+
+      // ==========================================
+      // APP BAR
+      // ==========================================
+
+      appBar: AppBar(
+        backgroundColor: AppColors.background,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        title: Text(
+          l10n.myAccount,
+          style: const TextStyle(
+            color: AppColors.primary,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            fontFamily:
+                AppTextStyles.fontFamily,
           ),
         ),
-        body: BlocBuilder<
-            ProfileCubit,
-            ProfileState>(
-          builder: (
-            context,
-            state,
-          ) {
-            debugPrint(
-              'ProfilePage state: '
-              '${state.runtimeType}',
+      ),
+
+      // ==========================================
+      // BODY
+      // ==========================================
+
+      body: BlocBuilder<
+          ProfileCubit,
+          ProfileState>(
+        builder: (
+          context,
+          state,
+        ) {
+          debugPrint(
+            'ProfilePage state: '
+            '${state.runtimeType}',
+          );
+
+          if (state is ProfileInitial ||
+              state is ProfileLoading) {
+            return _buildLoading();
+          }
+
+          if (state is ProfileFailure) {
+            return _buildError(
+              context,
+              state.message,
             );
+          }
 
-            if (state is ProfileInitial ||
-                state is ProfileLoading) {
-              return _buildLoading();
-            }
+          if (state is ProfileSuccess) {
+            return _buildProfile(
+              context,
+              state.profile,
+            );
+          }
 
-            if (state is ProfileFailure) {
-              return _buildError(
-                state.message,
-              );
-            }
+          if (state is ProfileUpdating) {
+            return _buildProfile(
+              context,
+              state.currentProfile,
+            );
+          }
 
-            if (state is ProfileSuccess) {
-              return _buildProfile(
-                state.profile,
-              );
-            }
+          if (state
+              is ProfileUpdateFailure) {
+            return _buildProfile(
+              context,
+              state.currentProfile,
+            );
+          }
 
-            return const SizedBox.shrink();
-          },
-        ),
-        bottomNavigationBar:
-            const CustomBottomNavigation(
-          currentIndex: 2,
-        ),
+          return const SizedBox.shrink();
+        },
+      ),
+
+      bottomNavigationBar:
+          const CustomBottomNavigation(
+        currentIndex: 2,
       ),
     );
   }
+
+  // ==================================================
+  // LOADING
+  // ==================================================
 
   Widget _buildLoading() {
     return const Center(
@@ -115,9 +152,17 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // ==================================================
+  // ERROR
+  // ==================================================
+
   Widget _buildError(
+    BuildContext context,
     String message,
   ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
     return Center(
       child: Padding(
         padding:
@@ -131,14 +176,11 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 82,
               decoration: BoxDecoration(
                 color: AppColors.error
-                    .withOpacity(
-                  0.1,
-                ),
+                    .withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
-                Icons
-                    .error_outline_rounded,
+                Icons.error_outline_rounded,
                 color: AppColors.error,
                 size: 42,
               ),
@@ -146,17 +188,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
             const SizedBox(height: 20),
 
-            const Text(
-              'تعذر تحميل الملف الشخصي',
+            Text(
+              l10n.profileLoadError,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color:
                     AppColors.onSurface,
                 fontSize: 18,
                 fontWeight:
                     FontWeight.bold,
                 fontFamily:
-                    AppTextStyles.fontFamily,
+                    AppTextStyles
+                        .fontFamily,
               ),
             ),
 
@@ -171,7 +214,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 fontSize: 14,
                 height: 1.6,
                 fontFamily:
-                    AppTextStyles.fontFamily,
+                    AppTextStyles
+                        .fontFamily,
               ),
             ),
 
@@ -184,10 +228,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () {
                   context
                       .read<ProfileCubit>()
-                      .loadProfile();
+                      .loadProfile(
+                        localizations:
+                            AppLocalizations.of(context),
+                      );
                 },
                 style:
-                    ElevatedButton.styleFrom(
+                    ElevatedButton
+                        .styleFrom(
                   backgroundColor:
                       AppColors.primary,
                   foregroundColor:
@@ -205,9 +253,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   Icons.refresh_rounded,
                   size: 20,
                 ),
-                label: const Text(
-                  'إعادة المحاولة',
-                  style: TextStyle(
+                label: Text(
+                  l10n.retry,
+                  style: const TextStyle(
                     fontWeight:
                         FontWeight.bold,
                     fontFamily:
@@ -223,7 +271,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // ==================================================
+  // PROFILE
+  // ==================================================
+
   Widget _buildProfile(
+    BuildContext context,
     ProfileModel profile,
   ) {
     return RefreshIndicator(
@@ -231,7 +284,10 @@ class _ProfilePageState extends State<ProfilePage> {
       onRefresh: () {
         return context
             .read<ProfileCubit>()
-            .refreshProfile();
+            .refreshProfile(
+              localizations:
+                  AppLocalizations.of(context),
+            );
       },
       child: SingleChildScrollView(
         physics:
@@ -246,33 +302,117 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             _buildProfileHeader(
+              context,
               profile,
             ),
 
             const SizedBox(height: 22),
 
             _buildPersonalInfoCard(
+              context,
               profile,
             ),
 
             const SizedBox(height: 16),
 
             _buildAddressCard(
+              context,
               profile,
             ),
 
             const SizedBox(height: 16),
 
-            _buildAccountHint(),
+            _buildEditButton(
+              context,
+              profile,
+            ),
+
+            const SizedBox(height: 16),
+
+            _buildAccountHint(
+              context,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildProfileHeader(
+  // ==================================================
+  // EDIT BUTTON
+  // ==================================================
+
+  Widget _buildEditButton(
+    BuildContext context,
     ProfileModel profile,
   ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    return SizedBox(
+      width: double.infinity,
+      height: 54,
+      child: ElevatedButton.icon(
+        onPressed: () {
+          Navigator.of(context)
+              .push<bool>(
+            MaterialPageRoute<bool>(
+              builder: (_) {
+                return BlocProvider<
+                    ProfileCubit>.value(
+                  value: context
+                      .read<ProfileCubit>(),
+                  child:
+                      EditProfileScreen(
+                    profile: profile,
+                  ),
+                );
+              },
+            ),
+          );
+        },
+        style:
+            ElevatedButton.styleFrom(
+          backgroundColor:
+              AppColors.primary,
+          foregroundColor:
+              Colors.white,
+          elevation: 0,
+          shape:
+              RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(
+              16,
+            ),
+          ),
+        ),
+        icon: const Icon(
+          Icons.edit_outlined,
+        ),
+        label: Text(
+          l10n.editProfile,
+          style: const TextStyle(
+            fontWeight:
+                FontWeight.bold,
+            fontFamily:
+                AppTextStyles.fontFamily,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================================================
+  // PROFILE HEADER
+  // ==================================================
+
+  Widget _buildProfileHeader(
+    BuildContext context,
+    ProfileModel profile,
+  ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
     final String? imageUrl =
         _getProfileImageUrl(
       profile.personalPhoto,
@@ -291,22 +431,17 @@ class _ProfilePageState extends State<ProfilePage> {
             BorderRadius.circular(26),
         border: Border.all(
           color: AppColors.brandGray
-              .withOpacity(
-            0.12,
-          ),
+              .withOpacity(0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black
-                .withOpacity(
+            color:
+                Colors.black.withOpacity(
               0.035,
             ),
             blurRadius: 18,
             offset:
-                const Offset(
-              0,
-              6,
-            ),
+                const Offset(0, 6),
           ),
         ],
       ),
@@ -328,8 +463,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Container(
               width: 108,
               height: 108,
-              decoration:
-                  BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors
                     .primaryContainer
@@ -349,11 +483,10 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 16),
 
           Text(
-            profile.fullName.isEmpty
-                ? 'المستفيد'
+            profile.fullName.trim().isEmpty
+                ? l10n.beneficiary
                 : profile.fullName,
-            textAlign:
-                TextAlign.center,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               color:
                   AppColors.onSurface,
@@ -361,7 +494,8 @@ class _ProfilePageState extends State<ProfilePage> {
               fontWeight:
                   FontWeight.bold,
               fontFamily:
-                  AppTextStyles.fontFamily,
+                  AppTextStyles
+                      .fontFamily,
             ),
           ),
 
@@ -399,7 +533,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
                 Text(
                   _formatPhone(
+                    profile.countryCode,
                     profile.number,
+                    l10n,
                   ),
                   textDirection:
                       TextDirection.ltr,
@@ -422,6 +558,10 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
+  // ==================================================
+  // PROFILE IMAGE
+  // ==================================================
 
   Widget _buildProfileImage(
     String? imageUrl,
@@ -464,57 +604,96 @@ class _ProfilePageState extends State<ProfilePage> {
         stackTrace,
       ) {
         debugPrint(
-          'Profile image error: '
-          '$error',
+          'Profile image error: $error',
         );
 
         return const Icon(
           Icons.person_rounded,
           size: 62,
-          color:
-              AppColors.primary,
+          color: AppColors.primary,
         );
       },
     );
   }
 
+  // ==================================================
+  // PERSONAL INFO
+  // ==================================================
+
   Widget _buildPersonalInfoCard(
+    BuildContext context,
     ProfileModel profile,
   ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
     return _buildCard(
-      title: 'المعلومات الشخصية',
+      title:
+          l10n.personalInformation,
       icon:
           Icons.person_outline_rounded,
       child: Column(
         children: [
           _buildInfoRow(
-            icon:
-                Icons.cake_outlined,
-            title: 'العمر',
-            value: profile.age == null
-                ? 'غير محدد'
-                : '${profile.age} سنة',
-          ),
-
-          _buildDivider(),
-
-          _buildInfoRow(
-            icon:
-                Icons.wc_outlined,
-            title: 'الجنس',
+            icon: Icons.email_outlined,
+            title: l10n.email,
             value:
-                profile.genderArabic,
+                profile.email.trim().isEmpty
+                    ? l10n.unspecified
+                    : profile.email,
+            valueTextDirection:
+                TextDirection.ltr,
           ),
 
           _buildDivider(),
 
           _buildInfoRow(
-            icon:
-                Icons.favorite_border_rounded,
+            icon: Icons
+                .calendar_month_outlined,
+            title: l10n.dateOfBirth,
+            value: _formatDateOfBirth(
+              profile.dateOfBirth,
+              l10n,
+            ),
+            valueTextDirection:
+                TextDirection.ltr,
+          ),
+
+          _buildDivider(),
+
+          _buildInfoRow(
+            icon: Icons.cake_outlined,
+            title: l10n.age,
+            value: profile.age == null
+                ? l10n.unspecified
+                : l10n.ageWithYears(
+                    profile.age!,
+                  ),
+          ),
+
+          _buildDivider(),
+
+          _buildInfoRow(
+            icon: Icons.wc_outlined,
+            title: l10n.gender,
+            value: _localizedGender(
+              profile.gender,
+              l10n,
+            ),
+          ),
+
+          _buildDivider(),
+
+          _buildInfoRow(
+            icon: Icons
+                .favorite_border_rounded,
             title:
-                'الحالة الاجتماعية',
-            value: profile
-                .socialStatusArabic,
+                l10n.socialStatus,
+            value:
+                _localizedSocialStatus(
+              profile.socialStatus,
+              l10n,
+            ),
           ),
 
           _buildDivider(),
@@ -525,20 +704,30 @@ class _ProfilePageState extends State<ProfilePage> {
                     .work_off_outlined
                 : Icons
                     .work_outline_rounded,
-            title: 'حالة العمل',
-            value: profile
-                .employmentStatusArabic,
+            title:
+                l10n.employmentStatus,
+            value: profile.isUnemployed
+                ? l10n.unemployed
+                : l10n.employed,
           ),
         ],
       ),
     );
   }
 
+  // ==================================================
+  // ADDRESS
+  // ==================================================
+
   Widget _buildAddressCard(
+    BuildContext context,
     ProfileModel profile,
   ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
     return _buildCard(
-      title: 'مكان الإقامة',
+      title: l10n.residence,
       icon:
           Icons.location_on_outlined,
       child: Row(
@@ -573,11 +762,13 @@ class _ProfilePageState extends State<ProfilePage> {
           Expanded(
             child: Column(
               crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  CrossAxisAlignment
+                      .start,
               children: [
-                const Text(
-                  'العنوان',
-                  style: TextStyle(
+                Text(
+                  l10n.address,
+                  style:
+                      const TextStyle(
                     color: AppColors
                         .brandGray,
                     fontSize: 13,
@@ -593,7 +784,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   profile.address
                           .trim()
                           .isEmpty
-                      ? 'غير محدد'
+                      ? l10n.unspecified
                       : profile.address,
                   style:
                       const TextStyle(
@@ -616,6 +807,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // ==================================================
+  // GENERIC CARD
+  // ==================================================
+
   Widget _buildCard({
     required String title,
     required IconData icon,
@@ -631,22 +826,17 @@ class _ProfilePageState extends State<ProfilePage> {
             BorderRadius.circular(22),
         border: Border.all(
           color: AppColors.brandGray
-              .withOpacity(
-            0.12,
-          ),
+              .withOpacity(0.12),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black
-                .withOpacity(
+            color:
+                Colors.black.withOpacity(
               0.025,
             ),
             blurRadius: 14,
             offset:
-                const Offset(
-              0,
-              5,
-            ),
+                const Offset(0, 5),
           ),
         ],
       ),
@@ -680,16 +870,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
 
-              const SizedBox(
-                width: 10,
-              ),
+              const SizedBox(width: 10),
 
               Text(
                 title,
                 style:
                     const TextStyle(
-                  color: AppColors
-                      .onSurface,
+                  color:
+                      AppColors.onSurface,
                   fontSize: 16,
                   fontWeight:
                       FontWeight.bold,
@@ -709,10 +897,15 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // ==================================================
+  // INFO ROW
+  // ==================================================
+
   Widget _buildInfoRow({
     required IconData icon,
     required String title,
     required String value,
+    TextDirection? valueTextDirection,
   }) {
     return Padding(
       padding:
@@ -724,10 +917,9 @@ class _ProfilePageState extends State<ProfilePage> {
           Container(
             width: 42,
             height: 42,
-            decoration:
-                BoxDecoration(
-              color: AppColors
-                  .background,
+            decoration: BoxDecoration(
+              color:
+                  AppColors.background,
               borderRadius:
                   BorderRadius.circular(
                 12,
@@ -763,8 +955,9 @@ class _ProfilePageState extends State<ProfilePage> {
           Flexible(
             child: Text(
               value,
-              textAlign:
-                  TextAlign.end,
+              textDirection:
+                  valueTextDirection,
+              textAlign: TextAlign.end,
               style:
                   const TextStyle(
                 color:
@@ -783,6 +976,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // ==================================================
+  // DIVIDER
+  // ==================================================
+
   Widget _buildDivider() {
     return Divider(
       height: 20,
@@ -794,13 +991,23 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildAccountHint() {
+  // ==================================================
+  // ACCOUNT HINT
+  // ==================================================
+
+  Widget _buildAccountHint(
+    BuildContext context,
+  ) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       padding:
           const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primaryContainer
+        color: AppColors
+            .primaryContainer
             .withOpacity(
           0.23,
         ),
@@ -808,28 +1015,27 @@ class _ProfilePageState extends State<ProfilePage> {
             BorderRadius.circular(18),
         border: Border.all(
           color: AppColors.primary
-              .withOpacity(
-            0.08,
-          ),
+              .withOpacity(0.08),
         ),
       ),
-      child: const Row(
+      child: Row(
         crossAxisAlignment:
             CrossAxisAlignment.start,
         children: [
-          Icon(
+          const Icon(
             Icons
                 .verified_user_outlined,
             color: AppColors.primary,
             size: 22,
           ),
 
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
 
           Expanded(
             child: Text(
-              'يتم عرض بيانات حسابك المسجلة لدى الجمعية.',
-              style: TextStyle(
+              l10n.profileAccountHint,
+              style:
+                  const TextStyle(
                 color:
                     AppColors.onSurface,
                 fontSize: 13,
@@ -845,6 +1051,65 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // ==================================================
+  // LOCALIZED GENDER
+  // ==================================================
+
+  String _localizedGender(
+    String gender,
+    AppLocalizations l10n,
+  ) {
+    switch (
+        gender.trim().toUpperCase()) {
+      case 'MALE':
+        return l10n.male;
+
+      case 'FEMALE':
+        return l10n.female;
+
+      default:
+        return gender.trim().isEmpty
+            ? l10n.unspecified
+            : gender;
+    }
+  }
+
+  // ==================================================
+  // LOCALIZED SOCIAL STATUS
+  // ==================================================
+
+  String _localizedSocialStatus(
+    String socialStatus,
+    AppLocalizations l10n,
+  ) {
+    switch (
+        socialStatus.trim().toUpperCase()) {
+      case 'SINGLE':
+        return l10n.single;
+
+      case 'MARRIED':
+        return l10n.married;
+
+      case 'WIDOWED':
+      case 'WIDOW':
+        return l10n.widowed;
+
+      case 'DIVORCED':
+        return l10n.divorced;
+
+      default:
+        return socialStatus
+                .trim()
+                .isEmpty
+            ? l10n.unspecified
+            : socialStatus;
+    }
+  }
+
+  // ==================================================
+  // IMAGE URL
+  // ==================================================
+
   String? _getProfileImageUrl(
     String? url,
   ) {
@@ -853,30 +1118,21 @@ class _ProfilePageState extends State<ProfilePage> {
       return null;
     }
 
-    String fixedUrl = url.trim();
+    String fixedUrl =
+        url.trim();
 
-    /*
-     * الباك قد يعيد الصورة بهذا الشكل:
-     *
-     * http://localhost:3000/uploads/...
-     *
-     * localhost لا يعمل من الموبايل،
-     * لذلك نستبدله بـ baseUrl الحالي.
-     */
-    fixedUrl = fixedUrl.replaceFirst(
+    fixedUrl =
+        fixedUrl.replaceFirst(
       'http://localhost:3000',
       ApiConstants.baseUrl,
     );
 
-    fixedUrl = fixedUrl.replaceFirst(
+    fixedUrl =
+        fixedUrl.replaceFirst(
       'http://127.0.0.1:3000',
       ApiConstants.baseUrl,
     );
 
-    /*
-     * إذا رجع الباك مسارًا فقط:
-     * /uploads/beneficiaries/...
-     */
     if (fixedUrl.startsWith('/')) {
       fixedUrl =
           '${ApiConstants.baseUrl}$fixedUrl';
@@ -890,22 +1146,89 @@ class _ProfilePageState extends State<ProfilePage> {
     return fixedUrl;
   }
 
-  String _formatPhone(
-    String number,
+  // ==================================================
+  // DATE OF BIRTH
+  // ==================================================
+
+  String _formatDateOfBirth(
+    String? dateOfBirth,
+    AppLocalizations l10n,
   ) {
+    final String value =
+        dateOfBirth?.trim() ?? '';
+
+    if (value.isEmpty) {
+      return l10n.unspecified;
+    }
+
+    final DateTime? parsedDate =
+        DateTime.tryParse(
+      value,
+    );
+
+    if (parsedDate == null) {
+      return value;
+    }
+
+    final String year =
+        parsedDate.year
+            .toString()
+            .padLeft(
+              4,
+              '0',
+            );
+
+    final String month =
+        parsedDate.month
+            .toString()
+            .padLeft(
+              2,
+              '0',
+            );
+
+    final String day =
+        parsedDate.day
+            .toString()
+            .padLeft(
+              2,
+              '0',
+            );
+
+    return '$year-$month-$day';
+  }
+
+  // ==================================================
+  // PHONE
+  // ==================================================
+
+  String _formatPhone(
+    String countryCode,
+    String number,
+    AppLocalizations l10n,
+  ) {
+    final String code =
+        countryCode.trim();
+
     final String value =
         number.trim();
 
     if (value.isEmpty) {
-      return 'غير محدد';
+      return l10n.unspecified;
     }
 
-    /*
-     * إذا الباك يعيد مثلاً:
-     * 993602106
-     *
-     * نضيف صفر للعرض فقط.
-     */
+    if (value.startsWith('+')) {
+      return value;
+    }
+
+    if (code.isNotEmpty) {
+      final String internationalNumber =
+          value.startsWith('0')
+              ? value.substring(1)
+              : value;
+
+      return '$code $internationalNumber';
+    }
+
     if (value.length == 9 &&
         !value.startsWith('0')) {
       return '0$value';

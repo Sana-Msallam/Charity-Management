@@ -1,5 +1,9 @@
 import 'package:charity_management/features/Beneficiary/completed_project/cubit/completed_projects_cubit.dart';
 import 'package:charity_management/features/Beneficiary/completed_project/service/completed_projects_service.dart';
+import 'package:charity_management/features/Beneficiary/profile/cubit/profile_cubit.dart';
+import 'package:charity_management/features/Beneficiary/profile/cubit/profile_state.dart';
+import 'package:charity_management/features/Beneficiary/profile/screen/profile_screen.dart';
+import 'package:charity_management/features/Beneficiary/profile/service/profile_service.dart';
 import 'package:charity_management/features/components/about_section_card.dart';
 import 'package:charity_management/features/components/completed_projects_section.dart';
 import 'package:charity_management/features/components/large_category_card.dart';
@@ -17,6 +21,237 @@ class HomePage extends StatelessWidget {
     super.key,
   });
 
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    return BlocProvider(
+      create: (_) {
+        return ProfileCubit(
+          ProfileService(),
+        )..loadProfile(
+            localizations: l10n,
+          );
+      },
+      child: const _HomeView(),
+    );
+  }
+}
+
+// ==================================================
+// HOME VIEW
+// ==================================================
+
+class _HomeView extends StatelessWidget {
+  const _HomeView();
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    return BlocBuilder<
+        ProfileCubit,
+        ProfileState>(
+      builder: (
+        context,
+        profileState,
+      ) {
+        String? profileImageUrl;
+
+        if (profileState
+            is ProfileSuccess) {
+          profileImageUrl =
+              profileState
+                  .profile
+                  .personalPhoto;
+
+          debugPrint(
+            'Home profile image: '
+            '$profileImageUrl',
+          );
+        }
+
+        return Scaffold(
+          resizeToAvoidBottomInset:
+              true,
+
+          backgroundColor:
+              AppColors.background,
+
+          // ======================================
+          // APP BAR
+          // ======================================
+
+          appBar: CustomAppBar(
+            profileImageUrl:
+                profileImageUrl,
+
+            onProfileTap: () {
+              _openProfile(
+                context,
+              );
+            },
+          ),
+
+          // ======================================
+          // BODY
+          // ======================================
+
+          body: SafeArea(
+            child:
+                SingleChildScrollView(
+              padding:
+                  const EdgeInsets
+                      .symmetric(
+                horizontal: 20,
+                vertical: 24,
+              ),
+
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment
+                        .start,
+
+                children: [
+                  // ======================================
+                  // ABOUT
+                  // ======================================
+
+                  const AboutSectionCard(),
+
+                  const SizedBox(
+                    height: 32,
+                  ),
+
+                  // ======================================
+                  // NEW AID REQUEST TITLE
+                  // ======================================
+
+                  Text(
+                    l10n.newAidRequest,
+                    style:
+                        const TextStyle(
+                      color:
+                          AppColors
+                              .onSurface,
+                      fontSize: 28,
+                      fontWeight:
+                          FontWeight
+                              .bold,
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 24,
+                  ),
+
+                  // ======================================
+                  // AID CATEGORIES
+                  // ======================================
+
+                  _buildCategoriesGrid(
+                    context,
+                  ),
+
+                  const SizedBox(
+                    height: 32,
+                  ),
+
+                  // ======================================
+                  // COMPLETED PROJECTS
+                  // ======================================
+
+                  BlocProvider(
+                    create: (_) {
+                      return CompletedProjectsCubit(
+                        CompletedProjectsService(),
+                      )..loadCompletedProjects();
+                    },
+                    child:
+                        const CompletedProjectsSection(),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // ======================================
+          // BOTTOM NAVIGATION
+          // ======================================
+
+          bottomNavigationBar:
+              const CustomBottomNavigation(
+            currentIndex: 0,
+          ),
+        );
+      },
+    );
+  }
+
+  // ==========================================
+  // OPEN PROFILE
+  // ==========================================
+
+  Future<void> _openProfile(
+    BuildContext context,
+  ) async {
+    debugPrint(
+      '======================================',
+    );
+
+    debugPrint(
+      'Profile image clicked',
+    );
+
+    debugPrint(
+      'Opening ProfilePage',
+    );
+
+    debugPrint(
+      '======================================',
+    );
+
+    await Navigator.of(context)
+        .push<void>(
+      MaterialPageRoute(
+        builder: (_) {
+          return BlocProvider(
+            create: (_) {
+              return ProfileCubit(
+                ProfileService(),
+              );
+            },
+            child:
+                const ProfilePage(),
+          );
+        },
+      ),
+    );
+
+    if (!context.mounted) {
+      return;
+    }
+
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
+
+    await context
+        .read<ProfileCubit>()
+        .refreshProfile(
+          localizations: l10n,
+        );
+  }
+
+  // ==========================================
+  // OPEN APPLICANT INFO
+  // ==========================================
+
   void _navigateToApplicantInfo(
     BuildContext context,
     String requestType,
@@ -24,112 +259,43 @@ class HomePage extends StatelessWidget {
     Navigator.pushNamed(
       context,
       AppRoutes.applicantInfo,
-      arguments: ApplicantInfoRouteArguments(
+      arguments:
+          ApplicantInfoRouteArguments(
         requestType: requestType,
       ),
     );
   }
 
-  @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final l10n = AppLocalizations.of(context);
-
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: AppColors.background,
-      appBar: const CustomAppBar(),
-
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 24,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ======================================
-              // قسم عن الجمعية
-              // ======================================
-
-              const AboutSectionCard(),
-
-              const SizedBox(height: 32),
-
-              // ======================================
-              // عنوان تقديم طلب جديد
-              // ======================================
-
-              Text(
-                l10n.newAidRequest,
-                style: const TextStyle(
-                  color: AppColors.onSurface,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // ======================================
-              // أنواع طلبات المساعدة
-              // ======================================
-
-              _buildCategoriesGrid(
-                context,
-              ),
-
-              const SizedBox(height: 32),
-
-              // ======================================
-              // المشاريع / الطلبات المكتملة من API
-              // ======================================
-
-              BlocProvider(
-                create: (_) {
-                  return CompletedProjectsCubit(
-                    CompletedProjectsService(),
-                  )..loadCompletedProjects();
-                },
-                child: const CompletedProjectsSection(),
-              ),
-
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      ),
-
-      bottomNavigationBar:
-          const CustomBottomNavigation(
-        currentIndex: 0,
-      ),
-    );
-  }
+  // ==========================================
+  // CATEGORIES
+  // ==========================================
 
   Widget _buildCategoriesGrid(
     BuildContext context,
   ) {
-    final l10n = AppLocalizations.of(context);
+    final AppLocalizations l10n =
+        AppLocalizations.of(context);
 
     return Column(
       children: [
         Row(
           children: [
             // ======================================
-            // الطلب الصحي
+            // HEALTH REQUEST
             // ======================================
 
             Expanded(
-              child: SmallCategoryCard(
-                title: l10n.healthRequest,
+              child:
+                  SmallCategoryCard(
+                title:
+                    l10n.healthRequest,
                 subtitle:
-                    l10n.healthRequestSubtitle,
-                icon:
-                    Icons.medical_services_outlined,
-                color: AppColors.error,
+                    l10n
+                        .healthRequestSubtitle,
+                icon: Icons
+                    .medical_services_outlined,
+                color:
+                    AppColors.error,
                 onTap: () {
                   _navigateToApplicantInfo(
                     context,
@@ -139,20 +305,26 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 16),
+            const SizedBox(
+              width: 16,
+            ),
 
             // ======================================
-            // الطلب الغذائي
+            // FOOD REQUEST
             // ======================================
 
             Expanded(
-              child: SmallCategoryCard(
-                title: l10n.foodRequest,
+              child:
+                  SmallCategoryCard(
+                title:
+                    l10n.foodRequest,
                 subtitle:
-                    l10n.foodRequestSubtitle,
-                icon:
-                    Icons.shopping_basket_outlined,
-                color: AppColors.secondary,
+                    l10n
+                        .foodRequestSubtitle,
+                icon: Icons
+                    .shopping_basket_outlined,
+                color:
+                    AppColors.secondary,
                 onTap: () {
                   _navigateToApplicantInfo(
                     context,
@@ -164,10 +336,12 @@ class HomePage extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(
+          height: 16,
+        ),
 
         // ======================================
-        // الطلب السكني
+        // HOUSING REQUEST
         // ======================================
 
         LargeCategoryCard(
@@ -179,22 +353,28 @@ class HomePage extends StatelessWidget {
           },
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(
+          height: 16,
+        ),
 
         Row(
           children: [
             // ======================================
-            // الطلب التعليمي
+            // EDUCATION REQUEST
             // ======================================
 
             Expanded(
-              child: SmallCategoryCard(
-                title: l10n.educationRequest,
+              child:
+                  SmallCategoryCard(
+                title:
+                    l10n.educationRequest,
                 subtitle:
-                    l10n.educationRequestSubtitle,
+                    l10n
+                        .educationRequestSubtitle,
                 icon:
                     Icons.auto_stories_outlined,
-                color: AppColors.primary,
+                color:
+                    AppColors.primary,
                 onTap: () {
                   _navigateToApplicantInfo(
                     context,
@@ -204,20 +384,28 @@ class HomePage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 16),
+            const SizedBox(
+              width: 16,
+            ),
 
             // ======================================
-            // دعم المشاريع الصغيرة
+            // SMALL PROJECT SUPPORT
             // ======================================
 
             Expanded(
-              child: SmallCategoryCard(
-                title: l10n.projectSupport,
+              child:
+                  SmallCategoryCard(
+                title:
+                    l10n.projectSupport,
                 subtitle:
-                    l10n.projectSupportSubtitle,
-                icon: Icons.trending_up,
+                    l10n
+                        .projectSupportSubtitle,
+                icon:
+                    Icons.trending_up,
                 color:
-                    const Color(0xFFF4CF58),
+                    const Color(
+                  0xFFF4CF58,
+                ),
                 onTap: () {
                   _navigateToApplicantInfo(
                     context,

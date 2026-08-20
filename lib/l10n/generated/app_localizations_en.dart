@@ -88,7 +88,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lastNameRequired => 'Please enter your last name';
 
   @override
-  String get email => 'Email address';
+  String get email => 'Email';
 
   @override
   String get emailRequired => 'Please enter your email address';
@@ -137,7 +137,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get female => 'Female';
 
   @override
-  String get dateOfBirth => 'Date of birth';
+  String get dateOfBirth => 'Date of Birth';
 
   @override
   String get selectDateOfBirth => 'Select date of birth';
@@ -291,7 +291,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takePhoto => 'Take a photo';
 
   @override
-  String get socialStatus => 'Marital status';
+  String get socialStatus => 'Social Status';
 
   @override
   String get selectStatus => 'Select status';
@@ -330,7 +330,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get syrianPound => 'SYP';
 
   @override
-  String get employmentStatus => 'Employment status';
+  String get employmentStatus => 'Employment Status';
 
   @override
   String get employed => 'Employed';
@@ -568,7 +568,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get medicalComplexProject => 'Medical complex';
 
   @override
-  String get aboutAssociationTitle => 'About the association';
+  String get aboutAssociationTitle =>
+      'Al Athar Association... Every Act of Giving Leaves an Impact';
 
   @override
   String get aboutAssociationDescription =>
@@ -786,13 +787,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get medicalAidType => 'Required medical aid type';
 
   @override
-  String get medicineInsurance => 'Medicine insurance';
+  String get medicineInsurance => 'Medicine Coverage';
 
   @override
   String get surgery => 'Surgery';
 
   @override
-  String get medicalDevices => 'Medical devices';
+  String get medicalDevices => 'Medical Devices';
 
   @override
   String get healthDescription => 'Detailed health condition description';
@@ -886,7 +887,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get expectedTotalCost => 'Expected total cost';
 
   @override
-  String get profileTitle => 'Account';
+  String get profileTitle => 'My Account';
 
   @override
   String ageWithYears(int years) {
@@ -923,7 +924,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String remainingAmount(String amount) {
-    return 'Remaining amount: $amount';
+    return 'Remaining: $amount SAR';
   }
 
   @override
@@ -1042,7 +1043,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sponsoredList => 'Sponsored list';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Try Again';
 
   @override
   String get noSponsorshipsForStatus => 'No sponsorships with this status';
@@ -1342,4 +1343,853 @@ class AppLocalizationsEn extends AppLocalizations {
   String loginSuccess(String firstName) {
     return 'Logged in successfully. Welcome, $firstName';
   }
+
+  @override
+  String get appPreferences => 'App preferences';
+
+  @override
+  String get changeAppLanguage => 'Change app language';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get accountSection => 'Account';
+
+  @override
+  String get changePasswordSubtitle => 'Update account password';
+
+  @override
+  String get logoutSubtitle => 'Sign out of the current account';
+
+  @override
+  String get chooseLanguage => 'Choose app language';
+
+  @override
+  String get togetherWeMakeImpact => 'Together, We Make an Impact';
+
+  @override
+  String get renewedHope => 'Renewed Hope';
+
+  @override
+  String get givingMakesDifference => 'Giving Makes a Difference';
+
+  @override
+  String get noCompletedProjects =>
+      'There are no completed projects at the moment';
+
+  @override
+  String get riyal => 'SAR';
+
+  @override
+  String get profileLoadError => 'Unable to load profile';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get beneficiary => 'Beneficiary';
+
+  @override
+  String get years => 'years';
+
+  @override
+  String get residence => 'Place of Residence';
+
+  @override
+  String get notSpecified => 'Not specified';
+
+  @override
+  String get profileAccountHint =>
+      'Your account information registered with the association is displayed here.';
+
+  @override
+  String get alternateAddressLoadError =>
+      'Unable to load the address in the other language';
+
+  @override
+  String get loadBothAddressesBeforeSave =>
+      'Both language addresses must be loaded before saving changes';
+
+  @override
+  String get unsupportedGenderValue =>
+      'The current gender value is not supported';
+
+  @override
+  String get unsupportedSocialStatusValue =>
+      'The current social status value is not supported';
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get savingChanges => 'Saving...';
+
+  @override
+  String get changePhoto => 'Change photo';
+
+  @override
+  String get profilePhotoOptionalHint =>
+      'The photo is optional and will only change if you select a new one';
+
+  @override
+  String get bilingualAddress => 'Address in both languages';
+
+  @override
+  String get arabicAddress => 'Address in Arabic';
+
+  @override
+  String get arabicAddressHint => 'Enter the address in Arabic';
+
+  @override
+  String get englishAddress => 'Address in English';
+
+  @override
+  String get englishAddressHint => 'Enter the address in English';
+
+  @override
+  String get loadingAlternateAddress =>
+      'Loading the address in the other language...';
+
+  @override
+  String get readOnlyData => 'Read-only information';
+
+  @override
+  String get fieldRequired => 'This field is required';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get currentPasswordRequired => 'Current password is required';
+
+  @override
+  String get requestTrackingTitle => 'Track Requests';
+
+  @override
+  String get allRequests => 'All';
+
+  @override
+  String get pendingRequests => 'Under Review';
+
+  @override
+  String get acceptedRequests => 'Accepted';
+
+  @override
+  String get rejectedRequests => 'Rejected';
+
+  @override
+  String get cancelledRequests => 'Cancelled';
+
+  @override
+  String get cancelRequestTitle => 'Cancel Request';
+
+  @override
+  String cancelRequestConfirmation(int requestId) {
+    return 'Are you sure you want to cancel request #$requestId?\nYou will not be able to undo this action.';
+  }
+
+  @override
+  String get confirmCancelRequest => 'Yes, Cancel Request';
+
+  @override
+  String get requestCancelledTitle => 'Request Cancelled';
+
+  @override
+  String get requestsLoadError => 'Unable to Load Requests';
+
+  @override
+  String get noRequestsForStatus => 'There are no requests with this status';
+
+  @override
+  String requestNumber(int requestId) {
+    return 'Request #$requestId';
+  }
+
+  @override
+  String get requestType => 'Request Type';
+
+  @override
+  String get subCategory => 'Subcategory';
+
+  @override
+  String get aidType => 'Aid Type';
+
+  @override
+  String get cost => 'Cost';
+
+  @override
+  String get submissionDate => 'Submission Date';
+
+  @override
+  String amountRiyal(String amount) {
+    return '$amount SAR';
+  }
+
+  @override
+  String get editRequest => 'Edit Request';
+
+  @override
+  String get fundingProgress => 'Funding Progress';
+
+  @override
+  String fundingAmountOf(String current, String total) {
+    return '$current of $total SAR';
+  }
+
+  @override
+  String get rejectionReason => 'Rejection Reason';
+
+  @override
+  String get noRejectionReason => 'No rejection reason was provided';
+
+  @override
+  String get requestWasCancelled => 'This request has been cancelled';
+
+  @override
+  String get selfApplicant => 'For myself';
+
+  @override
+  String get otherApplicant => 'For someone else';
+
+  @override
+  String get whoIsRequestFor => 'Who are you submitting this aid request for?';
+
+  @override
+  String get chooseApplicantBeforeFilling =>
+      'Choose the applicant before filling in the information';
+
+  @override
+  String get loadingProfileData => 'Loading profile information...';
+
+  @override
+  String get profileAutoFilled =>
+      'Your account information was filled in automatically. You can edit any field before continuing.';
+
+  @override
+  String get profileAutoFillError =>
+      'Unable to load profile information. You can try again or choose another person.';
+
+  @override
+  String get selectApplicantType =>
+      'Please choose who you want to submit the aid request for';
+
+  @override
+  String get waitForProfileLoading =>
+      'Please wait until your information is loaded';
+
+  @override
+  String get editApplicantInfo => 'Edit applicant information';
+
+  @override
+  String get personalStatus => 'Personal status';
+
+  @override
+  String get contactInformation => 'Contact information';
+
+  @override
+  String get applicantCreateDescription =>
+      'First choose who the request is for, then enter the applicant information accurately.';
+
+  @override
+  String get applicantEditDescription =>
+      'You can edit the applicant information, then continue to the aid details to update them.';
+
+  @override
+  String get arabicAddressLabel => 'Address (Arabic)';
+
+  @override
+  String get arabicAddressExample => 'Example: Damascus - Mazzeh - Main Street';
+
+  @override
+  String get englishAddressLabel => 'Address (English)';
+
+  @override
+  String get englishAddressExample =>
+      'Example: Damascus - Al Mazzeh - Main Street';
+
+  @override
+  String get arabicAddressRequired => 'Please enter the address in Arabic';
+
+  @override
+  String get arabicAddressOnly => 'Please write the address in Arabic only';
+
+  @override
+  String get englishAddressRequired => 'Please enter the address in English';
+
+  @override
+  String get englishAddressOnly => 'Please write the address in English only';
+
+  @override
+  String get phoneRequiredApplicant => 'Please enter the phone number';
+
+  @override
+  String get aidRequestTitle => 'Aid request';
+
+  @override
+  String get editAidRequestTitle => 'Edit aid request';
+
+  @override
+  String aidRequestWithType(String requestType) {
+    return '$requestType request';
+  }
+
+  @override
+  String editAidRequestWithType(String requestType) {
+    return 'Edit $requestType request';
+  }
+
+  @override
+  String get continueToRequestDetails => 'Continue to request details';
+
+  @override
+  String get continueToEditRequestDetails => 'Continue to edit request details';
+
+  @override
+  String get editEducationRequestDetails => 'Edit Education Request Details';
+
+  @override
+  String get academicAchievement => 'Academic Achievement';
+
+  @override
+  String get highSchool => 'High School';
+
+  @override
+  String get diploma => 'Diploma';
+
+  @override
+  String get bachelor => 'Bachelor\'s Degree';
+
+  @override
+  String get master => 'Master\'s Degree';
+
+  @override
+  String get thirdUniversityYear => 'Third University Year';
+
+  @override
+  String get fourthUniversityYear => 'Fourth University Year';
+
+  @override
+  String get fifthUniversityYear => 'Fifth University Year';
+
+  @override
+  String get sixthUniversityYear => 'Sixth University Year';
+
+  @override
+  String get institutionNameArabic => 'School / University Name (Arabic)';
+
+  @override
+  String get institutionNameArabicHint => 'Example: Damascus University';
+
+  @override
+  String get institutionNameEnglish => 'School / University Name (English)';
+
+  @override
+  String get institutionNameEnglishHint => 'Example: Damascus University';
+
+  @override
+  String get educationDetailsArabic => 'Education Request Details (Arabic)';
+
+  @override
+  String get educationDetailsArabicHint =>
+      'Explain the educational need in Arabic...';
+
+  @override
+  String get educationDetailsEnglish => 'Education Request Details (English)';
+
+  @override
+  String get educationDetailsEnglishHint =>
+      'Explain the educational need in English...';
+
+  @override
+  String get educationDocuments => 'Attach Educational Documents';
+
+  @override
+  String get addNewFiles => 'Add New Files';
+
+  @override
+  String get addNewFilesDescription =>
+      'You can add new documents. Existing documents will remain unchanged.';
+
+  @override
+  String get educationDocumentsDescription =>
+      'Please attach clear photos of documents or proof of enrollment.';
+
+  @override
+  String get newFiles => 'New Files';
+
+  @override
+  String get attachedFiles => 'Attached Files';
+
+  @override
+  String get existingAttachedFiles => 'Currently Attached Files';
+
+  @override
+  String get existingAttachment => 'Previously Attached File';
+
+  @override
+  String get educationEditInfo =>
+      'The current request data has been loaded. Edit the fields you want to change, then save your changes.';
+
+  @override
+  String get selectAcademicAchievement =>
+      'Please select the academic achievement';
+
+  @override
+  String get selectGradeOrYear => 'Please select the grade or academic year';
+
+  @override
+  String get educationDocumentRequired => 'Please attach at least one document';
+
+  @override
+  String get requestIdUnavailable =>
+      'Unable to determine the request ID to update';
+
+  @override
+  String get schoolOrUniversityName => 'School or university name';
+
+  @override
+  String get educationCaseDetails => 'Education request details';
+
+  @override
+  String enterFieldInArabic(String fieldName) {
+    return 'Please enter $fieldName in Arabic';
+  }
+
+  @override
+  String fieldArabicOnly(String fieldName) {
+    return 'Please write $fieldName in Arabic only';
+  }
+
+  @override
+  String enterFieldInEnglish(String fieldName) {
+    return 'Please enter $fieldName in English';
+  }
+
+  @override
+  String fieldEnglishOnly(String fieldName) {
+    return 'Please write $fieldName in English only';
+  }
+
+  @override
+  String get editFoodRequestDetails => 'Edit Food Request Details';
+
+  @override
+  String get foodRequestDetails => 'Food Request Details';
+
+  @override
+  String get foodAidType => 'Required Food Assistance Type';
+
+  @override
+  String get foodBasket => 'Food Basket';
+
+  @override
+  String get babyMilk => 'Baby Milk';
+
+  @override
+  String get foodDetailsArabic => 'Food Request Details (Arabic)';
+
+  @override
+  String get foodDetailsArabicHint =>
+      'Explain the type of need and the family\'s current situation in Arabic...';
+
+  @override
+  String get foodDetailsEnglish => 'Food Request Details (English)';
+
+  @override
+  String get foodDetailsEnglishHint =>
+      'Explain the family situation and food needs in English...';
+
+  @override
+  String get expectedFoodCost => 'Expected Cost';
+
+  @override
+  String get supportingDocuments => 'Attach Supporting Documents';
+
+  @override
+  String get addNewDocuments => 'Add New Documents';
+
+  @override
+  String get foodNewDocumentsDescription =>
+      'New attachments are optional as long as the existing attachments remain available';
+
+  @override
+  String get foodDocumentsDescription =>
+      'Please attach any documents that support the food request';
+
+  @override
+  String get foodDecorativeMessage =>
+      'Together, we help provide food for every family in need';
+
+  @override
+  String get selectFoodAidType => 'Please select the food assistance type';
+
+  @override
+  String get invalidIndividualsCount =>
+      'Please enter a valid number of individuals';
+
+  @override
+  String get foodDocumentRequired => 'Please attach at least one document';
+
+  @override
+  String get foodArabicDetailsRequired =>
+      'Please enter the request details in Arabic';
+
+  @override
+  String get foodArabicDetailsShort =>
+      'Please provide clearer details in Arabic';
+
+  @override
+  String get foodArabicDetailsMustContainArabic =>
+      'The Arabic details must contain Arabic letters';
+
+  @override
+  String get foodArabicDetailsNoEnglish =>
+      'Please write the Arabic details without English letters';
+
+  @override
+  String get foodEnglishDetailsRequired =>
+      'Please enter the request details in English';
+
+  @override
+  String get foodEnglishDetailsShort =>
+      'Please provide clearer details in English';
+
+  @override
+  String get foodEnglishDetailsMustContainEnglish =>
+      'The English details must contain English letters';
+
+  @override
+  String get foodEnglishDetailsNoArabic =>
+      'Please write the English details without Arabic letters';
+
+  @override
+  String get editHealthRequestDetails => 'Edit Health Request Details';
+
+  @override
+  String get healthDetailsArabic => 'Health Details (Arabic)';
+
+  @override
+  String get healthDetailsArabicHint =>
+      'Describe the diagnosis and symptoms in Arabic...';
+
+  @override
+  String get healthDetailsEnglish => 'Health Details (English)';
+
+  @override
+  String get healthDetailsEnglishHint =>
+      'Describe the diagnosis and symptoms in English...';
+
+  @override
+  String get addNewMedicalDocuments =>
+      'Add New Medical Reports or Prescriptions';
+
+  @override
+  String get medicalNewDocumentsDescription =>
+      'New attachments are optional as long as the existing attachments remain available';
+
+  @override
+  String get healthArabicDetailsRequired =>
+      'Please enter the health details in Arabic';
+
+  @override
+  String get healthArabicDetailsShort =>
+      'Please provide clearer health details in Arabic';
+
+  @override
+  String get healthArabicDetailsMustContainArabic =>
+      'The Arabic details must contain Arabic letters';
+
+  @override
+  String get healthArabicDetailsNoEnglish =>
+      'Please write the Arabic details without English letters';
+
+  @override
+  String get healthEnglishDetailsRequired =>
+      'Please enter the health details in English';
+
+  @override
+  String get healthEnglishDetailsShort =>
+      'Please provide clearer health details in English';
+
+  @override
+  String get healthEnglishDetailsMustContainEnglish =>
+      'The English details must contain English letters';
+
+  @override
+  String get healthEnglishDetailsNoArabic =>
+      'Please write the English details without Arabic letters';
+
+  @override
+  String get homeProvision => 'Home Provision';
+
+  @override
+  String get rentAssistance => 'Rent Assistance';
+
+  @override
+  String get homeRepairs => 'Home Repairs';
+
+  @override
+  String get editHousingRequestDetails => 'Edit Housing Request Details';
+
+  @override
+  String get housingAidType => 'Required Housing Assistance Type';
+
+  @override
+  String get chooseHousingAidTypeHint =>
+      'Choose the housing assistance type to display the required fields';
+
+  @override
+  String get housingEditInfo =>
+      'The current request data has been loaded. The housing assistance type is fixed, and you can edit the remaining fields before saving your changes.';
+
+  @override
+  String get currentResidenceArabic => 'Current Residence (Arabic)';
+
+  @override
+  String get currentResidenceArabicHint =>
+      'Example: Damascus - Mezzeh - temporary housing';
+
+  @override
+  String get currentResidenceEnglish => 'Current Residence (English)';
+
+  @override
+  String get currentResidenceEnglishHint =>
+      'Example: Damascus - Mezzeh - temporary housing';
+
+  @override
+  String get housingSupportReasonArabic =>
+      'Reason for Requesting Housing (Arabic)';
+
+  @override
+  String get housingSupportReasonArabicHint =>
+      'Explain why housing assistance is needed in Arabic...';
+
+  @override
+  String get housingSupportReasonEnglish =>
+      'Reason for Requesting Housing (English)';
+
+  @override
+  String get housingSupportReasonEnglishHint =>
+      'Explain why housing assistance is needed in English...';
+
+  @override
+  String get requestedHousingSpecsArabic =>
+      'Required Housing Specifications (Arabic)';
+
+  @override
+  String get requestedHousingSpecsArabicHint =>
+      'Example: two rooms, close to school...';
+
+  @override
+  String get requestedHousingSpecsEnglish =>
+      'Required Housing Specifications (English)';
+
+  @override
+  String get requestedHousingSpecsEnglishHint =>
+      'Example: two rooms, close to school...';
+
+  @override
+  String get currentHousingSituation => 'Current Housing Situation';
+
+  @override
+  String get currentHousingSituationArabic =>
+      'Current Housing Situation (Arabic)';
+
+  @override
+  String get currentHousingSituationArabicHint =>
+      'Describe the damage and required repairs in Arabic...';
+
+  @override
+  String get currentHousingSituationEnglish =>
+      'Current Housing Situation (English)';
+
+  @override
+  String get currentHousingSituationEnglishHint =>
+      'Describe the damage and required repairs in English...';
+
+  @override
+  String get housingDetailsArabic => 'Housing Request Details (Arabic)';
+
+  @override
+  String get housingDetailsArabicHint =>
+      'Explain the housing situation and need in Arabic...';
+
+  @override
+  String get housingDetailsEnglish => 'Housing Request Details (English)';
+
+  @override
+  String get housingDetailsEnglishHint =>
+      'Explain the housing situation and need in English...';
+
+  @override
+  String get expectedHousingCost => 'Expected Cost';
+
+  @override
+  String get selectHousingAidType =>
+      'Please select the housing assistance type';
+
+  @override
+  String get validCurrentRent => 'Please enter a valid current rent amount';
+
+  @override
+  String get housingDocumentRequired => 'Please attach at least one document';
+
+  @override
+  String get editSmallProjectRequestDetails => 'Edit Small Project Details';
+
+  @override
+  String get smallProjectRequestDetails => 'Small Project Details';
+
+  @override
+  String get projectInformation => 'Project Information';
+
+  @override
+  String get projectNameArabic => 'Project Name (Arabic)';
+
+  @override
+  String get projectNameArabicHint => 'Example: مخبز منزلي';
+
+  @override
+  String get projectNameEnglish => 'Project Name (English)';
+
+  @override
+  String get projectNameEnglishHint => 'Example: Home bakery';
+
+  @override
+  String get projectCategoryArabic => 'Project Category (Arabic)';
+
+  @override
+  String get projectCategoryArabicHint => 'Example: إنتاج غذائي';
+
+  @override
+  String get projectCategoryEnglish => 'Project Category (English)';
+
+  @override
+  String get projectCategoryEnglishHint => 'Example: Food production';
+
+  @override
+  String get numberOfPeopleSupported => 'Expected Number of People Supported';
+
+  @override
+  String get numberOfPeopleSupportedHint => 'Example: 3';
+
+  @override
+  String get projectDetailsArabic => 'Project Details (Arabic)';
+
+  @override
+  String get projectDetailsArabicHint =>
+      'Explain the project idea, goals, and expected benefit in Arabic...';
+
+  @override
+  String get projectDetailsEnglish => 'Project Details (English)';
+
+  @override
+  String get projectDetailsEnglishHint =>
+      'Explain the project idea, goals, and expected benefit in English...';
+
+  @override
+  String get expectedProjectCost => 'Expected Cost';
+
+  @override
+  String get smallProjectNewDocumentsDescription =>
+      'New attachments are optional as long as the existing attachments remain available';
+
+  @override
+  String get smallProjectDocumentsDescription =>
+      'Feasibility study, photos, invoices, or any documents supporting the project';
+
+  @override
+  String get smallProjectDecorativeMessage =>
+      'We support small projects to help families build a sustainable income';
+
+  @override
+  String get smallProjectEditInfo =>
+      'The current request data has been loaded. Edit the fields you want to change, then save your changes.';
+
+  @override
+  String get projectNameArabicRequired =>
+      'Please enter the project name in Arabic';
+
+  @override
+  String get projectNameArabicShort => 'The Arabic project name is too short';
+
+  @override
+  String get projectNameEnglishRequired =>
+      'Please enter the project name in English';
+
+  @override
+  String get projectNameEnglishShort => 'The English project name is too short';
+
+  @override
+  String get projectCategoryArabicRequired =>
+      'Please enter the project category in Arabic';
+
+  @override
+  String get projectCategoryArabicShort =>
+      'The Arabic project category is too short';
+
+  @override
+  String get projectCategoryEnglishRequired =>
+      'Please enter the project category in English';
+
+  @override
+  String get projectCategoryEnglishShort =>
+      'The English project category is too short';
+
+  @override
+  String get validSupportedPeopleCount =>
+      'Please enter a valid number of people to be supported';
+
+  @override
+  String get projectDetailsArabicRequired =>
+      'Please enter the project details in Arabic';
+
+  @override
+  String get projectDetailsArabicShort =>
+      'Please provide clearer project details in Arabic';
+
+  @override
+  String get projectDetailsEnglishRequired =>
+      'Please enter the project details in English';
+
+  @override
+  String get projectDetailsEnglishShort =>
+      'Please provide clearer project details in English';
+
+  @override
+  String get smallProjectDocumentRequired =>
+      'Please attach at least one document';
+
+  @override
+  String get smallProjectFilesUnavailable =>
+      'The selected files were already added or could not be accessed';
+
+  @override
+  String get arabicFieldMustContainArabic =>
+      'The Arabic field must contain Arabic letters';
+
+  @override
+  String get arabicFieldNoEnglish =>
+      'Please write the Arabic field without English letters';
+
+  @override
+  String get englishFieldMustContainEnglish =>
+      'The English field must contain English letters';
+
+  @override
+  String get englishFieldNoArabic =>
+      'Please write the English field without Arabic letters';
+
+  @override
+  String get loadingRequestData => 'Loading request data...';
+
+  @override
+  String get pleaseWaitMoment => 'Please wait a moment';
+
+  @override
+  String get requestDetailsLoadFailed => 'Could not load request details';
+
+  @override
+  String get back => 'Back';
 }

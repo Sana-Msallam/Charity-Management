@@ -11,20 +11,16 @@ import '../model/housing_request_model.dart';
 import '../model/housing_sub_category.dart';
 
 class HousingRequestService {
-  Future<String> submitHousingRequest(
-    HousingRequestModel request,
-  ) async {
+  Future<String> submitHousingRequest(HousingRequestModel request) async {
     debugPrint('======================================');
     debugPrint('START SUBMIT HOUSING REQUEST');
     debugPrint('======================================');
 
     final applicant = request.applicantInfo;
 
-    final String genderApiValue =
-        _mapGender(applicant.gender);
+    final String genderApiValue = _mapGender(applicant.gender);
 
-    final String socialStatusApiValue =
-        _mapSocialStatus(
+    final String socialStatusApiValue = _mapSocialStatus(
       applicant.socialStatus,
     );
 
@@ -41,151 +37,49 @@ class HousingRequestService {
     debugPrint('Housing request values:');
     debugPrint('categoryId: 3');
 
-    debugPrint(
-      'subCategoryId: ${request.subCategory.apiId}',
-    );
+    debugPrint('subCategoryId: ${request.subCategory.apiId}');
 
-    debugPrint(
-      'subCategory: ${request.subCategory.arabicLabel}',
-    );
+debugPrint(
+  'Subcategory: ${request.subCategory.name}',
+);
+    debugPrint('firstName: ${applicant.firstName}');
 
-    debugPrint(
-      'firstName: ${applicant.firstName}',
-    );
+    debugPrint('lastName: ${applicant.lastName}');
 
-    debugPrint(
-      'lastName: ${applicant.lastName}',
-    );
+    debugPrint('beneficiaryFatherName: ${applicant.fatherName}');
 
-    debugPrint(
-      'beneficiaryFatherName: ${applicant.fatherName}',
-    );
+    debugPrint('socialStatus: $socialStatusApiValue');
 
-    debugPrint(
-      'socialStatus: $socialStatusApiValue',
-    );
+    debugPrint('addressAr: ${applicant.addressAr}');
 
-    debugPrint(
-      'addressAr: ${applicant.addressAr}',
-    );
+    debugPrint('addressEn: ${applicant.addressEn}');
 
-    debugPrint(
-      'addressEn: ${applicant.addressEn}',
-    );
+    debugPrint('address JSON: $addressJson');
 
-    debugPrint(
-      'address JSON: $addressJson',
-    );
+    debugPrint('age: ${applicant.age}');
 
-    debugPrint(
-      'age: ${applicant.age}',
-    );
+    debugPrint('isUnemployed: ${applicant.isUnemployed}');
 
-    debugPrint(
-      'isUnemployed: ${applicant.isUnemployed}',
-    );
+    debugPrint('gender: $genderApiValue');
 
-    debugPrint(
-      'gender: $genderApiValue',
-    );
+    debugPrint('number: ${applicant.phoneNumber}');
 
-    debugPrint(
-      'number: ${applicant.phoneNumber}',
-    );
+    debugPrint('detailsAr: ${request.detailsAr}');
 
-    debugPrint(
-      'detailsAr: ${request.detailsAr}',
-    );
+    debugPrint('detailsEn: ${request.detailsEn}');
 
-    debugPrint(
-      'detailsEn: ${request.detailsEn}',
-    );
+    debugPrint('details JSON: $detailsJson');
 
-    debugPrint(
-      'details JSON: $detailsJson',
-    );
+    debugPrint('cost: ${request.cost}');
 
-    debugPrint(
-      'cost: ${request.cost}',
-    );
+    debugPrint('attachments count: ${request.media.length}');
 
-    debugPrint(
-      'attachments count: ${request.media.length}',
-    );
-
-    final FormData formData = FormData();
-
-    formData.fields.addAll([
-      const MapEntry(
-        'categoryId',
-        '3',
-      ),
-      MapEntry(
-        'subCategoryId',
-        request.subCategory.apiId.toString(),
-      ),
-      MapEntry(
-        'firstName',
-        applicant.firstName,
-      ),
-      MapEntry(
-        'lastName',
-        applicant.lastName,
-      ),
-      MapEntry(
-        'beneficiaryFatherName',
-        applicant.fatherName,
-      ),
-      MapEntry(
-        'socialStatus',
-        socialStatusApiValue,
-      ),
-      MapEntry(
-        'address',
-        addressJson,
-      ),
-      MapEntry(
-        'age',
-        applicant.age.toString(),
-      ),
-      MapEntry(
-        'isUnemployed',
-        applicant.isUnemployed.toString(),
-      ),
-      MapEntry(
-        'gender',
-        genderApiValue,
-      ),
-      MapEntry(
-        'number',
-        applicant.phoneNumber,
-      ),
-      MapEntry(
-        'details',
-        detailsJson,
-      ),
-      MapEntry(
-        'cost',
-        request.cost.toString(),
-      ),
-    ]);
-
-    _addSubCategoryFields(
-      formData: formData,
+    final FormData formData = await _buildHousingFormData(
       request: request,
+      includeRequestTypeIds: true,
     );
 
-    for (final PlatformFile file
-        in request.media) {
-      await _addFileToFormData(
-        formData: formData,
-        file: file,
-      );
-    }
-
-    _printFormData(
-      formData,
-    );
+    _printFormData(formData);
 
     try {
       debugPrint(
@@ -194,89 +88,163 @@ class HousingRequestService {
         '${ApiConstants.housingRequest}',
       );
 
-      final Response<dynamic> response =
-          await DioClient.dio.post<dynamic>(
+      final Response<dynamic> response = await DioClient.dio.post<dynamic>(
         ApiConstants.housingRequest,
         data: formData,
-        options: Options(
-          contentType:
-              Headers.multipartFormDataContentType,
-        ),
+        options: Options(contentType: Headers.multipartFormDataContentType),
       );
 
-      debugPrint(
-        'Housing request response received',
-      );
+      debugPrint('Housing request response received');
 
-      debugPrint(
-        'Status code: ${response.statusCode}',
-      );
+      debugPrint('Status code: ${response.statusCode}');
 
-      debugPrint(
-        'Response data: ${response.data}',
-      );
+      debugPrint('Response data: ${response.data}');
 
       debugPrint('======================================');
 
-      return _extractSuccessMessage(
-        response.data,
-      );
-    } on DioException catch (
-      error,
-      stackTrace
-    ) {
-      debugPrint(
-        'DIO ERROR WHILE SUBMITTING HOUSING REQUEST',
-      );
+      return _extractSuccessMessage(response.data);
+    } on DioException catch (error, stackTrace) {
+      debugPrint('DIO ERROR WHILE SUBMITTING HOUSING REQUEST');
 
-      debugPrint(
-        'Error type: ${error.type}',
-      );
+      debugPrint('Error type: ${error.type}');
 
-      debugPrint(
-        'Error message: ${error.message}',
-      );
+      debugPrint('Error message: ${error.message}');
 
-      debugPrint(
-        'Status code: ${error.response?.statusCode}',
-      );
+      debugPrint('Status code: ${error.response?.statusCode}');
 
-      debugPrint(
-        'Response data: ${error.response?.data}',
-      );
+      debugPrint('Response data: ${error.response?.data}');
 
-      debugPrint(
-        'Request URL: ${error.requestOptions.uri}',
-      );
+      debugPrint('Request URL: ${error.requestOptions.uri}');
 
-      debugPrint(
-        'Request method: ${error.requestOptions.method}',
-      );
+      debugPrint('Request method: ${error.requestOptions.method}');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
       debugPrint('======================================');
 
       rethrow;
     } catch (error, stackTrace) {
-      debugPrint(
-        'UNEXPECTED HOUSING REQUEST ERROR',
-      );
+      debugPrint('UNEXPECTED HOUSING REQUEST ERROR');
 
-      debugPrint(
-        'Error: $error',
-      );
+      debugPrint('Error: $error');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
       debugPrint('======================================');
 
       rethrow;
     }
+  }
+
+  Future<String> updateHousingRequest({
+    required int requestId,
+    required HousingRequestModel request,
+  }) async {
+    debugPrint('======================================');
+    debugPrint('START UPDATE HOUSING REQUEST');
+    debugPrint('Request id: $requestId');
+debugPrint(
+  'subCategoryId: ${request.subCategory.apiId}',
+);    debugPrint('======================================');
+
+    final FormData formData = await _buildHousingFormData(
+      request: request,
+      includeRequestTypeIds: false,
+    );
+
+    _printFormData(formData);
+
+    final String endpoint = '/requests/$requestId';
+
+    try {
+      debugPrint('Sending PATCH request to: ${ApiConstants.baseUrl}$endpoint');
+
+      final Response<dynamic> response = await DioClient.dio.patch<dynamic>(
+        endpoint,
+        data: formData,
+        options: Options(
+          contentType: Headers.multipartFormDataContentType,
+          headers: const {'accept-language': 'ar'},
+        ),
+      );
+
+      debugPrint('Housing update response received');
+      debugPrint('Status code: ${response.statusCode}');
+      debugPrint('Response data: ${response.data}');
+      debugPrint('======================================');
+
+      return _extractSuccessMessage(response.data);
+    } on DioException catch (error, stackTrace) {
+      debugPrint('DIO ERROR WHILE UPDATING HOUSING REQUEST');
+      debugPrint('Error type: ${error.type}');
+      debugPrint('Error message: ${error.message}');
+      debugPrint('Status code: ${error.response?.statusCode}');
+      debugPrint('Response data: ${error.response?.data}');
+      debugPrint('Request URL: ${error.requestOptions.uri}');
+      debugPrint('Request method: ${error.requestOptions.method}');
+      debugPrint('Stack trace: $stackTrace');
+      debugPrint('======================================');
+      rethrow;
+    } catch (error, stackTrace) {
+      debugPrint('UNEXPECTED HOUSING UPDATE ERROR');
+      debugPrint('Error: $error');
+      debugPrint('Stack trace: $stackTrace');
+      debugPrint('======================================');
+      rethrow;
+    }
+  }
+
+  Future<FormData> _buildHousingFormData({
+    required HousingRequestModel request,
+    required bool includeRequestTypeIds,
+  }) async {
+    final applicant = request.applicantInfo;
+
+    final String genderApiValue = _mapGender(applicant.gender);
+    final String socialStatusApiValue = _mapSocialStatus(
+      applicant.socialStatus,
+    );
+
+    final String addressJson = jsonEncode({
+      'ar': applicant.addressAr.trim(),
+      'en': applicant.addressEn.trim(),
+    });
+
+    final String detailsJson = jsonEncode({
+      'ar': request.detailsAr.trim(),
+      'en': request.detailsEn.trim(),
+    });
+
+    final FormData formData = FormData();
+
+    if (includeRequestTypeIds) {
+      formData.fields.addAll([
+        const MapEntry('categoryId', '3'),
+        MapEntry('subCategoryId', request.subCategory.apiId.toString()),
+      ]);
+    }
+
+    formData.fields.addAll([
+      MapEntry('firstName', applicant.firstName),
+      MapEntry('lastName', applicant.lastName),
+      MapEntry('beneficiaryFatherName', applicant.fatherName),
+      MapEntry('socialStatus', socialStatusApiValue),
+      MapEntry('address', addressJson),
+      MapEntry('age', applicant.age.toString()),
+      MapEntry('isUnemployed', applicant.isUnemployed.toString()),
+      MapEntry('gender', genderApiValue),
+      MapEntry('number', applicant.phoneNumber),
+      MapEntry('details', detailsJson),
+      MapEntry('cost', request.cost.toString()),
+    ]);
+
+    _addSubCategoryFields(formData: formData, request: request);
+
+    for (final PlatformFile file in request.media) {
+      await _addFileToFormData(formData: formData, file: file);
+    }
+
+    return formData;
   }
 
   void _addSubCategoryFields({
@@ -285,24 +253,15 @@ class HousingRequestService {
   }) {
     switch (request.subCategory) {
       case HousingSubCategory.homeProvision:
-        _addHomeProvisionFields(
-          formData: formData,
-          request: request,
-        );
+        _addHomeProvisionFields(formData: formData, request: request);
         break;
 
       case HousingSubCategory.rentAssistance:
-        _addRentAssistanceFields(
-          formData: formData,
-          request: request,
-        );
+        _addRentAssistanceFields(formData: formData, request: request);
         break;
 
       case HousingSubCategory.homeRepairs:
-        _addHomeRepairsFields(
-          formData: formData,
-          request: request,
-        );
+        _addHomeRepairsFields(formData: formData, request: request);
         break;
     }
   }
@@ -316,10 +275,8 @@ class HousingRequestService {
     final String currentPlaceEn =
         request.currentPlaceOfResidenceEn?.trim() ?? '';
 
-    final String reasonAr =
-        request.reasonForLockAr?.trim() ?? '';
-    final String reasonEn =
-        request.reasonForLockEn?.trim() ?? '';
+    final String reasonAr = request.reasonForLockAr?.trim() ?? '';
+    final String reasonEn = request.reasonForLockEn?.trim() ?? '';
 
     final String specificationsAr =
         request.housingSpecificationsAr?.trim() ?? '';
@@ -349,10 +306,7 @@ class HousingRequestService {
       en: currentPlaceEn,
     );
 
-    final String reasonJson = _encodeLocalizedText(
-      ar: reasonAr,
-      en: reasonEn,
-    );
+    final String reasonJson = _encodeLocalizedText(ar: reasonAr, en: reasonEn);
 
     final String specificationsJson = _encodeLocalizedText(
       ar: specificationsAr,
@@ -374,36 +328,23 @@ class HousingRequestService {
     required FormData formData,
     required HousingRequestModel request,
   }) {
-    final double? currentRent =
-        request.currentRent;
+    final double? currentRent = request.currentRent;
 
-    if (currentRent == null ||
-        currentRent <= 0) {
-      throw const FormatException(
-        'يرجى إدخال قيمة الإيجار الحالي بشكل صحيح',
-      );
+    if (currentRent == null || currentRent <= 0) {
+      throw const FormatException('يرجى إدخال قيمة الإيجار الحالي بشكل صحيح');
     }
 
-    formData.fields.add(
-      MapEntry(
-        'currentRent',
-        currentRent.toString(),
-      ),
-    );
+    formData.fields.add(MapEntry('currentRent', currentRent.toString()));
 
-    debugPrint(
-      'currentRent: $currentRent',
-    );
+    debugPrint('currentRent: $currentRent');
   }
 
   void _addHomeRepairsFields({
     required FormData formData,
     required HousingRequestModel request,
   }) {
-    final String situationAr =
-        request.currentHousingSituationAr?.trim() ?? '';
-    final String situationEn =
-        request.currentHousingSituationEn?.trim() ?? '';
+    final String situationAr = request.currentHousingSituationAr?.trim() ?? '';
+    final String situationEn = request.currentHousingSituationEn?.trim() ?? '';
 
     _requireLocalizedPair(
       ar: situationAr,
@@ -416,103 +357,63 @@ class HousingRequestService {
       en: situationEn,
     );
 
-    formData.fields.add(
-      MapEntry(
-        'currentHousingSituation',
-        situationJson,
-      ),
-    );
+    formData.fields.add(MapEntry('currentHousingSituation', situationJson));
 
-    debugPrint(
-      'currentHousingSituation: $situationJson',
-    );
+    debugPrint('currentHousingSituation: $situationJson');
   }
 
   Future<void> _addFileToFormData({
     required FormData formData,
     required PlatformFile file,
   }) async {
-    debugPrint(
-      '--------------------------------------',
-    );
+    debugPrint('--------------------------------------');
 
-    debugPrint(
-      'Checking housing attachment: ${file.name}',
-    );
+    debugPrint('Checking housing attachment: ${file.name}');
 
-    debugPrint(
-      'Attachment size: ${file.size} bytes',
-    );
+    debugPrint('Attachment size: ${file.size} bytes');
 
     MultipartFile multipartFile;
 
     if (kIsWeb) {
-      final Uint8List? bytes =
-          file.bytes;
+      final Uint8List? bytes = file.bytes;
 
-      if (bytes == null ||
-          bytes.isEmpty) {
+      if (bytes == null || bytes.isEmpty) {
         debugPrint(
           'Web attachment bytes are missing: '
           '${file.name}',
         );
 
-        throw const FormatException(
-          'تعذر قراءة أحد الملفات المرفقة',
-        );
+        throw const FormatException('تعذر قراءة أحد الملفات المرفقة');
       }
 
-      multipartFile =
-          MultipartFile.fromBytes(
-        bytes,
-        filename: file.name,
-      );
+      multipartFile = MultipartFile.fromBytes(bytes, filename: file.name);
 
-      debugPrint(
-        'Web attachment added using bytes',
-      );
+      debugPrint('Web attachment added using bytes');
     } else {
-      final String? path =
-          file.path;
+      final String? path = file.path;
 
-      if (path == null ||
-          path.trim().isEmpty) {
+      if (path == null || path.trim().isEmpty) {
         debugPrint(
           'Mobile attachment path is missing: '
           '${file.name}',
         );
 
-        throw const FormatException(
-          'تعذر الوصول إلى أحد الملفات المرفقة',
-        );
+        throw const FormatException('تعذر الوصول إلى أحد الملفات المرفقة');
       }
 
-      multipartFile =
-          await MultipartFile.fromFile(
-        path,
-        filename: file.name,
-      );
+      multipartFile = await MultipartFile.fromFile(path, filename: file.name);
 
-      debugPrint(
-        'Mobile attachment added using path: $path',
-      );
+      debugPrint('Mobile attachment added using path: $path');
     }
 
-    formData.files.add(
-      MapEntry(
-        'media',
-        multipartFile,
-      ),
-    );
+    formData.files.add(MapEntry('media', multipartFile));
 
     debugPrint(
       'Housing attachment added successfully: '
       '${file.name}',
     );
 
-    debugPrint(
-      '--------------------------------------',
-    );
+    debugPrint('--------------------------------------');
   }
 
   void _requireLocalizedPair({
@@ -527,46 +428,29 @@ class HousingRequestService {
     }
   }
 
-  String _encodeLocalizedText({
-    required String ar,
-    required String en,
-  }) {
-    return jsonEncode({
-      'ar': ar.trim(),
-      'en': en.trim(),
-    });
+  String _encodeLocalizedText({required String ar, required String en}) {
+    return jsonEncode({'ar': ar.trim(), 'en': en.trim()});
   }
 
-  String _extractSuccessMessage(
-    dynamic data,
-  ) {
+  String _extractSuccessMessage(dynamic data) {
     if (data is Map) {
-      final dynamic message =
-          data['message'];
+      final dynamic message = data['message'];
 
-      if (message is String &&
-          message.trim().isNotEmpty) {
+      if (message is String && message.trim().isNotEmpty) {
         return message;
       }
     }
 
-    if (data is String &&
-        data.trim().isNotEmpty) {
+    if (data is String && data.trim().isNotEmpty) {
       return data;
     }
 
-    debugPrint(
-      'Invalid housing response format: $data',
-    );
+    debugPrint('Invalid housing response format: $data');
 
-    throw const FormatException(
-      'استجابة الخادم غير صالحة',
-    );
+    throw const FormatException('استجابة الخادم غير صالحة');
   }
 
-  String _mapGender(
-    String gender,
-  ) {
+  String _mapGender(String gender) {
     switch (gender.trim()) {
       case 'ذكر':
       case 'MALE':
@@ -578,19 +462,13 @@ class HousingRequestService {
         return 'FEMALE';
 
       default:
-        debugPrint(
-          'Unsupported gender value: $gender',
-        );
+        debugPrint('Unsupported gender value: $gender');
 
-        throw const FormatException(
-          'قيمة الجنس غير صحيحة',
-        );
+        throw const FormatException('قيمة الجنس غير صحيحة');
     }
   }
 
-  String _mapSocialStatus(
-    String socialStatus,
-  ) {
+  String _mapSocialStatus(String socialStatus) {
     switch (socialStatus.trim()) {
       case 'أعزب':
       case 'عازب':
@@ -618,27 +496,19 @@ class HousingRequestService {
           '$socialStatus',
         );
 
-        throw const FormatException(
-          'قيمة الحالة الاجتماعية غير صحيحة',
-        );
+        throw const FormatException('قيمة الحالة الاجتماعية غير صحيحة');
     }
   }
 
-  void _printFormData(
-    FormData formData,
-  ) {
+  void _printFormData(FormData formData) {
     if (!kDebugMode) {
       return;
     }
 
-    debugPrint(
-      '----------- HOUSING FORM DATA -----------',
-    );
+    debugPrint('----------- HOUSING FORM DATA -----------');
 
     for (final field in formData.fields) {
-      debugPrint(
-        '${field.key}: ${field.value}',
-      );
+      debugPrint('${field.key}: ${field.value}');
     }
 
     for (final file in formData.files) {
@@ -649,9 +519,6 @@ class HousingRequestService {
       );
     }
 
-    debugPrint(
-      '-----------------------------------------',
-    );
+    debugPrint('-----------------------------------------');
   }
-
 }

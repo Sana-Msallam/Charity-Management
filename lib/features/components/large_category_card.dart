@@ -7,12 +7,12 @@ class LargeCategoryCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const LargeCategoryCard({
-    Key? key,
+    super.key,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
     const cardColor = Color(0xFFD3DC7C);
@@ -39,8 +39,6 @@ class LargeCategoryCard extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16.0),
-
-                // تم توحيد قوة الحدود مع باقي الكروت
                 border: Border.all(
                   color: cardColor.withOpacity(0.15),
                   width: 1.2,
@@ -51,6 +49,10 @@ class LargeCategoryCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
+                      // ======================================
+                      // ICON
+                      // ======================================
+
                       Container(
                         width: 52,
                         height: 52,
@@ -71,7 +73,13 @@ class LargeCategoryCard extends StatelessWidget {
                           size: 28,
                         ),
                       ),
+
                       const SizedBox(width: 16),
+
+                      // ======================================
+                      // TEXT
+                      // ======================================
+
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -84,6 +92,7 @@ class LargeCategoryCard extends StatelessWidget {
                               fontFamily: AppTextStyles.fontFamily,
                             ),
                           ),
+
                           Text(
                             l10n.housingRequestSubtitle,
                             style: TextStyle(
@@ -96,11 +105,21 @@ class LargeCategoryCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Icon(
-                    Icons.chevron_left,
-                    color: AppColors.onSurface,
-                    size: 24,
-                  ),
+
+                  // ======================================
+                  // ARROW
+                  //
+                  // AR → يتجه حسب RTL
+                  // EN → يتجه حسب LTR
+                  // ======================================
+
+                 Icon(
+  Directionality.of(context) == TextDirection.rtl
+      ? Icons.chevron_left_rounded
+      : Icons.chevron_right_rounded,
+  color: AppColors.onSurface,
+  size: 24,
+),
                 ],
               ),
             ),

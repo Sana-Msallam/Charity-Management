@@ -1,6 +1,7 @@
 import 'package:charity_management/features/Beneficiary/profile/cubit/profile_cubit.dart';
 import 'package:charity_management/features/Beneficiary/profile/screen/profile_screen.dart';
 import 'package:charity_management/features/Beneficiary/profile/service/profile_service.dart';
+import 'package:charity_management/features/Beneficiary/request_tracking/screen/request_tracking_page.dart';
 import 'package:charity_management/features/screen/settings_page.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:charity_management/theme/app_colors.dart';
@@ -41,24 +42,39 @@ class CustomBottomNavigation extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            // ==========================================
+            // الرئيسية
+            // ==========================================
             _buildNavItem(
               context: context,
               index: 0,
               icon: Icons.home,
               label: l10n.home,
             ),
+
+            // ==========================================
+            // تتبع الطلبات
+            // ==========================================
             _buildNavItem(
               context: context,
               index: 1,
               icon: Icons.analytics_outlined,
               label: l10n.trackRequest,
             ),
+
+            // ==========================================
+            // الحساب
+            // ==========================================
             _buildNavItem(
               context: context,
               index: 2,
               icon: Icons.person_outline,
               label: l10n.account,
             ),
+
+            // ==========================================
+            // الإعدادات
+            // ==========================================
             _buildNavItem(
               context: context,
               index: 3,
@@ -70,6 +86,10 @@ class CustomBottomNavigation extends StatelessWidget {
       ),
     );
   }
+
+  // ============================================
+  // Navigation Item
+  // ============================================
 
   Widget _buildNavItem({
     required BuildContext context,
@@ -109,7 +129,9 @@ class CustomBottomNavigation extends StatelessWidget {
                   : AppColors.brandGray,
               size: 24,
             ),
+
             const SizedBox(height: 4),
+
             Text(
               label,
               maxLines: 1,
@@ -131,51 +153,73 @@ class CustomBottomNavigation extends StatelessWidget {
     );
   }
 
-void _handleNavigation(
-  BuildContext context,
-  int index,
-) {
-  if (index == currentIndex) {
-    return;
+  // ============================================
+  // Navigation
+  // ============================================
+
+  void _handleNavigation(
+    BuildContext context,
+    int index,
+  ) {
+    // إذا المستخدم ضغط على الصفحة المفتوحة نفسها
+    // ما منعمل أي Navigation جديد.
+    if (index == currentIndex) {
+      return;
+    }
+
+    switch (index) {
+      // ==========================================
+      // الرئيسية
+      // ==========================================
+      case 0:
+        Navigator.of(context).popUntil(
+          (route) => route.isFirst,
+        );
+        break;
+
+      // ==========================================
+      // تتبع الطلبات
+      // ==========================================
+      case 1:
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) {
+              return const RequestTrackingPage();
+            },
+          ),
+        );
+        break;
+
+      // ==========================================
+      // الحساب
+      // ==========================================
+      case 2:
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) {
+              return BlocProvider(
+                create: (_) => ProfileCubit(
+                  ProfileService(),
+                ),
+                child: const ProfilePage(),
+              );
+            },
+          ),
+        );
+        break;
+
+      // ==========================================
+      // الإعدادات
+      // ==========================================
+      case 3:
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) {
+              return const SettingsPage();
+            },
+          ),
+        );
+        break;
+    }
   }
-
-  switch (index) {
-    case 0:
-      Navigator.of(context).popUntil(
-        (route) => route.isFirst,
-      );
-      break;
-
-    case 1:
-      debugPrint(
-        'Track requests clicked',
-      );
-      break;
-
-    case 2:
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) {
-            return BlocProvider(
-              create: (_) => ProfileCubit(
-                ProfileService(),
-              ),
-              child: const ProfilePage(),
-            );
-          },
-        ),
-      );
-      break;
-
-    case 3:
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) {
-            return const SettingsPage();
-          },
-        ),
-      );
-      break;
-  }
-}
 }

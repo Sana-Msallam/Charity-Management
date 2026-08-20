@@ -9,9 +9,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'small_project_state.dart';
 
 class SmallProjectCubit extends Cubit<SmallProjectState> {
-  SmallProjectCubit(
-    this._smallProjectRequestService,
-  ) : super(const SmallProjectInitial());
+  SmallProjectCubit(this._smallProjectRequestService)
+    : super(const SmallProjectInitial());
 
   final SmallProjectRequestService _smallProjectRequestService;
 
@@ -20,9 +19,7 @@ class SmallProjectCubit extends Cubit<SmallProjectState> {
     AppLocalizations localizations,
   ) async {
     if (state is SmallProjectLoading) {
-      debugPrint(
-        'Small project submit ignored: request is already loading',
-      );
+      debugPrint('Small project submit ignored: request is already loading');
       return;
     }
 
@@ -33,71 +30,79 @@ class SmallProjectCubit extends Cubit<SmallProjectState> {
     emit(const SmallProjectLoading());
 
     try {
-      final String message =
-          await _smallProjectRequestService
-              .submitSmallProjectRequest(
-        request,
-      );
+      final String message = await _smallProjectRequestService
+          .submitSmallProjectRequest(request);
 
-      debugPrint(
-        'SmallProjectCubit success: $message',
-      );
+      debugPrint('SmallProjectCubit success: $message');
 
-      emit(
-        SmallProjectSuccess(message),
-      );
+      emit(SmallProjectSuccess(message));
     } on DioException catch (error, stackTrace) {
-      debugPrint(
-        'SmallProjectCubit DioException: ${error.message}',
-      );
+      debugPrint('SmallProjectCubit DioException: ${error.message}');
 
-      debugPrint(
-        'Response: ${error.response?.data}',
-      );
+      debugPrint('Response: ${error.response?.data}');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
-      final String message =
-          ApiException.getMessage(
-        error,
-        localizations,
-      );
+      final String message = ApiException.getMessage(error, localizations);
 
-      emit(
-        SmallProjectFailure(
-          message,
-        ),
-      );
+      emit(SmallProjectFailure(message));
     } on FormatException catch (error, stackTrace) {
-      debugPrint(
-        'SmallProjectCubit FormatException: ${error.message}',
-      );
+      debugPrint('SmallProjectCubit FormatException: ${error.message}');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
-      emit(
-        SmallProjectFailure(
-          error.message,
-        ),
-      );
+      emit(SmallProjectFailure(error.message));
     } catch (error, stackTrace) {
-      debugPrint(
-        'SmallProjectCubit unexpected error: $error',
-      );
+      debugPrint('SmallProjectCubit unexpected error: $error');
 
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
+      debugPrint('Stack trace: $stackTrace');
 
-      emit(
-        SmallProjectFailure(
-          localizations.unexpectedError,
-        ),
-      );
+      emit(SmallProjectFailure(localizations.unexpectedError));
+    }
+  }
+
+  Future<void> updateSmallProjectRequest({
+    required int requestId,
+    required SmallProjectRequestModel request,
+    required AppLocalizations localizations,
+  }) async {
+    if (state is SmallProjectLoading) {
+      debugPrint('Small project update ignored: request is already loading');
+      return;
+    }
+
+    debugPrint('======================================');
+    debugPrint('SmallProjectCubit update started');
+    debugPrint('Request id: $requestId');
+    debugPrint('======================================');
+
+    emit(const SmallProjectLoading());
+
+    try {
+      final String message = await _smallProjectRequestService
+          .updateSmallProjectRequest(requestId: requestId, request: request);
+
+      debugPrint('SmallProjectCubit update success: $message');
+
+      emit(SmallProjectSuccess(message));
+    } on DioException catch (error, stackTrace) {
+      debugPrint('SmallProjectCubit update DioException: ${error.message}');
+      debugPrint('Response: ${error.response?.data}');
+      debugPrint('Stack trace: $stackTrace');
+
+      final String message = ApiException.getMessage(error, localizations);
+
+      emit(SmallProjectFailure(message));
+    } on FormatException catch (error, stackTrace) {
+      debugPrint('SmallProjectCubit update FormatException: ${error.message}');
+      debugPrint('Stack trace: $stackTrace');
+
+      emit(SmallProjectFailure(error.message));
+    } catch (error, stackTrace) {
+      debugPrint('SmallProjectCubit update unexpected error: $error');
+      debugPrint('Stack trace: $stackTrace');
+
+      emit(SmallProjectFailure(localizations.unexpectedError));
     }
   }
 }

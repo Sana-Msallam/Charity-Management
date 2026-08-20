@@ -435,5 +435,434 @@
         "type": "String"
       }
     }
+  },
+"appPreferences": "تفضيلات التطبيق",
+"changeAppLanguage": "تغيير لغة التطبيق",
+"appearance": "المظهر",
+"accountSection": "الحساب",
+"changePasswordSubtitle": "تحديث كلمة مرور الحساب",
+"logoutSubtitle": "الخروج من الحساب الحالي",
+"chooseLanguage": "اختر لغة التطبيق",
+"aboutAssociationTitle": "جمعية الأثر... لأن لكل عطاء أثراً",
+"togetherWeMakeImpact": "معاً نصنع أثراً",
+"renewedHope": "أمل يتجدد",
+"givingMakesDifference": "العطاء يصنع الفرق",
+"noCompletedProjects": "لا توجد مشاريع مكتملة حالياً",
+"urgent": "عاجل",
+"riyal": "ريال",
+"profileTitle": "حسابي",
+"profileLoadError": "تعذر تحميل الملف الشخصي",
+"retry": "إعادة المحاولة",
+"editProfile": "تعديل البيانات",
+"beneficiary": "المستفيد",
+"personalInformation": "المعلومات الشخصية",
+"email": "البريد الإلكتروني",
+"dateOfBirth": "تاريخ الميلاد",
+"age": "العمر",
+"years": "سنة",
+"gender": "الجنس",
+"male": "ذكر",
+"female": "أنثى",
+"socialStatus": "الحالة الاجتماعية",
+"single": "أعزب",
+"married": "متزوج",
+"widowed": "أرمل",
+"divorced": "مطلق",
+"employmentStatus": "حالة العمل",
+"employed": "يعمل",
+"unemployed": "عاطل عن العمل",
+"residence": "مكان الإقامة",
+"address": "العنوان",
+"notSpecified": "غير محدد",
+"profileAccountHint": "يتم عرض بيانات حسابك المسجلة لدى الجمعية.",
+"alternateAddressLoadError": "تعذر تحميل العنوان باللغة الأخرى",
+"loadBothAddressesBeforeSave": "يجب تحميل العنوان باللغتين قبل حفظ التعديلات",
+"unsupportedGenderValue": "قيمة الجنس الحالية غير مدعومة",
+"unsupportedSocialStatusValue": "قيمة الحالة الاجتماعية الحالية غير مدعومة",
+"saveChanges": "حفظ التعديلات",
+"savingChanges": "جارٍ الحفظ...",
+"changePhoto": "تغيير الصورة",
+"profilePhotoOptionalHint": "الصورة اختيارية، ولن تتغير إلا عند اختيار صورة جديدة",
+"bilingualAddress": "العنوان باللغتين",
+"arabicAddress": "العنوان بالعربية",
+"arabicAddressHint": "أدخل العنوان بالعربية",
+"englishAddress": "العنوان بالإنجليزية",
+"englishAddressHint": "أدخل العنوان بالإنجليزية",
+"loadingAlternateAddress": "جارٍ تحميل العنوان باللغة الأخرى...",
+"readOnlyData": "بيانات للعرض فقط",
+"fieldRequired": "هذا الحقل مطلوب",
+"currentPassword": "كلمة المرور الحالية",
+"currentPasswordRequired": "كلمة المرور الحالية مطلوبة",
+
+"requestTrackingTitle": "تتبع الطلبات",
+"allRequests": "الكل",
+"pendingRequests": "قيد المراجعة",
+"acceptedRequests": "المقبولة",
+"rejectedRequests": "المرفوضة",
+"cancelledRequests": "الملغاة",
+
+"cancelRequestTitle": "إلغاء الطلب",
+"cancelRequestConfirmation": "هل أنت متأكد من رغبتك في إلغاء الطلب رقم #{requestId}؟\nلن تتمكن من التراجع عن هذه العملية.",
+"@cancelRequestConfirmation": {
+  "placeholders": {
+    "requestId": {
+      "type": "int"
+    }
   }
+},
+
+"confirmCancelRequest": "نعم، إلغاء الطلب",
+"requestCancelledTitle": "تم إلغاء الطلب",
+
+"requestsLoadError": "تعذر تحميل الطلبات",
+"noRequestsForStatus": "لا توجد طلبات في هذه الحالة",
+"requestNumber": "طلب #{requestId}",
+"@requestNumber": {
+  "placeholders": {
+    "requestId": {
+      "type": "int"
+    }
+  }
+},
+
+"urgent": "عاجل",
+"requestType": "نوع الطلب",
+"subCategory": "النوع الفرعي",
+"aidType": "نوع المساعدة",
+"notSpecified": "غير محدد",
+
+"cost": "التكلفة",
+"submissionDate": "تاريخ التقديم",
+"amountRiyal": "{amount} ريال",
+"@amountRiyal": {
+  "placeholders": {
+    "amount": {
+      "type": "String"
+    }
+  }
+},
+
+"editRequest": "تعديل الطلب",
+
+"fundingProgress": "متابعة التمويل",
+"fundingAmountOf": "{current} من {total} ريال",
+"@fundingAmountOf": {
+  "placeholders": {
+    "current": {
+      "type": "String"
+    },
+    "total": {
+      "type": "String"
+    }
+  }
+},
+
+"remainingAmount": "المتبقي: {amount} ريال",
+"@remainingAmount": {
+  "placeholders": {
+    "amount": {
+      "type": "String"
+    }
+  }
+},
+
+"rejectionReason": "سبب الرفض",
+"noRejectionReason": "لم يتم توضيح سبب الرفض",
+"requestWasCancelled": "تم إلغاء هذا الطلب",
+"selfApplicant": "لنفسي",
+"otherApplicant": "لشخص آخر",
+
+"whoIsRequestFor": "لمن تريد تقديم طلب الإعانة؟",
+"chooseApplicantBeforeFilling": "اختر صاحب الطلب قبل تعبئة المعلومات",
+
+"loadingProfileData": "جارٍ تحميل بيانات الملف الشخصي...",
+"profileAutoFilled": "تم تعبئة بيانات حسابك تلقائياً. يمكنك تعديل أي معلومة قبل متابعة الطلب.",
+"profileAutoFillError": "تعذر تحميل بيانات الملف الشخصي، يمكنك المحاولة مرة أخرى أو اختيار شخص آخر",
+
+"selectApplicantType": "يرجى تحديد لمن تريد تقديم طلب الإعانة",
+"waitForProfileLoading": "يرجى الانتظار حتى يتم تحميل بياناتك",
+
+"editApplicantInfo": "تعديل معلومات مقدم الطلب",
+"personalStatus": "الحالة الشخصية",
+"contactInformation": "معلومات التواصل",
+
+"applicantCreateDescription": "حدد أولاً لمن تريد تقديم الطلب، ثم أدخل معلومات مقدم الطلب بدقة.",
+"applicantEditDescription": "يمكنك تعديل معلومات مقدم الطلب، ثم الانتقال إلى تفاصيل المساعدة لتعديلها.",
+
+"arabicAddressLabel": "العنوان (عربي)",
+"arabicAddressExample": "مثال: دمشق - المزة - الشارع الرئيسي",
+"englishAddressLabel": "العنوان (إنجليزي)",
+"englishAddressExample": "Example: Damascus - Al Mazzeh - Main Street",
+
+"arabicAddressRequired": "يرجى إدخال العنوان باللغة العربية",
+"arabicAddressOnly": "يرجى كتابة العنوان بالعربية فقط",
+"englishAddressRequired": "يرجى إدخال العنوان باللغة الإنجليزية",
+"englishAddressOnly": "يرجى كتابة العنوان باللغة الإنجليزية فقط",
+
+"phoneRequiredApplicant": "يرجى إدخال رقم الهاتف",
+
+"aidRequestTitle": "طلب مساعدة",
+"editAidRequestTitle": "تعديل طلب مساعدة",
+"aidRequestWithType": "طلب {requestType}",
+"@aidRequestWithType": {
+  "placeholders": {
+    "requestType": {
+      "type": "String"
+    }
+  }
+},
+"editAidRequestWithType": "تعديل طلب {requestType}",
+"@editAidRequestWithType": {
+  "placeholders": {
+    "requestType": {
+      "type": "String"
+    }
+  }
+},
+
+"continueToRequestDetails": "متابعة إلى تفاصيل الطلب",
+"continueToEditRequestDetails": "متابعة لتعديل تفاصيل الطلب",
+"editEducationRequestDetails": "تعديل تفاصيل الطلب التعليمي",
+
+"academicAchievement": "التحصيل الدراسي",
+"highSchool": "ثانوي",
+"diploma": "دبلوم",
+"bachelor": "بكالوريوس",
+"master": "ماجستير",
+
+"thirdUniversityYear": "سنة ثالثة جامعي",
+"fourthUniversityYear": "سنة رابعة جامعي",
+"fifthUniversityYear": "سنة خامسة جامعي",
+"sixthUniversityYear": "سنة سادسة جامعي",
+
+"institutionNameArabic": "اسم المدرسة / الجامعة (عربي)",
+"institutionNameArabicHint": "مثال: جامعة دمشق",
+"institutionNameEnglish": "اسم المدرسة / الجامعة (إنجليزي)",
+"institutionNameEnglishHint": "Example: Damascus University",
+
+"educationDetailsArabic": "تفاصيل الحالة التعليمية (عربي)",
+"educationDetailsArabicHint": "اشرح حاجتك التعليمية باللغة العربية...",
+"educationDetailsEnglish": "تفاصيل الحالة التعليمية (إنجليزي)",
+"educationDetailsEnglishHint": "Explain the educational need in English...",
+
+"educationDocuments": "إرفاق الوثائق التعليمية",
+
+"addNewFiles": "إضافة ملفات جديدة",
+"addNewFilesDescription": "يمكنك إضافة وثائق جديدة، أما الوثائق الحالية فستبقى كما هي",
+"educationDocumentsDescription": "يرجى إرفاق صور واضحة للوثائق أو إثبات التسجيل",
+
+"newFiles": "الملفات الجديدة",
+"attachedFiles": "الملفات المرفقة",
+"existingAttachedFiles": "الملفات المرفقة حالياً",
+"existingAttachment": "مرفق موجود مسبقاً",
+
+"educationEditInfo": "تم تحميل بيانات الطلب الحالية. عدّل الحقول التي تريد تغييرها ثم اضغط حفظ التعديلات.",
+
+"selectAcademicAchievement": "يرجى اختيار التحصيل الدراسي",
+"selectGradeOrYear": "يرجى اختيار الصف أو السنة الدراسية",
+"educationDocumentRequired": "يرجى إرفاق وثيقة واحدة على الأقل",
+"requestIdUnavailable": "تعذر تحديد رقم الطلب المراد تعديله",
+
+"schoolOrUniversityName": "اسم المدرسة أو الجامعة",
+"educationCaseDetails": "تفاصيل الحالة التعليمية",
+
+"enterFieldInArabic": "يرجى إدخال {fieldName} باللغة العربية",
+"@enterFieldInArabic": {
+  "placeholders": {
+    "fieldName": {
+      "type": "String"
+    }
+  }
+},
+
+"fieldArabicOnly": "يرجى كتابة {fieldName} باللغة العربية فقط",
+"@fieldArabicOnly": {
+  "placeholders": {
+    "fieldName": {
+      "type": "String"
+    }
+  }
+},
+
+"enterFieldInEnglish": "يرجى إدخال {fieldName} باللغة الإنجليزية",
+"@enterFieldInEnglish": {
+  "placeholders": {
+    "fieldName": {
+      "type": "String"
+    }
+  }
+},
+
+"fieldEnglishOnly": "يرجى كتابة {fieldName} باللغة الإنجليزية فقط",
+"@fieldEnglishOnly": {
+  "placeholders": {
+    "fieldName": {
+      "type": "String"
+    }
+  }
+},
+"editFoodRequestDetails": "تعديل تفاصيل الطلب الغذائي",
+"foodRequestDetails": "تفاصيل الطلب الغذائي",
+
+"foodAidType": "نوع المساعدة الغذائية المطلوبة",
+"foodBasket": "سلة غذائية",
+"babyMilk": "حليب أطفال",
+
+"foodDetailsArabic": "تفاصيل الحالة والاحتياج الغذائي (عربي)",
+"foodDetailsArabicHint": "اشرح نوع الاحتياج والظروف الحالية للأسرة باللغة العربية...",
+"foodDetailsEnglish": "تفاصيل الطلب الغذائي (إنجليزي)",
+"foodDetailsEnglishHint": "Explain the family situation and food needs in English...",
+
+"expectedFoodCost": "التكلفة المالية المتوقعة",
+
+"supportingDocuments": "إرفاق الوثائق الثبوتية",
+"addNewDocuments": "إضافة وثائق جديدة",
+"foodNewDocumentsDescription": "المرفقات الجديدة اختيارية ما دامت المرفقات الحالية موجودة",
+"foodDocumentsDescription": "يرجى إرفاق أي وثائق تدعم الطلب الغذائي",
+
+"foodDecorativeMessage": "معاً نساهم في توفير الغذاء لكل أسرة محتاجة",
+
+"selectFoodAidType": "يرجى اختيار نوع المساعدة الغذائية",
+"invalidIndividualsCount": "يرجى إدخال عدد أفراد صحيح",
+"foodDocumentRequired": "يرجى إرفاق وثيقة واحدة على الأقل",
+
+"foodArabicDetailsRequired": "يرجى إدخال تفاصيل الطلب باللغة العربية",
+"foodArabicDetailsShort": "يرجى كتابة تفاصيل أوضح باللغة العربية",
+"foodArabicDetailsMustContainArabic": "يجب أن تحتوي التفاصيل العربية على أحرف عربية",
+"foodArabicDetailsNoEnglish": "يرجى كتابة التفاصيل العربية دون أحرف إنكليزية",
+
+"foodEnglishDetailsRequired": "يرجى إدخال تفاصيل الطلب باللغة الإنجليزية",
+"foodEnglishDetailsShort": "يرجى كتابة تفاصيل أوضح باللغة الإنجليزية",
+"foodEnglishDetailsMustContainEnglish": "يجب أن تحتوي التفاصيل الإنجليزية على أحرف إنجليزية",
+"foodEnglishDetailsNoArabic": "يرجى كتابة التفاصيل الإنجليزية دون أحرف عربية",
+"medicineInsurance": "تأمين أدوية",
+"surgery": "عمل جراحي",
+"medicalDevices": "أجهزة طبية",
+"editHealthRequestDetails": "تعديل تفاصيل الطلب الصحي",
+
+"healthDetailsArabic": "تفاصيل الحالة الصحية (عربي)",
+"healthDetailsArabicHint": "يرجى ذكر التشخيص والأعراض باللغة العربية...",
+
+"healthDetailsEnglish": "تفاصيل الحالة الصحية (إنجليزي)",
+"healthDetailsEnglishHint": "Describe the diagnosis and symptoms in English...",
+
+"addNewMedicalDocuments": "إضافة تقارير أو وصفات طبية جديدة",
+"medicalNewDocumentsDescription": "المرفقات الجديدة اختيارية ما دامت المرفقات الحالية موجودة",
+
+"healthArabicDetailsRequired": "يرجى إدخال تفاصيل الحالة الصحية باللغة العربية",
+"healthArabicDetailsShort": "يرجى كتابة تفاصيل أوضح باللغة العربية",
+"healthArabicDetailsMustContainArabic": "يجب أن تحتوي التفاصيل العربية على أحرف عربية",
+"healthArabicDetailsNoEnglish": "يرجى كتابة التفاصيل العربية دون أحرف إنكليزية",
+
+"healthEnglishDetailsRequired": "يرجى إدخال تفاصيل الحالة الصحية باللغة الإنجليزية",
+"healthEnglishDetailsShort": "يرجى كتابة تفاصيل أوضح باللغة الإنجليزية",
+"healthEnglishDetailsMustContainEnglish": "يجب أن تحتوي التفاصيل الإنجليزية على أحرف إنجليزية",
+"healthEnglishDetailsNoArabic": "يرجى كتابة التفاصيل الإنجليزية دون أحرف عربية",
+"homeProvision": "تأمين منزل",
+"rentAssistance": "مساعدة في إيجار البيت",
+"homeRepairs": "إصلاحات منزلية",
+
+"editHousingRequestDetails": "تعديل تفاصيل الطلب السكني",
+"housingAidType": "نوع المساعدة السكنية المطلوبة",
+"chooseHousingAidTypeHint": "اختر نوع المساعدة السكنية لعرض الحقول المطلوبة",
+
+"housingEditInfo": "تم تحميل بيانات الطلب الحالية. نوع المساعدة السكنية ثابت، ويمكنك تعديل بقية الحقول ثم حفظ التعديلات.",
+
+"currentResidenceArabic": "مكان الإقامة الحالي (عربي)",
+"currentResidenceArabicHint": "مثال: دمشق - المزة - سكن مؤقت",
+"currentResidenceEnglish": "مكان الإقامة الحالي (إنجليزي)",
+"currentResidenceEnglishHint": "Example: Damascus - Mezzeh - temporary housing",
+
+"housingSupportReasonArabic": "سبب طلب تأمين منزل (عربي)",
+"housingSupportReasonArabicHint": "اشرح سبب الحاجة إلى منزل باللغة العربية...",
+"housingSupportReasonEnglish": "سبب طلب تأمين منزل (إنجليزي)",
+"housingSupportReasonEnglishHint": "Explain why housing assistance is needed in English...",
+
+"requestedHousingSpecsArabic": "مواصفات المنزل المطلوب (عربي)",
+"requestedHousingSpecsArabicHint": "مثال: غرفتان، قريب من المدرسة...",
+"requestedHousingSpecsEnglish": "مواصفات المنزل المطلوب (إنجليزي)",
+"requestedHousingSpecsEnglishHint": "Example: two rooms, close to school...",
+
+"currentHousingSituation": "حالة المنزل الحالية",
+"currentHousingSituationArabic": "وصف حالة المنزل الحالية (عربي)",
+"currentHousingSituationArabicHint": "اشرح الأضرار والإصلاحات المطلوبة باللغة العربية...",
+"currentHousingSituationEnglish": "وصف حالة المنزل الحالية (إنجليزي)",
+"currentHousingSituationEnglishHint": "Describe the damage and required repairs in English...",
+
+"housingDetailsArabic": "تفاصيل الطلب السكني (عربي)",
+"housingDetailsArabicHint": "اشرح الحالة والحاجة إلى المساعدة باللغة العربية...",
+"housingDetailsEnglish": "تفاصيل الطلب السكني (إنجليزي)",
+"housingDetailsEnglishHint": "Explain the housing situation and need in English...",
+
+"expectedHousingCost": "التكلفة المالية المتوقعة",
+
+"selectHousingAidType": "يرجى اختيار نوع المساعدة السكنية",
+"validCurrentRent": "يرجى إدخال قيمة الإيجار الحالي بشكل صحيح",
+"housingDocumentRequired": "يرجى إرفاق وثيقة واحدة على الأقل",
+"editSmallProjectRequestDetails": "تعديل تفاصيل المشروع الصغير",
+"smallProjectRequestDetails": "تفاصيل المشروع الصغير",
+
+"projectInformation": "معلومات المشروع",
+
+"projectNameArabic": "اسم المشروع (عربي)",
+"projectNameArabicHint": "مثال: مخبز منزلي",
+"projectNameEnglish": "اسم المشروع (إنجليزي)",
+"projectNameEnglishHint": "Example: Home bakery",
+
+"projectCategoryArabic": "تصنيف المشروع (عربي)",
+"projectCategoryArabicHint": "مثال: إنتاج غذائي",
+"projectCategoryEnglish": "تصنيف المشروع (إنجليزي)",
+"projectCategoryEnglishHint": "Example: Food production",
+
+"numberOfPeopleSupported": "عدد الأشخاص المتوقع دعمهم",
+"numberOfPeopleSupportedHint": "مثال: 3",
+
+"projectDetailsArabic": "تفاصيل المشروع (عربي)",
+"projectDetailsArabicHint": "اشرح فكرة المشروع، أهدافه، وخطة الاستفادة منه باللغة العربية...",
+"projectDetailsEnglish": "تفاصيل المشروع (إنجليزي)",
+"projectDetailsEnglishHint": "Explain the project idea, goals, and expected benefit in English...",
+
+"expectedProjectCost": "التكلفة المالية المتوقعة",
+
+"smallProjectNewDocumentsDescription": "المرفقات الجديدة اختيارية ما دامت المرفقات الحالية موجودة",
+"smallProjectDocumentsDescription": "دراسة جدوى، صور، فواتير أو وثائق تدعم المشروع",
+
+"smallProjectDecorativeMessage": "نسعى لدعم المشاريع الصغيرة لتوفير دخل مستدام للأسر",
+
+"smallProjectEditInfo": "تم تحميل بيانات الطلب الحالية. عدّل الحقول التي تريد تغييرها ثم اضغط حفظ التعديلات.",
+
+"projectNameArabicRequired": "يرجى إدخال اسم المشروع باللغة العربية",
+"projectNameArabicShort": "اسم المشروع باللغة العربية قصير جداً",
+
+"projectNameEnglishRequired": "يرجى إدخال اسم المشروع باللغة الإنجليزية",
+"projectNameEnglishShort": "اسم المشروع باللغة الإنجليزية قصير جداً",
+
+"projectCategoryArabicRequired": "يرجى إدخال تصنيف المشروع باللغة العربية",
+"projectCategoryArabicShort": "تصنيف المشروع باللغة العربية قصير جداً",
+
+"projectCategoryEnglishRequired": "يرجى إدخال تصنيف المشروع باللغة الإنجليزية",
+"projectCategoryEnglishShort": "تصنيف المشروع باللغة الإنجليزية قصير جداً",
+
+"validSupportedPeopleCount": "يرجى إدخال عدد صحيح للأشخاص المستفيدين",
+
+"projectDetailsArabicRequired": "يرجى إدخال تفاصيل المشروع باللغة العربية",
+"projectDetailsArabicShort": "يرجى كتابة تفاصيل أوضح باللغة العربية",
+
+"projectDetailsEnglishRequired": "يرجى إدخال تفاصيل المشروع باللغة الإنجليزية",
+"projectDetailsEnglishShort": "يرجى كتابة تفاصيل أوضح باللغة الإنجليزية",
+
+"smallProjectDocumentRequired": "يرجى إرفاق وثيقة واحدة على الأقل",
+
+"smallProjectFilesUnavailable": "الملفات المحددة مضافة مسبقاً أو تعذر الوصول إليها",
+
+"arabicFieldMustContainArabic": "يجب أن يحتوي الحقل العربي على أحرف عربية",
+"arabicFieldNoEnglish": "يرجى كتابة الحقل العربي دون أحرف إنكليزية",
+
+"englishFieldMustContainEnglish": "يجب أن يحتوي الحقل الإنجليزي على أحرف إنجليزية",
+"englishFieldNoArabic": "يرجى كتابة الحقل الإنجليزي دون أحرف عربية",
+"loadingRequestData": "جاري تحميل بيانات الطلب...",
+"pleaseWaitMoment": "يرجى الانتظار قليلاً",
+"requestDetailsLoadFailed": "تعذر تحميل تفاصيل الطلب",
+"back": "رجوع"
+
 }

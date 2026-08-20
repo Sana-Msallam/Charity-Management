@@ -10,178 +10,36 @@ import '../../../../../constants/dio_client.dart';
 import '../model/education_request_model.dart';
 
 class EducationRequestService {
+  // =================================================
+  // CREATE
+  // =================================================
+
   Future<String> submitEducationRequest(
     EducationRequestModel request,
   ) async {
-    debugPrint('======================================');
-    debugPrint('START SUBMIT EDUCATION REQUEST');
-    debugPrint('======================================');
-
-    final applicant = request.applicantInfo;
-
-    final String genderApiValue = _mapGender(
-      applicant.gender,
-    );
-
-    final String socialStatusApiValue = _mapSocialStatus(
-      applicant.socialStatus,
-    );
-
-    final String addressJson = jsonEncode({
-      'ar': applicant.addressAr.trim(),
-      'en': applicant.addressEn.trim(),
-    });
-
-    final String detailsJson = jsonEncode({
-      'ar': request.detailsAr.trim(),
-      'en': request.detailsEn.trim(),
-    });
-
-    final String institutionNameJson = jsonEncode({
-      'ar': request.institutionNameAr.trim(),
-      'en': request.institutionNameEn.trim(),
-    });
-
-    debugPrint('Education request values:');
-
-    debugPrint('categoryId: 4');
-
     debugPrint(
-      'firstName: ${applicant.firstName}',
+      '======================================',
     );
 
     debugPrint(
-      'lastName: ${applicant.lastName}',
+      'START SUBMIT EDUCATION REQUEST',
     );
 
     debugPrint(
-      'fatherName: ${applicant.fatherName}',
+      '======================================',
     );
-
-    debugPrint(
-      'socialStatus: $socialStatusApiValue',
-    );
-
-    debugPrint(
-      'address: $addressJson',
-    );
-
-    debugPrint(
-      'age: ${applicant.age}',
-    );
-
-    debugPrint(
-      'isUnemployed: ${applicant.isUnemployed}',
-    );
-
-    debugPrint(
-      'gender: $genderApiValue',
-    );
-
-    debugPrint(
-      'number: ${applicant.phoneNumber}',
-    );
-
-    debugPrint(
-      'details: $detailsJson',
-    );
-
-    debugPrint(
-      'cost: ${request.cost}',
-    );
-
-    debugPrint(
-      'academicAchievement: '
-      '${request.academicAchievement.apiValue}',
-    );
-
-    debugPrint(
-      'institutionName: $institutionNameJson',
-    );
-
-    debugPrint(
-      'year: ${request.year}',
-    );
-
-    debugPrint(
-      'attachments count: ${request.media.length}',
-    );
-
-    final FormData formData = FormData();
-
-    formData.fields.addAll([
-      const MapEntry(
-        'categoryId',
-        '4',
-      ),
-      MapEntry(
-        'firstName',
-        applicant.firstName,
-      ),
-      MapEntry(
-        'lastName',
-        applicant.lastName,
-      ),
-      MapEntry(
-        'beneficiaryFatherName',
-        applicant.fatherName,
-      ),
-      MapEntry(
-        'socialStatus',
-        socialStatusApiValue,
-      ),
-      MapEntry(
-        'address',
-        addressJson,
-      ),
-      MapEntry(
-        'age',
-        applicant.age.toString(),
-      ),
-      MapEntry(
-        'isUnemployed',
-        applicant.isUnemployed.toString(),
-      ),
-      MapEntry(
-        'gender',
-        genderApiValue,
-      ),
-      MapEntry(
-        'number',
-        applicant.phoneNumber,
-      ),
-      MapEntry(
-        'details',
-        detailsJson,
-      ),
-      MapEntry(
-        'cost',
-        request.cost.toString(),
-      ),
-      MapEntry(
-        'academicAchievement',
-        request.academicAchievement.apiValue,
-      ),
-      MapEntry(
-        'institutionName',
-        institutionNameJson,
-      ),
-      MapEntry(
-        'year',
-        request.year,
-      ),
-    ]);
-
-    for (final PlatformFile file in request.media) {
-      await _addFileToFormData(
-        formData: formData,
-        file: file,
-      );
-    }
-
-    _printFormData(formData);
 
     try {
+      final FormData formData =
+          await _buildEducationFormData(
+        request: request,
+        includeCategoryId: true,
+      );
+
+      _printFormData(
+        formData,
+      );
+
       debugPrint(
         'Sending POST request to: '
         '${ApiConstants.baseUrl}'
@@ -193,62 +51,49 @@ class EducationRequestService {
         ApiConstants.educationRequest,
         data: formData,
         options: Options(
-          contentType: Headers.multipartFormDataContentType,
+          contentType:
+              Headers
+                  .multipartFormDataContentType,
         ),
       );
 
-      debugPrint('Education response received');
-
       debugPrint(
-        'Status code: ${response.statusCode}',
+        'Education response received',
       );
 
       debugPrint(
-        'Response data: ${response.data}',
+        'Status code: '
+        '${response.statusCode}',
       );
 
-      debugPrint('======================================');
+      debugPrint(
+        'Response data: '
+        '${response.data}',
+      );
+
+      debugPrint(
+        '======================================',
+      );
 
       return _extractSuccessMessage(
         response.data,
       );
-    } on DioException catch (error, stackTrace) {
-      debugPrint(
-        'DIO ERROR WHILE SUBMITTING EDUCATION REQUEST',
+    } on DioException catch (
+      error,
+      stackTrace
+    ) {
+      _printDioError(
+        title:
+            'DIO ERROR WHILE SUBMITTING EDUCATION REQUEST',
+        error: error,
+        stackTrace: stackTrace,
       );
-
-      debugPrint(
-        'Error type: ${error.type}',
-      );
-
-      debugPrint(
-        'Error message: ${error.message}',
-      );
-
-      debugPrint(
-        'Status code: ${error.response?.statusCode}',
-      );
-
-      debugPrint(
-        'Response data: ${error.response?.data}',
-      );
-
-      debugPrint(
-        'Request URL: ${error.requestOptions.uri}',
-      );
-
-      debugPrint(
-        'Request method: ${error.requestOptions.method}',
-      );
-
-      debugPrint(
-        'Stack trace: $stackTrace',
-      );
-
-      debugPrint('======================================');
 
       rethrow;
-    } catch (error, stackTrace) {
+    } catch (
+      error,
+      stackTrace
+    ) {
       debugPrint(
         'UNEXPECTED EDUCATION REQUEST ERROR',
       );
@@ -261,34 +106,321 @@ class EducationRequestService {
         'Stack trace: $stackTrace',
       );
 
-      debugPrint('======================================');
+      debugPrint(
+        '======================================',
+      );
 
       rethrow;
     }
   }
 
+  // =================================================
+  // UPDATE
+  // =================================================
+
+  Future<String> updateEducationRequest({
+    required int requestId,
+    required EducationRequestModel request,
+  }) async {
+    debugPrint(
+      '======================================',
+    );
+
+    debugPrint(
+      'START UPDATE EDUCATION REQUEST',
+    );
+
+    debugPrint(
+      'Request id: $requestId',
+    );
+
+    debugPrint(
+      '======================================',
+    );
+
+    try {
+      final FormData formData =
+          await _buildEducationFormData(
+        request: request,
+
+        // بالـ PATCH نوع الطلب موجود أصلاً.
+        includeCategoryId: false,
+      );
+
+      _printFormData(
+        formData,
+      );
+
+      final String endpoint =
+          '/requests/$requestId';
+
+      debugPrint(
+        'Sending PATCH request to: '
+        '${ApiConstants.baseUrl}'
+        '$endpoint',
+      );
+
+      final Response<dynamic> response =
+          await DioClient.dio.patch<dynamic>(
+        endpoint,
+        data: formData,
+        options: Options(
+          contentType:
+              Headers
+                  .multipartFormDataContentType,
+          headers: {
+            'accept-language': 'ar',
+          },
+        ),
+      );
+
+      debugPrint(
+        'Education update response received',
+      );
+
+      debugPrint(
+        'Status code: '
+        '${response.statusCode}',
+      );
+
+      debugPrint(
+        'Response data: '
+        '${response.data}',
+      );
+
+      debugPrint(
+        '======================================',
+      );
+
+      return _extractSuccessMessage(
+        response.data,
+      );
+    } on DioException catch (
+      error,
+      stackTrace
+    ) {
+      _printDioError(
+        title:
+            'DIO ERROR WHILE UPDATING EDUCATION REQUEST',
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      rethrow;
+    } catch (
+      error,
+      stackTrace
+    ) {
+      debugPrint(
+        'UNEXPECTED EDUCATION UPDATE ERROR',
+      );
+
+      debugPrint(
+        'Error: $error',
+      );
+
+      debugPrint(
+        'Stack trace: $stackTrace',
+      );
+
+      debugPrint(
+        '======================================',
+      );
+
+      rethrow;
+    }
+  }
+
+  // =================================================
+  // BUILD FORM DATA
+  // =================================================
+
+  Future<FormData> _buildEducationFormData({
+    required EducationRequestModel request,
+    required bool includeCategoryId,
+  }) async {
+    final applicant =
+        request.applicantInfo;
+
+    final String genderApiValue =
+        _mapGender(
+      applicant.gender,
+    );
+
+    final String socialStatusApiValue =
+        _mapSocialStatus(
+      applicant.socialStatus,
+    );
+
+    final String addressJson =
+        jsonEncode(
+      {
+        'ar':
+            applicant.addressAr.trim(),
+        'en':
+            applicant.addressEn.trim(),
+      },
+    );
+
+    final String detailsJson =
+        jsonEncode(
+      {
+        'ar':
+            request.detailsAr.trim(),
+        'en':
+            request.detailsEn.trim(),
+      },
+    );
+
+    final String institutionNameJson =
+        jsonEncode(
+      {
+        'ar':
+            request.institutionNameAr
+                .trim(),
+        'en':
+            request.institutionNameEn
+                .trim(),
+      },
+    );
+
+    final FormData formData =
+        FormData();
+
+    if (includeCategoryId) {
+      formData.fields.add(
+        const MapEntry(
+          'categoryId',
+          '4',
+        ),
+      );
+    }
+
+    formData.fields.addAll(
+      [
+        MapEntry(
+          'firstName',
+          applicant.firstName,
+        ),
+
+        MapEntry(
+          'lastName',
+          applicant.lastName,
+        ),
+
+        MapEntry(
+          'beneficiaryFatherName',
+          applicant.fatherName,
+        ),
+
+        MapEntry(
+          'socialStatus',
+          socialStatusApiValue,
+        ),
+
+        MapEntry(
+          'address',
+          addressJson,
+        ),
+
+        MapEntry(
+          'age',
+          applicant.age.toString(),
+        ),
+
+        MapEntry(
+          'isUnemployed',
+          applicant.isUnemployed.toString(),
+        ),
+
+        MapEntry(
+          'gender',
+          genderApiValue,
+        ),
+
+        MapEntry(
+          'number',
+          applicant.phoneNumber,
+        ),
+
+        MapEntry(
+          'details',
+          detailsJson,
+        ),
+
+        MapEntry(
+          'cost',
+          request.cost.toString(),
+        ),
+
+        MapEntry(
+          'academicAchievement',
+          request
+              .academicAchievement
+              .apiValue,
+        ),
+
+        MapEntry(
+          'institutionName',
+          institutionNameJson,
+        ),
+
+        MapEntry(
+          'year',
+          request.year,
+        ),
+      ],
+    );
+
+    // إذا المستخدم اختار ملفات جديدة فقط
+    // منضيف media.
+    //
+    // في Edit Mode وإذا ما اختار ملفات جديدة،
+    // ما منرسل media إطلاقاً.
+    for (final PlatformFile file
+        in request.media) {
+      await _addFileToFormData(
+        formData: formData,
+        file: file,
+      );
+    }
+
+    return formData;
+  }
+
+  // =================================================
+  // ADD FILE
+  // =================================================
+
   Future<void> _addFileToFormData({
     required FormData formData,
     required PlatformFile file,
   }) async {
-    debugPrint('--------------------------------------');
-
     debugPrint(
-      'Checking attachment: ${file.name}',
+      '--------------------------------------',
     );
 
     debugPrint(
-      'Attachment size: ${file.size} bytes',
+      'Checking attachment: '
+      '${file.name}',
+    );
+
+    debugPrint(
+      'Attachment size: '
+      '${file.size} bytes',
     );
 
     MultipartFile multipartFile;
 
     if (kIsWeb) {
-      final Uint8List? bytes = file.bytes;
+      final Uint8List? bytes =
+          file.bytes;
 
-      if (bytes == null || bytes.isEmpty) {
+      if (bytes == null ||
+          bytes.isEmpty) {
         debugPrint(
-          'Web attachment bytes missing: ${file.name}',
+          'Web attachment bytes missing: '
+          '${file.name}',
         );
 
         throw const FormatException(
@@ -296,7 +428,8 @@ class EducationRequestService {
         );
       }
 
-      multipartFile = MultipartFile.fromBytes(
+      multipartFile =
+          MultipartFile.fromBytes(
         bytes,
         filename: file.name,
       );
@@ -305,11 +438,14 @@ class EducationRequestService {
         'Web attachment added using bytes',
       );
     } else {
-      final String? path = file.path;
+      final String? path =
+          file.path;
 
-      if (path == null || path.trim().isEmpty) {
+      if (path == null ||
+          path.trim().isEmpty) {
         debugPrint(
-          'Mobile attachment path missing: ${file.name}',
+          'Mobile attachment path missing: '
+          '${file.name}',
         );
 
         throw const FormatException(
@@ -317,13 +453,15 @@ class EducationRequestService {
         );
       }
 
-      multipartFile = await MultipartFile.fromFile(
+      multipartFile =
+          await MultipartFile.fromFile(
         path,
         filename: file.name,
       );
 
       debugPrint(
-        'Mobile attachment added using path: $path',
+        'Mobile attachment added using path: '
+        '$path',
       );
     }
 
@@ -335,17 +473,25 @@ class EducationRequestService {
     );
 
     debugPrint(
-      'Attachment added successfully: ${file.name}',
+      'Attachment added successfully: '
+      '${file.name}',
     );
 
-    debugPrint('--------------------------------------');
+    debugPrint(
+      '--------------------------------------',
+    );
   }
+
+  // =================================================
+  // SUCCESS MESSAGE
+  // =================================================
 
   String _extractSuccessMessage(
     dynamic data,
   ) {
     if (data is Map) {
-      final dynamic message = data['message'];
+      final dynamic message =
+          data['message'];
 
       if (message is String &&
           message.trim().isNotEmpty) {
@@ -359,7 +505,8 @@ class EducationRequestService {
     }
 
     debugPrint(
-      'Invalid education response format: $data',
+      'Invalid education response format: '
+      '$data',
     );
 
     throw const FormatException(
@@ -367,10 +514,15 @@ class EducationRequestService {
     );
   }
 
+  // =================================================
+  // GENDER
+  // =================================================
+
   String _mapGender(
     String gender,
   ) {
-    switch (gender.trim()) {
+    switch (
+        gender.trim().toUpperCase()) {
       case 'ذكر':
       case 'MALE':
         return 'MALE';
@@ -382,7 +534,8 @@ class EducationRequestService {
 
       default:
         debugPrint(
-          'Unsupported gender value: $gender',
+          'Unsupported gender value: '
+          '$gender',
         );
 
         throw const FormatException(
@@ -391,10 +544,15 @@ class EducationRequestService {
     }
   }
 
+  // =================================================
+  // SOCIAL STATUS
+  // =================================================
+
   String _mapSocialStatus(
     String socialStatus,
   ) {
-    switch (socialStatus.trim()) {
+    switch (
+        socialStatus.trim().toUpperCase()) {
       case 'أعزب':
       case 'عازب':
       case 'SINGLE':
@@ -417,7 +575,8 @@ class EducationRequestService {
 
       default:
         debugPrint(
-          'Unsupported social status value: $socialStatus',
+          'Unsupported social status value: '
+          '$socialStatus',
         );
 
         throw const FormatException(
@@ -425,6 +584,10 @@ class EducationRequestService {
         );
     }
   }
+
+  // =================================================
+  // PRINT FORM DATA
+  // =================================================
 
   void _printFormData(
     FormData formData,
@@ -437,13 +600,15 @@ class EducationRequestService {
       '--------- EDUCATION FORM DATA ---------',
     );
 
-    for (final field in formData.fields) {
+    for (final field
+        in formData.fields) {
       debugPrint(
         '${field.key}: ${field.value}',
       );
     }
 
-    for (final file in formData.files) {
+    for (final file
+        in formData.files) {
       debugPrint(
         '${file.key}: '
         '${file.value.filename} - '
@@ -453,6 +618,56 @@ class EducationRequestService {
 
     debugPrint(
       '---------------------------------------',
+    );
+  }
+
+  // =================================================
+  // PRINT DIO ERROR
+  // =================================================
+
+  void _printDioError({
+    required String title,
+    required DioException error,
+    required StackTrace stackTrace,
+  }) {
+    debugPrint(
+      title,
+    );
+
+    debugPrint(
+      'Error type: ${error.type}',
+    );
+
+    debugPrint(
+      'Error message: ${error.message}',
+    );
+
+    debugPrint(
+      'Status code: '
+      '${error.response?.statusCode}',
+    );
+
+    debugPrint(
+      'Response data: '
+      '${error.response?.data}',
+    );
+
+    debugPrint(
+      'Request URL: '
+      '${error.requestOptions.uri}',
+    );
+
+    debugPrint(
+      'Request method: '
+      '${error.requestOptions.method}',
+    );
+
+    debugPrint(
+      'Stack trace: $stackTrace',
+    );
+
+    debugPrint(
+      '======================================',
     );
   }
 }

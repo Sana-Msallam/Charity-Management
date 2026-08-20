@@ -20,6 +20,10 @@ class CompletedProjectsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // ==========================================
+        // عنوان القسم
+        // ==========================================
+
         Text(
           l10n.completedProjectsTitle,
           style: const TextStyle(
@@ -32,8 +36,17 @@ class CompletedProjectsSection extends StatelessWidget {
 
         const SizedBox(height: 16),
 
-        BlocBuilder<CompletedProjectsCubit, CompletedProjectsState>(
-          builder: (context, state) {
+        // ==========================================
+        // المشاريع
+        // ==========================================
+
+        BlocBuilder<
+            CompletedProjectsCubit,
+            CompletedProjectsState>(
+          builder: (
+            context,
+            state,
+          ) {
             if (state is CompletedProjectsInitial) {
               return const SizedBox.shrink();
             }
@@ -50,21 +63,34 @@ class CompletedProjectsSection extends StatelessWidget {
 
             if (state is CompletedProjectsSuccess) {
               if (state.projects.isEmpty) {
-                return _buildEmpty();
+                return _buildEmpty(
+                  context,
+                );
               }
 
               return SizedBox(
                 height: 235,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: state.projects.length,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(width: 14);
+                  physics:
+                      const BouncingScrollPhysics(),
+                  itemCount:
+                      state.projects.length,
+                  separatorBuilder: (
+                    context,
+                    index,
+                  ) {
+                    return const SizedBox(
+                      width: 14,
+                    );
                   },
-                  itemBuilder: (context, index) {
+                  itemBuilder: (
+                    context,
+                    index,
+                  ) {
                     return _CompletedProjectCard(
-                      project: state.projects[index],
+                      project:
+                          state.projects[index],
                     );
                   },
                 ),
@@ -78,6 +104,10 @@ class CompletedProjectsSection extends StatelessWidget {
     );
   }
 
+  // ============================================
+  // LOADING
+  // ============================================
+
   Widget _buildLoading() {
     return const SizedBox(
       height: 235,
@@ -89,6 +119,10 @@ class CompletedProjectsSection extends StatelessWidget {
     );
   }
 
+  // ============================================
+  // ERROR
+  // ============================================
+
   Widget _buildError(
     String message,
   ) {
@@ -96,10 +130,13 @@ class CompletedProjectsSection extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.error.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
+        color:
+            AppColors.error.withOpacity(0.05),
+        borderRadius:
+            BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.error.withOpacity(0.12),
+          color:
+              AppColors.error.withOpacity(0.12),
         ),
       ),
       child: Text(
@@ -108,37 +145,55 @@ class CompletedProjectsSection extends StatelessWidget {
         style: const TextStyle(
           color: AppColors.error,
           fontSize: 13,
-          fontFamily: AppTextStyles.fontFamily,
+          fontFamily:
+              AppTextStyles.fontFamily,
         ),
       ),
     );
   }
 
-  Widget _buildEmpty() {
+  // ============================================
+  // EMPTY
+  // ============================================
+
+  Widget _buildEmpty(
+    BuildContext context,
+  ) {
+    final l10n =
+        AppLocalizations.of(context);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+            BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.brandGray.withOpacity(0.10),
+          color: AppColors.brandGray
+              .withOpacity(0.10),
         ),
       ),
-      child: const Text(
-        'لا توجد مشاريع مكتملة حالياً',
+      child: Text(
+        l10n.noCompletedProjects,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           color: AppColors.brandGray,
           fontSize: 13,
-          fontFamily: AppTextStyles.fontFamily,
+          fontFamily:
+              AppTextStyles.fontFamily,
         ),
       ),
     );
   }
 }
 
-class _CompletedProjectCard extends StatelessWidget {
+// =====================================================
+// COMPLETED PROJECT CARD
+// =====================================================
+
+class _CompletedProjectCard
+    extends StatelessWidget {
   const _CompletedProjectCard({
     required this.project,
   });
@@ -146,27 +201,38 @@ class _CompletedProjectCard extends StatelessWidget {
   final CompletedProjectModel project;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
+    final l10n =
+        AppLocalizations.of(context);
+
     return Container(
       width: 210,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius:
+            BorderRadius.circular(18),
         border: Border.all(
-          color: AppColors.brandGray.withOpacity(0.10),
+          color: AppColors.brandGray
+              .withOpacity(0.10),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.035),
+            color:
+                Colors.black.withOpacity(0.035),
             blurRadius: 12,
-            offset: const Offset(0, 4),
+            offset:
+                const Offset(0, 4),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius:
+            BorderRadius.circular(18),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
           children: [
             // ==========================================
             // الصورة
@@ -182,7 +248,6 @@ class _CompletedProjectCard extends StatelessWidget {
 
                   // ====================================
                   // عاجل
-                  // تظهر فقط إذا كان الطلب عاجلاً
                   // ====================================
 
                   if (project.isUrgent)
@@ -190,30 +255,53 @@ class _CompletedProjectCard extends StatelessWidget {
                       end: 10,
                       top: 10,
                       child: Align(
-                        alignment: AlignmentDirectional.topEnd,
+                        alignment:
+                            AlignmentDirectional
+                                .topEnd,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
+                          padding:
+                              const EdgeInsets
+                                  .symmetric(
                             horizontal: 9,
                             vertical: 5,
                           ),
-                          decoration: BoxDecoration(
-                            color: AppColors.error,
-                            borderRadius: BorderRadius.circular(14),
+                          decoration:
+                              BoxDecoration(
+                            color:
+                                AppColors.error,
+                            borderRadius:
+                                BorderRadius
+                                    .circular(
+                              14,
+                            ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
+                                color: Colors
+                                    .black
+                                    .withOpacity(
+                                  0.08,
+                                ),
                                 blurRadius: 6,
-                                offset: const Offset(0, 2),
+                                offset:
+                                    const Offset(
+                                  0,
+                                  2,
+                                ),
                               ),
                             ],
                           ),
-                          child: const Text(
-                            'عاجل',
-                            style: TextStyle(
-                              color: Colors.white,
+                          child: Text(
+                            l10n.urgent,
+                            style:
+                                const TextStyle(
+                              color:
+                                  Colors.white,
                               fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: AppTextStyles.fontFamily,
+                              fontWeight:
+                                  FontWeight.bold,
+                              fontFamily:
+                                  AppTextStyles
+                                      .fontFamily,
                             ),
                           ),
                         ),
@@ -229,47 +317,66 @@ class _CompletedProjectCard extends StatelessWidget {
 
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(
+                padding:
+                    const EdgeInsets.fromLTRB(
                   12,
                   10,
                   12,
                   10,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start,
                   children: [
                     // ==================================
-                    // Category
-                    // مثال: سكني - صحي - غذائي
+                    // CATEGORY
+                    //
+                    // هاي جاية من الـ API،
+                    // لذلك ما منترجمها هون.
                     // ==================================
 
                     Text(
                       project.category.name,
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow:
+                          TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: AppColors.primary.withOpacity(0.85),
+                        color: AppColors.primary
+                            .withOpacity(
+                          0.85,
+                        ),
                         fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: AppTextStyles.fontFamily,
+                        fontWeight:
+                            FontWeight.w600,
+                        fontFamily:
+                            AppTextStyles
+                                .fontFamily,
                       ),
                     ),
 
                     const SizedBox(height: 3),
 
                     // ==================================
-                    // Title
+                    // TITLE
+                    //
+                    // كمان جاية من الـ model / API.
                     // ==================================
 
                     Text(
                       project.displayTitle,
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.onSurface,
+                      overflow:
+                          TextOverflow.ellipsis,
+                      style:
+                          const TextStyle(
+                        color:
+                            AppColors.onSurface,
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: AppTextStyles.fontFamily,
+                        fontWeight:
+                            FontWeight.w700,
+                        fontFamily:
+                            AppTextStyles
+                                .fontFamily,
                       ),
                     ),
 
@@ -282,8 +389,10 @@ class _CompletedProjectCard extends StatelessWidget {
                     Row(
                       children: [
                         const Icon(
-                          Icons.check_circle_rounded,
-                          color: AppColors.secondary,
+                          Icons
+                              .check_circle_rounded,
+                          color:
+                              AppColors.secondary,
                           size: 16,
                         ),
 
@@ -291,23 +400,33 @@ class _CompletedProjectCard extends StatelessWidget {
 
                         Text(
                           '${project.completionPercentage.toStringAsFixed(0)}%',
-                          style: const TextStyle(
-                            color: AppColors.brandGray,
+                          style:
+                              const TextStyle(
+                            color: AppColors
+                                .brandGray,
                             fontSize: 11,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: AppTextStyles.fontFamily,
+                            fontWeight:
+                                FontWeight.w500,
+                            fontFamily:
+                                AppTextStyles
+                                    .fontFamily,
                           ),
                         ),
 
                         const Spacer(),
 
                         Text(
-                          '${project.totalCost.toStringAsFixed(0)} ريال',
-                          style: const TextStyle(
-                            color: AppColors.primary,
+                          '${project.totalCost.toStringAsFixed(0)} ${l10n.riyal}',
+                          style:
+                              const TextStyle(
+                            color:
+                                AppColors.primary,
                             fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: AppTextStyles.fontFamily,
+                            fontWeight:
+                                FontWeight.w700,
+                            fontFamily:
+                                AppTextStyles
+                                    .fontFamily,
                           ),
                         ),
                       ],
@@ -344,7 +463,8 @@ class _CompletedProjectCard extends StatelessWidget {
     }
 
     // إذا الباك رجع صورة
-    final String imageUrl = _fixImageUrl(
+    final String imageUrl =
+        _fixImageUrl(
       project.image!,
     );
 
@@ -376,12 +496,15 @@ class _CompletedProjectCard extends StatelessWidget {
   }
 
   // ===================================================
-  // Fallback إذا ما في أي صورة
+  // FALLBACK
   // ===================================================
 
   Widget _buildFallback() {
     return Container(
-      color: AppColors.primaryContainer.withOpacity(0.25),
+      color: AppColors.primaryContainer
+          .withOpacity(
+        0.25,
+      ),
       alignment: Alignment.center,
       child: Icon(
         _getCategoryIcon(),
@@ -392,16 +515,18 @@ class _CompletedProjectCard extends StatelessWidget {
   }
 
   // ===================================================
-  // Icon افتراضي حسب Category
+  // CATEGORY ICON
   // ===================================================
 
   IconData _getCategoryIcon() {
     switch (project.category.id) {
       case 1:
-        return Icons.medical_services_outlined;
+        return Icons
+            .medical_services_outlined;
 
       case 2:
-        return Icons.shopping_basket_outlined;
+        return Icons
+            .shopping_basket_outlined;
 
       case 3:
         return Icons.home_outlined;
@@ -413,31 +538,36 @@ class _CompletedProjectCard extends StatelessWidget {
         return Icons.trending_up;
 
       default:
-        return Icons.volunteer_activism_outlined;
+        return Icons
+            .volunteer_activism_outlined;
     }
   }
 
   // ===================================================
-  // معالجة رابط الصورة
+  // FIX IMAGE URL
   // ===================================================
 
   String _fixImageUrl(
     String url,
   ) {
-    String result = url.trim();
+    String result =
+        url.trim();
 
-    result = result.replaceFirst(
+    result =
+        result.replaceFirst(
       'http://localhost:3000',
       ApiConstants.baseUrl,
     );
 
-    result = result.replaceFirst(
+    result =
+        result.replaceFirst(
       'http://127.0.0.1:3000',
       ApiConstants.baseUrl,
     );
 
     if (result.startsWith('/')) {
-      result = '${ApiConstants.baseUrl}$result';
+      result =
+          '${ApiConstants.baseUrl}$result';
     }
 
     return result;

@@ -1,8 +1,7 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl =
-      'https://bbs-theories-geological-acne.trycloudflare.com';
+  static const String baseUrl = 'http://10.195.118.11:3000';
 
   static const String login = '/auth/login/client';
 
@@ -21,6 +20,7 @@ class ApiConstants {
   static const String smallProjectRequest = '/requests/small-projects';
 
   static const String profile = '/api/profile';
+  static const String profilePassword = '/api/profile/password';
 
   static const String aidRequests = '/donor/public/aid-requests';
 
@@ -52,4 +52,5 @@ class ApiConstants {
 
   static const String orphanSupportFundWallet =
       '/api/donor/sponsorship-fund/wallet';
+  static const String myRequests = '/requests/my-requests';
 }

@@ -1,10 +1,19 @@
 enum HealthAidType {
-  medicineInsurance('تأمين أدوية', 'MEDICINE_INSURANCE'),
-  surgery('عمل جراحي', 'SURGERY'),
-  medicalDevices('أجهزة طبية', 'MEDICAL_DEVICES');
+  medicineInsurance(
+    'MEDICINE_INSURANCE',
+  ),
 
-  const HealthAidType(this.arabicLabel, this.apiValue);
+  surgery(
+    'SURGERY',
+  ),
 
-  final String arabicLabel;
+  medicalDevices(
+    'MEDICAL_DEVICES',
+  );
+
+  const HealthAidType(
+    this.apiValue,
+  );
+
   final String apiValue;
 }

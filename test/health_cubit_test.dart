@@ -13,81 +13,154 @@ void main() {
   final localizations = AppLocalizationsEn();
 
   group('HealthAidType', () {
-    test('provides the backend values for all supported types', () {
-      expect(HealthAidType.values.map((type) => type.apiValue), [
-        'MEDICINE_INSURANCE',
-        'SURGERY',
-        'MEDICAL_DEVICES',
-      ]);
-    });
+    test(
+      'provides the backend values for all supported types',
+      () {
+        expect(
+          HealthAidType.values.map(
+            (type) => type.apiValue,
+          ),
+          [
+            'MEDICINE_INSURANCE',
+            'SURGERY',
+            'MEDICAL_DEVICES',
+          ],
+        );
+      },
+    );
   });
 
   group('HealthCubit', () {
-    test('emits loading and success', () async {
-      final service = _FakeHealthRequestService();
-      final cubit = HealthCubit(service);
-      final states = <HealthState>[];
-      final subscription = cubit.stream.listen(states.add);
+    test(
+      'emits loading and success',
+      () async {
+        final service =
+            _FakeHealthRequestService();
 
-      final submission = cubit.submitHealthRequest(_request, localizations);
-      service.complete('تم إرسال الطلب');
-      await submission;
-      await Future<void>.delayed(Duration.zero);
+        final cubit =
+            HealthCubit(service);
 
-      expect(states, [
-        isA<HealthLoading>(),
-        isA<HealthSuccess>().having(
-          (state) => state.message,
-          'message',
+        final states = <HealthState>[];
+
+        final subscription =
+            cubit.stream.listen(
+          states.add,
+        );
+
+        final submission =
+            cubit.submitHealthRequest(
+          _request,
+          localizations,
+        );
+
+        service.complete(
           'تم إرسال الطلب',
-        ),
-      ]);
+        );
 
-      await subscription.cancel();
-      await cubit.close();
-    });
+        await submission;
 
-    test('ignores a duplicate submission while loading', () async {
-      final service = _FakeHealthRequestService();
-      final cubit = HealthCubit(service);
+        await Future<void>.delayed(
+          Duration.zero,
+        );
 
-      final firstSubmission = cubit.submitHealthRequest(
-        _request,
-        localizations,
-      );
-      await cubit.submitHealthRequest(_request, localizations);
+        expect(
+          states,
+          [
+            isA<HealthLoading>(),
+            isA<HealthSuccess>().having(
+              (state) => state.message,
+              'message',
+              'تم إرسال الطلب',
+            ),
+          ],
+        );
 
-      expect(service.callCount, 1);
+        await subscription.cancel();
 
-      service.complete('تم إرسال الطلب');
-      await firstSubmission;
-      await cubit.close();
-    });
+        await cubit.close();
+      },
+    );
 
-    test('converts a format exception to failure state', () async {
-      final service = _FakeHealthRequestService();
-      final cubit = HealthCubit(service);
+    test(
+      'ignores a duplicate submission while loading',
+      () async {
+        final service =
+            _FakeHealthRequestService();
 
-      final submission = cubit.submitHealthRequest(_request, localizations);
-      service.completeError(const FormatException('استجابة غير صالحة'));
-      await submission;
+        final cubit =
+            HealthCubit(service);
 
-      expect(
-        cubit.state,
-        isA<HealthFailure>().having(
-          (state) => state.message,
-          'message',
-          'استجابة غير صالحة',
-        ),
-      );
+        final firstSubmission =
+            cubit.submitHealthRequest(
+          _request,
+          localizations,
+        );
 
-      await cubit.close();
-    });
+        await cubit.submitHealthRequest(
+          _request,
+          localizations,
+        );
+
+        expect(
+          service.callCount,
+          1,
+        );
+
+        service.complete(
+          'تم إرسال الطلب',
+        );
+
+        await firstSubmission;
+
+        await cubit.close();
+      },
+    );
+
+    test(
+      'converts a format exception to failure state',
+      () async {
+        final service =
+            _FakeHealthRequestService();
+
+        final cubit =
+            HealthCubit(service);
+
+        final submission =
+            cubit.submitHealthRequest(
+          _request,
+          localizations,
+        );
+
+        service.completeError(
+          const FormatException(
+            'استجابة غير صالحة',
+          ),
+        );
+
+        await submission;
+
+        expect(
+          cubit.state,
+          isA<HealthFailure>().having(
+            (state) => state.message,
+            'message',
+            'استجابة غير صالحة',
+          ),
+        );
+
+        await cubit.close();
+      },
+    );
   });
 }
 
+// ============================================
+// TEST REQUEST
+// ============================================
+
 final _request = HealthRequestModel(
-  applicantInfo: const ApplicantInfoModel(
+  applicantInfo:
+      const ApplicantInfoModel(
     firstName: 'محمد',
     fatherName: 'أحمد',
     lastName: 'العلي',
@@ -95,26 +168,58 @@ final _request = HealthRequestModel(
     gender: 'ذكر',
     socialStatus: 'متزوج',
     phoneNumber: '0999999999',
-    address: 'دمشق',
+
+    // العنوان صار عربي + إنكليزي
+    addressAr: 'دمشق',
+    addressEn: 'Damascus',
+
     isUnemployed: false,
   ),
+
   typeAid: HealthAidType.surgery,
-  description: 'وصف الحالة',
+
+  // بدل description القديم
+  detailsAr: 'وصف الحالة',
+  detailsEn: 'Case description',
+
   cost: 100,
+
   media: const [],
 );
 
-class _FakeHealthRequestService extends HealthRequestService {
-  final Completer<String> _completer = Completer<String>();
+// ============================================
+// FAKE SERVICE
+// ============================================
+
+class _FakeHealthRequestService
+    extends HealthRequestService {
+  final Completer<String> _completer =
+      Completer<String>();
+
   int callCount = 0;
 
   @override
-  Future<String> submitHealthRequest(HealthRequestModel request) {
+  Future<String> submitHealthRequest(
+    HealthRequestModel request,
+  ) {
     callCount++;
+
     return _completer.future;
   }
 
-  void complete(String message) => _completer.complete(message);
+  void complete(
+    String message,
+  ) {
+    _completer.complete(
+      message,
+    );
+  }
 
-  void completeError(Object error) => _completer.completeError(error);
+  void completeError(
+    Object error,
+  ) {
+    _completer.completeError(
+      error,
+    );
+  }
 }

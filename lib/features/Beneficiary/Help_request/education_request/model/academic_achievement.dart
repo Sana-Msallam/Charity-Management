@@ -1,29 +1,12 @@
 enum AcademicAchievement {
-  highSchool(
-    arabicLabel: 'ثانوي',
-    apiValue: 'HIGH_SCHOOL',
-  ),
+  highSchool('HIGH_SCHOOL'),
+  diploma('DIPLOMA'),
+  bachelor('BACHELOR'),
+  master('MASTER');
 
-  diploma(
-    arabicLabel: 'دبلوم',
-    apiValue: 'DIPLOMA',
-  ),
-
-  bachelor(
-    arabicLabel: 'بكالوريوس',
-    apiValue: 'BACHELOR',
-  ),
-
-  master(
-    arabicLabel: 'ماجستير',
-    apiValue: 'MASTER',
+  const AcademicAchievement(
+    this.apiValue,
   );
 
-  const AcademicAchievement({
-    required this.arabicLabel,
-    required this.apiValue,
-  });
-
-  final String arabicLabel;
   final String apiValue;
 }

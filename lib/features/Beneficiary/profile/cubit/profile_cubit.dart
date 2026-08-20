@@ -1,21 +1,144 @@
+import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../model/profile_model.dart';
 import '../service/profile_service.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit(
-    this._profileService,
-  ) : super(
-          const ProfileInitial(),
-        );
+  ProfileCubit(this._profileService)
+      : super(const ProfileInitial());
 
   final ProfileService _profileService;
 
-  Future<void> loadProfile() async {
+  // ==================================================
+  // GET PROFILE FOR SPECIFIC LANGUAGE
+  // ==================================================
+
+  Future<ProfileModel> getProfileForLanguage(
+    String languageCode,
+  ) {
+    return _profileService.getProfile(
+      languageCode: languageCode,
+    );
+  }
+
+  // ==================================================
+  // UPDATE PROFILE
+  // ==================================================
+
+  Future<void> updateProfile({
+    required ProfileModel currentProfile,
+    required String firstName,
+    required String lastName,
+    required String email,
+    required String gender,
+    required String dateOfBirth,
+    required String addressAr,
+    required String addressEn,
+    required String socialStatus,
+    required bool isUnemployed,
+    required AppLocalizations localizations,
+    XFile? personalPhoto,
+  }) async {
+    if (state is ProfileUpdating) {
+      return;
+    }
+
+    emit(
+      ProfileUpdating(
+        currentProfile,
+      ),
+    );
+
+    try {
+      await _profileService.updateProfile(
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        gender: gender,
+        dateOfBirth: dateOfBirth,
+        addressAr: addressAr,
+        addressEn: addressEn,
+        socialStatus: socialStatus,
+        isUnemployed: isUnemployed,
+        personalPhoto: personalPhoto,
+      );
+
+      final ProfileModel refreshedProfile =
+          await _profileService.getProfile();
+
+      emit(
+        ProfileSuccess(
+          refreshedProfile,
+        ),
+      );
+    } on DioException catch (
+      error,
+      stackTrace
+    ) {
+      debugPrint(
+        'ProfileCubit update DioException: '
+        '${error.message}',
+      );
+
+      debugPrint(
+        'Response: '
+        '${error.response?.data}',
+      );
+
+      debugPrint(
+        'Status code: '
+        '${error.response?.statusCode}',
+      );
+
+      debugPrint(
+        'Stack trace: $stackTrace',
+      );
+
+      emit(
+        ProfileUpdateFailure(
+          currentProfile,
+          _extractDioMessage(
+            error,
+            localizations: localizations,
+            fallback:
+                localizations.unexpectedError,
+          ),
+        ),
+      );
+    } catch (
+      error,
+      stackTrace
+    ) {
+      debugPrint(
+        'ProfileCubit update unexpected error: '
+        '$error',
+      );
+
+      debugPrint(
+        'Stack trace: $stackTrace',
+      );
+
+      emit(
+        ProfileUpdateFailure(
+          currentProfile,
+          localizations.unexpectedError,
+        ),
+      );
+    }
+  }
+
+  // ==================================================
+  // LOAD PROFILE
+  // ==================================================
+
+  Future<void> loadProfile({
+    required AppLocalizations localizations,
+  }) async {
     if (state is ProfileLoading) {
       return;
     }
@@ -38,7 +161,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       stackTrace
     ) {
       debugPrint(
-        'ProfileCubit FormatException: ${error.message}',
+        'ProfileCubit FormatException: '
+        '${error.message}',
       );
 
       debugPrint(
@@ -55,15 +179,18 @@ class ProfileCubit extends Cubit<ProfileState> {
       stackTrace
     ) {
       debugPrint(
-        'ProfileCubit DioException: ${error.message}',
+        'ProfileCubit DioException: '
+        '${error.message}',
       );
 
       debugPrint(
-        'Response: ${error.response?.data}',
+        'Response: '
+        '${error.response?.data}',
       );
 
       debugPrint(
-        'Status code: ${error.response?.statusCode}',
+        'Status code: '
+        '${error.response?.statusCode}',
       );
 
       debugPrint(
@@ -74,6 +201,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         ProfileFailure(
           _extractDioMessage(
             error,
+            localizations: localizations,
+            fallback:
+                localizations.profileLoadError,
           ),
         ),
       );
@@ -82,7 +212,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       stackTrace
     ) {
       debugPrint(
-        'ProfileCubit unexpected error: $error',
+        'ProfileCubit unexpected error: '
+        '$error',
       );
 
       debugPrint(
@@ -90,19 +221,28 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
 
       emit(
-        const ProfileFailure(
-          'حدث خطأ غير متوقع أثناء تحميل الملف الشخصي',
+        ProfileFailure(
+          localizations.unexpectedError,
         ),
       );
     }
   }
 
+  // ==================================================
+  // EXTRACT DIO MESSAGE
+  // ==================================================
+
   String _extractDioMessage(
-    DioException error,
-  ) {
+    DioException error, {
+    required AppLocalizations localizations,
+    required String fallback,
+  }) {
     final dynamic data =
         error.response?.data;
 
+    // إذا الباك رجع message
+    // منستخدمها مباشرة.
+    // DioClient أصلاً يرسل لغة التطبيق للباك.
     if (data is Map) {
       final dynamic message =
           data['message'];
@@ -114,47 +254,77 @@ class ProfileCubit extends Cubit<ProfileState> {
 
       if (message is List &&
           message.isNotEmpty) {
-        return message.join('\n');
+        return message.join(
+          '\n',
+        );
       }
     }
+
+    // ==========================================
+    // CONNECTION ERRORS
+    // ==========================================
 
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return 'انتهت مهلة الاتصال بالخادم';
+        return localizations
+            .connectionTimeout;
 
       case DioExceptionType.connectionError:
-        return 'تعذر الاتصال بالخادم، تأكد من تشغيل الباك إند';
+        return localizations
+            .connectionError;
 
       default:
         break;
     }
 
-    switch (error.response?.statusCode) {
+    // ==========================================
+    // HTTP STATUS CODES
+    // ==========================================
+
+    switch (
+        error.response?.statusCode) {
       case 400:
-        return 'تعذر تحميل بيانات الملف الشخصي';
+        return localizations
+            .badRequest;
 
       case 401:
-        return 'يرجى تسجيل الدخول لعرض الملف الشخصي';
+        return localizations
+            .unauthorized;
 
       case 403:
-        return 'ليس لديك صلاحية لعرض الملف الشخصي';
+        return localizations
+            .forbidden;
 
       case 404:
-        return 'لم يتم العثور على بيانات الملف الشخصي';
+        return localizations
+            .notFound;
 
       case 500:
-        return 'حدث خطأ في الخادم أثناء تحميل الملف الشخصي';
+        return localizations
+            .serverError;
 
       default:
-        return 'تعذر تحميل الملف الشخصي';
+        return fallback;
     }
   }
 
-  Future<void> refreshProfile() async {
-    await loadProfile();
+  // ==================================================
+  // REFRESH PROFILE
+  // ==================================================
+
+  Future<void> refreshProfile({
+    required AppLocalizations localizations,
+  }) async {
+    await loadProfile(
+      localizations: localizations,
+    );
   }
+
+  // ==================================================
+  // RESET
+  // ==================================================
 
   void reset() {
     emit(

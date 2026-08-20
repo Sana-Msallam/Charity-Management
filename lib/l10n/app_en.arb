@@ -434,5 +434,433 @@
         "type": "String"
       }
     }
+  },
+"appPreferences": "App preferences",
+"changeAppLanguage": "Change app language",
+"appearance": "Appearance",
+"accountSection": "Account",
+"changePasswordSubtitle": "Update account password",
+"logoutSubtitle": "Sign out of the current account",
+"chooseLanguage": "Choose app language",
+"aboutAssociationTitle": "Al Athar Association... Every Act of Giving Leaves an Impact",
+"togetherWeMakeImpact": "Together, We Make an Impact",
+"renewedHope": "Renewed Hope",
+"givingMakesDifference": "Giving Makes a Difference",
+"noCompletedProjects": "There are no completed projects at the moment",
+"urgent": "Urgent",
+"riyal": "SAR",
+"profileTitle": "My Account",
+"profileLoadError": "Unable to load profile",
+"retry": "Try Again",
+"editProfile": "Edit Profile",
+"beneficiary": "Beneficiary",
+"personalInformation": "Personal Information",
+"email": "Email",
+"dateOfBirth": "Date of Birth",
+"age": "Age",
+"years": "years",
+"gender": "Gender",
+"male": "Male",
+"female": "Female",
+"socialStatus": "Social Status",
+"single": "Single",
+"married": "Married",
+"widowed": "Widowed",
+"divorced": "Divorced",
+"employmentStatus": "Employment Status",
+"employed": "Employed",
+"unemployed": "Unemployed",
+"residence": "Place of Residence",
+"address": "Address",
+"notSpecified": "Not specified",
+"profileAccountHint": "Your account information registered with the association is displayed here.",
+"alternateAddressLoadError": "Unable to load the address in the other language",
+"loadBothAddressesBeforeSave": "Both language addresses must be loaded before saving changes",
+"unsupportedGenderValue": "The current gender value is not supported",
+"unsupportedSocialStatusValue": "The current social status value is not supported",
+"saveChanges": "Save changes",
+"savingChanges": "Saving...",
+"changePhoto": "Change photo",
+"profilePhotoOptionalHint": "The photo is optional and will only change if you select a new one",
+"bilingualAddress": "Address in both languages",
+"arabicAddress": "Address in Arabic",
+"arabicAddressHint": "Enter the address in Arabic",
+"englishAddress": "Address in English",
+"englishAddressHint": "Enter the address in English",
+"loadingAlternateAddress": "Loading the address in the other language...",
+"readOnlyData": "Read-only information",
+"fieldRequired": "This field is required",
+"currentPassword": "Current password",
+"currentPasswordRequired": "Current password is required",
+
+"requestTrackingTitle": "Track Requests",
+"allRequests": "All",
+"pendingRequests": "Under Review",
+"acceptedRequests": "Accepted",
+"rejectedRequests": "Rejected",
+"cancelledRequests": "Cancelled",
+
+"cancelRequestTitle": "Cancel Request",
+"cancelRequestConfirmation": "Are you sure you want to cancel request #{requestId}?\nYou will not be able to undo this action.",
+"@cancelRequestConfirmation": {
+  "placeholders": {
+    "requestId": {
+      "type": "int"
+    }
   }
+},
+
+"confirmCancelRequest": "Yes, Cancel Request",
+"requestCancelledTitle": "Request Cancelled",
+
+"requestsLoadError": "Unable to Load Requests",
+"noRequestsForStatus": "There are no requests with this status",
+"requestNumber": "Request #{requestId}",
+"@requestNumber": {
+  "placeholders": {
+    "requestId": {
+      "type": "int"
+    }
+  }
+},
+
+"urgent": "Urgent",
+"requestType": "Request Type",
+"subCategory": "Subcategory",
+"aidType": "Aid Type",
+"notSpecified": "Not specified",
+
+"cost": "Cost",
+"submissionDate": "Submission Date",
+"amountRiyal": "{amount} SAR",
+"@amountRiyal": {
+  "placeholders": {
+    "amount": {
+      "type": "String"
+    }
+  }
+},
+
+"editRequest": "Edit Request",
+
+"fundingProgress": "Funding Progress",
+"fundingAmountOf": "{current} of {total} SAR",
+"@fundingAmountOf": {
+  "placeholders": {
+    "current": {
+      "type": "String"
+    },
+    "total": {
+      "type": "String"
+    }
+  }
+},
+
+"remainingAmount": "Remaining: {amount} SAR",
+"@remainingAmount": {
+  "placeholders": {
+    "amount": {
+      "type": "String"
+    }
+  }
+},
+
+"rejectionReason": "Rejection Reason",
+"noRejectionReason": "No rejection reason was provided",
+"requestWasCancelled": "This request has been cancelled",
+"selfApplicant": "For myself",
+"otherApplicant": "For someone else",
+
+"whoIsRequestFor": "Who are you submitting this aid request for?",
+"chooseApplicantBeforeFilling": "Choose the applicant before filling in the information",
+
+"loadingProfileData": "Loading profile information...",
+"profileAutoFilled": "Your account information was filled in automatically. You can edit any field before continuing.",
+"profileAutoFillError": "Unable to load profile information. You can try again or choose another person.",
+
+"selectApplicantType": "Please choose who you want to submit the aid request for",
+"waitForProfileLoading": "Please wait until your information is loaded",
+
+"editApplicantInfo": "Edit applicant information",
+"personalStatus": "Personal status",
+"contactInformation": "Contact information",
+
+"applicantCreateDescription": "First choose who the request is for, then enter the applicant information accurately.",
+"applicantEditDescription": "You can edit the applicant information, then continue to the aid details to update them.",
+
+"arabicAddressLabel": "Address (Arabic)",
+"arabicAddressExample": "Example: Damascus - Mazzeh - Main Street",
+"englishAddressLabel": "Address (English)",
+"englishAddressExample": "Example: Damascus - Al Mazzeh - Main Street",
+
+"arabicAddressRequired": "Please enter the address in Arabic",
+"arabicAddressOnly": "Please write the address in Arabic only",
+"englishAddressRequired": "Please enter the address in English",
+"englishAddressOnly": "Please write the address in English only",
+
+"phoneRequiredApplicant": "Please enter the phone number",
+
+"aidRequestTitle": "Aid request",
+"editAidRequestTitle": "Edit aid request",
+"aidRequestWithType": "{requestType} request",
+"@aidRequestWithType": {
+  "placeholders": {
+    "requestType": {
+      "type": "String"
+    }
+  }
+},
+"editAidRequestWithType": "Edit {requestType} request",
+"@editAidRequestWithType": {
+  "placeholders": {
+    "requestType": {
+      "type": "String"
+    }
+  }
+},
+
+"continueToRequestDetails": "Continue to request details",
+"continueToEditRequestDetails": "Continue to edit request details",
+"editEducationRequestDetails": "Edit Education Request Details",
+
+"academicAchievement": "Academic Achievement",
+"highSchool": "High School",
+"diploma": "Diploma",
+"bachelor": "Bachelor's Degree",
+"master": "Master's Degree",
+
+"thirdUniversityYear": "Third University Year",
+"fourthUniversityYear": "Fourth University Year",
+"fifthUniversityYear": "Fifth University Year",
+"sixthUniversityYear": "Sixth University Year",
+
+"institutionNameArabic": "School / University Name (Arabic)",
+"institutionNameArabicHint": "Example: Damascus University",
+"institutionNameEnglish": "School / University Name (English)",
+"institutionNameEnglishHint": "Example: Damascus University",
+
+"educationDetailsArabic": "Education Request Details (Arabic)",
+"educationDetailsArabicHint": "Explain the educational need in Arabic...",
+"educationDetailsEnglish": "Education Request Details (English)",
+"educationDetailsEnglishHint": "Explain the educational need in English...",
+
+"educationDocuments": "Attach Educational Documents",
+
+"addNewFiles": "Add New Files",
+"addNewFilesDescription": "You can add new documents. Existing documents will remain unchanged.",
+"educationDocumentsDescription": "Please attach clear photos of documents or proof of enrollment.",
+
+"newFiles": "New Files",
+"attachedFiles": "Attached Files",
+"existingAttachedFiles": "Currently Attached Files",
+"existingAttachment": "Previously Attached File",
+
+"educationEditInfo": "The current request data has been loaded. Edit the fields you want to change, then save your changes.",
+
+"selectAcademicAchievement": "Please select the academic achievement",
+"selectGradeOrYear": "Please select the grade or academic year",
+"educationDocumentRequired": "Please attach at least one document",
+"requestIdUnavailable": "Unable to determine the request ID to update",
+
+"schoolOrUniversityName": "School or university name",
+"educationCaseDetails": "Education request details",
+
+"enterFieldInArabic": "Please enter {fieldName} in Arabic",
+"@enterFieldInArabic": {
+  "placeholders": {
+    "fieldName": {
+      "type": "String"
+    }
+  }
+},
+
+"fieldArabicOnly": "Please write {fieldName} in Arabic only",
+"@fieldArabicOnly": {
+  "placeholders": {
+    "fieldName": {
+      "type": "String"
+    }
+  }
+},
+
+"enterFieldInEnglish": "Please enter {fieldName} in English",
+"@enterFieldInEnglish": {
+  "placeholders": {
+    "fieldName": {
+      "type": "String"
+    }
+  }
+},
+
+"fieldEnglishOnly": "Please write {fieldName} in English only",
+"@fieldEnglishOnly": {
+  "placeholders": {
+    "fieldName": {
+      "type": "String"
+    }
+  }
+},
+"editFoodRequestDetails": "Edit Food Request Details",
+"foodRequestDetails": "Food Request Details",
+
+"foodAidType": "Required Food Assistance Type",
+"foodBasket": "Food Basket",
+"babyMilk": "Baby Milk",
+
+"foodDetailsArabic": "Food Request Details (Arabic)",
+"foodDetailsArabicHint": "Explain the type of need and the family's current situation in Arabic...",
+"foodDetailsEnglish": "Food Request Details (English)",
+"foodDetailsEnglishHint": "Explain the family situation and food needs in English...",
+
+"expectedFoodCost": "Expected Cost",
+
+"supportingDocuments": "Attach Supporting Documents",
+"addNewDocuments": "Add New Documents",
+"foodNewDocumentsDescription": "New attachments are optional as long as the existing attachments remain available",
+"foodDocumentsDescription": "Please attach any documents that support the food request",
+
+"foodDecorativeMessage": "Together, we help provide food for every family in need",
+
+"selectFoodAidType": "Please select the food assistance type",
+"invalidIndividualsCount": "Please enter a valid number of individuals",
+"foodDocumentRequired": "Please attach at least one document",
+
+"foodArabicDetailsRequired": "Please enter the request details in Arabic",
+"foodArabicDetailsShort": "Please provide clearer details in Arabic",
+"foodArabicDetailsMustContainArabic": "The Arabic details must contain Arabic letters",
+"foodArabicDetailsNoEnglish": "Please write the Arabic details without English letters",
+
+"foodEnglishDetailsRequired": "Please enter the request details in English",
+"foodEnglishDetailsShort": "Please provide clearer details in English",
+"foodEnglishDetailsMustContainEnglish": "The English details must contain English letters",
+"foodEnglishDetailsNoArabic": "Please write the English details without Arabic letters",
+"medicineInsurance": "Medicine Coverage",
+"surgery": "Surgery",
+"medicalDevices": "Medical Devices",
+"editHealthRequestDetails": "Edit Health Request Details",
+
+"healthDetailsArabic": "Health Details (Arabic)",
+"healthDetailsArabicHint": "Describe the diagnosis and symptoms in Arabic...",
+
+"healthDetailsEnglish": "Health Details (English)",
+"healthDetailsEnglishHint": "Describe the diagnosis and symptoms in English...",
+
+"addNewMedicalDocuments": "Add New Medical Reports or Prescriptions",
+"medicalNewDocumentsDescription": "New attachments are optional as long as the existing attachments remain available",
+
+"healthArabicDetailsRequired": "Please enter the health details in Arabic",
+"healthArabicDetailsShort": "Please provide clearer health details in Arabic",
+"healthArabicDetailsMustContainArabic": "The Arabic details must contain Arabic letters",
+"healthArabicDetailsNoEnglish": "Please write the Arabic details without English letters",
+
+"healthEnglishDetailsRequired": "Please enter the health details in English",
+"healthEnglishDetailsShort": "Please provide clearer health details in English",
+"healthEnglishDetailsMustContainEnglish": "The English details must contain English letters",
+"healthEnglishDetailsNoArabic": "Please write the English details without Arabic letters",
+"homeProvision": "Home Provision",
+"rentAssistance": "Rent Assistance",
+"homeRepairs": "Home Repairs",
+
+"editHousingRequestDetails": "Edit Housing Request Details",
+"housingAidType": "Required Housing Assistance Type",
+"chooseHousingAidTypeHint": "Choose the housing assistance type to display the required fields",
+
+"housingEditInfo": "The current request data has been loaded. The housing assistance type is fixed, and you can edit the remaining fields before saving your changes.",
+
+"currentResidenceArabic": "Current Residence (Arabic)",
+"currentResidenceArabicHint": "Example: Damascus - Mezzeh - temporary housing",
+"currentResidenceEnglish": "Current Residence (English)",
+"currentResidenceEnglishHint": "Example: Damascus - Mezzeh - temporary housing",
+
+"housingSupportReasonArabic": "Reason for Requesting Housing (Arabic)",
+"housingSupportReasonArabicHint": "Explain why housing assistance is needed in Arabic...",
+"housingSupportReasonEnglish": "Reason for Requesting Housing (English)",
+"housingSupportReasonEnglishHint": "Explain why housing assistance is needed in English...",
+
+"requestedHousingSpecsArabic": "Required Housing Specifications (Arabic)",
+"requestedHousingSpecsArabicHint": "Example: two rooms, close to school...",
+"requestedHousingSpecsEnglish": "Required Housing Specifications (English)",
+"requestedHousingSpecsEnglishHint": "Example: two rooms, close to school...",
+
+"currentHousingSituation": "Current Housing Situation",
+"currentHousingSituationArabic": "Current Housing Situation (Arabic)",
+"currentHousingSituationArabicHint": "Describe the damage and required repairs in Arabic...",
+"currentHousingSituationEnglish": "Current Housing Situation (English)",
+"currentHousingSituationEnglishHint": "Describe the damage and required repairs in English...",
+
+"housingDetailsArabic": "Housing Request Details (Arabic)",
+"housingDetailsArabicHint": "Explain the housing situation and need in Arabic...",
+"housingDetailsEnglish": "Housing Request Details (English)",
+"housingDetailsEnglishHint": "Explain the housing situation and need in English...",
+
+"expectedHousingCost": "Expected Cost",
+
+"selectHousingAidType": "Please select the housing assistance type",
+"validCurrentRent": "Please enter a valid current rent amount",
+"housingDocumentRequired": "Please attach at least one document",
+"editSmallProjectRequestDetails": "Edit Small Project Details",
+"smallProjectRequestDetails": "Small Project Details",
+
+"projectInformation": "Project Information",
+
+"projectNameArabic": "Project Name (Arabic)",
+"projectNameArabicHint": "Example: مخبز منزلي",
+"projectNameEnglish": "Project Name (English)",
+"projectNameEnglishHint": "Example: Home bakery",
+
+"projectCategoryArabic": "Project Category (Arabic)",
+"projectCategoryArabicHint": "Example: إنتاج غذائي",
+"projectCategoryEnglish": "Project Category (English)",
+"projectCategoryEnglishHint": "Example: Food production",
+
+"numberOfPeopleSupported": "Expected Number of People Supported",
+"numberOfPeopleSupportedHint": "Example: 3",
+
+"projectDetailsArabic": "Project Details (Arabic)",
+"projectDetailsArabicHint": "Explain the project idea, goals, and expected benefit in Arabic...",
+"projectDetailsEnglish": "Project Details (English)",
+"projectDetailsEnglishHint": "Explain the project idea, goals, and expected benefit in English...",
+
+"expectedProjectCost": "Expected Cost",
+
+"smallProjectNewDocumentsDescription": "New attachments are optional as long as the existing attachments remain available",
+"smallProjectDocumentsDescription": "Feasibility study, photos, invoices, or any documents supporting the project",
+
+"smallProjectDecorativeMessage": "We support small projects to help families build a sustainable income",
+
+"smallProjectEditInfo": "The current request data has been loaded. Edit the fields you want to change, then save your changes.",
+
+"projectNameArabicRequired": "Please enter the project name in Arabic",
+"projectNameArabicShort": "The Arabic project name is too short",
+
+"projectNameEnglishRequired": "Please enter the project name in English",
+"projectNameEnglishShort": "The English project name is too short",
+
+"projectCategoryArabicRequired": "Please enter the project category in Arabic",
+"projectCategoryArabicShort": "The Arabic project category is too short",
+
+"projectCategoryEnglishRequired": "Please enter the project category in English",
+"projectCategoryEnglishShort": "The English project category is too short",
+
+"validSupportedPeopleCount": "Please enter a valid number of people to be supported",
+
+"projectDetailsArabicRequired": "Please enter the project details in Arabic",
+"projectDetailsArabicShort": "Please provide clearer project details in Arabic",
+
+"projectDetailsEnglishRequired": "Please enter the project details in English",
+"projectDetailsEnglishShort": "Please provide clearer project details in English",
+
+"smallProjectDocumentRequired": "Please attach at least one document",
+
+"smallProjectFilesUnavailable": "The selected files were already added or could not be accessed",
+
+"arabicFieldMustContainArabic": "The Arabic field must contain Arabic letters",
+"arabicFieldNoEnglish": "Please write the Arabic field without English letters",
+
+"englishFieldMustContainEnglish": "The English field must contain English letters",
+"englishFieldNoArabic": "Please write the English field without Arabic letters",
+"loadingRequestData": "Loading request data...",
+"pleaseWaitMoment": "Please wait a moment",
+"requestDetailsLoadFailed": "Could not load request details",
+"back": "Back"
 }
