@@ -968,6 +968,12 @@ abstract class AppLocalizations {
   /// **'Education'**
   String get education;
 
+  /// No description provided for @orphanFund.
+  ///
+  /// In en, this message translates to:
+  /// **'Orphan fund'**
+  String get orphanFund;
+
   /// No description provided for @health.
   ///
   /// In en, this message translates to:
@@ -979,6 +985,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Food'**
   String get food;
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'My Donations'**
+  String get title;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Donations'**
+  String get total;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @totalDonaited.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Donations'**
+  String get totalDonaited;
+
+  /// No description provided for @sponsorship.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship'**
+  String get sponsorship;
+
+  /// No description provided for @walletTopUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Top-up'**
+  String get walletTopUp;
+
+  /// No description provided for @aidRequestDonation.
+  ///
+  /// In en, this message translates to:
+  /// **'Aid Request'**
+  String get aidRequestDonation;
+
+  /// No description provided for @walletBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Balance'**
+  String get walletBalance;
+
+  /// No description provided for @operation.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction'**
+  String get operation;
+
+  /// No description provided for @empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions'**
+  String get empty;
+
+  /// No description provided for @sponsor.
+  ///
+  /// In en, this message translates to:
+  /// **'sponsor'**
+  String get sponsor;
+
+  /// No description provided for @loadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load donation history'**
+  String get loadError;
 
   /// No description provided for @housing.
   ///

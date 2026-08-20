@@ -1,8 +1,9 @@
 
 import 'package:charity_management/constants/api_constants.dart';
-import 'package:charity_management/Donor/cubit/completed_aid_requests_cubit.dart';
-import 'package:charity_management/Donor/cubit/completed_aid_requests_state.dart';
-import 'package:charity_management/Donor/model/completed_aid_request_model.dart';
+import 'package:charity_management/features/Donor/cubit/completed_aid_requests_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/completed_aid_requests_state.dart';
+import 'package:charity_management/features/Donor/model/completed_aid_request_model.dart';
+
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

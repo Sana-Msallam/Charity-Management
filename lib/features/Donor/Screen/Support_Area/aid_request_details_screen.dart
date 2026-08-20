@@ -1,9 +1,9 @@
-import 'package:charity_management/Donor/Profile/Cubit/profile_cubit.dart';
-import 'package:charity_management/Donor/Profile/Cubit/profile_state.dart';
-import 'package:charity_management/Donor/cubit/aid_request_details_cubit.dart';
-import 'package:charity_management/Donor/cubit/aid_request_details_state.dart';
 import 'package:charity_management/Payment/Screen/checkout.dart';
 import 'package:charity_management/constants/api_constants.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_details_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_details_state.dart';
+import 'package:charity_management/features/Donor/cubit/profile_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/profile_state.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,11 +83,240 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
               );
             }
 
-            if (state is AidRequestDetailsErrorState) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(state.error, textAlign: TextAlign.center),
+          if (state is AidRequestDetailsErrorState) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'حدث خطأ',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'IBM Plex Sans Arabic',
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        ElevatedButton(
+          onPressed: () {
+            context
+                .read<AidRequestDetailsCubit>()
+                .fetchDetails(id);
+          },
+          child: const Text(
+            'إعادة المحاولة',
+            style: TextStyle(
+              fontFamily: 'IBM Plex Sans Arabic',
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+            if (state is AidRequestDetailsSuccessState) {
+              final item = state.request;
+
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+
+                      child: Image.network(
+                        '${ApiConstants.baseUrl}/${item.image}',
+
+                        height: 220,
+
+                        width: double.infinity,
+
+                        fit: BoxFit.cover,
+
+                        errorBuilder: (context, error, stack) {
+                          return Container(
+                            height: 220,
+
+                            color: Colors.grey.shade200,
+
+                            child: const Icon(Icons.image, size: 50),
+                          );
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item.title,
+
+                            style: const TextStyle(
+                              fontSize: 22,
+
+                              fontWeight: FontWeight.bold,
+
+                              color: Color(0xFF2B2D42),
+
+                              fontFamily: 'IBM Plex Sans Arabic',
+                            ),
+                          ),
+                        ),
+
+                        if (item.isUrgent)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFBE8E7),
+
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+
+                            child: Text(
+                              l10n.urgent,
+
+                              style: const TextStyle(
+                                color: Color(0xFFA8201A),
+
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    Text(
+                      item.description,
+
+                      style: const TextStyle(
+                        fontSize: 15,
+
+                        height: 1.6,
+
+                        color: Color(0xFF7F8C8D),
+
+                        fontFamily: 'IBM Plex Sans Arabic',
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    Container(
+                      padding: const EdgeInsets.all(16),
+
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+
+                      child: Column(
+                        children: [
+                          _buildMoneyRow(
+                            l10n.requiredAmount,
+                            '${item.totalCost}\$',
+                          ),
+
+                          _buildMoneyRow(
+                            l10n.amountCollected,
+                            '${item.paidAmount}\$',
+                          ),
+
+                          _buildMoneyRow(
+                            l10n.amountRemaining,
+                            '${item.remainingAmount}\$',
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    Text(
+                      l10n.completionPercentage(item.completionPercentage),
+
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+
+                        fontSize: 14,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+
+                      child: LinearProgressIndicator(
+                        minHeight: 10,
+
+                        value: item.completionPercentage / 100,
+
+                        backgroundColor: const Color(0xFFF2ECE4),
+
+                        valueColor: const AlwaysStoppedAnimation(
+                          Color(0xFF3D523A),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    SizedBox(
+                      width: double.infinity,
+
+                      height: 50,
+
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFF5D166),
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CheckoutScreen(currentCaseName: item.title),
+                            ),
+                          );
+                        },
+
+                        child: Text(
+                          l10n.donateNow,
+
+                          style: const TextStyle(
+                            color: Color(0xFF765A00),
+
+                            fontWeight: FontWeight.bold,
+
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             }

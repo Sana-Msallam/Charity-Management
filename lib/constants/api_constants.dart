@@ -3,6 +3,7 @@ class ApiConstants {
 
   static const String baseUrl = 'http://10.195.118.11:3000';
 
+
   static const String login = '/auth/login/client';
 
   static const String registerDonor = '/auth/register/donor';
@@ -22,6 +23,7 @@ class ApiConstants {
   static const String profile = '/api/profile';
   static const String profilePassword = '/api/profile/password';
 
+static const String donorHistory = '/api/donors/me/history';
   static const String aidRequests = '/donor/public/aid-requests';
 
   static const String walletTopUpPaymentIntent =

@@ -92,4 +92,19 @@ class DioClient {
 
     return path.startsWith('${ApiConstants.aidRequests}/');
   }
+  static Future<Response<dynamic>> patch(
+  String path, {
+  dynamic data,
+  Map<String, dynamic>? queryParameters,
+  Options? options,
+  CancelToken? cancelToken,
+}) {
+  return dio.patch(
+    path,
+    data: data,
+    queryParameters: queryParameters,
+    options: options,
+    cancelToken: cancelToken,
+  );
+}
 }

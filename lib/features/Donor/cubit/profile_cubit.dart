@@ -1,6 +1,6 @@
-import 'package:charity_management/Donor/Profile/profile_model.dart';
 import 'package:charity_management/constants/api_constants.dart';
 import 'package:charity_management/constants/dio_client.dart';
+import 'package:charity_management/features/Donor/model/profile_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'profile_state.dart';

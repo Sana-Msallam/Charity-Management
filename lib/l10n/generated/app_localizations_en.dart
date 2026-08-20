@@ -459,10 +459,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String get education => 'Education';
 
   @override
+  String get orphanFund => 'Orphan fund';
+
+  @override
   String get health => 'Health';
 
   @override
   String get food => 'Food';
+
+  @override
+  String get title => 'My Donations';
+
+  @override
+  String get total => 'Total Donations';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get totalDonaited => 'Total Donations';
+
+  @override
+  String get sponsorship => 'Sponsorship';
+
+  @override
+  String get walletTopUp => 'Wallet Top-up';
+
+  @override
+  String get aidRequestDonation => 'Aid Request';
+
+  @override
+  String get walletBalance => 'Wallet Balance';
+
+  @override
+  String get operation => 'Transaction';
+
+  @override
+  String get empty => 'No transactions';
+
+  @override
+  String get sponsor => 'sponsor';
+
+  @override
+  String get loadError => 'Failed to load donation history';
 
   @override
   String get housing => 'Housing';
