@@ -1,11 +1,11 @@
 
-import 'package:charity_management/Donor/Screen/Support_Area/aid_request_details_screen.dart';
-import 'package:charity_management/Donor/cubit/aid_request_details_cubit.dart';
-import 'package:charity_management/Donor/model/aid_request_model.dart';
-import 'package:charity_management/Donor/cubit/aid_request_cubit.dart';
-import 'package:charity_management/Donor/cubit/aid_request_state.dart';
 import 'package:charity_management/Payment/Screen/checkout.dart';
 import 'package:charity_management/constants/api_constants.dart';
+import 'package:charity_management/features/Donor/Screen/Support_Area/aid_request_details_screen.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_details_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_state.dart';
+import 'package:charity_management/features/Donor/model/aid_request_model.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,12 +102,39 @@ class _SupportCategoryScreenState extends State<SupportCategoryScreen> {
                         child: CircularProgressIndicator(),
                       );
                     }
+if (state is AidRequestErrorState) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'حدث خطأ',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'IBM Plex Sans Arabic',
+          ),
+        ),
 
-                    if (state is AidRequestErrorState) {
-                      return Center(
-                        child: Text(state.errorMessage),
-                      );
-                    }
+        const SizedBox(height: 12),
+
+        ElevatedButton(
+          onPressed: () {
+            context.read<AidRequestCubit>().fetchAidRequests(
+              categoryId: widget.categoryId,
+            );
+          },
+          child: const Text(
+            'إعادة المحاولة',
+            style: TextStyle(
+              fontFamily: 'IBM Plex Sans Arabic',
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
                     if (state is AidRequestSuccessState) {
                       final filteredRequests =

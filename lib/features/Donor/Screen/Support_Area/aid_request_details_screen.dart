@@ -1,7 +1,8 @@
-import 'package:charity_management/Donor/cubit/aid_request_details_cubit.dart';
-import 'package:charity_management/Donor/cubit/aid_request_details_state.dart';
+
 import 'package:charity_management/Payment/Screen/checkout.dart';
 import 'package:charity_management/constants/api_constants.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_details_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_details_state.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,9 +54,39 @@ class AidRequestDetailsScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            if (state is AidRequestDetailsErrorState) {
-              return Center(child: Text(state.error));
-            }
+          if (state is AidRequestDetailsErrorState) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          'حدث خطأ',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'IBM Plex Sans Arabic',
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        ElevatedButton(
+          onPressed: () {
+            context
+                .read<AidRequestDetailsCubit>()
+                .fetchDetails(id);
+          },
+          child: const Text(
+            'إعادة المحاولة',
+            style: TextStyle(
+              fontFamily: 'IBM Plex Sans Arabic',
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
             if (state is AidRequestDetailsSuccessState) {
               final item = state.request;

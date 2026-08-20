@@ -1,6 +1,7 @@
-import 'package:charity_management/Donor/cubit/donor_history_cubit.dart';
-import 'package:charity_management/Donor/cubit/donor_history_state.dart';
-import 'package:charity_management/Donor/model/donor_history_model.dart';
+
+import 'package:charity_management/features/Donor/cubit/donor_history_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/donor_history_state.dart';
+import 'package:charity_management/features/Donor/model/donor_history_model.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';

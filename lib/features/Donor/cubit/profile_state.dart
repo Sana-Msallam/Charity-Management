@@ -1,7 +1,8 @@
-import 'package:charity_management/Donor/Profile/profile_model.dart';
 
 // import '../model/profile_model.dart';
 
+
+import 'package:charity_management/features/Donor/model/profile_model.dart';
 
 abstract class ProfileState {}
 

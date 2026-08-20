@@ -1,4 +1,4 @@
-import 'package:charity_management/Donor/model/donor_history_model.dart';
+import 'package:charity_management/features/Donor/model/donor_history_model.dart';
 
 // import 'donor_history_model.dart';
 
