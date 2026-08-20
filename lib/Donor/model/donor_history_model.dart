@@ -1,26 +1,20 @@
 class DonorHistoryModel {
   final List<DonorHistoryYear> years;
 
-  const DonorHistoryModel({
-    required this.years,
-  });
+  const DonorHistoryModel({required this.years});
 
   factory DonorHistoryModel.fromJson(Map<String, dynamic> json) {
     return DonorHistoryModel(
       years: (json['years'] as List<dynamic>? ?? [])
           .map(
-            (year) => DonorHistoryYear.fromJson(
-              year as Map<String, dynamic>,
-            ),
+            (year) => DonorHistoryYear.fromJson(year as Map<String, dynamic>),
           )
           .toList(),
     );
   }
 
   List<DonorOperation> get allOperations {
-    return years
-        .expand((year) => year.operations)
-        .toList();
+    return years.expand((year) => year.operations).toList();
   }
 }
 
@@ -28,19 +22,15 @@ class DonorHistoryYear {
   final int year;
   final List<DonorOperation> operations;
 
-  const DonorHistoryYear({
-    required this.year,
-    required this.operations,
-  });
+  const DonorHistoryYear({required this.year, required this.operations});
 
   factory DonorHistoryYear.fromJson(Map<String, dynamic> json) {
     return DonorHistoryYear(
       year: json['year'] as int,
       operations: (json['operations'] as List<dynamic>? ?? [])
           .map(
-            (operation) => DonorOperation.fromJson(
-              operation as Map<String, dynamic>,
-            ),
+            (operation) =>
+                DonorOperation.fromJson(operation as Map<String, dynamic>),
           )
           .toList(),
     );
@@ -64,25 +54,14 @@ class DonorOperation {
 
   factory DonorOperation.fromJson(Map<String, dynamic> json) {
     return DonorOperation(
-      amount: double.tryParse(
-            json['amount']?.toString() ?? '0',
-          ) ??
-          0,
-      type: DonorOperationType.fromString(
-        json['type']?.toString(),
-      ),
-      createdAt: DateTime.parse(
-        json['createdAt'].toString(),
-      ),
+      amount: double.tryParse(json['amount']?.toString() ?? '0') ?? 0,
+      type: DonorOperationType.fromString(json['type']?.toString()),
+      createdAt: DateTime.parse(json['createdAt'].toString()),
       orphan: json['orphan'] != null
-          ? DonorOrphan.fromJson(
-              json['orphan'] as Map<String, dynamic>,
-            )
+          ? DonorOrphan.fromJson(json['orphan'] as Map<String, dynamic>)
           : null,
       aidRequest: json['aidRequest'] != null
-          ? DonorAidRequest.fromJson(
-              json['aidRequest'] as Map<String, dynamic>,
-            )
+          ? DonorAidRequest.fromJson(json['aidRequest'] as Map<String, dynamic>)
           : null,
     );
   }
@@ -116,10 +95,7 @@ class DonorAidRequest {
   final int id;
   final String title;
 
-  const DonorAidRequest({
-    required this.id,
-    required this.title,
-  });
+  const DonorAidRequest({required this.id, required this.title});
 
   factory DonorAidRequest.fromJson(Map<String, dynamic> json) {
     return DonorAidRequest(
@@ -133,7 +109,8 @@ enum DonorOperationType {
   sponsorshipDonation,
   aidRequestDonation,
   walletTopUp,
-  unknown;
+  unknown,
+  generalDonation;
 
   static DonorOperationType fromString(String? value) {
     switch (value) {
@@ -145,6 +122,9 @@ enum DonorOperationType {
 
       case 'WALLET_TOP_UP':
         return DonorOperationType.walletTopUp;
+        
+      case 'GENERAL_DONATION':
+        return DonorOperationType.generalDonation;
 
       default:
         return DonorOperationType.unknown;

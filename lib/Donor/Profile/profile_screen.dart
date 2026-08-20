@@ -104,7 +104,7 @@ class ProfileScreen extends StatelessWidget {
                   l10n,
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 20),
 
                 _buildSectionTitle(
                   l10n.personalInformation,
@@ -120,16 +120,16 @@ class ProfileScreen extends StatelessWidget {
 
                 const SizedBox(height: 25),
 
-                _buildSectionTitle(
-                  l10n.myAccount,
-                  Icons.dashboard_outlined,
-                ),
+                // _buildSectionTitle(
+                //   l10n.myAccount,
+                //   Icons.dashboard_outlined,
+                // ),
 
-                const SizedBox(height: 12),
+                // const SizedBox(height: 12),
 
-                _buildDonationsButton(l10n),
+                // _buildDonationsButton(l10n),
 
-                const SizedBox(height: 12),
+                // const SizedBox(height: 12),
 
                 _buildSettingsButton(
                   context,
@@ -595,24 +595,24 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDonationsButton(
-    AppLocalizations l10n,
-  ) {
-    return _buildMainAction(
-      icon: Icons.volunteer_activism_rounded,
-      title: l10n.myDonations,
-      subtitle: l10n.followDonations,
-      background: primary,
-      iconBackground: Colors.white.withOpacity(0.15),
-      iconColor: Colors.white,
-      textColor: Colors.white,
-      subtitleColor: Colors.white.withOpacity(0.75),
-      arrowColor: Colors.white,
-      onTap: () {
-        // TODO: Navigate to My Donations
-      },
-    );
-  }
+  // Widget _buildDonationsButton(
+  //   AppLocalizations l10n,
+  // ) {
+  //   return _buildMainAction(
+  //     icon: Icons.volunteer_activism_rounded,
+  //     title: l10n.myDonations,
+  //     subtitle: l10n.followDonations,
+  //     background: primary,
+  //     iconBackground: Colors.white.withOpacity(0.15),
+  //     iconColor: Colors.white,
+  //     textColor: Colors.white,
+  //     subtitleColor: Colors.white.withOpacity(0.75),
+  //     arrowColor: Colors.white,
+  //     onTap: () {
+  //       // TODO: Navigate to My Donations
+  //     },
+  //   );
+  // }
 
   Widget _buildSettingsButton(
     BuildContext context,

@@ -968,6 +968,12 @@ abstract class AppLocalizations {
   /// **'Education'**
   String get education;
 
+  /// No description provided for @orphanFund.
+  ///
+  /// In en, this message translates to:
+  /// **'Orphan fund'**
+  String get orphanFund;
+
   /// No description provided for @health.
   ///
   /// In en, this message translates to:
@@ -1022,11 +1028,11 @@ abstract class AppLocalizations {
   /// **'Wallet Top-up'**
   String get walletTopUp;
 
-  /// No description provided for @caseLabel.
+  /// No description provided for @aidRequestDonation.
   ///
   /// In en, this message translates to:
-  /// **'Case'**
-  String get caseLabel;
+  /// **'Aid Request'**
+  String get aidRequestDonation;
 
   /// No description provided for @walletBalance.
   ///

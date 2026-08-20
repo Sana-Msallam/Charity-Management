@@ -6,7 +6,6 @@ import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DonationsScreen extends StatefulWidget {
   const DonationsScreen({
@@ -25,44 +24,65 @@ class DonationsScreen extends StatefulWidget {
 class _DonationsScreenState extends State<DonationsScreen> {
   DonationType _selectedType = DonationType.all;
 
+  bool _isDonation(DonorOperation operation) {
+    return operation.type ==
+            DonorOperationType.aidRequestDonation ||
+        operation.type ==
+            DonorOperationType.sponsorshipDonation ||
+        operation.type ==
+            DonorOperationType.generalDonation;
+  }
+
   List<DonorOperation> _filterOperations(
     List<DonorOperation> operations,
   ) {
-    if (_selectedType == DonationType.all) {
-      return operations;
+    switch (_selectedType) {
+      case DonationType.all:
+        return operations;
+
+      case DonationType.caseDonation:
+        return operations
+            .where(
+              (operation) =>
+                  operation.type ==
+                  DonorOperationType.aidRequestDonation,
+            )
+            .toList();
+
+      case DonationType.sponsorship:
+        return operations
+            .where(
+              (operation) =>
+                  operation.type ==
+                  DonorOperationType.sponsorshipDonation,
+            )
+            .toList();
+
+      case DonationType.generalDonation:
+        return operations
+            .where(
+              (operation) =>
+                  operation.type ==
+                  DonorOperationType.generalDonation,
+            )
+            .toList();
+
+      case DonationType.walletTopUp:
+        return operations
+            .where(
+              (operation) =>
+                  operation.type ==
+                  DonorOperationType.walletTopUp,
+            )
+            .toList();
     }
-
-    return operations.where((operation) {
-      switch (_selectedType) {
-        case DonationType.caseDonation:
-          return operation.type ==
-              DonorOperationType.aidRequestDonation;
-
-        case DonationType.sponsorship:
-          return operation.type ==
-              DonorOperationType.sponsorshipDonation;
-
-        case DonationType.walletTopUp:
-          return operation.type ==
-              DonorOperationType.walletTopUp;
-
-        case DonationType.all:
-          return true;
-      }
-    }).toList();
   }
 
   double _calculateTotalDonated(
     List<DonorOperation> operations,
   ) {
     return operations
-        .where(
-          (operation) =>
-              operation.type ==
-                  DonorOperationType.aidRequestDonation ||
-              operation.type ==
-                  DonorOperationType.sponsorshipDonation,
-        )
+        .where(_isDonation)
         .fold(
           0,
           (sum, operation) => sum + operation.amount,
@@ -88,7 +108,10 @@ class _DonationsScreenState extends State<DonationsScreen> {
         return l10n.sponsorship;
 
       case DonorOperationType.aidRequestDonation:
-        return operation.aidRequest?.title ?? l10n.caseLabel;
+        return operation.aidRequest?.title ?? l10n.aidRequestDonation;
+
+      case DonorOperationType.generalDonation:
+        return l10n.orphanFund;
 
       case DonorOperationType.walletTopUp:
         return l10n.walletTopUp;
@@ -153,10 +176,7 @@ class _DonationsScreenState extends State<DonationsScreen> {
             }
 
             if (state is DonorHistoryFailure) {
-              return _buildErrorState(
-                context,
-                state.message,
-              );
+              return _buildErrorState(context);
             }
 
             if (state is DonorHistorySuccess) {
@@ -179,12 +199,8 @@ class _DonationsScreenState extends State<DonationsScreen> {
   ) {
     final l10n = AppLocalizations.of(context)!;
     final operations = history.allOperations;
-    final hasSponsorships = _hasSponsorships(operations);
 
-    if (!hasSponsorships &&
-        _selectedType == DonationType.sponsorship) {
-      _selectedType = DonationType.all;
-    }
+    final hasSponsorships = _hasSponsorships(operations);
 
     final filteredOperations =
         _filterOperations(operations);
@@ -263,6 +279,7 @@ class _DonationsScreenState extends State<DonationsScreen> {
             : () =>
                 widget.onSponsorshipTap!.call(operation);
 
+      case DonorOperationType.generalDonation:
       case DonorOperationType.walletTopUp:
       case DonorOperationType.unknown:
         return null;
@@ -295,9 +312,7 @@ class _DonationsScreenState extends State<DonationsScreen> {
               size: 25,
             ),
           ),
-
           const SizedBox(width: 14),
-
           Expanded(
             child: Column(
               crossAxisAlignment:
@@ -312,9 +327,7 @@ class _DonationsScreenState extends State<DonationsScreen> {
                         AppTextStyles.fontFamily,
                   ),
                 ),
-
                 const SizedBox(height: 4),
-
                 Text(
                   '${totalDonated.toStringAsFixed(0)} \$',
                   style: const TextStyle(
@@ -338,29 +351,30 @@ class _DonationsScreenState extends State<DonationsScreen> {
     bool hasSponsorships,
   ) {
     return SizedBox(
-      height: 42,
+      height: 44,
       child: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
         scrollDirection: Axis.horizontal,
+        padding:
+            const EdgeInsets.symmetric(horizontal: 20),
+        physics: const BouncingScrollPhysics(),
         children: [
-          _FilterChip(
+          _FilterItem(
+            icon: Icons.grid_view_rounded,
             label: l10n.all,
             selected:
                 _selectedType == DonationType.all,
             onTap: () {
               setState(() {
-                _selectedType =
-                    DonationType.all;
+                _selectedType = DonationType.all;
               });
             },
           ),
 
           const SizedBox(width: 8),
 
-          _FilterChip(
-            label: l10n.caseLabel,
+          _FilterItem(
+            icon: Icons.favorite_rounded,
+            label: l10n.aidRequestDonation,
             selected:
                 _selectedType ==
                     DonationType.caseDonation,
@@ -375,7 +389,8 @@ class _DonationsScreenState extends State<DonationsScreen> {
           if (hasSponsorships) ...[
             const SizedBox(width: 8),
 
-            _FilterChip(
+            _FilterItem(
+              icon: Icons.child_care_rounded,
               label: l10n.sponsorships,
               selected:
                   _selectedType ==
@@ -391,7 +406,24 @@ class _DonationsScreenState extends State<DonationsScreen> {
 
           const SizedBox(width: 8),
 
-          _FilterChip(
+          _FilterItem(
+            icon: Icons.volunteer_activism_rounded,
+            label: l10n.orphanFund,
+            selected:
+                _selectedType ==
+                    DonationType.generalDonation,
+            onTap: () {
+              setState(() {
+                _selectedType =
+                    DonationType.generalDonation;
+              });
+            },
+          ),
+
+          const SizedBox(width: 8),
+
+          _FilterItem(
+            icon: Icons.account_balance_wallet_rounded,
             label: l10n.wallet,
             selected:
                 _selectedType ==
@@ -421,111 +453,97 @@ class _DonationsScreenState extends State<DonationsScreen> {
             size: 45,
             color: AppColors.brandGray,
           ),
-
           const SizedBox(height: 12),
-
           Text(
             l10n.empty,
             style: const TextStyle(
               color: AppColors.onSurface,
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              fontFamily:
-                  AppTextStyles.fontFamily,
+              fontFamily: AppTextStyles.fontFamily,
             ),
           ),
         ],
       ),
     );
   }
-Widget _buildErrorState(
-  BuildContext context,
-  String message,
-) {
-  final l10n = AppLocalizations.of(context)!;
 
-  return Center(
-    child: Padding(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 72,
-            height: 72,
-            decoration: BoxDecoration(
-              color: AppColors.error.withOpacity(0.08),
-              shape: BoxShape.circle,
+  Widget _buildErrorState(
+    BuildContext context,
+  ) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment:
+              MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                color:
+                    AppColors.error.withOpacity(0.08),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.cloud_off_rounded,
+                size: 36,
+                color: AppColors.error,
+              ),
             ),
-            child: const Icon(
-              Icons.cloud_off_rounded,
-              size: 36,
-              color: AppColors.error,
-            ),
-          ),
-
-          const SizedBox(height: 18),
-
-          Text(
-            l10n.loadError,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.onSurface,
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-              fontFamily: AppTextStyles.fontFamily,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          Text(
-          "",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppColors.onSurface.withOpacity(0.65),
-              fontSize: 13,
-              fontFamily: AppTextStyles.fontFamily,
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          ElevatedButton.icon(
-            onPressed: () {
-              context
-                  .read<DonorHistoryCubit>()
-                  .getDonorHistory();
-            },
-            icon: const Icon(
-              Icons.refresh_rounded,
-              size: 18,
-            ),
-            label: Text(
-              l10n.retry,
+            const SizedBox(height: 18),
+            Text(
+              l10n.loadError,
+              textAlign: TextAlign.center,
               style: const TextStyle(
+                color: AppColors.onSurface,
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
                 fontFamily: AppTextStyles.fontFamily,
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 12,
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () {
+                context
+                    .read<DonorHistoryCubit>()
+                    .getDonorHistory();
+              },
+              icon: const Icon(
+                Icons.refresh_rounded,
+                size: 18,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+              label: Text(
+                l10n.retry,
+                style: const TextStyle(
+                  fontFamily:
+                      AppTextStyles.fontFamily,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding:
+                    const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
+                shape:
+                    RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(12),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }
 
 class _DonationCard extends StatelessWidget {
@@ -546,9 +564,7 @@ class _DonationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config =
-        _DonationConfig.fromType(
-      operation.type,
-    );
+        _DonationConfig.fromType(operation.type);
 
     return Material(
       color: Colors.transparent,
@@ -559,8 +575,7 @@ class _DonationCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius:
-                BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(18),
             border: Border.all(
               color: AppColors.border,
             ),
@@ -631,8 +646,8 @@ class _DonationCard extends StatelessWidget {
                             height: 3,
                             decoration:
                                 const BoxDecoration(
-                              color:
-                                  AppColors.brandGray,
+                              color: AppColors
+                                  .brandGray,
                               shape:
                                   BoxShape.circle,
                             ),
@@ -671,7 +686,7 @@ class _DonationCard extends StatelessWidget {
                     CrossAxisAlignment.end,
                 children: [
                   Text(
-'${operation.amount.toStringAsFixed(0)} \$',
+                    '${operation.amount.toStringAsFixed(0)} \$',
                     style: TextStyle(
                       color: config.color,
                       fontSize: 14,
@@ -702,51 +717,69 @@ class _DonationCard extends StatelessWidget {
   }
 }
 
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({
+class _FilterItem extends StatelessWidget {
+  const _FilterItem({
+    required this.icon,
     required this.label,
     required this.selected,
     required this.onTap,
   });
 
+  final IconData icon;
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration:
-            const Duration(milliseconds: 200),
-        padding:
-            const EdgeInsets.symmetric(
-          horizontal: 18,
-        ),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary
-              : AppColors.surface,
-          borderRadius:
-              BorderRadius.circular(13),
-          border: Border.all(
-            color: selected
-                ? AppColors.primary
-                : AppColors.border,
+    return Material(
+      color: selected
+          ? AppColors.primary
+          : AppColors.surface,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: AnimatedContainer(
+          duration:
+              const Duration(milliseconds: 180),
+          padding:
+              const EdgeInsets.symmetric(
+            horizontal: 13,
           ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected
-                ? Colors.white
-                : AppColors.onSurface,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            fontFamily:
-                AppTextStyles.fontFamily,
+          decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.circular(14),
+            border: Border.all(
+              color: selected
+                  ? AppColors.primary
+                  : AppColors.border,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 17,
+                color: selected
+                    ? Colors.white
+                    : AppColors.brandGray,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  color: selected
+                      ? Colors.white
+                      : AppColors.onSurface,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  fontFamily:
+                      AppTextStyles.fontFamily,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -779,6 +812,12 @@ class _DonationConfig {
           color: AppColors.tertiary,
         );
 
+      case DonorOperationType.generalDonation:
+        return const _DonationConfig(
+          icon: Icons.volunteer_activism_rounded,
+          color: AppColors.primary,
+        );
+
       case DonorOperationType.walletTopUp:
         return const _DonationConfig(
           icon:
@@ -799,5 +838,6 @@ enum DonationType {
   all,
   caseDonation,
   sponsorship,
+  generalDonation,
   walletTopUp,
 }

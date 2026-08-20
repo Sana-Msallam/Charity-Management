@@ -459,6 +459,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get education => 'Education';
 
   @override
+  String get orphanFund => 'Orphan fund';
+
+  @override
   String get health => 'Health';
 
   @override
@@ -486,7 +489,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletTopUp => 'Wallet Top-up';
 
   @override
-  String get caseLabel => 'Case';
+  String get aidRequestDonation => 'Aid Request';
 
   @override
   String get walletBalance => 'Wallet Balance';
