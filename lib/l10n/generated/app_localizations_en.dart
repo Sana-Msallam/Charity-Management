@@ -2192,4 +2192,124 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get back => 'Back';
+
+  @override
+  String get zakatCalculator => 'Zakat Calculator';
+
+  @override
+  String get zakatConditionsTitle => 'Conditions for Zakat';
+
+  @override
+  String get zakatConditionNisab =>
+      'The wealth must reach the required Nisab threshold.';
+
+  @override
+  String get zakatConditionOwnership =>
+      'The wealth must be fully owned by its owner.';
+
+  @override
+  String get zakatConditionYear =>
+      'A full lunar year must pass for wealth that requires Hawl.';
+
+  @override
+  String get zakatCalculatorDisclaimer =>
+      'This calculator is for guidance only. For special cases, consult a qualified Islamic authority.';
+
+  @override
+  String get chooseZakatType => 'Choose Zakat Type';
+
+  @override
+  String get chooseZakatTypeHint =>
+      'Choose the type of Zakat you want to calculate';
+
+  @override
+  String get zakatMoney => 'Money Zakat';
+
+  @override
+  String get zakatMoneySubtitle => 'Calculate Zakat on cash and money';
+
+  @override
+  String get zakatGold => 'Gold Zakat';
+
+  @override
+  String get zakatGoldSubtitle =>
+      'Calculate Zakat based on gold weight in grams';
+
+  @override
+  String get zakatSilver => 'Silver Zakat';
+
+  @override
+  String get zakatSilverSubtitle =>
+      'Calculate Zakat based on silver weight in grams';
+
+  @override
+  String get calculateZakat => 'Calculate Zakat';
+
+  @override
+  String get zakatMoneyInputTitle => 'Enter Your Money Amount';
+
+  @override
+  String get zakatMoneyInputDescription =>
+      'Enter the amount of money you own and today\'s gold gram price to check the Nisab threshold.';
+
+  @override
+  String get zakatGoldInputTitle => 'Enter Gold Weight in Grams';
+
+  @override
+  String get zakatGoldInputDescription =>
+      'Enter the weight of gold you own and today\'s gold gram price.';
+
+  @override
+  String get zakatSilverInputTitle => 'Enter Silver Weight in Grams';
+
+  @override
+  String get zakatSilverInputDescription =>
+      'Enter the weight of silver you own and today\'s silver gram price.';
+
+  @override
+  String get moneyAmount => 'Money Amount';
+
+  @override
+  String get goldWeight => 'Gold Weight in Grams';
+
+  @override
+  String get silverWeight => 'Silver Weight in Grams';
+
+  @override
+  String get goldGramPriceToday => 'Today\'s Gold Gram Price';
+
+  @override
+  String get silverGramPriceToday => 'Today\'s Silver Gram Price';
+
+  @override
+  String get zakatValidAmountRequired =>
+      'Please enter a valid value greater than zero';
+
+  @override
+  String get zakatValidGramPriceRequired =>
+      'Please enter a valid gram price greater than zero';
+
+  @override
+  String get zakatDueTitle => 'Zakat is Due';
+
+  @override
+  String get zakatNotDueTitle => 'Zakat is Not Due';
+
+  @override
+  String get zakatTypeLabel => 'Zakat Type';
+
+  @override
+  String get zakatAssetValue => 'Asset Value';
+
+  @override
+  String get zakatNisabValue => 'Nisab Value';
+
+  @override
+  String get zakatRateLabel => 'Zakat Rate';
+
+  @override
+  String get zakatDueAmount => 'Zakat Due';
+
+  @override
+  String get calculateAgain => 'Calculate Again';
 }

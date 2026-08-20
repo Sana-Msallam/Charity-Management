@@ -4075,6 +4075,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back'**
   String get back;
+
+  /// No description provided for @zakatCalculator.
+  ///
+  /// In en, this message translates to:
+  /// **'Zakat Calculator'**
+  String get zakatCalculator;
+
+  /// No description provided for @zakatConditionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Conditions for Zakat'**
+  String get zakatConditionsTitle;
+
+  /// No description provided for @zakatConditionNisab.
+  ///
+  /// In en, this message translates to:
+  /// **'The wealth must reach the required Nisab threshold.'**
+  String get zakatConditionNisab;
+
+  /// No description provided for @zakatConditionOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'The wealth must be fully owned by its owner.'**
+  String get zakatConditionOwnership;
+
+  /// No description provided for @zakatConditionYear.
+  ///
+  /// In en, this message translates to:
+  /// **'A full lunar year must pass for wealth that requires Hawl.'**
+  String get zakatConditionYear;
+
+  /// No description provided for @zakatCalculatorDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This calculator is for guidance only. For special cases, consult a qualified Islamic authority.'**
+  String get zakatCalculatorDisclaimer;
+
+  /// No description provided for @chooseZakatType.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Zakat Type'**
+  String get chooseZakatType;
+
+  /// No description provided for @chooseZakatTypeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the type of Zakat you want to calculate'**
+  String get chooseZakatTypeHint;
+
+  /// No description provided for @zakatMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Money Zakat'**
+  String get zakatMoney;
+
+  /// No description provided for @zakatMoneySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate Zakat on cash and money'**
+  String get zakatMoneySubtitle;
+
+  /// No description provided for @zakatGold.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold Zakat'**
+  String get zakatGold;
+
+  /// No description provided for @zakatGoldSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate Zakat based on gold weight in grams'**
+  String get zakatGoldSubtitle;
+
+  /// No description provided for @zakatSilver.
+  ///
+  /// In en, this message translates to:
+  /// **'Silver Zakat'**
+  String get zakatSilver;
+
+  /// No description provided for @zakatSilverSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate Zakat based on silver weight in grams'**
+  String get zakatSilverSubtitle;
+
+  /// No description provided for @calculateZakat.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate Zakat'**
+  String get calculateZakat;
+
+  /// No description provided for @zakatMoneyInputTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Your Money Amount'**
+  String get zakatMoneyInputTitle;
+
+  /// No description provided for @zakatMoneyInputDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the amount of money you own and today\'s gold gram price to check the Nisab threshold.'**
+  String get zakatMoneyInputDescription;
+
+  /// No description provided for @zakatGoldInputTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Gold Weight in Grams'**
+  String get zakatGoldInputTitle;
+
+  /// No description provided for @zakatGoldInputDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the weight of gold you own and today\'s gold gram price.'**
+  String get zakatGoldInputDescription;
+
+  /// No description provided for @zakatSilverInputTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Silver Weight in Grams'**
+  String get zakatSilverInputTitle;
+
+  /// No description provided for @zakatSilverInputDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the weight of silver you own and today\'s silver gram price.'**
+  String get zakatSilverInputDescription;
+
+  /// No description provided for @moneyAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Money Amount'**
+  String get moneyAmount;
+
+  /// No description provided for @goldWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold Weight in Grams'**
+  String get goldWeight;
+
+  /// No description provided for @silverWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Silver Weight in Grams'**
+  String get silverWeight;
+
+  /// No description provided for @goldGramPriceToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Gold Gram Price'**
+  String get goldGramPriceToday;
+
+  /// No description provided for @silverGramPriceToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Silver Gram Price'**
+  String get silverGramPriceToday;
+
+  /// No description provided for @zakatValidAmountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid value greater than zero'**
+  String get zakatValidAmountRequired;
+
+  /// No description provided for @zakatValidGramPriceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid gram price greater than zero'**
+  String get zakatValidGramPriceRequired;
+
+  /// No description provided for @zakatDueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zakat is Due'**
+  String get zakatDueTitle;
+
+  /// No description provided for @zakatNotDueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zakat is Not Due'**
+  String get zakatNotDueTitle;
+
+  /// No description provided for @zakatTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Zakat Type'**
+  String get zakatTypeLabel;
+
+  /// No description provided for @zakatAssetValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Asset Value'**
+  String get zakatAssetValue;
+
+  /// No description provided for @zakatNisabValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Nisab Value'**
+  String get zakatNisabValue;
+
+  /// No description provided for @zakatRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Zakat Rate'**
+  String get zakatRateLabel;
+
+  /// No description provided for @zakatDueAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Zakat Due'**
+  String get zakatDueAmount;
+
+  /// No description provided for @calculateAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate Again'**
+  String get calculateAgain;
 }
 
 class _AppLocalizationsDelegate

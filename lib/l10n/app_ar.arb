@@ -863,6 +863,49 @@
 "loadingRequestData": "جاري تحميل بيانات الطلب...",
 "pleaseWaitMoment": "يرجى الانتظار قليلاً",
 "requestDetailsLoadFailed": "تعذر تحميل تفاصيل الطلب",
-"back": "رجوع"
+"back": "رجوع",
+"zakatCalculator": "حاسبة الزكاة",
+"zakatConditionsTitle": "شروط وجوب الزكاة",
+"zakatConditionNisab": "أن يبلغ المال النصاب الشرعي.",
+"zakatConditionOwnership": "أن يكون المال مملوكًا لصاحبه ملكًا تامًا.",
+"zakatConditionYear": "مرور الحول في الأموال التي يشترط فيها الحول.",
+"zakatCalculatorDisclaimer": "الحاسبة وسيلة إرشادية، ويُنصح بالرجوع إلى جهة شرعية مختصة في الحالات الخاصة.",
+
+"chooseZakatType": "اختر نوع الزكاة",
+"chooseZakatTypeHint": "اختر النوع الذي تريد حساب زكاته",
+
+"zakatMoney": "زكاة المال",
+"zakatMoneySubtitle": "حساب زكاة الأموال النقدية",
+"zakatGold": "زكاة الذهب",
+"zakatGoldSubtitle": "حساب الزكاة حسب وزن الذهب بالغرام",
+"zakatSilver": "زكاة الفضة",
+"zakatSilverSubtitle": "حساب الزكاة حسب وزن الفضة بالغرام",
+
+"calculateZakat": "حساب الزكاة",
+
+"zakatMoneyInputTitle": "أدخل مقدار الأموال",
+"zakatMoneyInputDescription": "أدخل مقدار المال الذي تملكه وسعر غرام الذهب اليوم ليتم التحقق من بلوغ النصاب.",
+"zakatGoldInputTitle": "أدخل وزن الذهب بالغرام",
+"zakatGoldInputDescription": "أدخل وزن الذهب الذي تملكه وسعر غرام الذهب اليوم.",
+"zakatSilverInputTitle": "أدخل وزن الفضة بالغرام",
+"zakatSilverInputDescription": "أدخل وزن الفضة الذي تملكه وسعر غرام الفضة اليوم.",
+
+"moneyAmount": "مقدار الأموال",
+"goldWeight": "وزن الذهب بالغرام",
+"silverWeight": "وزن الفضة بالغرام",
+"goldGramPriceToday": "سعر غرام الذهب اليوم",
+"silverGramPriceToday": "سعر غرام الفضة اليوم",
+
+"zakatValidAmountRequired": "يرجى إدخال قيمة صحيحة أكبر من صفر",
+"zakatValidGramPriceRequired": "يرجى إدخال سعر غرام صحيح أكبر من صفر",
+
+"zakatDueTitle": "الزكاة واجبة",
+"zakatNotDueTitle": "لم تجب الزكاة",
+"zakatTypeLabel": "نوع الزكاة",
+"zakatAssetValue": "قيمة المال",
+"zakatNisabValue": "قيمة النصاب",
+"zakatRateLabel": "نسبة الزكاة",
+"zakatDueAmount": "مقدار الزكاة المستحقة",
+"calculateAgain": "إعادة الحساب"
 
 }

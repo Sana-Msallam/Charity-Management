@@ -862,5 +862,48 @@
 "loadingRequestData": "Loading request data...",
 "pleaseWaitMoment": "Please wait a moment",
 "requestDetailsLoadFailed": "Could not load request details",
-"back": "Back"
+"back": "Back",
+"zakatCalculator": "Zakat Calculator",
+"zakatConditionsTitle": "Conditions for Zakat",
+"zakatConditionNisab": "The wealth must reach the required Nisab threshold.",
+"zakatConditionOwnership": "The wealth must be fully owned by its owner.",
+"zakatConditionYear": "A full lunar year must pass for wealth that requires Hawl.",
+"zakatCalculatorDisclaimer": "This calculator is for guidance only. For special cases, consult a qualified Islamic authority.",
+
+"chooseZakatType": "Choose Zakat Type",
+"chooseZakatTypeHint": "Choose the type of Zakat you want to calculate",
+
+"zakatMoney": "Money Zakat",
+"zakatMoneySubtitle": "Calculate Zakat on cash and money",
+"zakatGold": "Gold Zakat",
+"zakatGoldSubtitle": "Calculate Zakat based on gold weight in grams",
+"zakatSilver": "Silver Zakat",
+"zakatSilverSubtitle": "Calculate Zakat based on silver weight in grams",
+
+"calculateZakat": "Calculate Zakat",
+
+"zakatMoneyInputTitle": "Enter Your Money Amount",
+"zakatMoneyInputDescription": "Enter the amount of money you own and today's gold gram price to check the Nisab threshold.",
+"zakatGoldInputTitle": "Enter Gold Weight in Grams",
+"zakatGoldInputDescription": "Enter the weight of gold you own and today's gold gram price.",
+"zakatSilverInputTitle": "Enter Silver Weight in Grams",
+"zakatSilverInputDescription": "Enter the weight of silver you own and today's silver gram price.",
+
+"moneyAmount": "Money Amount",
+"goldWeight": "Gold Weight in Grams",
+"silverWeight": "Silver Weight in Grams",
+"goldGramPriceToday": "Today's Gold Gram Price",
+"silverGramPriceToday": "Today's Silver Gram Price",
+
+"zakatValidAmountRequired": "Please enter a valid value greater than zero",
+"zakatValidGramPriceRequired": "Please enter a valid gram price greater than zero",
+
+"zakatDueTitle": "Zakat is Due",
+"zakatNotDueTitle": "Zakat is Not Due",
+"zakatTypeLabel": "Zakat Type",
+"zakatAssetValue": "Asset Value",
+"zakatNisabValue": "Nisab Value",
+"zakatRateLabel": "Zakat Rate",
+"zakatDueAmount": "Zakat Due",
+"calculateAgain": "Calculate Again"
 }

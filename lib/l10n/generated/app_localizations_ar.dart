@@ -2155,4 +2155,119 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get back => 'رجوع';
+
+  @override
+  String get zakatCalculator => 'حاسبة الزكاة';
+
+  @override
+  String get zakatConditionsTitle => 'شروط وجوب الزكاة';
+
+  @override
+  String get zakatConditionNisab => 'أن يبلغ المال النصاب الشرعي.';
+
+  @override
+  String get zakatConditionOwnership =>
+      'أن يكون المال مملوكًا لصاحبه ملكًا تامًا.';
+
+  @override
+  String get zakatConditionYear =>
+      'مرور الحول في الأموال التي يشترط فيها الحول.';
+
+  @override
+  String get zakatCalculatorDisclaimer =>
+      'الحاسبة وسيلة إرشادية، ويُنصح بالرجوع إلى جهة شرعية مختصة في الحالات الخاصة.';
+
+  @override
+  String get chooseZakatType => 'اختر نوع الزكاة';
+
+  @override
+  String get chooseZakatTypeHint => 'اختر النوع الذي تريد حساب زكاته';
+
+  @override
+  String get zakatMoney => 'زكاة المال';
+
+  @override
+  String get zakatMoneySubtitle => 'حساب زكاة الأموال النقدية';
+
+  @override
+  String get zakatGold => 'زكاة الذهب';
+
+  @override
+  String get zakatGoldSubtitle => 'حساب الزكاة حسب وزن الذهب بالغرام';
+
+  @override
+  String get zakatSilver => 'زكاة الفضة';
+
+  @override
+  String get zakatSilverSubtitle => 'حساب الزكاة حسب وزن الفضة بالغرام';
+
+  @override
+  String get calculateZakat => 'حساب الزكاة';
+
+  @override
+  String get zakatMoneyInputTitle => 'أدخل مقدار الأموال';
+
+  @override
+  String get zakatMoneyInputDescription =>
+      'أدخل مقدار المال الذي تملكه وسعر غرام الذهب اليوم ليتم التحقق من بلوغ النصاب.';
+
+  @override
+  String get zakatGoldInputTitle => 'أدخل وزن الذهب بالغرام';
+
+  @override
+  String get zakatGoldInputDescription =>
+      'أدخل وزن الذهب الذي تملكه وسعر غرام الذهب اليوم.';
+
+  @override
+  String get zakatSilverInputTitle => 'أدخل وزن الفضة بالغرام';
+
+  @override
+  String get zakatSilverInputDescription =>
+      'أدخل وزن الفضة الذي تملكه وسعر غرام الفضة اليوم.';
+
+  @override
+  String get moneyAmount => 'مقدار الأموال';
+
+  @override
+  String get goldWeight => 'وزن الذهب بالغرام';
+
+  @override
+  String get silverWeight => 'وزن الفضة بالغرام';
+
+  @override
+  String get goldGramPriceToday => 'سعر غرام الذهب اليوم';
+
+  @override
+  String get silverGramPriceToday => 'سعر غرام الفضة اليوم';
+
+  @override
+  String get zakatValidAmountRequired => 'يرجى إدخال قيمة صحيحة أكبر من صفر';
+
+  @override
+  String get zakatValidGramPriceRequired =>
+      'يرجى إدخال سعر غرام صحيح أكبر من صفر';
+
+  @override
+  String get zakatDueTitle => 'الزكاة واجبة';
+
+  @override
+  String get zakatNotDueTitle => 'لم تجب الزكاة';
+
+  @override
+  String get zakatTypeLabel => 'نوع الزكاة';
+
+  @override
+  String get zakatAssetValue => 'قيمة المال';
+
+  @override
+  String get zakatNisabValue => 'قيمة النصاب';
+
+  @override
+  String get zakatRateLabel => 'نسبة الزكاة';
+
+  @override
+  String get zakatDueAmount => 'مقدار الزكاة المستحقة';
+
+  @override
+  String get calculateAgain => 'إعادة الحساب';
 }

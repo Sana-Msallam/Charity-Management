@@ -53,4 +53,5 @@ class ApiConstants {
   static const String orphanSupportFundWallet =
       '/api/donor/sponsorship-fund/wallet';
   static const String myRequests = '/requests/my-requests';
+ static const String zakatCalculate = '/api/zakat/calculate';
 }
