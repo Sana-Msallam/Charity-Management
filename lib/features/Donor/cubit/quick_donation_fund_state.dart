@@ -1,5 +1,5 @@
-import 'package:charity_management/Donor/model/quick_donation_fund_payment_intent_model.dart';
-import 'package:charity_management/Donor/model/quick_donation_fund_wallet_donation_model.dart';
+import 'package:charity_management/features/Donor/model/quick_donation_fund_payment_intent_model.dart';
+import 'package:charity_management/features/Donor/model/quick_donation_fund_wallet_donation_model.dart';
 
 enum QuickDonationFundPaymentStatus {
   initial,
