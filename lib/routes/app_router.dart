@@ -82,7 +82,13 @@ class AppRouter {
         return const PendingApprovalScreen();
 
       case AppRoutes.donorHome:
-        return DonorHomeScreen();
+        final arguments = settings.arguments;
+
+        return DonorHomeScreen(
+          isGuest: arguments is DonorHomeRouteArguments
+              ? arguments.isGuest
+              : false,
+        );
 
       case AppRoutes.beneficiaryHome:
         return const HomePage();

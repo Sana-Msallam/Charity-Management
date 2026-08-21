@@ -17,7 +17,8 @@ class RegisterBeneficiaryRequestModel {
   final File personalPhoto;
   final File familyStatement;
 
-  final String address;
+  final String addressAr;
+  final String addressEn;
   final String socialStatus;
   final bool isUnemployed;
   final double monthlyIncome;
@@ -35,7 +36,8 @@ class RegisterBeneficiaryRequestModel {
     required this.dateOfBirth,
     required this.personalPhoto,
     required this.familyStatement,
-    required this.address,
+    required this.addressAr,
+    required this.addressEn,
     required this.socialStatus,
     required this.isUnemployed,
     required this.monthlyIncome,
@@ -58,7 +60,7 @@ class RegisterBeneficiaryRequestModel {
 
       'familyStatement': await MultipartFile.fromFile(familyStatement.path),
 
-      'address': jsonEncode({'area': address}),
+      'address': jsonEncode({'ar': addressAr, 'en': addressEn}),
       'socialStatus': socialStatus,
       'isUnemployed': isUnemployed,
       'monthlyIncome': monthlyIncome,

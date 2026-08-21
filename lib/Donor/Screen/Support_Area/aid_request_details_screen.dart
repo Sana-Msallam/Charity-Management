@@ -1,5 +1,6 @@
 import 'package:charity_management/Donor/Profile/Cubit/profile_cubit.dart';
 import 'package:charity_management/Donor/Profile/Cubit/profile_state.dart';
+import 'package:charity_management/Donor/guest_login_required_dialog.dart';
 import 'package:charity_management/Donor/cubit/aid_request_details_cubit.dart';
 import 'package:charity_management/Donor/cubit/aid_request_details_state.dart';
 import 'package:charity_management/Payment/Screen/checkout.dart';
@@ -9,9 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AidRequestDetailsScreen extends StatefulWidget {
-  const AidRequestDetailsScreen({super.key, required this.id});
+  const AidRequestDetailsScreen({
+    super.key,
+    required this.id,
+    this.isGuest = false,
+  });
 
   final int id;
+  final bool isGuest;
 
   @override
   State<AidRequestDetailsScreen> createState() =>
@@ -35,7 +41,11 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _profileCubit = ProfileCubit()..fetchProfile();
+    _profileCubit = ProfileCubit();
+
+    if (!widget.isGuest) {
+      _profileCubit.fetchProfile();
+    }
   }
 
   @override
@@ -346,6 +356,59 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
       return _buildCompletedDonationState(isArabic);
     }
 
+    if (widget.isGuest) {
+      return Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: FilledButton.icon(
+              onPressed: () => showGuestLoginRequiredDialog(context),
+              icon: const Icon(Icons.credit_card_rounded),
+              label: Text(
+                isArabic ? 'التبرع بالبطاقة البنكية' : 'Donate by bank card',
+              ),
+              style: FilledButton.styleFrom(
+                backgroundColor: _accentColor,
+                foregroundColor: _primaryColor,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'IBM Plex Sans Arabic',
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                elevation: 0,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: OutlinedButton.icon(
+              onPressed: () => showGuestLoginRequiredDialog(context),
+              icon: const Icon(Icons.account_balance_wallet_outlined),
+              label: Text(isArabic ? 'التبرع من المحفظة' : 'Donate from wallet'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: _greenColor,
+                side: const BorderSide(color: _greenColor, width: 1.4),
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'IBM Plex Sans Arabic',
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     final walletDisabledMessage = _walletDisabledMessage(isArabic, donorWallet);
 
     return Column(
@@ -486,6 +549,11 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
     required String paidAmount,
     required String remainingAmount,
   }) {
+    if (widget.isGuest) {
+      showGuestLoginRequiredDialog(context);
+      return;
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -515,6 +583,11 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
     required String remainingAmount,
     required double walletBalance,
   }) {
+    if (widget.isGuest) {
+      showGuestLoginRequiredDialog(context);
+      return;
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(

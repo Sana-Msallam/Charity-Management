@@ -2,7 +2,8 @@ class ApiConstants {
   ApiConstants._();
 
   static const String baseUrl =
-      'https://bbs-theories-geological-acne.trycloudflare.com';
+      'https://wireless-extent-ids-capable.trycloudflare.com';
+  // static const String baseUrl = 'http://192.168.1.13:3000';
 
   static const String login = '/auth/login/client';
 
@@ -11,6 +12,11 @@ class ApiConstants {
   static const String verifyOtp = '/auth/register/verify-otp';
   static const String requestPasswordResetOtp =
       '/auth/forgot-password/request-otp';
+  static const String notificationRegistration = '/notifications/registration';
+  static const String notifications = '/notifications';
+  static const String unreadNotificationsCount = '/notifications/unread-count';
+  static const String readAllNotifications = '/notifications/read-all';
+  static String readNotification(int id) => '/notifications/$id/read';
 
   static const String resetPassword = '/auth/forgot-password/reset';
 
@@ -37,6 +43,8 @@ class ApiConstants {
 
   static const String sponsorships = '/sponsorships';
   static const String cancelSponsorship = '/sponsorships';
+  static String annualReports(int sponsorshipId) =>
+      '/sponsorships/$sponsorshipId/annual-reports';
   static const String completedAidCases =
       '/public/statistics/completed-aid-cases';
   static const String logout = '/auth/logout';
@@ -52,4 +60,10 @@ class ApiConstants {
 
   static const String orphanSupportFundWallet =
       '/api/donor/sponsorship-fund/wallet';
+
+  static const String quickDonationFundPaymentIntent =
+      '/api/donor/quick-aid-fund/payment-intent';
+
+  static const String quickDonationFundWallet =
+      '/api/donor/quick-aid-fund/wallet';
 }

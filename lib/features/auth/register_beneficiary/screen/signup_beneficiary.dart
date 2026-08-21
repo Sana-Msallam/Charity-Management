@@ -70,6 +70,25 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
     'ريف دمشق',
   ];
 
+  final Map<String, String> addressEnglish = {
+    'مزة': 'Al Mazzeh',
+    'ميدان': 'Al Midan',
+    'مهاجرين': 'Al Muhajireen',
+    'عفيف': 'Afif',
+    'ركن الدين': 'Rukn Al Din',
+    'صحنايا': 'Sahnaya',
+    'المالكي': 'Al Malki',
+    'شارع بغداد': 'Baghdad Street',
+    'كفرسوسة': 'Kafr Sousa',
+    'برزة': 'Barzeh',
+    'شعلان': 'Shaalan',
+    'شارع الحمرا': 'Al Hamra Street',
+    'ميسات': 'Maysat',
+    'الصالحية': 'Al Salihiyah',
+    'المزرعة': 'Al Mazraa',
+    'ريف دمشق': 'Rural Damascus',
+  };
+
   final List<String> socialStatusOptions = [
     'SINGLE',
     'MARRIED',
@@ -138,7 +157,8 @@ class _SignUpBeneficiaryScreenState extends State<SignUpBeneficiaryScreen> {
       dateOfBirth: dateOfBirthController.text,
       personalPhoto: personalImage!,
       familyStatement: familyStatementImage!,
-      address: selectedAddress!,
+      addressAr: selectedAddress!,
+      addressEn: addressEnglish[selectedAddress!]!,
       socialStatus: selectedSocialStatus,
       isUnemployed: isUnemployed,
       monthlyIncome: monthlyIncomeController.text,

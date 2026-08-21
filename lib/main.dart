@@ -9,8 +9,9 @@ import 'package:charity_management/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:country_picker/country_picker.dart';
-
-/*Future<void> main() async {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:charity_management/features/notifications/service/firebase_notification_service.dart';/*Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final languageCubit = await LanguageCubit.create();
 
@@ -69,6 +70,10 @@ textTheme: ThemeData.light().textTheme,          ),
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
+await FirebaseNotificationService.initialize();
   debugPrint('========== MAIN START ==========');
 
   final LanguageCubit languageCubit = await LanguageCubit.create();

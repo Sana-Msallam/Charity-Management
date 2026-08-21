@@ -1322,6 +1322,56 @@ class AppLocalizationsAr extends AppLocalizations {
       'طلب الكفالة ما زال قيد الانتظار ولم يتم تخصيص يتيم لك حتى الآن.';
 
   @override
+  String get annualReportsTitle => 'التقارير السنوية';
+
+  @override
+  String get annualReportsSubtitle => 'تابع أحدث تقرير عن حالة اليتيم وتطوره';
+
+  @override
+  String annualReportYear(int year) {
+    return 'التقرير السنوي $year';
+  }
+
+  @override
+  String annualReportNumber(int number) {
+    return 'التقرير رقم $number';
+  }
+
+  @override
+  String get viewReport => 'عرض التقرير';
+
+  @override
+  String get noAnnualReportsYet => 'لا توجد تقارير سنوية حتى الآن';
+
+  @override
+  String get annualReportsLoading => 'جاري تحميل التقارير السنوية...';
+
+  @override
+  String get annualReportsLoadFailed => 'تعذر تحميل التقارير السنوية';
+
+  @override
+  String annualReportPreviewTitle(int year) {
+    return 'التقرير السنوي $year';
+  }
+
+  @override
+  String get reportImageLoadFailed => 'تعذر تحميل صورة التقرير';
+
+  @override
+  String get saveAnnualReportDialogTitle => 'حفظ التقرير السنوي';
+
+  @override
+  String downloadReportSuccess(String fileName) {
+    return 'تم حفظ $fileName بنجاح';
+  }
+
+  @override
+  String get downloadReportFailed => 'تعذر تنزيل التقرير';
+
+  @override
+  String get close => 'إغلاق';
+
+  @override
   String loginSuccess(String firstName) {
     return 'تم تسجيل الدخول بنجاح، أهلاً $firstName';
   }

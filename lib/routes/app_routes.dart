@@ -33,3 +33,9 @@ class ApplicantInfoRouteArguments {
 
   final String requestType;
 }
+
+class DonorHomeRouteArguments {
+  const DonorHomeRouteArguments({this.isGuest = false});
+
+  final bool isGuest;
+}

@@ -13,12 +13,14 @@ class SupportCategoryScreen extends StatefulWidget {
   final String categoryTitle;
   final Color bannerColor;
   final int categoryId;
+  final bool isGuest;
 
   const SupportCategoryScreen({
     super.key,
     required this.categoryTitle,
     required this.bannerColor,
     required this.categoryId,
+    this.isGuest = false,
   });
 
   @override
@@ -570,7 +572,10 @@ class _SupportCategoryScreenState extends State<SupportCategoryScreen> {
       MaterialPageRoute(
         builder: (_) => BlocProvider(
           create: (_) => AidRequestDetailsCubit()..fetchDetails(item.id),
-          child: AidRequestDetailsScreen(id: item.id),
+          child: AidRequestDetailsScreen(
+            id: item.id,
+            isGuest: widget.isGuest,
+          ),
         ),
       ),
     ).then((_) {
