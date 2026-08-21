@@ -132,7 +132,7 @@ class _AboutSectionCardState extends State<AboutSectionCard> {
     return Column(
       children: [
         SizedBox(
-          height: 415,
+          height: 350,
           child: PageView.builder(
             controller: _pageController,
             itemCount: slides.length,
@@ -238,7 +238,7 @@ class _AboutSlideCard extends StatelessWidget {
   ) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(22),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(
@@ -278,7 +278,7 @@ class _AboutSlideCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: AppColors.onSurface,
-              fontSize: 24,
+              fontSize: 21,
               fontWeight: FontWeight.w800,
               height: 1.35,
               letterSpacing: -0.25,
@@ -287,7 +287,7 @@ class _AboutSlideCard extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
 
           // ============================================
           // الخط الصغير تحت العنوان
@@ -305,7 +305,7 @@ class _AboutSlideCard extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
 
           // ============================================
           // الوصف
@@ -329,7 +329,7 @@ class _AboutSlideCard extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
 
           // ============================================
           // الصورة

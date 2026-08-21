@@ -306,7 +306,7 @@ class _RequestTrackingViewState
 
                               onEdit: () {
                                 debugPrint(
-                                  'Edit request #${request.id}',
+                                  'Edit request ${request.id}',
                                 );
 
                                 Navigator.of(
@@ -330,7 +330,7 @@ class _RequestTrackingViewState
                               onCancel: () {
                                 debugPrint(
                                   'Cancel button clicked '
-                                  'for request #${request.id}',
+                                  'for request ${request.id}',
                                 );
 
                                 _showCancelDialog(
@@ -505,7 +505,7 @@ class _RequestTrackingViewState
               onPressed: () {
                 debugPrint(
                   'User cancelled cancel dialog '
-                  'for request #$requestId',
+                  'for request $requestId',
                 );
 
                 Navigator.of(

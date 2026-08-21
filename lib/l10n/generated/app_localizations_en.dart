@@ -638,7 +638,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get individuals => 'people';
 
   @override
-  String get currencyRiyal => 'Riyal';
+  String get currencyRiyal => '\$';
 
   @override
   String get currentStep => 'Current step';
@@ -1465,7 +1465,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'There are no completed projects at the moment';
 
   @override
-  String get riyal => 'SAR';
+  String get riyal => '\$';
 
   @override
   String get profileLoadError => 'Unable to load profile';
@@ -1572,7 +1572,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String cancelRequestConfirmation(int requestId) {
-    return 'Are you sure you want to cancel request #$requestId?\nYou will not be able to undo this action.';
+    return 'Are you sure you want to cancel request $requestId?\nYou will not be able to undo this action.';
   }
 
   @override
@@ -1589,7 +1589,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String requestNumber(int requestId) {
-    return 'Request #$requestId';
+    return 'Request $requestId';
   }
 
   @override
@@ -1609,7 +1609,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String amountRiyal(String amount) {
-    return '$amount SAR';
+    return '$amount \$';
   }
 
   @override
@@ -1738,7 +1738,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get academicAchievement => 'Academic Achievement';
 
   @override
-  String get highSchool => 'High School';
+  String get highSchool => 'School';
 
   @override
   String get diploma => 'Diploma';

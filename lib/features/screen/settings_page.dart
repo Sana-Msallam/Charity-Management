@@ -105,21 +105,9 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
 
-              const SizedBox(height: 14),
-
               // ======================================
-              // APPEARANCE
+              // تم حذف خيار المظهر من هنا
               // ======================================
-
-              _buildSettingCard(
-                icon: Icons.dark_mode_outlined,
-                title: l10n.appearance,
-                subtitle:
-                    l10n.changeAppAppearance,
-                onTap: () {
-                  // لاحقاً نربط الوضع الداكن
-                },
-              ),
 
               const SizedBox(height: 28),
 

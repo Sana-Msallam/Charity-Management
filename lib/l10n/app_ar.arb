@@ -206,7 +206,7 @@
   "beneficiariesNeedSupport": "عدد الأفراد المحتاجين للدعم",
   "individual": "فرد",
   "individuals": "أفراد",
-  "currencyRiyal": "ريال",
+"currencyRiyal": "$",
   "currentStep": "الخطوة الحالية",
   "lastStep": "الخطوة الأخيرة",
   "stepOfTotal": "{currentStep} من {totalSteps}",
@@ -481,7 +481,7 @@
 "givingMakesDifference": "العطاء يصنع الفرق",
 "noCompletedProjects": "لا توجد مشاريع مكتملة حالياً",
 "urgent": "عاجل",
-"riyal": "ريال",
+"riyal": "$",
 "profileTitle": "حسابي",
 "profileLoadError": "تعذر تحميل الملف الشخصي",
 "editProfile": "تعديل البيانات",
@@ -533,7 +533,7 @@
 "cancelledRequests": "الملغاة",
 
 "cancelRequestTitle": "إلغاء الطلب",
-"cancelRequestConfirmation": "هل أنت متأكد من رغبتك في إلغاء الطلب رقم #{requestId}؟\nلن تتمكن من التراجع عن هذه العملية.",
+"cancelRequestConfirmation": "هل أنت متأكد من رغبتك في إلغاء الطلب رقم {requestId}؟\nلن تتمكن من التراجع عن هذه العملية.",
 "@cancelRequestConfirmation": {
   "placeholders": {
     "requestId": {
@@ -547,7 +547,7 @@
 
 "requestsLoadError": "تعذر تحميل الطلبات",
 "noRequestsForStatus": "لا توجد طلبات في هذه الحالة",
-"requestNumber": "طلب #{requestId}",
+"requestNumber": "طلب {requestId}",
 "@requestNumber": {
   "placeholders": {
     "requestId": {
@@ -564,7 +564,7 @@
 
 "cost": "التكلفة",
 "submissionDate": "تاريخ التقديم",
-"amountRiyal": "{amount} ريال",
+"amountRiyal": "{amount} $",
 "@amountRiyal": {
   "placeholders": {
     "amount": {
@@ -576,7 +576,7 @@
 "editRequest": "تعديل الطلب",
 
 "fundingProgress": "متابعة التمويل",
-"fundingAmountOf": "{current} من {total} ريال",
+"fundingAmountOf": "{current} من {total} $",
 "@fundingAmountOf": {
   "placeholders": {
     "current": {
@@ -588,7 +588,7 @@
   }
 },
 
-"remainingAmount": "المتبقي: {amount} ريال",
+"fundingAmountOf": "{current} من {total} $",
 "@remainingAmount": {
   "placeholders": {
     "amount": {
@@ -656,7 +656,7 @@
 "editEducationRequestDetails": "تعديل تفاصيل الطلب التعليمي",
 
 "academicAchievement": "التحصيل الدراسي",
-"highSchool": "ثانوي",
+"highSchool": "مدرسي",
 "diploma": "دبلوم",
 "bachelor": "بكالوريوس",
 "master": "ماجستير",

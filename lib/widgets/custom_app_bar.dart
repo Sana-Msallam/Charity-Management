@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:charity_management/constants/api_constants.dart';
 import 'package:charity_management/features/notifications/widget/notification_bell_button.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
@@ -20,6 +21,10 @@ class CustomAppBar extends StatelessWidget
     final AppLocalizations l10n =
         AppLocalizations.of(context);
 
+    final String languageCode =
+        Localizations.localeOf(context)
+            .languageCode;
+
     final String? fixedProfileImageUrl =
         _getProfileImageUrl(
       profileImageUrl,
@@ -27,19 +32,24 @@ class CustomAppBar extends StatelessWidget
 
     return AppBar(
       backgroundColor:
-          AppColors.surface.withOpacity(0.9),
+          AppColors.surface.withValues(
+        alpha: 0.9,
+      ),
       elevation: 0,
       scrolledUnderElevation: 0,
       titleSpacing: 20,
 
       // ==========================================
       // اسم الجمعية + اللوغو
-      // الاتجاه يتغير تلقائياً حسب لغة التطبيق
       // ==========================================
 
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // ========================================
+          // اللوغو
+          // ========================================
+
           Container(
             width: 44,
             height: 44,
@@ -48,8 +58,10 @@ class CustomAppBar extends StatelessWidget
               color: AppColors.surface,
               shape: BoxShape.circle,
               border: Border.all(
-                color:
-                    AppColors.primary.withOpacity(0.2),
+                color: AppColors.primary
+                    .withValues(
+                  alpha: 0.2,
+                ),
                 width: 2,
               ),
             ),
@@ -61,7 +73,13 @@ class CustomAppBar extends StatelessWidget
             ),
           ),
 
-          const SizedBox(width: 10),
+          const SizedBox(
+            width: 10,
+          ),
+
+          // ========================================
+          // اسم الجمعية
+          // ========================================
 
           Text(
             l10n.associationName,
@@ -75,13 +93,10 @@ class CustomAppBar extends StatelessWidget
       ),
 
       // ==========================================
-      // الصورة + الجرس
+      // PROFILE + NOTIFICATION
       //
-      // لا يوجد Directionality ثابت هنا.
-      // Flutter سيقلب الاتجاه تلقائياً:
-      //
-      // AR → RTL
-      // EN → LTR
+      // بالعربي والإنكليزي:
+      // نحافظ على مكان الصورة بالنسبة للجرس
       // ==========================================
 
       actions: [
@@ -89,50 +104,66 @@ class CustomAppBar extends StatelessWidget
           padding: const EdgeInsets.symmetric(
             horizontal: 12,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // ========================================
-              // صورة البروفايل
-              // ========================================
+          child: Directionality(
+            textDirection:
+                languageCode == 'ar'
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // ==================================
+                // صورة البروفايل
+                // ==================================
 
-              InkWell(
-                onTap: onProfileTap,
-                borderRadius:
-                    BorderRadius.circular(30),
-                child: Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors
-                        .primaryContainer
-                        .withOpacity(0.3),
-                    border: Border.all(
-                      color: AppColors.primary
-                          .withOpacity(0.25),
-                      width: 1.5,
-                    ),
+                InkWell(
+                  onTap: onProfileTap,
+                  borderRadius:
+                      BorderRadius.circular(
+                    30,
                   ),
-                  child: ClipOval(
-                    child: _buildProfileImage(
-                      fixedProfileImageUrl,
+                  child: Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors
+                          .primaryContainer
+                          .withValues(
+                        alpha: 0.3,
+                      ),
+                      border: Border.all(
+                        color: AppColors.primary
+                            .withValues(
+                          alpha: 0.25,
+                        ),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: ClipOval(
+                      child:
+                          _buildProfileImage(
+                        fixedProfileImageUrl,
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(width: 6),
+                const SizedBox(
+                  width: 6,
+                ),
 
-              // ========================================
-              // الجرس
-              // ========================================
+                // ==================================
+                // الجرس
+                // ==================================
 
-              const NotificationBellButton(
-                iconColor: AppColors.brandGray,
-                iconSize: 28,
-              ),
-            ],
+                const NotificationBellButton(
+                  iconColor:
+                      AppColors.brandGray,
+                  iconSize: 28,
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -157,41 +188,55 @@ class CustomAppBar extends StatelessWidget
       );
     }
 
-    return Image.network(
-      imageUrl,
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
       width: 42,
       height: 42,
       fit: BoxFit.cover,
 
-      loadingBuilder: (
-        context,
-        child,
-        loadingProgress,
-      ) {
-        if (loadingProgress == null) {
-          return child;
-        }
+      // ======================================
+      // انتقال سريع للصورة
+      // ======================================
 
+      fadeInDuration:
+          const Duration(
+        milliseconds: 120,
+      ),
+
+      fadeOutDuration:
+          const Duration(
+        milliseconds: 80,
+      ),
+
+      // ======================================
+      // أثناء تحميل الصورة
+      // ======================================
+
+      placeholder: (
+        context,
+        url,
+      ) {
         return const Center(
-          child: SizedBox(
-            width: 18,
-            height: 18,
-            child:
-                CircularProgressIndicator(
-              strokeWidth: 2,
-              color: AppColors.primary,
-            ),
+          child: Icon(
+            Icons.person_rounded,
+            color: AppColors.primary,
+            size: 26,
           ),
         );
       },
 
-      errorBuilder: (
+      // ======================================
+      // في حال فشل تحميل الصورة
+      // ======================================
+
+      errorWidget: (
         context,
+        url,
         error,
-        stackTrace,
       ) {
         debugPrint(
-          'CustomAppBar profile image error: $error',
+          'CustomAppBar profile image error: '
+          '$error',
         );
 
         return const Center(
@@ -217,20 +262,29 @@ class CustomAppBar extends StatelessWidget
       return null;
     }
 
-    String fixedUrl =
-        url.trim();
+    String fixedUrl = url.trim();
 
-    fixedUrl =
-        fixedUrl.replaceFirst(
+    // ========================================
+    // localhost -> API base URL
+    // ========================================
+
+    fixedUrl = fixedUrl.replaceFirst(
       'http://localhost:3000',
       ApiConstants.baseUrl,
     );
 
-    fixedUrl =
-        fixedUrl.replaceFirst(
+    // ========================================
+    // 127.0.0.1 -> API base URL
+    // ========================================
+
+    fixedUrl = fixedUrl.replaceFirst(
       'http://127.0.0.1:3000',
       ApiConstants.baseUrl,
     );
+
+    // ========================================
+    // Relative URL
+    // ========================================
 
     if (fixedUrl.startsWith('/')) {
       fixedUrl =
@@ -238,11 +292,16 @@ class CustomAppBar extends StatelessWidget
     }
 
     debugPrint(
-      'CustomAppBar profile image URL: $fixedUrl',
+      'CustomAppBar profile image URL: '
+      '$fixedUrl',
     );
 
     return fixedUrl;
   }
+
+  // ==========================================
+  // APP BAR HEIGHT
+  // ==========================================
 
   @override
   Size get preferredSize =>

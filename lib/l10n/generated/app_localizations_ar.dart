@@ -632,7 +632,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get individuals => 'أفراد';
 
   @override
-  String get currencyRiyal => 'ريال';
+  String get currencyRiyal => '\$';
 
   @override
   String get currentStep => 'الخطوة الحالية';
@@ -949,7 +949,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String remainingAmount(String amount) {
-    return 'المتبقي: $amount ريال';
+    return 'المبلغ المتبقي: $amount';
   }
 
   @override
@@ -1446,7 +1446,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noCompletedProjects => 'لا توجد مشاريع مكتملة حالياً';
 
   @override
-  String get riyal => 'ريال';
+  String get riyal => '\$';
 
   @override
   String get profileLoadError => 'تعذر تحميل الملف الشخصي';
@@ -1549,7 +1549,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String cancelRequestConfirmation(int requestId) {
-    return 'هل أنت متأكد من رغبتك في إلغاء الطلب رقم #$requestId؟\nلن تتمكن من التراجع عن هذه العملية.';
+    return 'هل أنت متأكد من رغبتك في إلغاء الطلب رقم $requestId؟\nلن تتمكن من التراجع عن هذه العملية.';
   }
 
   @override
@@ -1566,7 +1566,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String requestNumber(int requestId) {
-    return 'طلب #$requestId';
+    return 'طلب $requestId';
   }
 
   @override
@@ -1586,7 +1586,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String amountRiyal(String amount) {
-    return '$amount ريال';
+    return '$amount \$';
   }
 
   @override
@@ -1597,7 +1597,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String fundingAmountOf(String current, String total) {
-    return '$current من $total ريال';
+    return '$current من $total \$';
   }
 
   @override
@@ -1713,7 +1713,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get academicAchievement => 'التحصيل الدراسي';
 
   @override
-  String get highSchool => 'ثانوي';
+  String get highSchool => 'مدرسي';
 
   @override
   String get diploma => 'دبلوم';
