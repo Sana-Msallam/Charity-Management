@@ -1,4 +1,4 @@
-import 'package:charity_management/Donor/model/aid_request_details_model.dart';
+import 'package:charity_management/features/Donor/model/aid_request_details_model.dart';
 
 class WalletAidRequestDonationModel {
   const WalletAidRequestDonationModel({

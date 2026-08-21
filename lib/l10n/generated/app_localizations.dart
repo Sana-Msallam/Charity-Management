@@ -1028,12 +1028,6 @@ abstract class AppLocalizations {
   /// **'Wallet Top-up'**
   String get walletTopUp;
 
-  /// No description provided for @aidRequestDonation.
-  ///
-  /// In en, this message translates to:
-  /// **'Aid Request'**
-  String get aidRequestDonation;
-
   /// No description provided for @walletBalance.
   ///
   /// In en, this message translates to:
@@ -2125,12 +2119,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sponsored list'**
   String get sponsoredList;
-
-  /// No description provided for @retry.
-  ///
-  /// In en, this message translates to:
-  /// **'Try Again'**
-  String get retry;
 
   /// No description provided for @noSponsorshipsForStatus.
   ///

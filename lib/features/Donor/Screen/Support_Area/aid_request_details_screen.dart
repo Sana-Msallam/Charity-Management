@@ -103,7 +103,7 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
           onPressed: () {
             context
                 .read<AidRequestDetailsCubit>()
-                .fetchDetails(id);
+                .fetchDetails(widget.id);
           },
           child: const Text(
             'إعادة المحاولة',
@@ -297,8 +297,13 @@ class _AidRequestDetailsScreenState extends State<AidRequestDetailsScreen> {
                             context,
 
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  CheckoutScreen(currentCaseName: item.title),
+                              builder: (context) => CheckoutScreen(
+                                requestId: widget.id,
+                                title: item.title,
+                                totalCost: item.totalCost,
+                                paidAmount: item.paidAmount,
+                                remainingAmount: item.remainingAmount,
+                              ),
                             ),
                           );
                         },

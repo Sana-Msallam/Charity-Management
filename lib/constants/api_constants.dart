@@ -1,7 +1,7 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'http://10.195.118.11:3000';
+  static const String baseUrl = 'https://beats-reason-enquiry-proceed.trycloudflare.com';
 
 
   static const String login = '/auth/login/client';

@@ -489,9 +489,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletTopUp => 'Wallet Top-up';
 
   @override
-  String get aidRequestDonation => 'Aid Request';
-
-  @override
   String get walletBalance => 'Wallet Balance';
 
   @override
@@ -1083,9 +1080,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sponsoredList => 'Sponsored list';
-
-  @override
-  String get retry => 'Try Again';
 
   @override
   String get noSponsorshipsForStatus => 'No sponsorships with this status';

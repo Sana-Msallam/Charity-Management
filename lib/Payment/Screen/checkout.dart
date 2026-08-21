@@ -2,7 +2,7 @@ import 'package:charity_management/Payment/cubit/aid_request_payment_cubit.dart'
 import 'package:charity_management/Payment/cubit/aid_request_payment_state.dart';
 import 'package:charity_management/Payment/cubit/wallet_aid_request_donation_cubit.dart';
 import 'package:charity_management/Payment/cubit/wallet_aid_request_donation_state.dart';
-import 'package:charity_management/Donor/model/aid_request_details_model.dart';
+import 'package:charity_management/features/Donor/model/aid_request_details_model.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

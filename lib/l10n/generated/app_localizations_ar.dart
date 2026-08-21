@@ -484,9 +484,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get walletTopUp => 'شحن المحفظة';
 
   @override
-  String get aidRequestDonation => 'تبرع لطلب مساعدة';
-
-  @override
   String get walletBalance => 'رصيد المحفظة';
 
   @override
@@ -1068,9 +1065,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sponsoredList => 'قائمة المكفولين';
-
-  @override
-  String get retry => 'إعادة المحاولة';
 
   @override
   String get noSponsorshipsForStatus => 'لا توجد كفالات بهذه الحالة';

@@ -1,5 +1,5 @@
-import 'package:charity_management/Donor/Profile/Cubit/profile_cubit.dart';
-import 'package:charity_management/Donor/Profile/Cubit/profile_state.dart';
+import 'package:charity_management/features/Donor/cubit/profile_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/profile_state.dart';
 import 'package:charity_management/Orphan/cubit/orphan_support_fund_cubit.dart';
 import 'package:charity_management/Orphan/cubit/orphan_support_fund_state.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
@@ -687,10 +687,10 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
 
     if (state is ProfileSuccessState) {
       return _DonorWalletInfo(
-        isSponsor: state.profile.isSponsor ?? widget.isSponsor,
+        isSponsor: state.profile.isSponsor,
         walletBalance:
             _walletBalanceAfterDonation ??
-            _parseAmount(state.profile.walletBalance ?? ''),
+            state.profile.walletBalance.toDouble(),
       );
     }
 

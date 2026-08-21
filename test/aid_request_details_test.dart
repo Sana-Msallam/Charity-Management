@@ -1,7 +1,7 @@
-import 'package:charity_management/Donor/cubit/aid_request_details_cubit.dart';
-import 'package:charity_management/Donor/cubit/aid_request_details_state.dart';
-import 'package:charity_management/Donor/model/aid_request_model.dart';
-import 'package:charity_management/Donor/model/aid_request_details_model.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_details_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/aid_request_details_state.dart';
+import 'package:charity_management/features/Donor/model/aid_request_model.dart';
+import 'package:charity_management/features/Donor/model/aid_request_details_model.dart';
 import 'package:charity_management/constants/api_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
