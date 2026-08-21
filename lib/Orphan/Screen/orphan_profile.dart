@@ -1,9 +1,18 @@
+import 'dart:typed_data';
+
+import 'package:charity_management/Orphan/cubit/annual_reports_cubit.dart';
+import 'package:charity_management/Orphan/cubit/annual_reports_state.dart';
+import 'package:charity_management/Orphan/model/annual_report_model.dart';
 import 'package:charity_management/Payment/cubit/wallet_sponsorship_donation_cubit.dart';
 import 'package:charity_management/Payment/cubit/wallet_sponsorship_donation_state.dart';
 import 'package:charity_management/Sponsership/cubit/cancel_sponsorship_cubit.dart';
 import 'package:charity_management/Sponsership/cubit/cancel_sponsorship_state.dart';
 import 'package:charity_management/Sponsership/model/sponsorship_list_model.dart';
+import 'package:charity_management/constants/api_constants.dart';
+import 'package:charity_management/constants/dio_client.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,6 +36,19 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
       providers: [
         BlocProvider(create: (_) => CancelSponsorshipCubit()),
         BlocProvider(create: (_) => WalletSponsorshipDonationCubit()),
+        BlocProvider(
+          create: (_) {
+            final cubit = AnnualReportsCubit();
+            if (_canShowAnnualReports()) {
+              cubit.loadAnnualReports(
+                sponsorshipId: widget.sponsorship.id,
+                localizations: l10n,
+              );
+            }
+
+            return cubit;
+          },
+        ),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -153,6 +175,10 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
                                 l10n,
                                 isRtl,
                               ),
+                              if (_canShowAnnualReports()) ...[
+                                const SizedBox(height: 20),
+                                _buildAnnualReportsSection(context, isRtl),
+                              ],
                               if (widget.sponsorship.rejectionReason !=
                                   null) ...[
                                 const SizedBox(height: 20),
@@ -249,6 +275,517 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
 
   bool _canPayMonthlySponsorship() {
     return widget.sponsorship.status.toUpperCase() == 'ACCEPTED';
+  }
+
+  bool _canShowAnnualReports() {
+    return widget.sponsorship.status.toUpperCase() == 'ACCEPTED';
+  }
+
+  Widget _buildAnnualReportsSection(BuildContext context, bool isRtl) {
+    final l10n = AppLocalizations.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFD1C5B1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFCE6A3),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.description_outlined,
+                  color: Color(0xFF735C00),
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.annualReportsTitle,
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        color: Color(0xFF735C00),
+                        fontSize: 18,
+                        fontFamily: 'IBM Plex Sans Arabic',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      l10n.annualReportsSubtitle,
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        color: Color(0xFF7C766C),
+                        fontSize: 12,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          BlocBuilder<AnnualReportsCubit, AnnualReportsState>(
+            builder: (context, state) {
+              return _buildAnnualReportsContent(context, state, l10n, isRtl);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnnualReportsContent(
+    BuildContext context,
+    AnnualReportsState state,
+    AppLocalizations l10n,
+    bool isRtl,
+  ) {
+    if (state is AnnualReportsLoading || state is AnnualReportsInitial) {
+      return _buildAnnualReportsLoading(l10n);
+    }
+
+    if (state is AnnualReportsFailure) {
+      return _buildAnnualReportsError(context, state.message, l10n);
+    }
+
+    if (state is AnnualReportsEmpty) {
+      return _buildEmptyAnnualReports(l10n);
+    }
+
+    if (state is AnnualReportsSuccess) {
+      return Column(
+        children: state.reports
+            .map(
+              (report) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _buildAnnualReportCard(context, report, l10n, isRtl),
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    return _buildEmptyAnnualReports(l10n);
+  }
+
+  Widget _buildAnnualReportCard(
+    BuildContext context,
+    AnnualReportModel report,
+    AppLocalizations l10n,
+    bool isRtl,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF8F1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFF1DEAA)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 54,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0xFFE3D5B3)),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Icon(
+                      Icons.article_outlined,
+                      color: Color(0xFF735C00),
+                      size: 28,
+                    ),
+                    Positioned(
+                      right: 4,
+                      top: 4,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFB2E7C6),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.annualReportYear(report.reportYear),
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        color: Color(0xFF1F1B14),
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      l10n.annualReportNumber(report.reportNumber),
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                        color: Color(0xFF735C00),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.calendar_today_outlined,
+                          size: 13,
+                          color: Color(0xFF7C766C),
+                        ),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: Text(
+                            _formatDate(report.createdAt),
+                            style: const TextStyle(
+                              color: Color(0xFF7C766C),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 42,
+                  child: ElevatedButton.icon(
+                    onPressed: () => _showReportPreview(context, report, isRtl),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF735C00),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    icon: const Icon(Icons.visibility_outlined, size: 19),
+                    label: Text(
+                      l10n.viewReport,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              SizedBox(
+                width: 46,
+                height: 42,
+                child: OutlinedButton(
+                  onPressed: () => _downloadAnnualReport(context, report, l10n),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF735C00),
+                    padding: EdgeInsets.zero,
+                    side: const BorderSide(color: Color(0xFF735C00)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Icon(Icons.download_outlined, size: 21),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnnualReportsLoading(AppLocalizations l10n) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF8F1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(
+            width: 26,
+            height: 26,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: Color(0xFF735C00),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            l10n.annualReportsLoading,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF7C766C),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnnualReportsError(
+    BuildContext context,
+    String message,
+    AppLocalizations l10n,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 22),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF8F1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.error_outline, color: Color(0xFFC62828), size: 36),
+          const SizedBox(height: 10),
+          Text(
+            message.isEmpty ? l10n.annualReportsLoadFailed : message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF7C766C),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 14),
+          OutlinedButton.icon(
+            onPressed: () {
+              context.read<AnnualReportsCubit>().loadAnnualReports(
+                sponsorshipId: widget.sponsorship.id,
+                localizations: l10n,
+              );
+            },
+            style: OutlinedButton.styleFrom(
+              foregroundColor: const Color(0xFF735C00),
+              side: const BorderSide(color: Color(0xFF735C00)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            icon: const Icon(Icons.refresh, size: 18),
+            label: Text(l10n.retry),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyAnnualReports(AppLocalizations l10n) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF8F1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          const Icon(
+            Icons.insert_drive_file_outlined,
+            color: Color(0xFFB6AD9E),
+            size: 38,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            l10n.noAnnualReportsYet,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Color(0xFF7C766C),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showReportPreview(
+    BuildContext context,
+    AnnualReportModel report,
+    bool _,
+  ) {
+    final l10n = AppLocalizations.of(context);
+    final imageUrl = _buildReportImageUrl(report.imageUrl);
+
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (_) {
+          return Scaffold(
+            backgroundColor: Colors.black,
+            appBar: AppBar(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              title: Text(l10n.annualReportPreviewTitle(report.reportYear)),
+            ),
+            body: Center(
+              child: InteractiveViewer(
+                minScale: 0.7,
+                maxScale: 4,
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.contain,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    }
+
+                    return const SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Text(
+                        l10n.reportImageLoadFailed,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _downloadAnnualReport(
+    BuildContext context,
+    AnnualReportModel report,
+    AppLocalizations l10n,
+  ) async {
+    try {
+      final response = await DioClient.dio.get<dynamic>(
+        _buildReportImageUrl(report.imageUrl),
+        options: Options(responseType: ResponseType.bytes),
+      );
+
+      final bytes = Uint8List.fromList(List<int>.from(response.data as List));
+      final fileName = _annualReportFileName(report);
+
+      final savedPath = await FilePicker.platform.saveFile(
+        dialogTitle: l10n.saveAnnualReportDialogTitle,
+        fileName: fileName,
+        bytes: bytes,
+      );
+
+      if (!context.mounted || savedPath == null) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.downloadReportSuccess(fileName)),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.downloadReportFailed),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  String _buildReportImageUrl(String imageUrl) {
+    final trimmedUrl = imageUrl.trim();
+    final uri = Uri.tryParse(trimmedUrl);
+
+    if (uri != null && uri.hasScheme) {
+      return trimmedUrl;
+    }
+
+    final baseUrl = ApiConstants.baseUrl.endsWith('/')
+        ? ApiConstants.baseUrl.substring(0, ApiConstants.baseUrl.length - 1)
+        : ApiConstants.baseUrl;
+    final path = trimmedUrl.startsWith('/')
+        ? trimmedUrl.substring(1)
+        : trimmedUrl;
+
+    return '$baseUrl/$path';
+  }
+
+  String _annualReportFileName(AnnualReportModel report) {
+    final extension = _reportFileExtension(report.imageUrl);
+
+    return 'annual_report_${report.reportYear}_${report.reportNumber}.$extension';
+  }
+
+  String _reportFileExtension(String imageUrl) {
+    final path = Uri.tryParse(imageUrl)?.path ?? imageUrl;
+    final segments = path.split('/').where((part) => part.isNotEmpty);
+    final lastSegment = segments.isEmpty ? '' : segments.last;
+    final extension = lastSegment.contains('.')
+        ? lastSegment.split('.').last.toLowerCase()
+        : 'jpg';
+
+    if (extension.length > 5 || extension.isEmpty) {
+      return 'jpg';
+    }
+
+    return extension;
   }
 
   Widget _buildProfileCard(SponsoredOrphanModel orphan) {

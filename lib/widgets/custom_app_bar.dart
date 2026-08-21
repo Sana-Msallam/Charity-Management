@@ -1,4 +1,5 @@
 import 'package:charity_management/constants/api_constants.dart';
+import 'package:charity_management/features/notifications/widget/notification_bell_button.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -127,44 +128,9 @@ class CustomAppBar extends StatelessWidget
               // الجرس
               // ========================================
 
-              IconButton(
-                onPressed: () {
-                  // لاحقاً نربط صفحة الإشعارات
-                },
-                icon: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    const Icon(
-                      Icons
-                          .notifications_none_outlined,
-                      color:
-                          AppColors.brandGray,
-                      size: 28,
-                    ),
-
-                    Positioned(
-                      top: 1,
-                      right: 1,
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration:
-                            BoxDecoration(
-                          color:
-                              AppColors.error,
-                          shape:
-                              BoxShape.circle,
-                          border:
-                              Border.all(
-                            color:
-                                AppColors.surface,
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              const NotificationBellButton(
+                iconColor: AppColors.brandGray,
+                iconSize: 28,
               ),
             ],
           ),

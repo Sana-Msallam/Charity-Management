@@ -348,7 +348,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 46,
                           child: OutlinedButton(
                             onPressed: () {
-                              // TODO: continue as visitor
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                AppRoutes.donorHome,
+                                (route) => false,
+                                arguments: const DonorHomeRouteArguments(
+                                  isGuest: true,
+                                ),
+                              );
                             },
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.primary,

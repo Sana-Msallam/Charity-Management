@@ -27,7 +27,8 @@ class RegisterBeneficiaryCubit extends Cubit<RegisterBeneficiaryState> {
     required String dateOfBirth,
     required File personalPhoto,
     required File familyStatement,
-    required String address,
+    required String addressAr,
+    required String addressEn,
     required String socialStatus,
     required bool isUnemployed,
     required String monthlyIncome,
@@ -54,7 +55,8 @@ class RegisterBeneficiaryCubit extends Cubit<RegisterBeneficiaryState> {
         personalPhoto: personalPhoto,
         familyStatement: familyStatement,
 
-        address: address.trim(),
+        addressAr: addressAr.trim(),
+        addressEn: addressEn.trim(),
 
         socialStatus: socialStatus,
 

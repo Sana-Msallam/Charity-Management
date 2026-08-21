@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:charity_management/features/Donor/guest_login_required_dialog.dart';
 import 'package:charity_management/features/Donor/cubit/profile_cubit.dart';
 import 'package:charity_management/features/Donor/cubit/profile_state.dart';
 import 'package:charity_management/Orphan/cubit/orphan_support_fund_cubit.dart';
@@ -13,12 +16,14 @@ class OrphanSupportFundScreen extends StatefulWidget {
   const OrphanSupportFundScreen({
     super.key,
     required this.isSponsor,
+    this.isGuest = false,
     this.onDonateWithCard,
     this.onDonateWithWallet,
   });
 
   /// تأتي لاحقًا من بيانات بروفايل المتبرع.
   final bool isSponsor;
+  final bool isGuest;
 
   /// مؤقتًا الواجهة مستقلة عن الـ API. نربط هذين الحدثين بالـ Cubit لاحقًا.
   final ValueChanged<double>? onDonateWithCard;
@@ -34,6 +39,7 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
   final PageController _pageController = PageController();
   late final OrphanSupportFundCubit _fundCubit;
   late final ProfileCubit _profileCubit;
+  Timer? _sliderTimer;
 
   final List<int> _quickAmounts = const [10, 25, 50, 100];
   int _currentSlide = 0;
@@ -47,16 +53,40 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
   void initState() {
     super.initState();
     _fundCubit = OrphanSupportFundCubit();
-    _profileCubit = ProfileCubit()..fetchProfile();
+    _profileCubit = ProfileCubit();
+
+    if (!widget.isGuest) {
+      _profileCubit.fetchProfile();
+    }
+
+    _startSliderTimer();
   }
 
   @override
   void dispose() {
     _amountController.dispose();
+    _sliderTimer?.cancel();
     _pageController.dispose();
     _fundCubit.close();
     _profileCubit.close();
     super.dispose();
+  }
+
+  void _startSliderTimer() {
+    _sliderTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!mounted || !_pageController.hasClients) {
+        return;
+      }
+
+      final slides = _slides;
+      final nextSlide = (_currentSlide + 1) % slides.length;
+
+      _pageController.animateToPage(
+        nextSlide,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   double? _readAmount() {
@@ -100,12 +130,22 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
   }
 
   void _donateWithCard(AppLocalizations l10n) {
+    if (widget.isGuest) {
+      showGuestLoginRequiredDialog(context);
+      return;
+    }
+
     if (!_validateAmount()) return;
 
     _fundCubit.donateWithCard(amount: _readAmount()!, localizations: l10n);
   }
 
   void _donateWithWallet(AppLocalizations l10n, _DonorWalletInfo donorWallet) {
+    if (widget.isGuest) {
+      showGuestLoginRequiredDialog(context);
+      return;
+    }
+
     if (donorWallet.isSponsor || !_validateAmount()) return;
 
     _fundCubit.donateFromWallet(amount: _readAmount()!, localizations: l10n);
@@ -140,6 +180,9 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
+          iconTheme: const IconThemeData(
+    color: AppColors.primary,
+  ),
           title: Text(
             _isArabic ? 'صندوق سند اليتيم' : 'Orphan Support Fund',
             style: const TextStyle(
@@ -221,8 +264,8 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
     );
   }
 
-  Widget _buildIntroSlider() {
-    final slides = <_FundSlide>[
+  List<_FundSlide> get _slides {
+    return <_FundSlide>[
       _FundSlide(
         icon: Icons.workspace_premium_outlined,
         title: _isArabic ? 'رفقة النبي ﷺ في الجنة' : 'A noble reward',
@@ -250,6 +293,10 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
         colors: const [Color(0xFF475B3D), Color(0xFF9AAA64)],
       ),
     ];
+  }
+
+  Widget _buildIntroSlider() {
+    final slides = _slides;
 
     return Column(
       children: [
@@ -460,7 +507,9 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
   ) {
     final isLoading = fundState.isAnyLoading;
     final isSponsor = donorWallet.isSponsor;
-    final isWalletDisabled = isLoading || isSponsor || donorWallet.isLoading;
+    final isWalletDisabled = widget.isGuest
+        ? isLoading
+        : isLoading || isSponsor || donorWallet.isLoading;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

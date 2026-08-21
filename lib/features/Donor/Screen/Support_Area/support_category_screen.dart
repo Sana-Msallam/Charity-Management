@@ -14,12 +14,14 @@ class SupportCategoryScreen extends StatefulWidget {
   final String categoryTitle;
   final Color bannerColor;
   final int categoryId;
+  final bool isGuest;
 
   const SupportCategoryScreen({
     super.key,
     required this.categoryTitle,
     required this.bannerColor,
     required this.categoryId,
+    this.isGuest = false,
   });
 
   @override
@@ -371,22 +373,7 @@ if (state is AidRequestErrorState) {
     return InkWell(
       borderRadius: BorderRadius.circular(20),
 
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => BlocProvider(
-              create: (_) =>
-                  AidRequestDetailsCubit()
-                    ..fetchDetails(item.id),
-
-              child: AidRequestDetailsScreen(
-                id: item.id,
-              ),
-            ),
-          ),
-        );
-      },
+      onTap: () => _openAidRequestDetails(context, item),
 
       child: Container(
         width: double.infinity,
@@ -610,6 +597,27 @@ if (state is AidRequestErrorState) {
         ),
       ),
     );
+  }
+
+  void _openAidRequestDetails(BuildContext context, AidRequestModel item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => AidRequestDetailsCubit()..fetchDetails(item.id),
+          child: AidRequestDetailsScreen(
+            id: item.id,
+            isGuest: widget.isGuest,
+          ),
+        ),
+      ),
+    ).then((_) {
+      if (context.mounted) {
+        context.read<AidRequestCubit>().fetchAidRequests(
+          categoryId: widget.categoryId,
+        );
+      }
+    });
   }
 }
 

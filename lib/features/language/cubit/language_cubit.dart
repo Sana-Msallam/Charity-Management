@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/dio_client.dart';
+import '../../notifications/service/firebase_notification_service.dart';
 import 'language_state.dart';
 
 class LanguageCubit extends Cubit<LanguageState> {
@@ -42,11 +44,20 @@ class LanguageCubit extends Cubit<LanguageState> {
 
     await _preferences.setString(_languageKey, normalizedLanguageCode);
     DioClient.setLanguage(normalizedLanguageCode);
+    unawaited(_registerNotificationsForLanguageChange());
     emit(LanguageState(Locale(normalizedLanguageCode)));
   }
 
   Future<void> toggleLanguage() async {
     final newLanguageCode = state.locale.languageCode == 'ar' ? 'en' : 'ar';
     await changeLanguage(newLanguageCode);
+  }
+
+  Future<void> _registerNotificationsForLanguageChange() async {
+    try {
+      await FirebaseNotificationService.registerCurrentTokenIfAuthenticated();
+    } catch (_) {
+      // Notification registration must not block language changes.
+    }
   }
 }

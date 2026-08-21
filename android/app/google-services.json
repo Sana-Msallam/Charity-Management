@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "335108424121",
+    "project_id": "association-system-1601d",
+    "storage_bucket": "association-system-1601d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335108424121:android:2f82f0828f80a50cff7668",
+        "android_client_info": {
+          "package_name": "com.example.charity_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzbRzOAAwaCFLzk-PFtebg3Djpapn4bRk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

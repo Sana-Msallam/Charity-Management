@@ -1376,6 +1376,56 @@ class AppLocalizationsEn extends AppLocalizations {
       'The sponsorship request is still pending, and no orphan has been assigned to you yet.';
 
   @override
+  String get annualReportsTitle => 'Annual reports';
+
+  @override
+  String get annualReportsSubtitle => 'View the latest update about the orphan';
+
+  @override
+  String annualReportYear(int year) {
+    return 'Annual report $year';
+  }
+
+  @override
+  String annualReportNumber(int number) {
+    return 'Report no. $number';
+  }
+
+  @override
+  String get viewReport => 'View report';
+
+  @override
+  String get noAnnualReportsYet => 'No annual reports yet';
+
+  @override
+  String get annualReportsLoading => 'Loading annual reports...';
+
+  @override
+  String get annualReportsLoadFailed => 'Could not load annual reports';
+
+  @override
+  String annualReportPreviewTitle(int year) {
+    return 'Annual report $year';
+  }
+
+  @override
+  String get reportImageLoadFailed => 'Could not load the report image';
+
+  @override
+  String get saveAnnualReportDialogTitle => 'Save annual report';
+
+  @override
+  String downloadReportSuccess(String fileName) {
+    return '$fileName was saved successfully';
+  }
+
+  @override
+  String get downloadReportFailed => 'Could not download the report';
+
+  @override
+  String get close => 'Close';
+
+  @override
   String loginSuccess(String firstName) {
     return 'Logged in successfully. Welcome, $firstName';
   }

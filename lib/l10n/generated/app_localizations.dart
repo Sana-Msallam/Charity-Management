@@ -2666,6 +2666,90 @@ abstract class AppLocalizations {
   /// **'The sponsorship request is still pending, and no orphan has been assigned to you yet.'**
   String get noOrphanDataDescription;
 
+  /// No description provided for @annualReportsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual reports'**
+  String get annualReportsTitle;
+
+  /// No description provided for @annualReportsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'View the latest update about the orphan'**
+  String get annualReportsSubtitle;
+
+  /// No description provided for @annualReportYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual report {year}'**
+  String annualReportYear(int year);
+
+  /// No description provided for @annualReportNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Report no. {number}'**
+  String annualReportNumber(int number);
+
+  /// No description provided for @viewReport.
+  ///
+  /// In en, this message translates to:
+  /// **'View report'**
+  String get viewReport;
+
+  /// No description provided for @noAnnualReportsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No annual reports yet'**
+  String get noAnnualReportsYet;
+
+  /// No description provided for @annualReportsLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading annual reports...'**
+  String get annualReportsLoading;
+
+  /// No description provided for @annualReportsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load annual reports'**
+  String get annualReportsLoadFailed;
+
+  /// No description provided for @annualReportPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Annual report {year}'**
+  String annualReportPreviewTitle(int year);
+
+  /// No description provided for @reportImageLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the report image'**
+  String get reportImageLoadFailed;
+
+  /// No description provided for @saveAnnualReportDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save annual report'**
+  String get saveAnnualReportDialogTitle;
+
+  /// No description provided for @downloadReportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'{fileName} was saved successfully'**
+  String downloadReportSuccess(String fileName);
+
+  /// No description provided for @downloadReportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not download the report'**
+  String get downloadReportFailed;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
   /// No description provided for @loginSuccess.
   ///
   /// In en, this message translates to:

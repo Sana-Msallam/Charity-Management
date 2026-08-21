@@ -10,14 +10,28 @@ import '../otp/models/verify_otp_response_model.dart';
 import '../register_beneficiary/models/register_beneficiary_request_model.dart';
 import '../register_beneficiary/models/register_beneficiary_response_model.dart';
 import '../storage/auth_local_storage.dart';
+import '../../notifications/service/firebase_notification_service.dart';
 
 class AuthService {
   final Dio _dio;
   final AuthLocalStorage _localStorage;
+  final Future<String?> Function() _registrationTokenProvider;
+  final Future<void> Function() _registerNotificationsIfAuthenticated;
 
-  AuthService({Dio? dio, AuthLocalStorage? localStorage})
+  AuthService({
+    Dio? dio,
+    AuthLocalStorage? localStorage,
+    Future<String?> Function()? registrationTokenProvider,
+    Future<void> Function()? registerNotificationsIfAuthenticated,
+  })
     : _dio = dio ?? DioClient.dio,
-      _localStorage = localStorage ?? AuthLocalStorage();
+      _localStorage = localStorage ?? AuthLocalStorage(),
+      _registrationTokenProvider =
+          registrationTokenProvider ??
+          FirebaseNotificationService.getRegistrationToken,
+      _registerNotificationsIfAuthenticated =
+          registerNotificationsIfAuthenticated ??
+          FirebaseNotificationService.registerCurrentTokenIfAuthenticated;
 
   Future<LoginResponseModel> login({
     required String phoneNumber,
@@ -56,6 +70,12 @@ class AuthService {
       userType: loginResponse.user.type,
     );
 
+    try {
+      await _registerNotificationsIfAuthenticated();
+    } catch (_) {
+      // Notification registration must not block login.
+    }
+
     return loginResponse;
   }
 
@@ -88,9 +108,25 @@ class AuthService {
     required String invalidResponseMessage,
     required String verificationFailedMessage,
   }) async {
+    final requestBody = <String, dynamic>{
+      'countryCode': countryCode,
+      'number': phoneNumber,
+      'code': code,
+    };
+
+    try {
+      final registrationId = await _registrationTokenProvider();
+
+      if (registrationId != null && registrationId.trim().isNotEmpty) {
+        requestBody['registrationId'] = registrationId.trim();
+      }
+    } catch (_) {
+      // OTP verification should continue without a notification token.
+    }
+
     final response = await _dio.post(
       ApiConstants.verifyOtp,
-      data: {'countryCode': countryCode, 'number': phoneNumber, 'code': code},
+      data: requestBody,
     );
 
     final data = response.data;
@@ -174,13 +210,14 @@ class AuthService {
 
     return fallbackMessage;
   }
+
   Future<void> logout() async {
-  try {
-    await _dio.post(
-      ApiConstants.logout,
-    );
-  } finally {
-    await _localStorage.deleteSession();
+    try {
+      await _dio.post(
+        ApiConstants.logout,
+      );
+    } finally {
+      await _localStorage.deleteSession();
+    }
   }
-}
 }

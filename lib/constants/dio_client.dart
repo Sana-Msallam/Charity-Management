@@ -16,8 +16,8 @@ class DioClient {
     final dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
-        connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 15),
+        connectTimeout: const Duration(seconds:30),
+        receiveTimeout: const Duration(seconds: 30),
         sendTimeout: const Duration(seconds: 30),
         headers: {
           'Accept': 'application/json',
@@ -47,7 +47,7 @@ class DioClient {
         LogInterceptor(
           request: true,
           requestBody: true,
-          requestHeader: false,
+          requestHeader:true,
           responseBody: true,
           responseHeader: false,
           error: true,
