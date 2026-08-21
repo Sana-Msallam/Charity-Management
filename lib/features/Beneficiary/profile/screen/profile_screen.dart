@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:charity_management/constants/api_constants.dart';
 import 'package:charity_management/features/Beneficiary/profile/cubit/profile_cubit.dart';
 import 'package:charity_management/features/Beneficiary/profile/cubit/profile_state.dart';
@@ -568,51 +569,55 @@ class _ProfilePageState extends State<ProfilePage> {
   ) {
     if (imageUrl == null ||
         imageUrl.trim().isEmpty) {
-      return const Icon(
-        Icons.person_rounded,
-        size: 62,
-        color: AppColors.primary,
-      );
+      return _profileImagePlaceholder();
     }
 
-    return Image.network(
-      imageUrl,
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
       width: 108,
       height: 108,
       fit: BoxFit.cover,
-      loadingBuilder: (
+      fadeInDuration:
+          const Duration(
+        milliseconds: 120,
+      ),
+      fadeOutDuration:
+          const Duration(
+        milliseconds: 80,
+      ),
+      placeholder: (
         context,
-        child,
-        progress,
+        url,
       ) {
-        if (progress == null) {
-          return child;
-        }
-
-        return const Center(
-          child:
-              CircularProgressIndicator(
-            strokeWidth: 2,
-            color:
-                AppColors.primary,
-          ),
-        );
+        return _profileImagePlaceholder();
       },
-      errorBuilder: (
+      errorWidget: (
         context,
+        url,
         error,
-        stackTrace,
       ) {
         debugPrint(
           'Profile image error: $error',
         );
 
-        return const Icon(
-          Icons.person_rounded,
-          size: 62,
-          color: AppColors.primary,
-        );
+        return _profileImagePlaceholder();
       },
+    );
+  }
+
+  Widget _profileImagePlaceholder() {
+    return Container(
+      color: AppColors
+          .primaryContainer
+          .withValues(
+        alpha: 0.35,
+      ),
+      alignment: Alignment.center,
+      child: const Icon(
+        Icons.person_rounded,
+        size: 62,
+        color: AppColors.primary,
+      ),
     );
   }
 

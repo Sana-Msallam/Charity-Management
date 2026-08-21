@@ -1319,7 +1319,7 @@ abstract class AppLocalizations {
   /// No description provided for @currencyRiyal.
   ///
   /// In en, this message translates to:
-  /// **'Riyal'**
+  /// **'\$'**
   String get currencyRiyal;
 
   /// No description provided for @currentStep.
@@ -2825,7 +2825,7 @@ abstract class AppLocalizations {
   /// No description provided for @riyal.
   ///
   /// In en, this message translates to:
-  /// **'SAR'**
+  /// **'\$'**
   String get riyal;
 
   /// No description provided for @profileLoadError.
@@ -3023,7 +3023,7 @@ abstract class AppLocalizations {
   /// No description provided for @cancelRequestConfirmation.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to cancel request #{requestId}?\nYou will not be able to undo this action.'**
+  /// **'Are you sure you want to cancel request {requestId}?\nYou will not be able to undo this action.'**
   String cancelRequestConfirmation(int requestId);
 
   /// No description provided for @confirmCancelRequest.
@@ -3053,7 +3053,7 @@ abstract class AppLocalizations {
   /// No description provided for @requestNumber.
   ///
   /// In en, this message translates to:
-  /// **'Request #{requestId}'**
+  /// **'Request {requestId}'**
   String requestNumber(int requestId);
 
   /// No description provided for @requestType.
@@ -3089,7 +3089,7 @@ abstract class AppLocalizations {
   /// No description provided for @amountRiyal.
   ///
   /// In en, this message translates to:
-  /// **'{amount} SAR'**
+  /// **'{amount} \$'**
   String amountRiyal(String amount);
 
   /// No description provided for @editRequest.
@@ -3317,7 +3317,7 @@ abstract class AppLocalizations {
   /// No description provided for @highSchool.
   ///
   /// In en, this message translates to:
-  /// **'High School'**
+  /// **'School'**
   String get highSchool;
 
   /// No description provided for @diploma.

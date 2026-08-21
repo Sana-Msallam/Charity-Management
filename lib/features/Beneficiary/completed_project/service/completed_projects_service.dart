@@ -63,7 +63,7 @@ class CompletedProjectsService {
 
       for (final project in projects) {
         debugPrint(
-          'Project #${project.id} - '
+          'Project ${project.id} - '
           '${project.category.name} - '
           '${project.displayTitle}',
         );

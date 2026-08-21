@@ -204,7 +204,7 @@
   "beneficiariesNeedSupport": "People in need of support",
   "individual": "person",
   "individuals": "people",
-  "currencyRiyal": "Riyal",
+  "currencyRiyal": "$",
   "currentStep": "Current step",
   "lastStep": "Final step",
   "stepOfTotal": "{currentStep} of {totalSteps}",
@@ -478,7 +478,7 @@
 "givingMakesDifference": "Giving Makes a Difference",
 "noCompletedProjects": "There are no completed projects at the moment",
 "urgent": "Urgent",
-"riyal": "SAR",
+"riyal": "$",
 "profileTitle": "My Account",
 "profileLoadError": "Unable to load profile",
 "editProfile": "Edit Profile",
@@ -530,7 +530,7 @@
 "cancelledRequests": "Cancelled",
 
 "cancelRequestTitle": "Cancel Request",
-"cancelRequestConfirmation": "Are you sure you want to cancel request #{requestId}?\nYou will not be able to undo this action.",
+"cancelRequestConfirmation": "Are you sure you want to cancel request {requestId}?\nYou will not be able to undo this action.",
 "@cancelRequestConfirmation": {
   "placeholders": {
     "requestId": {
@@ -544,7 +544,7 @@
 
 "requestsLoadError": "Unable to Load Requests",
 "noRequestsForStatus": "There are no requests with this status",
-"requestNumber": "Request #{requestId}",
+"requestNumber": "Request {requestId}",
 "@requestNumber": {
   "placeholders": {
     "requestId": {
@@ -561,7 +561,7 @@
 
 "cost": "Cost",
 "submissionDate": "Submission Date",
-"amountRiyal": "{amount} SAR",
+"amountRiyal": "{amount} $",
 "@amountRiyal": {
   "placeholders": {
     "amount": {
@@ -653,7 +653,7 @@
 "editEducationRequestDetails": "Edit Education Request Details",
 
 "academicAchievement": "Academic Achievement",
-"highSchool": "High School",
+"highSchool": "School",
 "diploma": "Diploma",
 "bachelor": "Bachelor's Degree",
 "master": "Master's Degree",
