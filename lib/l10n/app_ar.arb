@@ -380,6 +380,8 @@
   "startNewSponsorshipDescription": "ابدئي كفالة جديدة وكوني سببًا في دعم طفل",
   "chooseOrphanAndStartSponsorship": "اختاري طفلًا وابدئي طلب الكفالة",
   "walletBalanceUsedForSponsorship": "يُستخدم رصيد محفظتك عند إرسال طلب الكفالة",
+  "sponsorshipWalletEmptyTitle": "المحفظة فارغة",
+  "sponsorshipWalletEmptyMessage": "لا يمكنك تقديم طلب الكفالة لأن رصيد محفظتك غير كافٍ. يرجى شحن المحفظة ثم المحاولة مجدداً.",
   "completeTrust": "موثوقية تامة",
   "completeTrustDescription": "جميع البيانات والمعلومات يتم التعامل معها بأعلى معايير الخصوصية والأمان وفق الضوابط الشرعية.",
   "sponsorshipTermsTitle": "شروط وأحكام الكفالة",
@@ -937,6 +939,11 @@
 "zakatNisabValue": "قيمة النصاب",
 "zakatRateLabel": "نسبة الزكاة",
 "zakatDueAmount": "مقدار الزكاة المستحقة",
-"calculateAgain": "إعادة الحساب"
+"calculateAgain": "إعادة الحساب",
+"donateZakatAmount": "تبرع بمبلغ الزكاة",
+"zakatDonationSheetTitle": "اختر صندوق التبرع",
+"zakatDonationAmount": "مبلغ الزكاة",
+"zakatOrphanSupportFundOption": "صندوق سند اليتيم",
+"zakatQuickDonationFundOption": "صندوق التبرع السريع"
 
 }

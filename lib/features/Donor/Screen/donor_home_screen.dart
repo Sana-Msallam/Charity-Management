@@ -2,6 +2,7 @@ import 'dart:async';
 
 // import 'package:charity_management/Donor/Drawer/app_drawer.dart';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:charity_management/Sponsership/Screen/sponsership_main_screen.dart';
 import 'package:charity_management/Orphan/Screen/orphan_support_fund_screen.dart';
 import 'package:charity_management/Payment/Screen/wallet_top_up_screen.dart';
@@ -17,12 +18,14 @@ import 'package:charity_management/features/Donor/cubit/completed_aid_cases_stat
 import 'package:charity_management/features/Donor/cubit/completed_aid_requests_cubit.dart';
 import 'package:charity_management/features/Donor/cubit/donor_history_cubit.dart';
 import 'package:charity_management/features/Donor/cubit/profile_cubit.dart';
+import 'package:charity_management/features/Donor/cubit/profile_state.dart';
 import 'package:charity_management/features/notifications/widget/notification_bell_button.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
 import 'package:charity_management/theme/app_colors.dart';
 import 'package:charity_management/theme/app_font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:charity_management/Donor/zakat/screen/zakat_calculator_page.dart';
 
 class DonorHomeScreen extends StatefulWidget {
   const DonorHomeScreen({super.key, this.isGuest = false});
@@ -37,6 +40,7 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final PageController _pageController = PageController();
+  late final ProfileCubit _profileCubit;
 
   int _currentPage = 0;
   Timer? _sliderTimer;
@@ -45,12 +49,19 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
   void dispose() {
     _sliderTimer?.cancel();
     _pageController.dispose();
+    _profileCubit.close();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+
+    _profileCubit = ProfileCubit();
+
+    if (!widget.isGuest) {
+      _profileCubit.fetchProfile();
+    }
 
     _sliderTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (!_pageController.hasClients) return;
@@ -155,17 +166,46 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
         const SizedBox(width: 12),
 
         Expanded(
-          child: Text(
-            l10n.associationName,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Color(0xFF765A00),
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'IBM Plex Sans Arabic',
-            ),
-          ),
+          child: widget.isGuest
+              ? Text(
+                  l10n.associationName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Color(0xFF765A00),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'IBM Plex Sans Arabic',
+                  ),
+                )
+              : BlocProvider.value(
+                  value: _profileCubit,
+                  child: BlocBuilder<ProfileCubit, ProfileState>(
+                    builder: (context, state) {
+                      var headerName = l10n.associationName;
+
+                      if (state is ProfileSuccessState) {
+                        final donorName = state.profile.fullName.trim();
+
+                        if (donorName.isNotEmpty) {
+                          headerName = donorName;
+                        }
+                      }
+
+                      return Text(
+                        headerName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Color(0xFF765A00),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'IBM Plex Sans Arabic',
+                        ),
+                      );
+                    },
+                  ),
+                ),
         ),
 
         widget.isGuest
@@ -703,28 +743,40 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
 
                   const SizedBox(height: 12),
 
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AppColors.onSurface,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: AppTextStyles.fontFamily,
-                    ),
-                  ),
-
-                  const SizedBox(height: 4),
-
-                  Text(
-                    subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppColors.onSurface.withOpacity(0.7),
-                      fontSize: 12,
-                      fontFamily: AppTextStyles.fontFamily,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AutoSizeText(
+                          title,
+                          maxLines: 1,
+                          minFontSize: 16,
+                          stepGranularity: 0.5,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppColors.onSurface,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: AppTextStyles.fontFamily,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Flexible(
+                          child: AutoSizeText(
+                            subtitle,
+                            maxLines: 2,
+                            minFontSize: 10,
+                            stepGranularity: 0.5,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: AppColors.onSurface.withOpacity(0.7),
+                              fontSize: 12,
+                              height: 1.15,
+                              fontFamily: AppTextStyles.fontFamily,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -773,56 +825,73 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 52,
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: cardColor.withOpacity(0.2),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.home_outlined,
-                          color: AppColors.tertiary,
-                          size: 28,
-                        ),
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              color: AppColors.onSurface,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: AppTextStyles.fontFamily,
-                            ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 52,
+                          height: 52,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(14),
+                            boxShadow: [
+                              BoxShadow(
+                                color: cardColor.withOpacity(0.2),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
-
-                          Text(
-                            AppLocalizations.of(context).housingRequestSubtitle,
-                            style: TextStyle(
-                              color: AppColors.onSurface.withOpacity(0.7),
-                              fontSize: 13,
-                              fontFamily: AppTextStyles.fontFamily,
-                            ),
+                          child: const Icon(
+                            Icons.home_outlined,
+                            color: AppColors.tertiary,
+                            size: 28,
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+
+                        const SizedBox(width: 16),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AutoSizeText(
+                                title,
+                                maxLines: 1,
+                                minFontSize: 16,
+                                stepGranularity: 0.5,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: AppColors.onSurface,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: AppTextStyles.fontFamily,
+                                ),
+                              ),
+
+                              Flexible(
+                                child: AutoSizeText(
+                                  AppLocalizations.of(
+                                    context,
+                                  ).housingRequestSubtitle,
+                                  maxLines: 2,
+                                  minFontSize: 11,
+                                  stepGranularity: 0.5,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: AppColors.onSurface.withOpacity(0.7),
+                                    fontSize: 13,
+                                    height: 1.15,
+                                    fontFamily: AppTextStyles.fontFamily,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
                   const Icon(
@@ -841,6 +910,10 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
 
   Widget buildImpactStatsRow(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final subtitle = isArabic
+        ? 'حالات اكتمل تمويلها بفضل مساهماتكم'
+        : 'Cases fully funded thanks to your contributions';
 
     return BlocBuilder<CompletedAidCasesCubit, CompletedAidCasesState>(
       builder: (context, state) {
@@ -851,75 +924,135 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
         }
 
         if (state is CompletedAidCasesErrorState) {
-          completedCases = 'لا توجد حالات مكتملة حاليا';
+          completedCases = '—';
         }
 
-        return Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider(
-                        create: (_) => CompletedAidRequestsCubit(),
-                        child: const CompletedAidRequestsScreen(),
-                      ),
-                    ),
-                  );
-                },
-                child: buildStatBox(
-                  l10n.completedAidCases,
-                  completedCases,
-                  const Color(0xFF3D523A),
+        return Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    create: (_) => CompletedAidRequestsCubit(),
+                    child: const CompletedAidRequestsScreen(),
+                  ),
                 ),
+              );
+            },
+            child: Ink(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF1F5ED),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: const Color(0xFF3D523A).withOpacity(0.14),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF3D523A).withOpacity(0.08),
+                    blurRadius: 14,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF3D523A).withOpacity(0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.check_circle_outline_rounded,
+                      color: Color(0xFF3D523A),
+                      size: 29,
+                    ),
+                  ),
+
+                  const SizedBox(width: 14),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.completedAidCases,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Color(0xFF2F3F2D),
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'IBM Plex Sans Arabic',
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          subtitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: const Color(0xFF2F3F2D).withOpacity(0.68),
+                            fontSize: 12,
+                            height: 1.35,
+                            fontFamily: 'IBM Plex Sans Arabic',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        constraints: const BoxConstraints(minWidth: 38),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5D86E),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          completedCases,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Color(0xFF3D523A),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'IBM Plex Sans Arabic',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Icon(
+                        isArabic
+                            ? Icons.chevron_left_rounded
+                            : Icons.chevron_right_rounded,
+                        color: const Color(0xFF3D523A),
+                        size: 23,
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         );
       },
-    );
-  }
-
-  Widget buildStatBox(String label, String value, Color valueColor) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF7F2EA),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Color(0xFF8A817C),
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'IBM Plex Sans Arabic',
-            ),
-          ),
-
-          const SizedBox(height: 4),
-
-          Text(
-            value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: valueColor,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'IBM Plex Sans Arabic',
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -940,10 +1073,7 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => OrphanSupportFundScreen(
-                isSponsor: false,
-                isGuest: widget.isGuest,
-              ),
+              builder: (_) => OrphanSupportFundScreen(isGuest: widget.isGuest),
             ),
           );
         },
@@ -991,27 +1121,42 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
                       ),
                     ),
                     const Spacer(),
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'IBM Plex Sans Arabic',
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFFEAF2DF),
-                        fontSize: 13,
-                        height: 1.4,
-                        fontFamily: 'IBM Plex Sans Arabic',
+                    Flexible(
+                      flex: 7,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AutoSizeText(
+                            title,
+                            maxLines: 1,
+                            minFontSize: 16,
+                            stepGranularity: 0.5,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'IBM Plex Sans Arabic',
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Flexible(
+                            child: AutoSizeText(
+                              description,
+                              maxLines: 2,
+                              minFontSize: 11,
+                              stepGranularity: 0.5,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Color(0xFFEAF2DF),
+                                fontSize: 13,
+                                height: 1.2,
+                                fontFamily: 'IBM Plex Sans Arabic',
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -1062,9 +1207,7 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => QuickDonationFundScreen(
-                isGuest: widget.isGuest,
-              ),
+              builder: (_) => QuickDonationFundScreen(isGuest: widget.isGuest),
             ),
           );
         },
@@ -1121,27 +1264,42 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
                       ),
                     ),
                     const Spacer(),
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'IBM Plex Sans Arabic',
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Color(0xFFFFF6DE),
-                        fontSize: 13,
-                        height: 1.4,
-                        fontFamily: 'IBM Plex Sans Arabic',
+                    Flexible(
+                      flex: 7,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AutoSizeText(
+                            title,
+                            maxLines: 1,
+                            minFontSize: 16,
+                            stepGranularity: 0.5,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'IBM Plex Sans Arabic',
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          Flexible(
+                            child: AutoSizeText(
+                              description,
+                              maxLines: 2,
+                              minFontSize: 11,
+                              stepGranularity: 0.5,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Color(0xFFFFF6DE),
+                                fontSize: 13,
+                                height: 1.2,
+                                fontFamily: 'IBM Plex Sans Arabic',
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -1175,119 +1333,131 @@ class _DonorHomeScreenState extends State<DonorHomeScreen> {
     );
   }
 
-Widget buildBottomNavigationBar(BuildContext context) {
-  final l10n = AppLocalizations.of(context);
+  Widget buildBottomNavigationBar(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
-  return Container(
-    decoration: const BoxDecoration(
-      color: Color(0xFFFDFBF7),
-      border: Border(
-        top: BorderSide(
-          color: Color(0xFFEFEAE4),
-          width: 1,
-        ),
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFFFDFBF7),
+        border: Border(top: BorderSide(color: Color(0xFFEFEAE4), width: 1)),
       ),
-    ),
-    child: BottomNavigationBar(
-      backgroundColor: const Color(0xFFFDFBF7),
-      elevation: 0,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: const Color(0xFF765A00),
-      unselectedItemColor: const Color(0xFF8A817C),
-      selectedFontSize: 11,
-      unselectedFontSize: 11,
-      currentIndex: 1,
+      child: BottomNavigationBar(
+        backgroundColor: const Color(0xFFFDFBF7),
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: const Color(0xFF765A00),
+        unselectedItemColor: const Color(0xFF8A817C),
+        selectedFontSize: 11,
+        unselectedFontSize: 11,
 
-      onTap: (index) {
-        if (index == 0) {
-          if (widget.isGuest) {
-            showGuestLoginRequiredDialog(context);
+        // الرئيسية أصبحت العنصر رقم 2.
+        currentIndex: 2,
+
+        onTap: (index) {
+          // الزكاة
+          if (index == 0) {
+            if (widget.isGuest) {
+              showGuestLoginRequiredDialog(context);
+              return;
+            }
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => ZakatCalculatorPage()),
+            );
             return;
           }
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BlocProvider(
-                create: (_) => DonorHistoryCubit()
-                  ..getDonorHistory(),
-                child: const DonationsScreen(),
+          // تبرعاتي
+          if (index == 1) {
+            if (widget.isGuest) {
+              showGuestLoginRequiredDialog(context);
+              return;
+            }
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BlocProvider(
+                  create: (_) => DonorHistoryCubit()..getDonorHistory(),
+                  child: const DonationsScreen(),
+                ),
               ),
-            ),
-          );
-        }
-
-        if (index == 2) {
-          if (widget.isGuest) {
-            showGuestLoginRequiredDialog(context);
+            );
             return;
           }
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const WalletTopUpScreen()),
-          );
-        }
-
-        if (index == 3) {
-          if (widget.isGuest) {
-            showGuestLoginRequiredDialog(context);
+          // الرئيسية: لا نحتاج إلى انتقال لأنها الشاشة الحالية.
+          if (index == 2) {
             return;
           }
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const SponsorshipMainScreen(),
-            ),
-          );
-        }
-      },
+          // المحفظة
+          if (index == 3) {
+            if (widget.isGuest) {
+              showGuestLoginRequiredDialog(context);
+              return;
+            }
 
-      items: [
-        BottomNavigationBarItem(
-          icon: const Icon(
-            Icons.volunteer_activism_outlined,
-          ),
-          label:  l10n.myDonations,
-        ),
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const WalletTopUpScreen()),
+            );
+            return;
+          }
 
-        BottomNavigationBarItem(
-          icon: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 6,
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5D166),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Icon(
-              Icons.home,
-              color: Color(0xFF765A00),
-            ),
-          ),
-          label: l10n.home,
-        ),
+          // الكفالات
+          if (index == 4) {
+            if (widget.isGuest) {
+              showGuestLoginRequiredDialog(context);
+              return;
+            }
 
-        BottomNavigationBarItem(
-          icon: const Icon(
-            Icons.account_balance_wallet_outlined,
-          ),
-          label: l10n.wallet,
-        ),
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SponsorshipMainScreen()),
+            );
+          }
+        },
 
-        BottomNavigationBarItem(
-          icon: const Icon(
-            Icons.favorite_border,
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.calculate_outlined),
+            activeIcon: const Icon(Icons.calculate),
+            label: isArabic ? 'الزكاة' : 'Zakat',
           ),
-          label: l10n.sponsorships,
-        ),
-      ],
-    ),
-  );
-}
+
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.volunteer_activism_outlined),
+            label: l10n.myDonations,
+          ),
+
+          BottomNavigationBarItem(
+            icon: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5D166),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Icon(Icons.home, color: Color(0xFF765A00)),
+            ),
+            label: l10n.home,
+          ),
+
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.account_balance_wallet_outlined),
+            label: l10n.wallet,
+          ),
+
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.favorite_border),
+            label: l10n.sponsorships,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _SupportArea {

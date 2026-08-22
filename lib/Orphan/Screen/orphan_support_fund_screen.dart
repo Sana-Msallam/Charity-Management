@@ -15,15 +15,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class OrphanSupportFundScreen extends StatefulWidget {
   const OrphanSupportFundScreen({
     super.key,
-    required this.isSponsor,
+    this.isSponsor,
     this.isGuest = false,
+    this.initialAmount,
     this.onDonateWithCard,
     this.onDonateWithWallet,
   });
 
   /// تأتي لاحقًا من بيانات بروفايل المتبرع.
-  final bool isSponsor;
+  final bool? isSponsor;
   final bool isGuest;
+  final double? initialAmount;
 
   /// مؤقتًا الواجهة مستقلة عن الـ API. نربط هذين الحدثين بالـ Cubit لاحقًا.
   final ValueChanged<double>? onDonateWithCard;
@@ -54,6 +56,7 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
     super.initState();
     _fundCubit = OrphanSupportFundCubit();
     _profileCubit = ProfileCubit();
+    _setInitialAmount();
 
     if (!widget.isGuest) {
       _profileCubit.fetchProfile();
@@ -92,6 +95,19 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
   double? _readAmount() {
     final normalized = _amountController.text.trim().replaceAll(',', '.');
     return double.tryParse(normalized);
+  }
+
+  void _setInitialAmount() {
+    final amount = widget.initialAmount;
+
+    if (amount == null || !amount.isFinite || amount <= 0) {
+      return;
+    }
+
+    _amountController.text = amount.toStringAsFixed(2);
+    _amountController.selection = TextSelection.collapsed(
+      offset: _amountController.text.length,
+    );
   }
 
   void _selectQuickAmount(int amount, {required bool isEnabled}) {
@@ -146,7 +162,7 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
       return;
     }
 
-    if (donorWallet.isSponsor || !_validateAmount()) return;
+    if (donorWallet.isSponsor != false || !_validateAmount()) return;
 
     _fundCubit.donateFromWallet(amount: _readAmount()!, localizations: l10n);
   }
@@ -180,9 +196,7 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
-          iconTheme: const IconThemeData(
-    color: AppColors.primary,
-  ),
+          iconTheme: const IconThemeData(color: AppColors.primary),
           title: Text(
             _isArabic ? 'صندوق سند اليتيم' : 'Orphan Support Fund',
             style: const TextStyle(
@@ -506,10 +520,11 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
     AppLocalizations l10n,
   ) {
     final isLoading = fundState.isAnyLoading;
-    final isSponsor = donorWallet.isSponsor;
+    final isSponsor = donorWallet.isSponsor == true;
+    final isSponsorUnknown = !widget.isGuest && donorWallet.isSponsor == null;
     final isWalletDisabled = widget.isGuest
         ? isLoading
-        : isLoading || isSponsor || donorWallet.isLoading;
+        : isLoading || isSponsor || isSponsorUnknown || donorWallet.isLoading;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -628,10 +643,10 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
         _buildPaymentButton(
           icon: Icons.account_balance_wallet_outlined,
           title: _isArabic ? 'التبرع من المحفظة' : 'Donate from wallet',
-          backgroundColor: isSponsor
+          backgroundColor: isSponsor || isSponsorUnknown
               ? const Color(0xFFE8E4DC)
               : const Color(0xFFE2F0B9),
-          foregroundColor: isSponsor
+          foregroundColor: isSponsor || isSponsorUnknown
               ? const Color(0xFF9B958A)
               : const Color(0xFF304C39),
           isLoading: fundState.isWalletLoading,
@@ -765,12 +780,12 @@ class _OrphanSupportFundScreenState extends State<OrphanSupportFundScreen> {
 
 class _DonorWalletInfo {
   const _DonorWalletInfo({
-    required this.isSponsor,
+    this.isSponsor,
     this.walletBalance,
     this.isLoading = false,
   });
 
-  final bool isSponsor;
+  final bool? isSponsor;
   final double? walletBalance;
   final bool isLoading;
 }

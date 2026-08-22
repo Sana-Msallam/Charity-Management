@@ -11,9 +11,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuickDonationFundScreen extends StatefulWidget {
-  const QuickDonationFundScreen({super.key, this.isGuest = false});
+  const QuickDonationFundScreen({
+    super.key,
+    this.isGuest = false,
+    this.initialAmount,
+  });
 
   final bool isGuest;
+  final double? initialAmount;
 
   @override
   State<QuickDonationFundScreen> createState() =>
@@ -38,6 +43,7 @@ class _QuickDonationFundScreenState extends State<QuickDonationFundScreen> {
   void initState() {
     super.initState();
     _fundCubit = QuickDonationFundCubit();
+    _setInitialAmount();
     _startSliderTimer();
   }
 
@@ -70,6 +76,19 @@ class _QuickDonationFundScreenState extends State<QuickDonationFundScreen> {
   double? _readAmount() {
     final normalized = _amountController.text.trim().replaceAll(',', '.');
     return double.tryParse(normalized);
+  }
+
+  void _setInitialAmount() {
+    final amount = widget.initialAmount;
+
+    if (amount == null || !amount.isFinite || amount <= 0) {
+      return;
+    }
+
+    _amountController.text = amount.toStringAsFixed(2);
+    _amountController.selection = TextSelection.collapsed(
+      offset: _amountController.text.length,
+    );
   }
 
   void _selectQuickAmount(int amount, {required bool isEnabled}) {
@@ -152,9 +171,7 @@ class _QuickDonationFundScreenState extends State<QuickDonationFundScreen> {
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
-          iconTheme: const IconThemeData(
-    color: AppColors.primary,
-  ),
+          iconTheme: const IconThemeData(color: AppColors.primary),
           title: Text(
             _isArabic ? 'صندوق التبرع السريع' : 'Quick Donation Fund',
             style: const TextStyle(
