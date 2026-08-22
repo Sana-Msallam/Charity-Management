@@ -547,27 +547,31 @@ class _CompletedProjectCard
   // FIX IMAGE URL
   // ===================================================
 
-  String _fixImageUrl(
+ String _fixImageUrl(
     String url,
   ) {
-    String result =
-        url.trim();
+    String result = url.trim();
 
-    result =
-        result.replaceFirst(
+  
+    result = result.replaceAll('\\', '/');
+
+    result = result.replaceFirst(
       'http://localhost:3000',
       ApiConstants.baseUrl,
     );
 
-    result =
-        result.replaceFirst(
+    result = result.replaceFirst(
       'http://127.0.0.1:3000',
       ApiConstants.baseUrl,
     );
+// نضيف عليه الـ baseUrl
+    if (!result.startsWith('http://') &&
+        !result.startsWith('https://')) {
+      if (!result.startsWith('/')) {
+        result = '/$result';
+      }
 
-    if (result.startsWith('/')) {
-      result =
-          '${ApiConstants.baseUrl}$result';
+      result = '${ApiConstants.baseUrl}$result';
     }
 
     return result;
