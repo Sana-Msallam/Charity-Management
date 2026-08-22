@@ -159,61 +159,115 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
             ],
           ),
           body: SafeArea(
-            child: orphan == null
-                ? _buildNoOrphanData(context)
-                : SingleChildScrollView(
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 600),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              _buildProfileCard(orphan),
-                              const SizedBox(height: 20),
-                              _buildPersonalDataCard(orphan, l10n, isRtl),
-                              const SizedBox(height: 20),
-                              _buildSponsorshipCard(
-                                widget.sponsorship,
-                                l10n,
-                                isRtl,
-                              ),
-                              if (_canShowAnnualReports()) ...[
-                                const SizedBox(height: 20),
-                                _buildAnnualReportsSection(context, isRtl),
-                              ],
-                              if (widget.sponsorship.rejectionReason !=
-                                  null) ...[
-                                const SizedBox(height: 20),
-                                _buildInfoCard(
-                                  title: l10n.sponsorshipRejectionReason,
-                                  value: widget.sponsorship.rejectionReason!,
-                                  icon: Icons.info_outline,
-                                  isRtl: isRtl,
-                                ),
-                              ],
-                              if (widget.sponsorship.cancellationSource !=
-                                  null) ...[
-                                const SizedBox(height: 20),
-                                _buildInfoCard(
-                                  title: l10n.sponsorshipCancellationSource,
-                                  value: widget.sponsorship.cancellationSource!,
-                                  icon: Icons.cancel_outlined,
-                                  isRtl: isRtl,
-                                ),
-                              ],
-                              if (_canPayMonthlySponsorship()) ...[
-                                const SizedBox(height: 20),
-                                _buildMonthlyPaymentButton(context, l10n),
-                              ],
-                              const SizedBox(height: 30),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+            child: _buildSponsorshipBody(
+              context: context,
+              orphan: orphan,
+              l10n: l10n,
+              isRtl: isRtl,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String get _normalizedStatus =>
+      widget.sponsorship.status.trim().toUpperCase();
+
+  Widget _buildSponsorshipBody({
+    required BuildContext context,
+    required SponsoredOrphanModel? orphan,
+    required AppLocalizations l10n,
+    required bool isRtl,
+  }) {
+    final status = _normalizedStatus;
+
+    if (status == 'PENDING') {
+      return _buildNoOrphanData(context);
+    }
+
+    if (status == 'REJECTED') {
+      return _buildRejectedSponsorship(context, isRtl);
+    }
+
+    if (_isCancelledStatus(status) && orphan == null) {
+      return _buildStatusOnlySponsorship(
+        context: context,
+        isRtl: isRtl,
+        icon: Icons.cancel_outlined,
+        title: l10n.cancelledSponsorshipNoOrphanTitle,
+        message: l10n.cancelledSponsorshipNoOrphanMessage,
+        iconColor: const Color(0xFFC62828),
+        iconBackgroundColor: const Color(0xFFFFEBEE),
+      );
+    }
+
+    if (orphan == null) {
+      return _buildStatusOnlySponsorship(
+        context: context,
+        isRtl: isRtl,
+        icon: Icons.info_outline,
+        title: l10n.sponsorshipDetailsUnavailableTitle,
+        message: l10n.sponsorshipDetailsUnavailableMessage,
+        iconColor: const Color(0xFF765A00),
+        iconBackgroundColor: const Color(0xFFFFF8E7),
+      );
+    }
+
+    return _buildOrphanDetailsContent(context, orphan, l10n, isRtl);
+  }
+
+  Widget _buildOrphanDetailsContent(
+    BuildContext context,
+    SponsoredOrphanModel orphan,
+    AppLocalizations l10n,
+    bool isRtl,
+  ) {
+    final rejectionReason = widget.sponsorship.rejectionReason?.trim();
+
+    return SingleChildScrollView(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildProfileCard(orphan),
+                const SizedBox(height: 20),
+                _buildPersonalDataCard(orphan, l10n, isRtl),
+                const SizedBox(height: 20),
+                _buildSponsorshipCard(widget.sponsorship, l10n, isRtl),
+                if (_canShowAnnualReports()) ...[
+                  const SizedBox(height: 20),
+                  _buildAnnualReportsSection(context, isRtl),
+                ],
+                if (rejectionReason != null && rejectionReason.isNotEmpty) ...[
+                  const SizedBox(height: 20),
+                  _buildInfoCard(
+                    title: l10n.sponsorshipRejectionReason,
+                    value: rejectionReason,
+                    icon: Icons.info_outline,
+                    isRtl: isRtl,
                   ),
+                ],
+                if (widget.sponsorship.cancellationSource != null) ...[
+                  const SizedBox(height: 20),
+                  _buildInfoCard(
+                    title: l10n.sponsorshipCancellationSource,
+                    value: widget.sponsorship.cancellationSource!,
+                    icon: Icons.cancel_outlined,
+                    isRtl: isRtl,
+                  ),
+                ],
+                if (_canPayMonthlySponsorship()) ...[
+                  const SizedBox(height: 20),
+                  _buildMonthlyPaymentButton(context, l10n),
+                ],
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
@@ -271,18 +325,151 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
     );
   }
 
+  Widget _buildRejectedSponsorship(BuildContext context, bool isRtl) {
+    final l10n = AppLocalizations.of(context);
+    final rejectionReason = widget.sponsorship.rejectionReason?.trim();
+    final visibleReason = rejectionReason == null || rejectionReason.isEmpty
+        ? l10n.noSponsorshipRejectionReason
+        : rejectionReason;
+
+    return SingleChildScrollView(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildStateHeaderCard(
+                  icon: Icons.cancel_outlined,
+                  title: l10n.sponsorshipRejectedTitle,
+                  message: l10n.sponsorshipRejectedMessage,
+                  iconColor: const Color(0xFFC62828),
+                  iconBackgroundColor: const Color(0xFFFFEBEE),
+                  isRtl: isRtl,
+                ),
+                const SizedBox(height: 20),
+                _buildSponsorshipCard(widget.sponsorship, l10n, isRtl),
+                const SizedBox(height: 20),
+                _buildInfoCard(
+                  title: l10n.sponsorshipRejectionReason,
+                  value: visibleReason,
+                  icon: Icons.info_outline,
+                  isRtl: isRtl,
+                ),
+                const SizedBox(height: 30),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatusOnlySponsorship({
+    required BuildContext context,
+    required bool isRtl,
+    required IconData icon,
+    required String title,
+    required String message,
+    required Color iconColor,
+    required Color iconBackgroundColor,
+  }) {
+    final l10n = AppLocalizations.of(context);
+
+    return SingleChildScrollView(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildStateHeaderCard(
+                  icon: icon,
+                  title: title,
+                  message: message,
+                  iconColor: iconColor,
+                  iconBackgroundColor: iconBackgroundColor,
+                  isRtl: isRtl,
+                ),
+                const SizedBox(height: 20),
+                _buildSponsorshipCard(widget.sponsorship, l10n, isRtl),
+                const SizedBox(height: 30),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStateHeaderCard({
+    required IconData icon,
+    required String title,
+    required String message,
+    required Color iconColor,
+    required Color iconBackgroundColor,
+    required bool isRtl,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFD1C5B1)),
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 90,
+            height: 90,
+            decoration: BoxDecoration(
+              color: iconBackgroundColor,
+              borderRadius: BorderRadius.circular(45),
+            ),
+            child: Icon(icon, size: 42, color: iconColor),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: iconColor,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            message,
+            textAlign: _textAlign(isRtl),
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   bool _canCancelSponsorship() {
-    final status = widget.sponsorship.status.toUpperCase();
+    final status = _normalizedStatus;
 
     return status == 'PENDING' || status == 'ACCEPTED';
   }
 
   bool _canPayMonthlySponsorship() {
-    return widget.sponsorship.status.toUpperCase() == 'ACCEPTED';
+    return _normalizedStatus == 'ACCEPTED';
   }
 
   bool _canShowAnnualReports() {
-    return widget.sponsorship.status.toUpperCase() == 'ACCEPTED';
+    return _normalizedStatus == 'ACCEPTED';
   }
 
   Widget _buildAnnualReportsSection(BuildContext context, bool isRtl) {
@@ -1269,7 +1456,7 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
   }
 
   String _translateSponsorshipStatus(String status, AppLocalizations l10n) {
-    switch (status.toUpperCase()) {
+    switch (status.trim().toUpperCase()) {
       case 'PENDING':
         return l10n.sponsorshipStatusPending;
       case 'ACCEPTED':
@@ -1277,10 +1464,15 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
       case 'REJECTED':
         return l10n.sponsorshipStatusRejected;
       case 'CANCELLED':
+      case 'CANCELED':
         return l10n.sponsorshipStatusCancelled;
       default:
         return status;
     }
+  }
+
+  bool _isCancelledStatus(String status) {
+    return status == 'CANCELLED' || status == 'CANCELED';
   }
 
   CrossAxisAlignment _cardCrossAxisAlignment(bool isRtl) {

@@ -29,13 +29,11 @@ class SponsorshipListModel {
       donorId: json['donorId'],
       monthlyAmount: json['monthlyAmount']?.toString() ?? '0.00',
       status: json['status'] ?? '',
-      rejectionReason: json['rejectionReason'],
+      rejectionReason: json['rejectionReason'] as String?,
       startDate: json['startDate'] != null
           ? DateTime.parse(json['startDate'])
           : null,
-      endDate: json['endDate'] != null
-          ? DateTime.parse(json['endDate'])
-          : null,
+      endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : null,
       cancellationSource: json['cancellationSource'],
       createdAt: DateTime.parse(json['createdAt']),
       orphan: json['orphan'] != null

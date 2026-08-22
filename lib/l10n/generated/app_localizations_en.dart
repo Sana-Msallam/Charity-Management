@@ -1079,7 +1079,32 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get sponsoredList => 'Sponsored list';
+  String get sponsoredList => 'Sponsorship requests';
+
+  @override
+  String get sponsorshipRejectedTitle => 'Sponsorship request rejected';
+
+  @override
+  String get sponsorshipRejectedMessage =>
+      'Sorry, your sponsorship request was not approved.';
+
+  @override
+  String get noSponsorshipRejectionReason => 'No rejection reason was provided';
+
+  @override
+  String get cancelledSponsorshipNoOrphanTitle => 'Sponsorship cancelled';
+
+  @override
+  String get cancelledSponsorshipNoOrphanMessage =>
+      'This sponsorship request has been cancelled, and no orphan information is available.';
+
+  @override
+  String get sponsorshipDetailsUnavailableTitle =>
+      'Sponsorship details unavailable';
+
+  @override
+  String get sponsorshipDetailsUnavailableMessage =>
+      'The sponsorship status is available, but orphan information is not available for this request.';
 
   @override
   String get noSponsorshipsForStatus => 'No sponsorships with this status';

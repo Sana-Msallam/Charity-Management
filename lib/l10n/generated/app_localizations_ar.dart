@@ -1064,7 +1064,31 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get sponsoredList => 'قائمة المكفولين';
+  String get sponsoredList => 'طلبات الكفالة';
+
+  @override
+  String get sponsorshipRejectedTitle => 'تم رفض طلب الكفالة';
+
+  @override
+  String get sponsorshipRejectedMessage =>
+      'عذراً، لم تتم الموافقة على طلب الكفالة.';
+
+  @override
+  String get noSponsorshipRejectionReason => 'لم يتم توضيح سبب الرفض';
+
+  @override
+  String get cancelledSponsorshipNoOrphanTitle => 'تم إلغاء الكفالة';
+
+  @override
+  String get cancelledSponsorshipNoOrphanMessage =>
+      'تم إلغاء طلب الكفالة، ولا تتوفر معلومات عن اليتيم لهذا الطلب.';
+
+  @override
+  String get sponsorshipDetailsUnavailableTitle => 'تفاصيل الكفالة غير متاحة';
+
+  @override
+  String get sponsorshipDetailsUnavailableMessage =>
+      'حالة الكفالة متوفرة، لكن معلومات اليتيم غير متاحة لهذا الطلب.';
 
   @override
   String get noSponsorshipsForStatus => 'لا توجد كفالات بهذه الحالة';

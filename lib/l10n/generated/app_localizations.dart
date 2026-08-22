@@ -2117,8 +2117,50 @@ abstract class AppLocalizations {
   /// No description provided for @sponsoredList.
   ///
   /// In en, this message translates to:
-  /// **'Sponsored list'**
+  /// **'Sponsorship requests'**
   String get sponsoredList;
+
+  /// No description provided for @sponsorshipRejectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship request rejected'**
+  String get sponsorshipRejectedTitle;
+
+  /// No description provided for @sponsorshipRejectedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, your sponsorship request was not approved.'**
+  String get sponsorshipRejectedMessage;
+
+  /// No description provided for @noSponsorshipRejectionReason.
+  ///
+  /// In en, this message translates to:
+  /// **'No rejection reason was provided'**
+  String get noSponsorshipRejectionReason;
+
+  /// No description provided for @cancelledSponsorshipNoOrphanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship cancelled'**
+  String get cancelledSponsorshipNoOrphanTitle;
+
+  /// No description provided for @cancelledSponsorshipNoOrphanMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This sponsorship request has been cancelled, and no orphan information is available.'**
+  String get cancelledSponsorshipNoOrphanMessage;
+
+  /// No description provided for @sponsorshipDetailsUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sponsorship details unavailable'**
+  String get sponsorshipDetailsUnavailableTitle;
+
+  /// No description provided for @sponsorshipDetailsUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The sponsorship status is available, but orphan information is not available for this request.'**
+  String get sponsorshipDetailsUnavailableMessage;
 
   /// No description provided for @noSponsorshipsForStatus.
   ///

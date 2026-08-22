@@ -31,7 +31,6 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
     const Color primaryYellow = Color(0xFFD4AF37);
     const Color lightCardBg = Color(0xFFFDF8EB);
@@ -96,7 +95,8 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
 
               final currentSponsorships = sponsorships
                   .where(
-                    (sponsorship) => sponsorship.status == 'ACCEPTED',
+                    (sponsorship) =>
+                        sponsorship.status.trim().toUpperCase() == 'ACCEPTED',
                     // ||
                     // sponsorship.status == 'PENDING',
                   )
@@ -249,35 +249,32 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                           itemBuilder: (context, index) {
                             final sponsorship = filteredSponsorships[index];
 
-                            final orphan = sponsorship.orphan;
-
-                            final name = orphan != null
-                                ? orphan.fullName
-                                : l10n.sponsorshipUnderReview;
+                            final name = _sponsorshipCardTitle(
+                              sponsorship,
+                              l10n,
+                            );
 
                             return InkWell(
-                              onTap: sponsorship.status == 'CANCELLED'
-                                  ? null
-                                  : () async {
-                                      final shouldRefresh =
-                                          await Navigator.push<bool>(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  OrphanDetailsScreen(
-                                                    sponsorship: sponsorship,
-                                                  ),
+                              onTap: () async {
+                                final shouldRefresh =
+                                    await Navigator.push<bool>(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            OrphanDetailsScreen(
+                                              sponsorship: sponsorship,
                                             ),
-                                          );
-                                      if (!context.mounted) {
-                                        return;
-                                      }
-                                      if (shouldRefresh == true) {
-                                        context
-                                            .read<SponsorshipListCubit>()
-                                            .getSponsorships();
-                                      }
-                                    },
+                                      ),
+                                    );
+                                if (!context.mounted) {
+                                  return;
+                                }
+                                if (shouldRefresh == true) {
+                                  context
+                                      .read<SponsorshipListCubit>()
+                                      .getSponsorships();
+                                }
+                              },
                               borderRadius: BorderRadius.circular(16),
                               child: Container(
                                 padding: const EdgeInsets.all(12),
@@ -405,7 +402,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
     Color textColor;
     String text;
 
-    switch (status) {
+    switch (status.trim().toUpperCase()) {
       case 'ACCEPTED':
         backgroundColor = const Color(0xFFE8F5E9);
         textColor = const Color(0xFF2E7D32);
@@ -419,6 +416,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
         break;
 
       case 'CANCELLED':
+      case 'CANCELED':
         backgroundColor = const Color(0xFFFFEBEE);
         textColor = const Color(0xFFC62828);
         text = l10n.sponsorshipStatusCancelled;
@@ -451,6 +449,28 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
         ),
       ),
     );
+  }
+
+  String _sponsorshipCardTitle(
+    SponsorshipListModel sponsorship,
+    AppLocalizations l10n,
+  ) {
+    final orphan = sponsorship.orphan;
+    final status = sponsorship.status.trim().toUpperCase();
+
+    switch (status) {
+      case 'PENDING':
+        return l10n.sponsorshipUnderReview;
+      case 'REJECTED':
+        return l10n.sponsorshipRejectedTitle;
+      case 'ACCEPTED':
+        return orphan?.fullName ?? l10n.sponsorshipDetailsUnavailableTitle;
+      case 'CANCELLED':
+      case 'CANCELED':
+        return orphan?.fullName ?? l10n.cancelledSponsorshipNoOrphanTitle;
+      default:
+        return orphan?.fullName ?? l10n.sponsorshipDetailsUnavailableTitle;
+    }
   }
 
   void _showFilterBottomSheet(
@@ -566,7 +586,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
   String _statusName(String status) {
     final l10n = AppLocalizations.of(context);
 
-    switch (status) {
+    switch (status.trim().toUpperCase()) {
       case 'ACCEPTED':
         return l10n.sponsorshipStatusAccepted;
 
@@ -574,6 +594,7 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
         return l10n.sponsorshipStatusPending;
 
       case 'CANCELLED':
+      case 'CANCELED':
         return l10n.sponsorshipStatusCancelled;
 
       case 'REJECTED':
