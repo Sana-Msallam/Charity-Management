@@ -1,4 +1,5 @@
- import 'package:charity_management/Sponsership/Cubit/sponsership_cubit.dart';
+import 'package:charity_management/Payment/Screen/wallet_top_up_screen.dart';
+import 'package:charity_management/Sponsership/Cubit/sponsership_cubit.dart';
 // import 'package:charity_management/Sponsership/Repository/sponsership_repository.dart';
 import 'package:charity_management/Sponsership/Screen/sponsership_success_screen.dart';
 import 'package:charity_management/l10n/generated/app_localizations.dart';
@@ -21,40 +22,34 @@ class SponsorshipRequestScreen extends StatelessWidget {
     ];
 
     return BlocProvider(
-     create: (_) => SponsorshipCubit(),
+      create: (_) => SponsorshipCubit(),
       child: BlocListener<SponsorshipCubit, SponsorshipState>(
         listener: (context, state) {
           if (state is SponsorshipSuccess) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    const SponsorshipSuccessScreen(),
+                builder: (context) => const SponsorshipSuccessScreen(),
               ),
             );
           }
 
-
-if (state is SponsorshipError) {
-  if (state.message.contains('المحفظة') ||
-      state.message.contains('رصيد') ||
-      state.message.contains('wallet') ||
-      state.message.contains('balance')) {
-    showWalletEmptyDialog(context);
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          state.message,
-          style: const TextStyle(
-            fontFamily: 'IBM Plex Sans Arabic',
-          ),
-        ),
-      ),
-    );
-  }
-
-
+          if (state is SponsorshipError) {
+            if (state.message.contains('المحفظة') ||
+                state.message.contains('رصيد') ||
+                state.message.contains('wallet') ||
+                state.message.contains('balance')) {
+              showWalletEmptyDialog(context);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.message,
+                    style: const TextStyle(fontFamily: 'IBM Plex Sans Arabic'),
+                  ),
+                ),
+              );
+            }
           }
         },
         child: Directionality(
@@ -65,10 +60,7 @@ if (state is SponsorshipError) {
               backgroundColor: const Color(0xFFFDFBF7),
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Color(0xFF765A00),
-                ),
+                icon: const Icon(Icons.arrow_back, color: Color(0xFF765A00)),
                 onPressed: () => Navigator.pop(context),
               ),
               centerTitle: true,
@@ -88,55 +80,52 @@ if (state is SponsorshipError) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: double.infinity,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: const DecorationImage(
-                          image: AssetImage(
-                            'assets/orphan_profile.jpg',
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.black.withOpacity(0.6),
-                              Colors.transparent,
-                            ],
-                            begin: Alignment.bottomCenter,
- end: Alignment.topCenter,
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(16),
-                        alignment: Alignment.bottomRight,
-                        child: Text(
-                          l10n.changeChildLife,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'IBM Plex Sans Arabic',
-                          ),
-                        ),
-                      ),
-                    ),
+                    //                     Container(
+                    //                       width: double.infinity,
+                    //                       height: 140,
+                    //                       decoration: BoxDecoration(
+                    //                         borderRadius: BorderRadius.circular(20),
+                    //                         image: const DecorationImage(
+                    //                           image: AssetImage(
+                    //                             'assets/orphan_profile.jpg',
+                    //                           ),
+                    //                           fit: BoxFit.cover,
+                    //                         ),
+                    //                       ),
+                    //                       child: Container(
+                    //                         decoration: BoxDecoration(
+                    //                           borderRadius: BorderRadius.circular(20),
+                    //                           gradient: LinearGradient(
+                    //                             colors: [
+                    //                               Colors.black.withOpacity(0.6),
+                    //                               Colors.transparent,
+                    //                             ],
+                    //                             begin: Alignment.bottomCenter,
+                    //  end: Alignment.topCenter,
+                    //                           ),
+                    //                         ),
+                    //                         padding: const EdgeInsets.all(16),
+                    //                         alignment: Alignment.bottomRight,
+                    //                         child: Text(
+                    //                           l10n.changeChildLife,
+                    //                           style: const TextStyle(
+                    //                             color: Colors.white,
+                    //                             fontSize: 16,
+                    //                             fontWeight: FontWeight.bold,
+                    //                             fontFamily: 'IBM Plex Sans Arabic',
+                    //                           ),
+                    //                         ),
+                    //                       ),
+                    //                     ),
 
-                    const SizedBox(height: 16),
-
+                    // const SizedBox(height: 16),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: const Color(0xFFEFEAE4),
-                        ),
+                        border: Border.all(color: const Color(0xFFEFEAE4)),
                       ),
                       child: Column(
                         children: [
@@ -178,9 +167,7 @@ if (state is SponsorshipError) {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: const Color(0xFFEFEAE4),
-                        ),
+                        border: Border.all(color: const Color(0xFFEFEAE4)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +191,7 @@ if (state is SponsorshipError) {
                               ),
                             ],
                           ),
- const SizedBox(height: 16),
+                          const SizedBox(height: 16),
 
                           for (final condition in conditions)
                             buildConditionRow(condition),
@@ -216,19 +203,16 @@ if (state is SponsorshipError) {
 
                     BlocBuilder<SponsorshipCubit, SponsorshipState>(
                       builder: (context, state) {
-                        final isLoading =
-                            state is SponsorshipLoading;
+                        final isLoading = state is SponsorshipLoading;
 
                         return SizedBox(
                           width: double.infinity,
                           height: 48,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color(0xFF3D523A),
+                              backgroundColor: const Color(0xFF3D523A),
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               elevation: 0,
                             ),
@@ -243,35 +227,28 @@ if (state is SponsorshipError) {
                                 ? const SizedBox(
                                     width: 22,
                                     height: 22,
-                                    child:
-                                        CircularProgressIndicator(
+                                    child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor:
-                                          AlwaysStoppedAnimation<
-                                              Color>(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
                                         Colors.white,
                                       ),
                                     ),
                                   )
                                 : Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         l10n.acceptSponsorshipTerms,
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
-                                          fontWeight:
-                                              FontWeight.bold,
-                                          fontFamily:
-                                              'IBM Plex Sans Arabic',
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'IBM Plex Sans Arabic',
                                         ),
                                       ),
                                       const SizedBox(width: 8),
                                       const Icon(
-                                        Icons
-                                            .assignment_turned_in_outlined,
+                                        Icons.assignment_turned_in_outlined,
                                         color: Colors.white,
                                         size: 18,
                                       ),
@@ -288,7 +265,7 @@ if (state is SponsorshipError) {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-color: const Color(0xFFF7F2EA),
+                        color: const Color(0xFFF7F2EA),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Column(
@@ -318,8 +295,7 @@ color: const Color(0xFFF7F2EA),
                           Text(
                             l10n.narratedByBukhari,
                             style: TextStyle(
-                              color: const Color(0xFF3D523A)
-                                  .withOpacity(0.6),
+                              color: const Color(0xFF3D523A).withOpacity(0.6),
                               fontSize: 11,
                               fontFamily: 'IBM Plex Sans Arabic',
                             ),
@@ -343,11 +319,7 @@ color: const Color(0xFFF7F2EA),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.check_circle,
-            color: Color(0xFF3D523A),
-            size: 18,
-          ),
+          const Icon(Icons.check_circle, color: Color(0xFF3D523A), size: 18),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -366,11 +338,13 @@ color: const Color(0xFFF7F2EA),
   }
 }
 
-void showWalletEmptyDialog(BuildContext context) {
+void showWalletEmptyDialog(BuildContext screenContext) {
+  final l10n = AppLocalizations.of(screenContext);
+
   showDialog(
-    context: context,
+    context: screenContext,
     barrierDismissible: false,
-    builder: (context) {
+    builder: (dialogContext) {
       return Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -399,10 +373,10 @@ void showWalletEmptyDialog(BuildContext context) {
 
               const SizedBox(height: 18),
 
-              const Text(
-                'المحفظة فارغة',
+              Text(
+                l10n.sponsorshipWalletEmptyTitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color(0xFF735C00),
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -412,10 +386,10 @@ void showWalletEmptyDialog(BuildContext context) {
 
               const SizedBox(height: 10),
 
-              const Text(
-                'لا يمكن تقديم طلب الكفالة لأن رصيد محفظتك غير كافٍ. يرجى شحن المحفظة للمتابعة.',
+              Text(
+                l10n.sponsorshipWalletEmptyMessage,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Color(0xFF7C766C),
                   fontSize: 13,
                   height: 1.6,
@@ -430,7 +404,13 @@ void showWalletEmptyDialog(BuildContext context) {
                 height: 48,
                 child: ElevatedButton(
                   onPressed: () {
-                    // سيتم ربط شاشة شحن المحفظة لاحقًا
+                    Navigator.pop(dialogContext);
+                    Navigator.push(
+                      screenContext,
+                      MaterialPageRoute(
+                        builder: (_) => const WalletTopUpScreen(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF735C00),
@@ -440,9 +420,9 @@ void showWalletEmptyDialog(BuildContext context) {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'شحن المحفظة',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.topUpWallet,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'IBM Plex Sans Arabic',
@@ -458,20 +438,18 @@ void showWalletEmptyDialog(BuildContext context) {
                 height: 48,
                 child: OutlinedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pop(dialogContext);
                   },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xFF735C00),
-                    side: const BorderSide(
-                      color: Color(0xFFFCE6A3),
-                    ),
+                    side: const BorderSide(color: Color(0xFFFCE6A3)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'إلغاء',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.cancel,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'IBM Plex Sans Arabic',
@@ -486,4 +464,3 @@ void showWalletEmptyDialog(BuildContext context) {
     },
   );
 }
-

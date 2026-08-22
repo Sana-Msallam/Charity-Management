@@ -2288,6 +2288,18 @@ abstract class AppLocalizations {
   /// **'Your wallet balance is used when you submit a sponsorship request'**
   String get walletBalanceUsedForSponsorship;
 
+  /// No description provided for @sponsorshipWalletEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Empty'**
+  String get sponsorshipWalletEmptyTitle;
+
+  /// No description provided for @sponsorshipWalletEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot submit a sponsorship request because your wallet is empty. Please top up your wallet and try again.'**
+  String get sponsorshipWalletEmptyMessage;
+
   /// No description provided for @givingImpactDescription.
   ///
   /// In en, this message translates to:
@@ -4447,6 +4459,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Calculate Again'**
   String get calculateAgain;
+
+  /// No description provided for @donateZakatAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate Zakat amount'**
+  String get donateZakatAmount;
+
+  /// No description provided for @zakatDonationSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose donation fund'**
+  String get zakatDonationSheetTitle;
+
+  /// No description provided for @zakatDonationAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Zakat amount'**
+  String get zakatDonationAmount;
+
+  /// No description provided for @zakatOrphanSupportFundOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Orphan Support Fund'**
+  String get zakatOrphanSupportFundOption;
+
+  /// No description provided for @zakatQuickDonationFundOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Donation Fund'**
+  String get zakatQuickDonationFundOption;
 }
 
 class _AppLocalizationsDelegate

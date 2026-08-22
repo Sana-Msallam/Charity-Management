@@ -1154,6 +1154,13 @@ class AppLocalizationsAr extends AppLocalizations {
       'يُستخدم رصيد محفظتك عند إرسال طلب الكفالة';
 
   @override
+  String get sponsorshipWalletEmptyTitle => 'المحفظة فارغة';
+
+  @override
+  String get sponsorshipWalletEmptyMessage =>
+      'لا يمكنك تقديم طلب الكفالة لأن رصيد محفظتك غير كافٍ. يرجى شحن المحفظة ثم المحاولة مجدداً.';
+
+  @override
   String get givingImpactDescription =>
       'Educational meals were provided this month thanks to your giving';
 
@@ -2356,4 +2363,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get calculateAgain => 'إعادة الحساب';
+
+  @override
+  String get donateZakatAmount => 'تبرع بمبلغ الزكاة';
+
+  @override
+  String get zakatDonationSheetTitle => 'اختر صندوق التبرع';
+
+  @override
+  String get zakatDonationAmount => 'مبلغ الزكاة';
+
+  @override
+  String get zakatOrphanSupportFundOption => 'صندوق سند اليتيم';
+
+  @override
+  String get zakatQuickDonationFundOption => 'صندوق التبرع السريع';
 }

@@ -21,6 +21,7 @@ class CustomTextField extends StatefulWidget {
     this.inputFormatters,
     this.enabled = true,
     this.suffixText,
+    this.contentPadding,
   });
 
   final String? labelText;
@@ -39,6 +40,7 @@ class CustomTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final bool enabled;
   final String? suffixText;
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -136,10 +138,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     },
                   )
                 : widget.suffixIcon,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 14,
-            ),
+            contentPadding:
+                widget.contentPadding ??
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: borderColor),

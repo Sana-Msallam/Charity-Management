@@ -296,13 +296,17 @@ class _SponsorshipsViewState extends State<_SponsorshipsView> {
                                 ),
                                 child: Row(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: Image.asset(
-                                        'assets/orphan_profile.jpg',
-                                        width: 64,
-                                        height: 64,
-                                        fit: BoxFit.cover,
+                                    Container(
+                                      width: 64,
+                                      height: 64,
+                                      decoration: BoxDecoration(
+                                        color: lightCardBg,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: const Icon(
+                                        Icons.child_care,
+                                        color: primaryGold,
+                                        size: 34,
                                       ),
                                     ),
                                     const SizedBox(width: 16),

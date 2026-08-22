@@ -195,17 +195,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 const SizedBox(height: 16),
                 _buildPaymentNotice(l10n),
                 const SizedBox(height: 20),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    'assets/orphan_profile.jpg',
-                    width: double.infinity,
-                    height: 120,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const SizedBox.shrink(),
-                  ),
-                ),
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(16),
+                //   child: Image.asset(
+                //     'assets/orphan_profile.jpg',
+                //     width: double.infinity,
+                //     height: 120,
+                //     fit: BoxFit.cover,
+                //     errorBuilder: (context, error, stackTrace) =>
+                //         const SizedBox.shrink(),
+                //   ),
+                // ),
               ],
             ),
           ),

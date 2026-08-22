@@ -1170,6 +1170,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your wallet balance is used when you submit a sponsorship request';
 
   @override
+  String get sponsorshipWalletEmptyTitle => 'Wallet Empty';
+
+  @override
+  String get sponsorshipWalletEmptyMessage =>
+      'You cannot submit a sponsorship request because your wallet is empty. Please top up your wallet and try again.';
+
+  @override
   String get givingImpactDescription =>
       'Educational meals were provided this month thanks to your giving';
 
@@ -2398,4 +2405,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calculateAgain => 'Calculate Again';
+
+  @override
+  String get donateZakatAmount => 'Donate Zakat amount';
+
+  @override
+  String get zakatDonationSheetTitle => 'Choose donation fund';
+
+  @override
+  String get zakatDonationAmount => 'Zakat amount';
+
+  @override
+  String get zakatOrphanSupportFundOption => 'Orphan Support Fund';
+
+  @override
+  String get zakatQuickDonationFundOption => 'Quick Donation Fund';
 }

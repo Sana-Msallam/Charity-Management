@@ -118,38 +118,42 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
             iconTheme: const IconThemeData(color: Color(0xFF765A00)),
             actions: [
               if (_canCancelSponsorship())
-                PopupMenuButton<_OrphanProfileAction>(
-                  icon: const Icon(Icons.more_vert),
-                  onSelected: (action) {
-                    switch (action) {
-                      case _OrphanProfileAction.cancelSponsorship:
-                        _showCancelConfirmation(context);
-                    }
-                  },
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem(
-                        value: _OrphanProfileAction.cancelSponsorship,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.cancel_outlined,
-                              color: Color(0xFFC62828),
-                              size: 20,
+                Builder(
+                  builder: (innerContext) {
+                    return PopupMenuButton<_OrphanProfileAction>(
+                      icon: const Icon(Icons.more_vert),
+                      onSelected: (action) {
+                        switch (action) {
+                          case _OrphanProfileAction.cancelSponsorship:
+                            _showCancelConfirmation(innerContext);
+                        }
+                      },
+                      itemBuilder: (context) {
+                        return [
+                          PopupMenuItem(
+                            value: _OrphanProfileAction.cancelSponsorship,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.cancel_outlined,
+                                  color: Color(0xFFC62828),
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  l10n.cancelSponsorship,
+                                  style: const TextStyle(
+                                    color: Color(0xFFC62828),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              l10n.cancelSponsorship,
-                              style: const TextStyle(
-                                color: Color(0xFFC62828),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ];
+                          ),
+                        ];
+                      },
+                    );
                   },
                 ),
             ],
@@ -819,13 +823,12 @@ class _OrphanDetailsScreenState extends State<OrphanDetailsScreen> {
                   color: Color(0xFFFFD56B),
                   shape: BoxShape.circle,
                 ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage('assets/orphan_profile.jpg'),
-                      fit: BoxFit.cover,
-                    ),
+                child: const CircleAvatar(
+                  backgroundColor: Color(0xFFFFF8F1),
+                  child: Icon(
+                    Icons.child_care,
+                    color: Color(0xFF765A00),
+                    size: 52,
                   ),
                 ),
               ),

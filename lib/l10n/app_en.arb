@@ -375,6 +375,8 @@
   "startNewSponsorshipDescription": "Start a new sponsorship and support a child",
   "chooseOrphanAndStartSponsorship": "Choose a child and start a sponsorship request",
   "walletBalanceUsedForSponsorship": "Your wallet balance is used when you submit a sponsorship request",
+  "sponsorshipWalletEmptyTitle": "Wallet Empty",
+  "sponsorshipWalletEmptyMessage": "You cannot submit a sponsorship request because your wallet is empty. Please top up your wallet and try again.",
   "givingImpactDescription": "Educational meals were provided this month thanks to your giving",
   "newSponsorshipRequest": "New sponsorship request",
   "changeChildLife": "Help change a child's life",
@@ -934,5 +936,10 @@
 "zakatNisabValue": "Nisab Value",
 "zakatRateLabel": "Zakat Rate",
 "zakatDueAmount": "Zakat Due",
-"calculateAgain": "Calculate Again"
+"calculateAgain": "Calculate Again",
+"donateZakatAmount": "Donate Zakat amount",
+"zakatDonationSheetTitle": "Choose donation fund",
+"zakatDonationAmount": "Zakat amount",
+"zakatOrphanSupportFundOption": "Orphan Support Fund",
+"zakatQuickDonationFundOption": "Quick Donation Fund"
 }
